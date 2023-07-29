@@ -1,0 +1,91 @@
+version: "3.7"
+
+
+services:
+
+  db:
+    image: postgres:14.2
+
+    volumes:
+      - main_db:/var/lib/postgresql/data/
+
+    networks:
+      - back
+
+    environment:
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  adminer:
+    image: adminer
+
+    # depends_on:
+    #   - postgres
+
+    ports:
+      - "8081:8080"
+
+    networks:
+      - back
+
+  back:
+    build: ./_build/php
+    # image: httpd:2.4.57-alpine
+    depends_on:
+      - db
+
+    volumes:
+      - ./back:/var/www/html
+
+    networks:
+      - back
+      - front
+
+    ports:
+      - "8888:80"
+
+    environment:
+      DATABASE_CONNECT: 'pgsql'
+      DATABASE_HOST: 'db'
+      DATABASE_PORT: '5432'
+
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_USER: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+      API_UID: ${API_UID}
+      API_SECRET: ${API_SECRET}
+  
+    working_dir: /app
+
+
+  front:
+    build: ./_build/react
+
+    ports:
+     - "8080:5173"
+    #  - "8443:443"
+
+    volumes:
+      - ./site:/app
+
+    networks:
+      - front
+
+    environment:
+      API_UID: ${API_UID}
+
+    working_dir: /app
+
+
+
+
+networks:
+  front:
+  back:
+
+volumes:
+  main_db:
+
+

@@ -1,0 +1,27 @@
+
+version: '3.8'
+
+services:
+
+  db:
+    restart: "on-failure"
+
+
+#   back:
+#     restart: "on-failure"
+
+#     environment:
+#       BUILD_TYPE: "Production" 
+
+#   front:
+#     restart: "on-failure"
+
+#     environment:
+#       BUILD_TYPE: "Production" 
+
+#   nginx:
+#     restart: "on-failure"
+
+#     ports:
+#       - "8080:80"
+

@@ -1,0 +1,20 @@
+_build/nginx/certs/*.crt
+_build/nginx/certs/*.key
+
+node_modules/
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+__pycache__/
+api/app/__pycache__/
+*.pyc
+*.cpython-311.pyc
+
+__pycache__/
+*.py[cod]
