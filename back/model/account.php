@@ -2,7 +2,7 @@
 
 
 //Request given user's password and verify it
-function loginUser($login, $password)
+function loginUser($login, $password, $checkPassword = true)
 {
   $query = "SELECT id, login, password FROM users WHERE login = :login";
   $data = array(":login" => $login);
@@ -15,9 +15,11 @@ function loginUser($login, $password)
   {
     $result = $result[0];
   
-    $success = password_verify($password, $result["password"]);
+    if ($checkPassword) {
+      return (password_verify($password, $result["password"]));
+    }
   
-    return $success;
+    return true;
   }
 
   return false;
@@ -52,6 +54,25 @@ function getUserInfos($login)
   return array("error" => "Not found");
 }
 
+function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
+{
+  $query = "INSERT INTO users (id, login, password, first_name, last_name, display_name, avatar_url, color)
+  VALUES (:id, :login, NULL, :first_name, :last_name, :display_name, :avatar_url, :color)";
+
+  $data = array(
+    ":id" => $id, 
+    ":login" => $login,
+    ":first_name" => $firstname, 
+    ":last_name" => $lastname,
+    ":display_name" => $displayname,
+    ":avatar_url" => $avatar_url,
+    ":color" => $color,
+  );
+
+  $success = executeQueryAction($query, $data);
+
+  return $success;
+}
 
 //Add a new user to the database
 // function createUser($userEmail, $userName, $userPassword)

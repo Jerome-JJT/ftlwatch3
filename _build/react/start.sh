@@ -1,7 +1,7 @@
 
 apk add nano
 
-
+# sleep 1000000
 # yarn tailwindcss init -p
 
 # # Create application

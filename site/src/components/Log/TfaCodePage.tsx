@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import axios from "axios";
-import { UseLoginDto } from "./dto/useLogin.dto";
+import { UseLoginDto } from "../../_dtos/useLogin.dto";
 import { useNavigate } from "react-router-dom";
 
 interface TfaCodePageProps {

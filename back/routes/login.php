@@ -12,20 +12,38 @@ switch($action)
     case "view":
         echo (password_hash("1234", PASSWORD_BCRYPT));
         require_once("view/login.html");
-        exit();
         break;
-
+        
     case "login":
         login($_POST);
         break;
 
-// case "searchGame":
+
+    case "authorizeapi":
+        loginapi_authorize();
+        break;
+
+    case "loginapi":
+        loginapi_callback($_POST);
+        break;
+
+    case "logout":
+        logout();
+        break;
+            
+    case "me":
+        me();
+        break;
+
+        // case "searchGame":
 //   require_once("controler/gameGeneration.php");
 //   searchGame($_POST);
 //   break;
 
 // case "upload":
-//   require_once("controler/uploading.php");
-//   uploadTrack($_POST, $_FILES);
+    //   require_once("controler/uploading.php");
+    //   uploadTrack($_POST, $_FILES);
 //   break;
 }
+
+exit();

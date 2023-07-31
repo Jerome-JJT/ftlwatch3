@@ -7,11 +7,11 @@ services:
     restart: "on-failure"
 
 
-#   back:
-#     restart: "on-failure"
+  back:
+    restart: "on-failure"
 
-#     environment:
-#       BUILD_TYPE: "Production" 
+    environment:
+      BUILD_TYPE: "PROD" 
 
 #   front:
 #     restart: "on-failure"

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  postgres:
+  db:
     restart: "no"
 
     ports:
@@ -10,23 +10,16 @@ services:
 
 
   adminer:
-    image: adminer
-    depends_on:
-      - postgres
-
     restart: "no"
 
-    ports:
-      - "8081:8080"
-
-    environment:
-      ADMINER_DEFAULT_SYSTEM: pgsql
-      ADMINER_DEFAULT_SERVER: postgres
-      ADMINER_DEFAULT_DATABASE: ${DATABASE_DB}
-
+    # environment:
+    #   ADMINER_DEFAULT_SYSTEM: pgsql
+    #   ADMINER_DEFAULT_SERVER: postgres
+    #   ADMINER_DEFAULT_DATABASE: ${DATABASE_DB}
 
     networks:
       - back
+
 
   back:
     restart: "no"
@@ -34,8 +27,8 @@ services:
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
 
-    ports:
-      - "8888:8000"
+    environment:
+      ENV: 'DEV'
 
     # volumes:
     #   - ./api:/app
@@ -49,14 +42,8 @@ services:
 
     # ports:
     #   - "3000:3000"
-    #   - "19006:19006"
-    #   - "19000:19000"
-    #   # - "8082:8081"
 
     # volumes:
     #   - ./site:/app
 
-
-  nginx:
-    restart: "no"
 

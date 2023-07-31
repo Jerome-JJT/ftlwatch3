@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { UseLoginDto } from "./dto/useLogin.dto";
+import { UseLoginDto } from "../Hooks/useLogin";
 
 interface LoginApiProps {
   loginer: UseLoginDto;
@@ -14,54 +14,40 @@ export default function LoginApi({ loginer }: LoginApiProps) {
   const [searchParams] = useSearchParams();
 
   let code = searchParams.get("code");
-  let state = searchParams.get("state");
 
   React.useEffect(() => {
-    if (
-      code != null &&
-      state != null &&
-      (loginer.token === undefined || loginer.token === "")
-    ) {
+    if (code != null) {
       axios
-        .post("/api/login/apicallback", {
-          code: code,
-          state: state,
-        })
+      .post("/?page=login&action=loginapi", 
+          `code=${code}`, {withCredentials: true}, 
+        )
         .then((res) => {
-          if (res.status === 201 && res.data["access_token"]) {
-            localStorage.setItem("token", res.data["access_token"]);
-            loginer.setToken(res.data["access_token"]);
+          if (res.status === 200) {
+            loginer.getUserData();
 
             setPageMessage("Login successful, redirecting...");
             setTimeout(() => {
               navigate("/");
             }, 3000);
           } //
-          else if (res.status === 206 && res.data["id"] !== undefined) {
-            loginer.tfaUserId.current = res.data["id"];
-
-            setPageMessage("Tfa needed, redirecting...");
-            setTimeout(() => {
-              navigate("/login_tfa");
-            }, 3000);
-          } //
-          else if (res.status === 203) {
-            // setPageMessage("Login successful, redirecting...");
-          } //
           else {
-            setPageMessage("Error contacting 42 API");
+            if (!loginer.logged) {
+              setPageMessage("Error contacting 42 API");
+            }
           }
         })
         .catch(() => {
-          setPageMessage("Error contacting 42 API");
+          if (!loginer.logged) { 
+            setPageMessage("Error contacting 42 API");
+          }
         });
-
-      // .catch((error) => {setPageMessage('wait...'); console.log(error)}); /* en strict mode envoie 2 requetes, 1 qui throw une erreur */
     } //
-    else if (code == null && state == null) {
-      setPageMessage("Error missing infos for 42 API");
+    else if (code == null) {
+      if (!loginer.logged) { 
+        setPageMessage("Error missing infos for 42 API");
+      }
     }
-  }, [code, loginer, navigate, state]);
+  }, [code, loginer, navigate]);
 
   return (
     <>

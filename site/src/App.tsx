@@ -11,22 +11,59 @@ import NavBar from "./components/NavBar/NavBar";
 import LoginApi from "./components/Log/LoginApi";
 import Logout from "./components/Log/Logout";
 
-import { UseLoginDto } from "./components/Log/dto/useLogin.dto";
-import useLogin from "./components/Log/useLogin";
+import useLogin, { UseLoginDto } from "./components/Hooks/useLogin";
 import CreateAccountPage from "./components/Log/CreateAccountPage";
+import LeftDrawer from "./components/NavBar/LeftDrawer";
+import axios from "axios";
+import { AxiosErrorText } from "./components/Hooks/AxiosErrorText";
 
 
 export default function App() {
   const loginer: UseLoginDto = useLogin();
   const [openedMenu, setOpenedMenu] = React.useState("");
 
+  const logging = import.meta.env.DEV;
+  
+  axios.interceptors.request.use(
+    function (req) {
+      req.baseURL = `${import.meta.env.VITE_API_PREFIX}`
+      // req.meta.requestStartedAt = new Date().getTime();
+      return req;
+  });
+
+  axios.interceptors.response.use(
+    function (response) {
+      if (logging) { console.log('inter res', response) }
+
+      return response;
+    },
+    function (error) {
+      if (logging) { console.log('myaxiosintercept', AxiosErrorText(error), error) }
+
+      // console.log('ttt', error);
+      if (error.response && error.response.status === 401) {
+        loginer.logout();
+        // userStore.logout();
+      }
+      // if ((error.response && error.response.data && error.response.data.detail) === 'Invalid token.' && error.request.responseURL.indexOf("logout") === -1) {
+      // }
+
+      return Promise.reject(error);
+    }
+  );
+
   return (  
     <Router>
       <NavBar
-        // loginer={loginer}
+        loginer={loginer}
         openedMenu={openedMenu}
         setOpenedMenu={setOpenedMenu}
       />
+
+      <LeftDrawer
+        loginer={loginer}
+        openedMenu={openedMenu}
+        setOpenedMenu={setOpenedMenu} />
 
       <div className="grow bg-gray-100 dark:bg-gray-400">
         <Routes>

@@ -6,7 +6,7 @@ COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
 #Dev
-DOCKER		= docker compose ${COMPOSE_BASE} -p ${APP_NAME}
+DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}
 
 #Prod
 # DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
@@ -54,7 +54,7 @@ repostg:
 run:
 			${DOCKER} exec front sh
 runapi:
-			${DOCKER} exec back sh
+			${DOCKER} exec back bash
 runpostg:
 			${DOCKER} exec postgres bash
 rundb:

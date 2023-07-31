@@ -1,8 +1,8 @@
 import React, { SyntheticEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UseLoginDto } from "../Hooks/useLogin";
 
-import { UseLoginDto } from "./dto/useLogin.dto";
 
 interface LogPageProps {
   loginer: UseLoginDto;
@@ -11,7 +11,7 @@ interface LogPageProps {
 export default function LogPage({ loginer }: LogPageProps) {
   const [pageMessage, setPageMessage] = React.useState("");
 
-  const [loginName, setLoginName] = React.useState("");
+  const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const navigate = useNavigate();
@@ -19,29 +19,28 @@ export default function LogPage({ loginer }: LogPageProps) {
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
 
-    axios
-      .post("/api/login/basic", {
-        username: loginName,
-        password: password,
-      })
-      .then((res) => {
-        if (res.status === 201 && res.data["access_token"]) {
-          localStorage.setItem("token", res.data["access_token"]);
-          loginer.setToken(res.data["access_token"]);
+    console.log(login, password);
 
-          setPageMessage("Login successful, redirecting...");
-          setTimeout(() => {
-            navigate("/");
-          }, 3000);
-        } //
-        else {
-          // setTfa(true);
-          // setUserId(res.data.id);
-          // setPageMessage("");
-        }
-      })
-      .catch(() => setPageMessage("Login error"));
-    // }
+    axios
+        .post("/?page=login&action=login", 
+          `login=${login}&password=${password}`, {withCredentials: true}, 
+        )
+        .then((res) => {
+          if (res.status === 200) {
+
+            loginer.getUserData();
+            setPageMessage("Login successful, redirecting...");
+            setTimeout(() => {
+              navigate("/");
+            }, 3000);
+          } //
+          else {
+            setPageMessage("Login error");
+          }
+        })
+        .catch(() => setPageMessage("Login error"));
+      // }
+  
   };
 
   return (
@@ -57,8 +56,8 @@ export default function LogPage({ loginer }: LogPageProps) {
                 id="loginName"
                 className="block w-3/5 rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-300 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 type="text"
-                value={loginName}
-                onChange={(e) => setLoginName(e.target.value)}
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
                 required
               />
             </div>
@@ -81,7 +80,7 @@ export default function LogPage({ loginer }: LogPageProps) {
               onClick={handleSubmit}
               className="center content-center rounded-lg bg-blue-700 px-5 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 md:w-auto"
             >
-              Log in
+              Login
             </button>
           </>
 
