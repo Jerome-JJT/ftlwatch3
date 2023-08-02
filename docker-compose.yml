@@ -81,7 +81,32 @@ services:
 
     working_dir: /app
 
+  api:
+    build: ./_build/api
+    #restart: on-failure
+    
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
 
+    volumes:
+      - ./api:/app/
+
+    networks:
+      - back
+
+    environment:
+      DATABASE_CONNECT: 'pgsql'
+      DATABASE_HOST: 'db'
+      DATABASE_PORT: '5432'
+
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_USER: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+      API_UID: ${API_UID}
+      API_SECRET: ${API_SECRET}
+
+    working_dir: /app
 
 
 networks:

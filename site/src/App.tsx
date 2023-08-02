@@ -16,6 +16,7 @@ import CreateAccountPage from "./components/Log/CreateAccountPage";
 import LeftDrawer from "./components/NavBar/LeftDrawer";
 import axios from "axios";
 import { AxiosErrorText } from "./components/Hooks/AxiosErrorText";
+import Tableau from "./components/Tableau/Tableau";
 
 
 export default function App() {
@@ -78,6 +79,7 @@ export default function App() {
             <>
             </>
           )}
+          <Route path="/tableau" element={<Tableau loginer={loginer} />} />
           <Route path="/login" element={<LogPage loginer={loginer} />} />
           <Route path="/loginapi" element={<LoginApi loginer={loginer} />} />
           <Route

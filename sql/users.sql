@@ -1,7 +1,7 @@
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL, 
     "login" character varying NOT NULL, 
-    "password" character varying NOT NULL, 
+    "password" character varying, 
     "first_name" character varying NOT NULL DEFAULT '', 
     "last_name" character varying NOT NULL DEFAULT '', 
     "display_name" character varying NOT NULL DEFAULT '', 
