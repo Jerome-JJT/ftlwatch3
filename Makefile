@@ -31,7 +31,7 @@ flogs:
 
 logsfront:
 			${DOCKER} logs front
-logsapi:
+logsback:
 			${DOCKER} logs back
 logspostg:
 			${DOCKER} logs db
@@ -51,9 +51,11 @@ repostg:
 			${DOCKER} restart db
 
 
-run:
-			${DOCKER} exec front sh
 runapi:
+			${DOCKER} exec api bash
+runfront:
+			${DOCKER} exec front sh
+runback:
 			${DOCKER} exec back bash
 runpostg:
 			${DOCKER} exec postgres bash
