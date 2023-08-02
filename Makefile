@@ -32,6 +32,8 @@ flogs:
 logsfront:
 			${DOCKER} logs front
 logsback:
+			${DOCKER} exec back tail -n30 /var/log/apache2/mylogger.log
+logsback2:
 			${DOCKER} logs back
 logspostg:
 			${DOCKER} logs db
@@ -39,6 +41,8 @@ logspostg:
 flogsfront:
 			${DOCKER} logs -f front
 flogsback:
+			${DOCKER} exec back tail -f /var/log/apache2/mylogger.log
+flogsback2:
 			${DOCKER} logs -f back
 flogspostg:
 			${DOCKER} logs -f db

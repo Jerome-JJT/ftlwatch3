@@ -1,5 +1,7 @@
 <?php
 
+require_once("controller/_common.php");
+
 header('Access-Control-Allow-Origin: http://localhost:8080');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 1000');
@@ -8,6 +10,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 session_set_cookie_params(0, "/", $_SERVER["SERVER_NAME"], true, true);
 
 session_start();
+
 // print_r($_SERVER);
 
 // $json = file_get_contents('php://input');
@@ -17,12 +20,14 @@ session_start();
 // print_r($_REQUEST);
 // print_r($_SERVER);
 
+
 $page = "";
 if(isset($_GET["page"]))
 {
     $page = $_GET["page"];
 }
 
+mylogger("REQUEST TO page ".$page, LOGGER_DEBUG());
 switch($page)
 {
     case "login":
@@ -30,11 +35,11 @@ switch($page)
         break;
 
 
-        default: 
-            print_r($_SERVER);
-            print_r("<br><br>");
-            print_r($_REQUEST);
-            // print_r($_SERVER);
+    default: 
+        print_r($_SERVER);
+        print_r("<br><br>");
+        print_r($_REQUEST);
+        // print_r($_SERVER);
         
 
 // case "generateGame":

@@ -74,6 +74,32 @@ function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar
   return $success;
 }
 
+
+function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
+{
+  $query = "UPDATE users SET 
+    first_name = :first_name, 
+    last_name = :last_name, 
+    display_name = :display_name, 
+    avatar_url = :avatar_url, 
+    color =  :color
+    WHERE id = :id AND login = :login";
+
+  $data = array(
+    ":id" => $id, 
+    ":login" => $login,
+    ":first_name" => $firstname, 
+    ":last_name" => $lastname,
+    ":display_name" => $displayname,
+    ":avatar_url" => $avatar_url,
+    ":color" => $color,
+  );
+
+  $success = executeQueryAction($query, $data);
+
+  return $success;
+}
+
 //Add a new user to the database
 // function createUser($userEmail, $userName, $userPassword)
 // {

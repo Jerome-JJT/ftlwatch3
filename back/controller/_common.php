@@ -87,3 +87,37 @@ function jsonResponse($data = array(), $code = 200) {
     exit();
 }
 
+
+function LOGGER_DEBUG() { return 0; };
+function LOGGER_INFO() { return 1; };
+function LOGGER_WARNING() { return 2; };
+function LOGGER_ERROR() { return 3; };
+
+function mylogger($log, $level) {
+
+    $lvltotxt = "";
+
+    if ($level == 0) {
+        $lvltotxt = "DEBUG";
+    } 
+    else if ($level == 1) {
+        $lvltotxt = "INFO";
+    } 
+    else if ($level == 2) {
+        $lvltotxt = "WARNING";
+    } 
+    else if ($level == 3) {
+        $lvltotxt = "ERROR";
+    }
+    else {
+        $lvltotxt = "UNKNOWN";
+    }
+
+    $myfile = fopen("/var/log/apache2/mylogger.log", "a");
+    fwrite($myfile, $lvltotxt." ".$log."\n");
+    fclose($myfile);
+}
+
+function jsonlogger($msg, $data, $level) {
+    mylogger($msg." ".json_encode($data), $level);
+}
