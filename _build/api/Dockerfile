@@ -7,5 +7,5 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-RUN echo "alias ll='ls -lAh'" > /root/.bashrc
+RUN echo "alias ll='ls -lah'" > /root/.bashrc
 
