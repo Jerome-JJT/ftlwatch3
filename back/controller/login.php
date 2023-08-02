@@ -7,10 +7,14 @@ function login_way($login) {
 
     // TODO get rights and groups
 
-    error_log("test");
-
     if (!isset($userInfos["error"])) {
+        jsonlogger("SET USER", $userInfos, LOGGER_DEBUG());
+        
         $_SESSION["user"] = $userInfos;
+    }
+    else {
+        mylogger("GET USER INFOS ERROR".$userInfos["error"], LOGGER_ERROR());
+        
     }
     jsonResponse($userInfos, !isset($userInfos["error"]) ? 200 : 400);
 }
@@ -68,12 +72,12 @@ function loginapi_callback($post) {
             jsonResponse(array("error" => $meInfos->error), 401);
         }
 
-        // print_r($meInfos);
-
-        // exit();
         
         if (!loginUser($meInfos["login"], null, false)) {
-            createUser($meInfos);
+            storeUser($meInfos, 0);
+        }
+        else {
+            storeUser($meInfos, 1);
         }
 
         login_way($meInfos["login"]);
@@ -85,7 +89,7 @@ function loginapi_callback($post) {
     }
 }
 
-function createUser($res) {
+function storeUser($res, $exists = 0) {
     require_once("model/account.php");
 
     $good_firstname = isset($res["usual_first_name"]) ? $res["usual_first_name"] : $res["first_name"];
@@ -104,7 +108,12 @@ function createUser($res) {
         $good_number = $res['coalition_id'];
     }
 
-    createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+    if ($exists == 0) {
+        createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+    }
+    else {
+        updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+    }
 }
 
 
@@ -118,7 +127,10 @@ function logout() {
 
 function me() {
     
+    // mylogger("ME ASKED ".$_SESSION["user"], LOGGER_DEBUG());
+    // mylogger("ME ASKED ".implode(" ", array_keys($_SESSION["user"])), LOGGER_DEBUG());
     if (isset($_SESSION["user"])) {
+
 
         jsonResponse(array(
             "user" => $_SESSION["user"]
