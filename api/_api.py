@@ -7,33 +7,34 @@ import time
 import requests
 import rich
 import environ
+import math
 
 env = environ.Env()
 environ.Env.read_env()
 
-
-# from _gettoken import *
-
-# token = gettoken()
-# token = request_token()
+from _utils import *
 
 
 token = ""
 tokencachefile = "/tmp/.token"
 
 def test_token(token):
-    return True
+    check = raw("/v2/users/jjaqueme", for_test = True)
+    return check.status_code == 200
 
 def get_headers(force_refresh = False):
     global token
     global tokencachefile
 
     if (len(token) == 0 and force_refresh == False):
-        with open(f"{tokencachefile}", "r") as f:
-            token = f.read()
+        if (os.path.isfile(tokencachefile)):
+            with open(f"{tokencachefile}", "r") as f:
+                token = f.read()
 
         if (len(token) != 0):
+            mylogger("token from file", LOGGER_INFO)
             if (not test_token(token)):
+                mylogger("token from file invalid", LOGGER_INFO)
                 token = ""
 
     if (len(token) == 0 or force_refresh == True):
@@ -48,73 +49,93 @@ def get_headers(force_refresh = False):
             "scope": "public",
         }
 
+        mylogger("ask new token", LOGGER_INFO)
         token_url = "https://api.intra.42.fr/v2/oauth/token"
         response = requests.post(token_url, data=request_token_payload)
 
         if(response.ok == True or response.status_code == 200):
             jsonres = response.json()
-            
-            print("OK", response.ok)
-            print("HTTP", response.status_code)
 
+            mylogger("got new token", LOGGER_INFO)
             token = jsonres["access_token"]
-            with open(f"tokencachefile", "w") as f:
+            with open(f"{tokencachefile}", "w") as f:
                 f.write(jsonres["access_token"])
+        
+        else:
+            mylogger(f"token get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
+
 
     return {
         "Authorization": f"Bearer {token}"
     }
+    
 
-
-
-def callapi(req, multiple = False):
-
-    rawreq = raw(req)
-    res = rawreq.json()
-
-
-    if (typeof(res) == typeof([]) and multiple == True): #rawreq.nb pages > 0
-        for i in nbpage:
-            res.extends(newres)
-
-    resjson = []
-    try:
-        resjson = res.json()
-    except requests.exceptions.JSONDecodeError:
-        with open("res_watcher/_newsletter_errors.news", "a") as notif:
-            print(f"req error {req}, ", file=notif)
-
-
-
-def raw(req):
+def raw(req, for_test = False):
     auth = get_headers()
 
-    if ("?" in req):
-        url = f"https://api.intra.42.fr{req}"
-    else:
-        url = f"https://api.intra.42.fr{req}"
-    print("REQ", url)
+    url = f"https://api.intra.42.fr{req}"
+
+    if ("?" in url and "page[size]" not in url):
+        url = f"{url}&page[size]=100"
+    elif ("page[size]" not in url):
+        url = f"{url}?page[size]=100"
+
+    mylogger(f"request to {req}", LOGGER_INFO)
 
     fails = 0
+    maxfails = 10
 
-    while (fails < 10)
+    while (fails < maxfails):
         res = requests.get(url, headers=auth)
 
         if (res.status_code == 200):
             return res
 
-        elif (res.status_code == 401):
-            print("Token expired / Unauthorized")
-            auth = get_headers(True)
+        elif (res.status_code == 401 and for_test == False):
+            mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
+            auth = get_headers(force_refresh = True)
 
         elif (res.status_code == 429):
-            print("Timeout api")
-            time.sleep(2)
+            mylogger(f"Timeout api", LOGGER_INFO)
+            time.sleep(1)
+
+    mylogger(f"Raw api failed {maxfails} times", LOGGER_ERROR)
+    raise Exception(f"Raw api failed {maxfails} times") 
+
+
+def callapi(req, multiple = False):
+
+    page = req
+    rawres = raw(page)
+    res = rawres.json()
+
+    perpage = rawres.headers.get("X-Per-Page")
+    tot = rawres.headers.get("X-Total")
+    if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Total")) <= 0.5):
+        mylogger(f"So fast", LOGGER_DEBUG)
+        time.sleep(0.5)
+
+    if (type(res) == type([]) and multiple == True and perpage != None and tot != None):
+
+        for i in range(2, math.ceil(int(tot)/int(perpage)) + 1):
+
+            if ("?" in req):
+                page = f"{req}&page[number]={i}"
+            else:
+                page = f"{req}?page[number]={i}"
+
+            rawres = raw(page)
+            res.extend(rawres.json())
+            if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Total")) <= 0.5):
+                mylogger(f"So fast", LOGGER_DEBUG)
+                time.sleep(0.5)
+
+    return res
+
+
+
 
     
-    # throw
-
-
 def userify(user):
     try:
         user.pop('campus_users')
@@ -150,239 +171,3 @@ def userify(user):
         pass
 
     return (user)
-
-
-def pure(req):
-    global token
-    heads = {
-        "Authorization": f"Bearer {token}"
-    }
-
-    if ("page[size" not in req):
-        if ("?" in req):
-            url = f"https://api.intra.42.fr{req}&page[size=100]"
-        else:
-            url = f"https://api.intra.42.fr{req}?page[size=100]"
-    else:
-        url = f"https://api.intra.42.fr{req}"
-    print("REQ", url)
-
-    flag = 0
-
-    while (1):
-        res = requests.get(url, headers=heads)
-
-        if (res.status_code == 401 and flag < nbtoken()):
-            print("Update token")
-            token = request_token(flag)
-            flag += 1
-            heads = {
-                "Authorization": f"Bearer {token}"
-            }
-        elif (res.status_code == 401):
-            print("Token expired / Unauthorized")
-            time.sleep(60)
-        elif (res.status_code == 429 and flag < nbtoken()):
-            print(f"Timeout api, update {flag}")
-            token = request_token(flag)
-            flag += 1
-            heads = {
-                "Authorization": f"Bearer {token}"
-            }
-        elif (res.status_code == 429):
-            print("Timeout api")
-            time.sleep(60)
-        else:
-            break
-
-    resjson = []
-    try:
-        resjson = res.json()
-    except requests.exceptions.JSONDecodeError:
-        with open("res_watcher/_newsletter_errors.news", "a") as notif:
-            print(f"req error {req}, ", file=notif)
-
-    return (resjson)
-
-
-
-
-
-# def post(req):
-#     global token
-#     heads = {
-#         "Authorization": f"Bearer {token}"
-#     }
-#
-#     if ("?" in req):
-#         url = f"https://api.intra.42.fr{req}"
-#     else:
-#         url = f"https://api.intra.42.fr{req}"
-#
-#     flag = 0
-#
-#     while (1):
-#         res = requests.post(url, headers=heads)
-#
-#         if (res.status_code == 401 and flag < nbtoken()):
-#             print("Update token")
-#             token = request_token()
-#             flag += 1
-#             heads = {
-#                 "Authorization": f"Bearer {token}"
-#             }
-#         elif (res.status_code == 401):
-#             print("Token expired / Unauthorized")
-#             return (res)
-#         elif (res.status_code == 429 and flag < nbtoken()):
-#             print(f"Timeout api, update {flag}")
-#             token = request_token(flag)
-#             flag += 1
-#             heads = {
-#                 "Authorization": f"Bearer {token}"
-#             }
-#         elif (res.status_code == 429):
-#             print("Timeout api")
-#             time.sleep(60)
-#         else:
-#             break
-#     return (res.json())
-
-
-def mpure(req):
-    global token
-    heads = {
-        "Authorization": f"Bearer {token}"
-    }
-
-    full = []
-
-    if ("page[size" not in req):
-        if ("?" in req):
-            url = f"https://api.intra.42.fr{req}&page[size=100]"
-        else:
-            url = f"https://api.intra.42.fr{req}?page[size=100]"
-    else:
-        url = f"https://api.intra.42.fr{req}"
-
-    print("REQ", url)
-    flag = 0
-
-    while (1):
-        res = requests.get(url, headers=heads)
-
-        if (res.status_code == 401 and flag < nbtoken()):
-            print("Update token")
-            token = request_token()
-            flag += 1
-            heads = {
-                "Authorization": f"Bearer {token}"
-            }
-        elif (res.status_code == 401):
-            print("Token expired / Unauthorized")
-            return (res)
-        elif (res.status_code == 429 and flag < nbtoken()):
-            print(f"Timeout api, update {flag}")
-            token = request_token(flag)
-            flag += 1
-            heads = {
-                "Authorization": f"Bearer {token}"
-            }
-        elif (res.status_code == 429):
-            print("Timeout api")
-            time.sleep(60)
-        else:
-            break
-    full.extend(res.json())
-
-    flag = 0
-
-    num = 2
-    while True:
-        time.sleep(0.6)
-        page = f"{url}&page[number]={num}"
-        print("REQ", page)
-
-        while (1):
-            res = requests.get(page, headers=heads)
-
-            if (res.status_code == 401 and flag < nbtoken()):
-                print("Update token")
-                token = request_token()
-                flag += 1
-                heads = {
-                    "Authorization": f"Bearer {token}"
-                }
-            elif (res.status_code == 401):
-                print("Token expired / Unauthorized")
-                return (res)
-            elif (res.status_code == 429 and flag < nbtoken()):
-                print(f"Timeout api, update {flag}")
-                token = request_token(flag)
-                flag += 1
-                heads = {
-                    "Authorization": f"Bearer {token}"
-                }
-            elif (res.status_code == 429):
-                print("Timeout api")
-                time.sleep(60)
-            else:
-                break
-
-        if (len(res.json()) == 0):
-            break
-        full.extend(res.json())
-        num += 1
-
-    time.sleep(0.6)
-    return (full)
-
-
-
-def api(req, list=[], file=""):
-    global token
-    heads = {
-        "Authorization": f"Bearer {token}"
-    }
-
-    if ("?" in req):
-        url = f"https://api.intra.42.fr{req}&page[size=100]"
-    else:
-        url = f"https://api.intra.42.fr{req}?page[size=100]"
-
-    print("REQ", url)
-    res = requests.get(url, headers=heads)
-
-    full = []
-
-    if (res.status_code == 401):
-        print("Token expired / Unauthorized")
-        return (res)
-
-    #if (len(file) > 0):
-    #    file = f"{apilogfolder}{file}"
-    #    fi = open(file, "w")
-    #    fi.close()
-
-    showres(res, list)
-    full.extend(res.json())
-    time.sleep(0.6)
-
-    num = 2
-    while True:
-        page = f"{url}&page[number]={num}"
-        print("REQ", page)
-        res = requests.get(page, headers=heads)
-
-        if (res.status_code == 401):
-            print("Token expired / Unauthorized")
-            return (res)
-
-        if (len(res.json()) == 0):
-            break
-        showres(res, list)
-        full.extend(res.json())
-        time.sleep(0.6)
-        num += 1
-
-    return (full)

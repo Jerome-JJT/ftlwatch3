@@ -89,7 +89,7 @@ services:
     tty: true        # docker run -t
 
     volumes:
-      - ./api:/app/
+      - ./api:/app
 
     networks:
       - back
@@ -106,7 +106,7 @@ services:
       API_UID: ${API_UID}
       API_SECRET: ${API_SECRET}
 
-    working_dir: /app
+    working_dir: /
 
 
 networks:
