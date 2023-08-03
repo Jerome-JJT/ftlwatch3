@@ -1,4 +1,4 @@
-CREATE TABLE "users" (
+CREATE TABLE "login_users" (
     "id" SERIAL NOT NULL, 
     "login" character varying NOT NULL, 
     "password" character varying, 
@@ -9,7 +9,7 @@ CREATE TABLE "users" (
     "color" integer NOT NULL DEFAULT -1,
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "PK_USER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_LOGIN_USER_ID" PRIMARY KEY ("id"));
 
 CREATE TABLE "groups" (
     "id" SERIAL NOT NULL, 
@@ -17,7 +17,7 @@ CREATE TABLE "groups" (
     "owner_id" integer, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "USER_ID" FOREIGN KEY("owner_id") REFERENCES "users"("id"),
+    CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("owner_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_ID" PRIMARY KEY ("id"));
 
 CREATE TABLE "pages" (
@@ -36,7 +36,7 @@ CREATE TABLE "permissions" (
     "page_id" integer, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id"),
+    CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE SET NULL,
     CONSTRAINT "PK_PERMISSION_ID" PRIMARY KEY ("id"));
 
 
@@ -44,8 +44,8 @@ CREATE TABLE "pages_permissions" (
     "id" SERIAL NOT NULL, 
     "page_id" integer NOT NULL, 
     "permission_id" integer NOT NULL, 
-    CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id"),
-    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id"),
+    CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE CASCADE,
+    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_PAGE_PERMISSION_ID" PRIMARY KEY ("id"));
 
 
@@ -53,15 +53,15 @@ CREATE TABLE "groups_permissions" (
     "id" SERIAL NOT NULL, 
     "group_id" integer NOT NULL, 
     "permission_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id"),
-    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id"),
+    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_PERMISSION_ID" PRIMARY KEY ("id"));
 
 
-CREATE TABLE "groups_users" (
+CREATE TABLE "groups_login_users" (
     "id" SERIAL NOT NULL, 
     "group_id" integer NOT NULL, 
-    "user_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id"),
-    CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id"),
+    "login_user_id" integer NOT NULL, 
+    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("login_user_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_USER_ID" PRIMARY KEY ("id"));

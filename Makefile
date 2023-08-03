@@ -37,6 +37,8 @@ logsback2:
 			${DOCKER} logs back
 logspostg:
 			${DOCKER} logs db
+logsf:
+			${DOCKER} logs flyway
 
 flogsfront:
 			${DOCKER} logs -f front
@@ -55,6 +57,8 @@ repostg:
 			${DOCKER} restart db
 
 
+runf:
+			${DOCKER} exec flyway bash
 runapi:
 			${DOCKER} exec api bash
 runfront:

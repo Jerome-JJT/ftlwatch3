@@ -31,7 +31,7 @@ function loginUser($login, $password, $checkPassword = true)
 function getUserInfos($login)
 {
   $query = "SELECT users.id, users.login, users.display_name, users.avatar_url
-  FROM users
+  FROM login_users
   WHERE login = :login";
 
   $data = array(":login" => $login);
@@ -56,7 +56,7 @@ function getUserInfos($login)
 
 function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
 {
-  $query = "INSERT INTO users (id, login, password, first_name, last_name, display_name, avatar_url, color)
+  $query = "INSERT INTO login_users (id, login, password, first_name, last_name, display_name, avatar_url, color)
   VALUES (:id, :login, NULL, :first_name, :last_name, :display_name, :avatar_url, :color)";
 
   $data = array(
@@ -77,7 +77,7 @@ function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar
 
 function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
 {
-  $query = "UPDATE users SET 
+  $query = "UPDATE login_users SET 
     first_name = :first_name, 
     last_name = :last_name, 
     display_name = :display_name, 
