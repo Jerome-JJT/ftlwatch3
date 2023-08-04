@@ -23,7 +23,7 @@ function executeQuerySelect($query, $data = array())
     return $queryResult;
   }
   catch (Exception $e) {
-    mylogger("Caught exception query action".$e->getMessage(), LOGGER_ERROR());
+    mylogger("Caught exception query select ".$e->getMessage(), LOGGER_ERROR());
     throw $e;
   }
 }
@@ -63,7 +63,7 @@ function executeQueryAction($query, $data = array(), $repeat = false)
     return $result;
   }
   catch (Exception $e) {
-    mylogger("Caught exception query action".$e->getMessage(), LOGGER_ERROR());
+    mylogger("Caught exception query action ".$e->getMessage(), LOGGER_ERROR());
     throw $e;
   }
 }

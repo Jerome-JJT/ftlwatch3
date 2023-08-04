@@ -13,12 +13,15 @@ CREATE TABLE "users" (
     "last_name" character varying NOT NULL,  
     "display_name" character varying NOT NULL, 
     "avatar_url" character varying NOT NULL,
+
+    "grade" character varying NOT NULL,
+    "level" character varying NOT NULL,
     "kind" character varying NOT NULL,
     "staff?" boolean NOT NULL,
     
     "nbcursus" integer NOT NULL,
-    "has_cursus21" integer NOT NULL,
-    "has_cursus9" integer NOT NULL,
+    "has_cursus21" boolean NOT NULL,
+    "has_cursus9" boolean NOT NULL,
 
     "poolfilter_id" integer NOT NULL,
 
@@ -33,6 +36,7 @@ CREATE TABLE "timedusers" (
 
     "correction_point" integer NOT NULL,
     "wallet" integer NOT NULL,
+    "coalition_points" integer NOT NULL,
 
     "date" character varying NOT NULL,
     "user_id" integer NOT NULL,

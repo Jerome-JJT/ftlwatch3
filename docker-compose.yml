@@ -23,8 +23,8 @@ services:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
 
-    # entrypoint: "bash"
-    entrypoint: "bash /flyway/sql/_start.sh"
+    entrypoint: "bash"
+    # entrypoint: "bash /flyway/sql/_myflyway.sh migrate"
 
   db:
     image: postgres:14.2

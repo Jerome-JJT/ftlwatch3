@@ -56,6 +56,12 @@ reback:
 repostg:
 			${DOCKER} restart db
 
+info:
+			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh info
+migrate:
+			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh migrate
+revert:
+			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh undo
 
 runf:
 			${DOCKER} exec flyway bash

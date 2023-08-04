@@ -4,7 +4,7 @@
 //Request given user's password and verify it
 function loginUser($login, $password, $checkPassword = true)
 {
-  $query = "SELECT id, login, password FROM users WHERE login = :login";
+  $query = "SELECT id, login, password FROM login_users WHERE login = :login";
   $data = array(":login" => $login);
 //   print_r($query);
 
@@ -30,7 +30,7 @@ function loginUser($login, $password, $checkPassword = true)
 //Get user informations for session storage, (username, join date, score)
 function getUserInfos($login)
 {
-  $query = "SELECT users.id, users.login, users.display_name, users.avatar_url
+  $query = "SELECT id, login, display_name, avatar_url
   FROM login_users
   WHERE login = :login";
 
