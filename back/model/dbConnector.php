@@ -11,8 +11,7 @@ function executeQuerySelect($query, $data = array())
     //Open database connection
     $pdo = openDBConnection();
 
-    if ($pdo != null)
-    {
+    if ($pdo != null) {
       $stm = $pdo->prepare($query);
       $stm->execute($data);
       $queryResult = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -21,9 +20,8 @@ function executeQuerySelect($query, $data = array())
     //Close database connection
     $pdo = null;
     return $queryResult;
-  }
-  catch (Exception $e) {
-    mylogger("Caught exception query action".$e->getMessage(), LOGGER_ERROR());
+  } catch (Exception $e) {
+    mylogger("Caught exception query select " . $e->getMessage(), LOGGER_ERROR());
     throw $e;
   }
 }
@@ -38,21 +36,16 @@ function executeQueryAction($query, $data = array(), $repeat = false)
     $pdo = openDBConnection();
     $result = true;
 
-    if ($pdo != null)
-    {
+    if ($pdo != null) {
       $stm = $pdo->prepare($query);
 
       //Single query option
-      if(!$repeat)
-      {
+      if (!$repeat) {
         $stm->execute($data);
         // $result = $pdo->lastInsertId();
-      }
-      else
-      {
+      } else {
         //Multiple query option
-        foreach ($data as $value)
-        {
+        foreach ($data as $value) {
           $result &= $stm->execute($value);
         }
       }
@@ -61,9 +54,8 @@ function executeQueryAction($query, $data = array(), $repeat = false)
     //Close database connection
     $pdo = null;
     return $result;
-  }
-  catch (Exception $e) {
-    mylogger("Caught exception query action".$e->getMessage(), LOGGER_ERROR());
+  } catch (Exception $e) {
+    mylogger("Caught exception query action " . $e->getMessage(), LOGGER_ERROR());
     throw $e;
   }
 }
@@ -81,15 +73,14 @@ function openDBConnection()
   $dbName = getenv('DATABASE_DB');
   $userName = getenv('DATABASE_USER');
   $userPwd = getenv('DATABASE_PASSWORD');
-  $dsn = $sql.':host='.$hostname.';dbname='.$dbName.';port='.$port;
+  $dsn = $sql . ':host=' . $hostname . ';dbname=' . $dbName . ';port=' . $port;
 
-  try
-  {
+  try {
     $dbConnection = new PDO($dsn, $userName, $userPwd);
-  }
-  catch (PDOException $e)
-  {
-    echo("PDO error"); print_r($e); echo("<br>");
+  } catch (PDOException $e) {
+    echo ("PDO error");
+    print_r($e);
+    echo ("<br>");
   }
 
   return $dbConnection;

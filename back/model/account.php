@@ -4,21 +4,20 @@
 //Request given user's password and verify it
 function loginUser($login, $password, $checkPassword = true)
 {
-  $query = "SELECT id, login, password FROM users WHERE login = :login";
+  $query = "SELECT id, login, password FROM login_users WHERE login = :login";
   $data = array(":login" => $login);
-//   print_r($query);
+  //   print_r($query);
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
 
-  if(count($result) === 1)
-  {
+  if (count($result) === 1) {
     $result = $result[0];
-  
+
     if ($checkPassword) {
       return (password_verify($password, $result["password"]));
     }
-  
+
     return true;
   }
 
@@ -30,8 +29,8 @@ function loginUser($login, $password, $checkPassword = true)
 //Get user informations for session storage, (username, join date, score)
 function getUserInfos($login)
 {
-  $query = "SELECT users.id, users.login, users.display_name, users.avatar_url
-  FROM users
+  $query = "SELECT id, login, display_name, avatar_url
+  FROM login_users
   WHERE login = :login";
 
   $data = array(":login" => $login);
@@ -39,10 +38,9 @@ function getUserInfos($login)
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
 
-  if(count($result) === 1)
-  {
+  if (count($result) === 1) {
     $result = $result[0];
-  
+
     return array(
       "id" => $result["id"],
       "login" => $result["login"],
@@ -56,13 +54,13 @@ function getUserInfos($login)
 
 function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
 {
-  $query = "INSERT INTO users (id, login, password, first_name, last_name, display_name, avatar_url, color)
+  $query = "INSERT INTO login_users (id, login, password, first_name, last_name, display_name, avatar_url, color)
   VALUES (:id, :login, NULL, :first_name, :last_name, :display_name, :avatar_url, :color)";
 
   $data = array(
-    ":id" => $id, 
+    ":id" => $id,
     ":login" => $login,
-    ":first_name" => $firstname, 
+    ":first_name" => $firstname,
     ":last_name" => $lastname,
     ":display_name" => $displayname,
     ":avatar_url" => $avatar_url,
@@ -77,7 +75,7 @@ function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar
 
 function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
 {
-  $query = "UPDATE users SET 
+  $query = "UPDATE login_users SET 
     first_name = :first_name, 
     last_name = :last_name, 
     display_name = :display_name, 
@@ -86,9 +84,9 @@ function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar
     WHERE id = :id AND login = :login";
 
   $data = array(
-    ":id" => $id, 
+    ":id" => $id,
     ":login" => $login,
-    ":first_name" => $firstname, 
+    ":first_name" => $firstname,
     ":last_name" => $lastname,
     ":display_name" => $displayname,
     ":avatar_url" => $avatar_url,
@@ -128,5 +126,3 @@ function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar
 
 //   return $success;
 // }
-
-

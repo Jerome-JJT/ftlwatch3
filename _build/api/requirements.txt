@@ -1,6 +1,7 @@
 requests
 django-environ
 
+psycopg2
 
 
 oauthlib
