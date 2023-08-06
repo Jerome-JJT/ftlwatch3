@@ -1,4 +1,4 @@
-CREATE TABLE "poolfilter" (
+CREATE TABLE "poolfilters" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
 
@@ -27,7 +27,7 @@ CREATE TABLE "users" (
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "POOLFILTER_ID" FOREIGN KEY("poolfilter_id") REFERENCES "poolfilter"("id") ON DELETE CASCADE,
+    CONSTRAINT "POOLFILTER_ID" FOREIGN KEY("poolfilter_id") REFERENCES "poolfilters"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_USER_ID" PRIMARY KEY ("id"));
 
 

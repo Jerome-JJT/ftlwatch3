@@ -15,7 +15,7 @@ def import_users(update_all = False):
     local_users = executeQuerySelect("SELECT * FROM users")
     local_users = {user["id"]: user for user in local_users} 
 
-    poolfilters = executeQuerySelect("SELECT * FROM poolfilter")
+    poolfilters = executeQuerySelect("SELECT * FROM poolfilters")
 
     all_users = callapi("/v2/campus/47/users", True)
     
@@ -36,10 +36,10 @@ def import_users(update_all = False):
 
         if (len(list(filter(lambda gfilter: gfilter["name"] == good_poolfilter, poolfilters))) == 0):
 
-            executeQueryAction("""INSERT INTO poolfilter ("name") VALUES (%(name)s)""", {
+            executeQueryAction("""INSERT INTO poolfilters ("name") VALUES (%(name)s)""", {
                 "name": good_poolfilter
             })
-            poolfilters = executeQuerySelect("SELECT * FROM poolfilter")
+            poolfilters = executeQuerySelect("SELECT * FROM poolfilters")
         
 
         good_poolfilter_id = list(filter(lambda gfilter: gfilter["name"] == good_poolfilter, poolfilters))[0]["id"]
