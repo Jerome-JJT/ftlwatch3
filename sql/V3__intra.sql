@@ -2,6 +2,7 @@ CREATE TABLE "poolfilters" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
 
+    "hidden" boolean DEFAULT false,
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "PK_POOLFILTER_ID" PRIMARY KEY ("id"));
@@ -25,10 +26,12 @@ CREATE TABLE "users" (
 
     "poolfilter_id" integer NOT NULL,
 
+    "hidden" boolean DEFAULT false,
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "POOLFILTER_ID" FOREIGN KEY("poolfilter_id") REFERENCES "poolfilters"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_USER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_USER_ID" PRIMARY KEY ("id")
+);
 
 
 CREATE TABLE "timedusers" (
@@ -43,16 +46,24 @@ CREATE TABLE "timedusers" (
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     -- CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id"), -- intented to avoid loss on user delete
-    CONSTRAINT "PK_TIMEDUSER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_TIMEDUSER_ID" PRIMARY KEY ("id")
+);
 
 
 CREATE TABLE "projects" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
+    "slug" character varying NOT NULL, 
+
+    "difficulty" integer NOT NULL, 
+
+    "has_cursus21" boolean NOT NULL,
+    "has_cursus9" boolean NOT NULL,
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "PK_PROJECT_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_PROJECT_ID" PRIMARY KEY ("id")
+);
 
 CREATE TABLE "projects_users" (
     "id" SERIAL NOT NULL, 
@@ -65,7 +76,8 @@ CREATE TABLE "projects_users" (
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "PROJECT_ID" FOREIGN KEY("project_id") REFERENCES "projects"("id") ON DELETE CASCADE,
     CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_PROJECT_USER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_PROJECT_USER_ID" PRIMARY KEY ("id")
+);
 
 
 CREATE TABLE "titles" (
@@ -74,7 +86,8 @@ CREATE TABLE "titles" (
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "PK_TITLES_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_TITLES_ID" PRIMARY KEY ("id")
+);
 
 CREATE TABLE "titles_users" (
     "id" SERIAL NOT NULL, 
@@ -85,7 +98,8 @@ CREATE TABLE "titles_users" (
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "PROJECT_ID" FOREIGN KEY("title_id") REFERENCES "titles"("id") ON DELETE CASCADE,
     CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_TITLE_USER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_TITLE_USER_ID" PRIMARY KEY ("id")
+);
 
 
 CREATE TABLE "roles" (
@@ -94,7 +108,8 @@ CREATE TABLE "roles" (
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    CONSTRAINT "PK_ROLE_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_ROLE_ID" PRIMARY KEY ("id")
+);
 
 CREATE TABLE "roles_users" (
     "id" SERIAL NOT NULL, 
@@ -105,7 +120,8 @@ CREATE TABLE "roles_users" (
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "ROLE_ID" FOREIGN KEY("role_id") REFERENCES "roles"("id") ON DELETE CASCADE,
     CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_ROLEUSER_ID" PRIMARY KEY ("id"));
+    CONSTRAINT "PK_ROLEUSER_ID" PRIMARY KEY ("id"))
+;
 
 
 

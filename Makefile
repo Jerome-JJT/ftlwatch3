@@ -84,8 +84,13 @@ down:
 			${DOCKER} down
 
 clean:		down
-#			${DOCKER} down --volumes
+					${DOCKER} down --volumes
 
-re:			clean build start
+re:			
+					${MAKE} clean 
+					${MAKE} all
+					sleep 4
+					${MAKE} migrate
+
 
 .PHONY:		all build start ps logs flogs run api down clean re

@@ -2,8 +2,8 @@ import React from "react";
 import LogoInconnu from "../../assets/img/inconnu.jpeg";
 import { Link } from "react-router-dom";
 import { UseLoginDto } from "../Hooks/useLogin";
-import { Avatar, Chip, List, ListItem, ListItemPrefix, ListItemSuffix, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
-import { AiFillHeart, AiFillSetting, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
+import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
+import { AiFillSetting, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
 import classNames from "classnames";
 
 interface ProfileButtonProps {
