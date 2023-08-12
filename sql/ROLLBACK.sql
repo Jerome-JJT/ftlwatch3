@@ -1,21 +1,25 @@
-DROP TABLE "roles_users";
-DROP TABLE "roles";
-DROP TABLE "titles_users";
-DROP TABLE "titles";
-DROP TABLE "projects_users";
-DROP TABLE "projects";
-DROP TABLE "timedusers";
-DROP TABLE "users";
-DROP TABLE "poolfilter";
+DROP TABLE IF EXISTS "roles_users";
+DROP TABLE IF EXISTS "roles";
+DROP TABLE IF EXISTS "titles_users";
+DROP TABLE IF EXISTS "titles";
+DROP TABLE IF EXISTS "projects_users";
+DROP TABLE IF EXISTS "projects";
+DROP TABLE IF EXISTS "timedusers";
+DROP TABLE IF EXISTS "users";
+DROP TABLE IF EXISTS "poolfilters";
 
 
-DROP TABLE "groups_login_users";
-DROP TABLE "groups_permissions";
-DROP TABLE "pages_permissions";
-DROP TABLE "permissions";
-DROP TABLE "pages";
-DROP TABLE "groups";
-DROP TABLE "login_users";
+DROP VIEW IF EXISTS "v_user_permissions";
 
+DROP TABLE IF EXISTS "groups_login_users";
+DROP TABLE IF EXISTS "groups_permissions";
+DROP TABLE IF EXISTS "pages_permissions";
+DROP TABLE IF EXISTS "permissions";
+DROP TABLE IF EXISTS "pages";
+DROP TABLE IF EXISTS "groups";
+DROP TABLE IF EXISTS "login_users";
 
-DROP TABLE "flyway_schema_history";
+DROP TABLE IF EXISTS "pages";
+DROP TABLE IF EXISTS "submenus";
+
+DROP TABLE IF EXISTS "flyway_schema_history";
