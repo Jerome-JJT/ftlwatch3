@@ -17,15 +17,12 @@
     "plugins": [
         "react"
     ],
-    "overrides": [
-        {
-            "files": [
-                "*.ts",
-                "*.tsx"
-            ],
-            "rules": {
-                "dot-notation": 0
-            }
-        }
-    ]
+    "rules": {
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/semi": "off",
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/brace-style": "off"
+    }
 }

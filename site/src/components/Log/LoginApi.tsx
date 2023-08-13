@@ -1,53 +1,53 @@
-import React from "react";
-import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { UseLoginDto } from "../Hooks/useLogin";
+import React from 'react';
+import axios from 'axios';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { type UseLoginDto } from '../Hooks/useLogin';
 
 interface LoginApiProps {
-  loginer: UseLoginDto;
+  loginer: UseLoginDto
 }
 
-export default function LoginApi({ loginer }: LoginApiProps) {
-  const [pageMessage, setPageMessage] = React.useState("42 api loading");
+export default function LoginApi ({ loginer }: LoginApiProps): JSX.Element {
+  const [pageMessage, setPageMessage] = React.useState('42 api loading');
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  let code = searchParams.get("code");
+  const code = searchParams.get('code');
 
   React.useEffect(() => {
     if (code != null) {
       axios
-      .post("/?page=login&action=loginapi", 
-          `code=${code}`, {withCredentials: true}, 
+        .post('/?page=login&action=loginapi',
+          `code=${code}`, { withCredentials: true }
         )
         .then((res) => {
           if (res.status === 200) {
             loginer.getUserData();
 
-            setPageMessage("Login successful, redirecting...");
+            setPageMessage('Login successful, redirecting...');
             setTimeout(() => {
-              navigate("/");
+              navigate('/');
             }, 3000);
           } //
           else {
             if (!loginer.logged) {
-              setPageMessage("Error contacting 42 API");
+              setPageMessage('Error contacting 42 API');
             }
           }
         })
         .catch(() => {
-          if (!loginer.logged) { 
-            setPageMessage("Error contacting 42 API");
+          if (!loginer.logged) {
+            setPageMessage('Error contacting 42 API');
           }
         });
     } //
     else if (code == null) {
-      if (!loginer.logged) { 
-        setPageMessage("Error missing infos for 42 API");
+      if (!loginer.logged) {
+        setPageMessage('Error missing infos for 42 API');
       }
     }
-  }, [code, loginer, navigate]);
+  }, []);
 
   return (
     <>

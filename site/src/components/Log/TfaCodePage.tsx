@@ -1,54 +1,53 @@
-import React, { SyntheticEvent } from "react";
-import axios from "axios";
-import { UseLoginDto } from "../../_dtos/useLogin.dto";
-import { useNavigate } from "react-router-dom";
+import React, { type SyntheticEvent } from 'react';
+import axios from 'axios';
+import { type UseLoginDto } from '../../_dtos/LoggedUser.dto';
+import { useNavigate } from 'react-router-dom';
 
 interface TfaCodePageProps {
-  loginer: UseLoginDto;
+  loginer: UseLoginDto
 }
 
-export default function TfaCodePage({ loginer }: TfaCodePageProps) {
-  const [pageMessage, setPageMessage] = React.useState("");
-  const [tfaCode, setTfaCode] = React.useState("");
+export default function TfaCodePage ({ loginer }: TfaCodePageProps) {
+  const [pageMessage, setPageMessage] = React.useState('');
+  const [tfaCode, setTfaCode] = React.useState('');
 
   const navigate = useNavigate();
 
   const handleUpdate = async (value: string) => {
-    if (value != null && !isNaN(Number(value.toString())))
-      setTfaCode(value.substring(0, 6));
+    if (value != null && !isNaN(Number(value.toString()))) { setTfaCode(value.substring(0, 6)); }
   };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
 
     axios
-      .post("/api/tfa/authenticate", {
+      .post('/api/tfa/authenticate', {
         id: loginer.tfaUserId.current,
-        tfa_code: tfaCode,
+        tfa_code: tfaCode
       })
       .then((res) => {
-        if (res.status === 201 && res.data["access_token"]) {
-          localStorage.setItem("token", res.data["access_token"]);
-          loginer.setToken(res.data["access_token"]);
+        if (res.status === 201 && res.data.access_token) {
+          localStorage.setItem('token', res.data.access_token);
+          loginer.setToken(res.data.access_token);
 
-          setPageMessage("Login successful, redirecting...");
+          setPageMessage('Login successful, redirecting...');
           setTimeout(() => {
-            navigate("/");
+            navigate('/');
           }, 3000);
         } //
       })
       .catch((error) => {
         if (error.response.status === 408) {
-          setPageMessage("Login timeout, retry login...");
+          setPageMessage('Login timeout, retry login...');
           setTimeout(() => {
-            navigate("/");
+            navigate('/');
           }, 3000);
         } //
         else if (error.response.data.message) {
           setPageMessage(error.response.data.message);
         } //
         else {
-          setPageMessage("Unexcepted error");
+          setPageMessage('Unexcepted error');
         }
       });
   };
@@ -67,7 +66,7 @@ export default function TfaCodePage({ loginer }: TfaCodePageProps) {
               type="text"
               placeholder="_ _ _ _ _ _"
               value={tfaCode}
-              onChange={(e) => handleUpdate(e.target.value)}
+              onChange={async (e) => { await handleUpdate(e.target.value); }}
             />
           </div>
           <button

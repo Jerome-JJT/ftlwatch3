@@ -1,36 +1,35 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import "./App.css";
+import './App.css';
 
-import HomePage from "./components/Home/HomePage";
-import LogPage from "./components/Log/LogPage";
+import HomePage from './components/Home/HomePage';
+import LogPage from './components/Log/LogPage';
 
-import NavBar from "./components/NavBar/NavBar";
+import NavBar from './components/NavBar/NavBar';
 
-import LoginApi from "./components/Log/LoginApi";
-import Logout from "./components/Log/Logout";
+import LoginApi from './components/Log/LoginApi';
+import Logout from './components/Log/Logout';
 
-import useLogin, { UseLoginDto } from "./components/Hooks/useLogin";
-import CreateAccountPage from "./components/Log/CreateAccountPage";
-import LeftDrawer from "./components/NavBar/LeftDrawer";
-import axios from "axios";
-import { AxiosErrorText } from "./components/Hooks/AxiosErrorText";
-import Tableau from "./components/Tableau/Tableau";
+import useLogin, { type UseLoginDto } from './components/Hooks/useLogin';
+import CreateAccountPage from './components/Log/CreateAccountPage';
+import LeftDrawer from './components/NavBar/LeftDrawer';
+import axios from 'axios';
+import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
+import Tableau from './components/Tableau/Tableau';
 
-
-export default function App() {
+export default function App (): JSX.Element {
   const loginer: UseLoginDto = useLogin();
-  const [openedMenu, setOpenedMenu] = React.useState("");
+  const [openedMenu, setOpenedMenu] = React.useState('');
 
   const logging = import.meta.env.DEV;
-  
+
   axios.interceptors.request.use(
     function (req) {
       req.baseURL = `${import.meta.env.VITE_API_PREFIX}`
       // req.meta.requestStartedAt = new Date().getTime();
       return req;
-  });
+    });
 
   axios.interceptors.response.use(
     function (response) {
@@ -38,7 +37,7 @@ export default function App() {
 
       return response;
     },
-    function (error) {
+    async function (error) {
       if (logging) { console.log('myaxiosintercept', AxiosErrorText(error), error) }
 
       // console.log('ttt', error);
@@ -49,11 +48,11 @@ export default function App() {
       // if ((error.response && error.response.data && error.response.data.detail) === 'Invalid token.' && error.request.responseURL.indexOf("logout") === -1) {
       // }
 
-      return Promise.reject(error);
+      return await Promise.reject(error);
     }
   );
 
-  return (  
+  return (
     <Router>
       <NavBar
         loginer={loginer}

@@ -20,41 +20,43 @@ session_start();
 // print_r($_REQUEST);
 // print_r($_SERVER);
 
+try {
+    $page = "";
+    if (isset($_GET["page"])) {
+        $page = $_GET["page"];
+    }
 
-$page = "";
-if(isset($_GET["page"]))
-{
-    $page = $_GET["page"];
-}
-
-mylogger("REQUEST TO page ".$page, LOGGER_DEBUG());
-switch($page)
-{
-    case "login":
-        require_once("routes/login.php");
-        break;
+    mylogger("REQUEST TO page " . $page, LOGGER_DEBUG());
+    switch ($page) {
+        case "login":
+            require_once("routes/login.php");
+            break;
 
 
-    default: 
-        print_r($_SERVER);
-        print_r("<br><br>");
-        print_r($_REQUEST);
+        default:
+            print_r($_SERVER);
+            print_r("<br><br>");
+            print_r($_REQUEST);
         // print_r($_SERVER);
-        
 
-// case "generateGame":
-//   require_once("controler/gameGeneration.php");
-//   generateGame($_POST);
-//   break;
 
-// case "searchGame":
-//   require_once("controler/gameGeneration.php");
-//   searchGame($_POST);
-//   break;
+        // case "generateGame":
+        //   require_once("controler/gameGeneration.php");
+        //   generateGame($_POST);
+        //   break;
 
-// case "upload":
-//   require_once("controler/uploading.php");
-//   uploadTrack($_POST, $_FILES);
-//   break;
+        // case "searchGame":
+        //   require_once("controler/gameGeneration.php");
+        //   searchGame($_POST);
+        //   break;
+
+        // case "upload":
+        //   require_once("controler/uploading.php");
+        //   uploadTrack($_POST, $_FILES);
+        //   break;
+    }
+
+} catch (Exception $e) {
+    mylogger('Uncaught top level exception: ' . $e->getMessage(), LOGGER_ERROR());
+    jsonResponse(array(), 500);
 }
-

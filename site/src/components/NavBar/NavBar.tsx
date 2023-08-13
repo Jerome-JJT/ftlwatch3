@@ -1,31 +1,27 @@
-import classNames from "classnames";
-import React from "react";
-import { Link } from "react-router-dom";
-import ProfileButton from "./ProfileButton";
-import { UseLoginDto } from "../Hooks/useLogin";
-
-
+import classNames from 'classnames'
+import { Link } from 'react-router-dom'
+import ProfileButton from './ProfileButton'
+import { type UseLoginDto } from '../Hooks/useLogin'
 
 interface NavBarProps {
-  loginer: UseLoginDto;
-  openedMenu: string;
-  setOpenedMenu: Function;
+  loginer: UseLoginDto
+  openedMenu: string
+  setOpenedMenu: Function
 }
 
-export default function NavBar({
+export default function NavBar ({
   loginer,
   openedMenu,
-  setOpenedMenu,
-}: NavBarProps) {
-
-  const handleClick = () => {
-    if (openedMenu !== "leftdrawer") {
-      setOpenedMenu("leftdrawer");
+  setOpenedMenu
+}: NavBarProps): JSX.Element {
+  const handleClick = (): void => {
+    if (openedMenu !== 'leftdrawer') {
+      setOpenedMenu('leftdrawer')
     } //
     else {
-      setOpenedMenu("");
+      setOpenedMenu('')
     }
-  };
+  }
 
   // const ref = React.useRef<HTMLDivElement | null>(null);
   // React.useEffect(() => {
@@ -52,7 +48,7 @@ export default function NavBar({
     <header className="top-0 z-50 w-full">
       <nav
         className={classNames(
-          "z-50 px-2 py-2.5 shadow-lg sm:px-4",
+          'z-50 px-2 py-2.5 shadow-lg sm:px-4'
         )}
       >
         <div className="mx-auto flex flex-wrap items-center justify-between">
@@ -79,7 +75,6 @@ export default function NavBar({
             </button>
           </div>
 
-
           <Link to="/" className="justify-start">
             <img
               src="https://42lausanne.ch/wp-content/uploads/2021/01/42_logo.svg"
@@ -96,5 +91,5 @@ export default function NavBar({
         </div>
       </nav>
     </header>
-  );
+  )
 }

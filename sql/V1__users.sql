@@ -25,7 +25,7 @@ CREATE TABLE "groups" (
 CREATE TABLE "submenus" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
-    "icon" character varying DEFAULT '', 
+    "icon" character varying, 
 
     "order" integer DEFAULT 30,
     "route" character varying, 
@@ -40,7 +40,7 @@ CREATE TABLE "pages" (
     "id" SERIAL NOT NULL, 
 
     "name" character varying NOT NULL,
-    "icon" character varying DEFAULT '', 
+    "icon" character varying, 
     "order" integer DEFAULT 30,
 
     "route" character varying, 

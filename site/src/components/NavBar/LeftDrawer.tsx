@@ -1,105 +1,134 @@
 import {
   Drawer,
-  Button,
   Typography,
   IconButton,
   List,
   ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip
-} from "@material-tailwind/react";
-import { AiFillHeart, AiOutlineClose } from 'react-icons/ai';
+  ListItemPrefix
+} from '@material-tailwind/react'
+import { AiFillCaretDown, AiFillCaretUp, AiFillHeart, AiFillStar, AiOutlineClose } from 'react-icons/ai'
 
-import { UseLoginDto } from "../Hooks/useLogin";
+import { type UseLoginDto } from '../Hooks/useLogin'
+import React from 'react'
 
 interface NavBarProps {
-  loginer: UseLoginDto;
-  openedMenu: string;
-  setOpenedMenu: Function;
+  loginer: UseLoginDto
+  openedMenu: string
+  setOpenedMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
+const screens = [
+  {
+    label: 'Home', url: 'Home'
+  },
+  {
+    label: 'Testing',
+    list: [
+      { label: 'Tests', url: 'Tests', icon: 'caretRight' },
+      { label: 'Permissions', url: 'Permissions' },
+      { label: 'User_Permissions', url: 'UserPermissions' },
+      { label: 'Groups', url: 'Groups' },
+      { label: 'Screen1', url: 'Screen1' }
+    ]
+  },
+  { label: 'Users', url: 'Users' },
+  { label: 'Images', url: 'Images' }
+]
 
-
-// const screens = [
-//   {
-//     label: "Home", url: "Home",
-//     icon: <MaterialCommunityIcons name={"home-variant-outline"} size={globalStyles.drawerTxt.fontSize + 4} color={globalStyles.drawerTxt.color} />
-//   },
-//   {
-//     label: "Testing",
-//     list: [
-//       { label: "Tests", url: "Tests", icon: 'caretRight' },
-//       { label: "Permissions", url: "Permissions" },
-//       { label: "User_Permissions", url: "UserPermissions" },
-//       { label: "Groups", url: "Groups" },
-//       { label: "Screen1", url: "Screen1" },
-//     ]
-//   },
-//   { label: "Users", url: "Users" },
-//   { label: "Images", url: "Images" },
-// ];
-
-
-
-export default function LeftDrawer({
+export default function LeftDrawer ({
   loginer,
   openedMenu,
-  setOpenedMenu,
-}: NavBarProps) {
-  
-  return (
-    <Drawer open={openedMenu === "leftdrawer"} onClose={() => setOpenedMenu("")} className="p-4">
-        <div className="mb-2 flex items-center justify-between p-4">
-          <Typography variant="h5" color="blue-gray">
-            Side Menu
-          </Typography>
-          <IconButton variant="text" color="blue-gray" onClick={() => setOpenedMenu("")}>
-            <AiOutlineClose/>
-          </IconButton>
-        </div>
-        <List>
-          <ListItem>
-            <ListItemPrefix>
-              <AiFillHeart/>
-            </ListItemPrefix>
-            Dashboard
-            <ListItemSuffix>
-              <Chip
-                value="14"
-                size="sm"
-                variant="ghost"
-                color="blue-gray"
-                className="rounded-full"
-              />
-            </ListItemSuffix>
-          </ListItem>
+  setOpenedMenu
+}: NavBarProps): JSX.Element {
+  const changeSub = (subId: number): void => {
+    if (subId === selectedSub) {
+      subId = -1
+    }
 
-        
-          <ListItem>
-            <ListItemPrefix>
-              <FontAwesomeIcon icon="AiFillAlert"/>
-            </ListItemPrefix>
-            Settings
+    setSelectedSub(subId)
+  }
+
+  const [selectedSub, setSelectedSub] = React.useState(-1)
+  // const [openedSub, setOpenedSub] = React.useState(-1);
+
+  function createDrawer (): any {
+    console.log('aaa', loginer.userPages)
+
+    return loginer.userPages?.flatMap((elem, id) => {
+      return ([
+
+        <ListItem key={`${id}`} onClick={() => { changeSub(id) }}>
+          <ListItemPrefix>
+
+            {
+              (
+                (
+                  (elem.list && elem.list.length > 0 && selectedSub === id) &&
+                  <AiFillCaretUp />
+                ) ||
+
+                (
+                  elem.list && elem.list.length > 0 &&
+                <AiFillCaretDown />)
+              ) ||
+
+              <AiFillStar />
+            }
+          </ListItemPrefix>
+
+          {(elem.name && elem.name) || ''}
+        </ListItem>,
+
+        elem.list?.map((sub: any, subId: number) => {
+          return (
+            selectedSub === id &&
+            <ListItem key={`${id}_${subId}`} className="ml-4">
+
+              <ListItemPrefix>
+                <AiFillStar />
+              </ListItemPrefix>
+
+              {(sub.name && sub.name) || ''}
+
+            </ListItem>
+          )
+        }),
+
+        (id < screens.length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
+
+      ])
+    })
+  }
+
+  return (
+    <Drawer open={openedMenu === 'leftdrawer'} onClose={() => { setOpenedMenu('') }} className="p-4">
+      <div className="mb-2 flex items-center justify-between p-4">
+        <Typography variant="h5" color="blue-gray">
+          Side Menu
+        </Typography>
+        <IconButton variant="text" color="blue-gray" onClick={() => { setOpenedMenu('') }}>
+          <AiOutlineClose />
+        </IconButton>
+      </div>
+      <List>
+
+        {createDrawer()}
+
+        {/* {
+          screens.map((elem, id) => {
+
+        return <ListItem onClick={() => changeSub(id)}>
+          <ListItemPrefix>
+            <AiFillHeart/>
+          </ListItemPrefix>
+
+          {elem.label && elem.label || ''}
+
           </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </ListItemPrefix>
-            Log Out
-          </ListItem>
-        </List>
-      </Drawer>
-  );
+          })
+        } */}
+
+      </List>
+    </Drawer>
+  )
 }

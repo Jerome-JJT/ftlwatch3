@@ -47,7 +47,8 @@ INSERT INTO "groups" ("id", "name") VALUES
   (2, 'BDE'),
   (3, 'Admin'),
   (4, 'Grant'),
-  (5, 'Event manager')
+  (5, 'Event manager'),
+  (6, 'Students')
   ON CONFLICT(id) DO NOTHING
 ;
 
@@ -69,7 +70,8 @@ INSERT INTO "pages" ("id", "name", "order", "route", "basefilter", "submenu_id")
   (6, 'Images current pool', 2, NULL, 'filter=currentpool', 2),
   (7, 'Images current year', 3, NULL, 'filter=currentyear', 2),
 
-  (8, 'Admin', 20, 'admin', NULL, 3)
+  (8, 'Admin', 20, 'admin', NULL, 3),
+  (9, 'Credits', 30, 'credits', NULL, NULL)
   ON CONFLICT(id) DO NOTHING
 ;
 

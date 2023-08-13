@@ -1,56 +1,42 @@
-import axios from "axios";
+import axios from 'axios';
 import React from 'react';
 
 export const getUsers = async () => {
-
-  const data = await axios.get(`/api/users/`,
-    { withCredentials: true, },
+  const data = await axios.get('/api/users/',
+    { withCredentials: true }
   )
     .then((api_response) => {
-
       return api_response.data
-
     })
     .catch((error) => {
-
       return AxiosErrorText(error);
     });
 
   return data;
 };
-
 
 export const getUserInfos = async (id: number) => {
-
   const data = await axios.get(`/api/users/${id}`,
-    { withCredentials: true, },
+    { withCredentials: true }
   )
     .then((api_response) => {
-
       return api_response.data
-
     })
     .catch((error) => {
-
       return AxiosErrorText(error);
     });
 
   return data;
 };
 
-
 export const getGroups = async () => {
-
-  const data = await axios.get(`/api/groups/`,
-    { withCredentials: true, },
+  const data = await axios.get('/api/groups/',
+    { withCredentials: true }
   )
     .then((api_response) => {
-
       return api_response.data
-
     })
     .catch((error) => {
-
       return AxiosErrorText(error);
     });
 
@@ -59,10 +45,10 @@ export const getGroups = async () => {
 
 export const createGroup = async (name) => {
   return await axios
-    .post("/api/groups/", {
-      name: name,
+    .post('/api/groups/', {
+      name
     },
-      { withCredentials: true, },
+    { withCredentials: true }
     )
     .then((res) => {
       if (res.status === 201) {
@@ -74,20 +60,15 @@ export const createGroup = async (name) => {
     .catch((error) => AxiosErrorText(error))
 };
 
-
 export const getGroupUsers = async (id: number) => {
-
   const data = await axios.get(`/api/groups/${id}`,
-    { withCredentials: true, },
+    { withCredentials: true }
   )
     .then((api_response) => {
-
       console.log(api_response.data)
       return api_response.data
-
     })
     .catch((error) => {
-
       return AxiosErrorText(error);
     });
 
@@ -95,40 +76,36 @@ export const getGroupUsers = async (id: number) => {
 };
 
 export const getPermissions = async () => {
-
-  const data = await axios.get(`/api/permissions/`,
-    { withCredentials: true, },
+  const data = await axios.get('/api/permissions/',
+    { withCredentials: true }
   )
     .then((api_response) => {
       return api_response.data
-
     })
     .catch((error) => {
-
       return AxiosErrorText(error);
     });
 
   console.log('chips', data);
-
 
   return data;
 };
 
 export const createPermission = async (name, codename, forceCodename) => {
   return await axios
-      .post("/api/permissions/", {
-          name: name,
-          codename: codename,
-          force: forceCodename,
-        },
-        { withCredentials: true, },
-      )
-      .then((res) => {
-        if (res.status === 201) {
-          return 'Permission created';
-        }
+    .post('/api/permissions/', {
+      name,
+      codename,
+      force: forceCodename
+    },
+    { withCredentials: true }
+    )
+    .then((res) => {
+      if (res.status === 201) {
+        return 'Permission created';
+      }
 
-        return 'Other success';
-      })
-      .catch((error) => AxiosErrorText(error) );
+      return 'Other success';
+    })
+    .catch((error) => AxiosErrorText(error));
 }
