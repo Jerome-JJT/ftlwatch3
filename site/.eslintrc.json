@@ -23,6 +23,7 @@
         "@typescript-eslint/semi": "off",
         "@typescript-eslint/consistent-type-assertions": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
-        "@typescript-eslint/brace-style": "off"
+        "@typescript-eslint/brace-style": "off",
+        "@typescript-eslint/prefer-nullish-coalescing": "off"
     }
 }

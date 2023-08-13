@@ -6,10 +6,11 @@ import {
   ListItem,
   ListItemPrefix
 } from '@material-tailwind/react'
-import { AiFillCaretDown, AiFillCaretUp, AiFillHeart, AiFillStar, AiOutlineClose } from 'react-icons/ai'
+import { AiFillCaretDown, AiFillCaretUp, AiFillHeart, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai'
 
 import { type UseLoginDto } from '../Hooks/useLogin'
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface NavBarProps {
   loginer: UseLoginDto
@@ -49,17 +50,15 @@ export default function LeftDrawer ({
   }
 
   const [selectedSub, setSelectedSub] = React.useState(-1)
-  // const [openedSub, setOpenedSub] = React.useState(-1);
+  const navigate = useNavigate();
 
   function createDrawer (): any {
-    console.log('aaa', loginer.userPages)
-
     return loginer.userPages?.flatMap((elem, id) => {
       return ([
 
-        <ListItem key={`${id}`} onClick={() => { changeSub(id) }}>
+        <ListItem key={`${id}`}
+         onClick={() => { (elem.list && elem.list.length > 0) ? changeSub(id) : navigate(elem.route) }}>
           <ListItemPrefix>
-
             {
               (
                 (
@@ -82,7 +81,7 @@ export default function LeftDrawer ({
         elem.list?.map((sub: any, subId: number) => {
           return (
             selectedSub === id &&
-            <ListItem key={`${id}_${subId}`} className="ml-4">
+            <ListItem key={`${id}_${subId}`} onClick={() => { navigate(sub.route); }} className="ml-4">
 
               <ListItemPrefix>
                 <AiFillStar />
@@ -110,23 +109,19 @@ export default function LeftDrawer ({
           <AiOutlineClose />
         </IconButton>
       </div>
+
       <List>
 
-        {createDrawer()}
-
-        {/* {
-          screens.map((elem, id) => {
-
-        return <ListItem onClick={() => changeSub(id)}>
+        <ListItem key={'home'} onClick={() => { navigate('/'); }}>
           <ListItemPrefix>
-            <AiFillHeart/>
+            <AiFillHome />
           </ListItemPrefix>
 
-          {elem.label && elem.label || ''}
+          {'Home'}
+        </ListItem>
+        <hr key={'sep_home'} className="my-2 border-blue-gray-200" />
 
-          </ListItem>
-          })
-        } */}
+        {createDrawer()}
 
       </List>
     </Drawer>
