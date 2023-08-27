@@ -56,12 +56,12 @@ def import_users(update_all = False):
             executeQueryAction("""INSERT INTO users (
                 "id", "login", "first_name", "last_name", "display_name", 
                 "avatar_url", "level", 
-                "kind", "staff?", "nbcursus", 
+                "kind", "is_staff", "nbcursus", 
                 "has_cursus21", "has_cursus9", "poolfilter_id") VALUES (
 
                 %(id)s, %(login)s, %(first_name)s, %(last_name)s, %(display_name)s, 
                 %(avatar_url)s, %(level)s,
-                %(kind)s, %(staff?)s, %(nbcursus)s,
+                %(kind)s, %(is_staff)s, %(nbcursus)s,
                 %(has_cursus21)s, %(has_cursus9)s, %(poolfilter_id)s
             )""", {
                 "id": user["id"], 
@@ -72,7 +72,7 @@ def import_users(update_all = False):
                 "avatar_url": good_avatar_url, 
                 "level": '', 
                 "kind": user["kind"], 
-                "staff?": user["staff?"], 
+                "is_staff": user["staff?"], 
                 "nbcursus": -2, 
                 "has_cursus21": False, 
                 "has_cursus9": False, 

@@ -15,10 +15,10 @@ CREATE TABLE "users" (
     "display_name" character varying NOT NULL, 
     "avatar_url" character varying NOT NULL,
 
-    "grade" character varying NOT NULL,
+    "grade" character varying DEFAULT '',
     "level" character varying NOT NULL,
     "kind" character varying NOT NULL,
-    "staff?" boolean NOT NULL,
+    "is_staff" boolean NOT NULL,
     
     "nbcursus" integer NOT NULL,
     "has_cursus21" boolean NOT NULL,

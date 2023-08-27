@@ -71,35 +71,37 @@ function getUserPages($user_id)
   return $realResult;
 }
 
-// function get_permissions($user_id)
-// {
+function needOnePermission($perms)
+{
 
-//   $query = "SELECT permissions.id, permissions.name, users_groups FROM permissions 
-//   JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
-//   JOIN groups ON groups_permissions.group_id = groups.id
-//   JOIN users_groups ON groups.id = users_groups.group_id
-//   JOIN users ON users_groups.user_id = users.id
+  return true;
 
-//   WHERE users_groups.user_id = :user_id";
+  // $query = "SELECT permissions.id, permissions.name, users_groups FROM permissions 
+  // JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
+  // JOIN groups ON groups_permissions.group_id = groups.id
+  // JOIN users_groups ON groups.id = users_groups.group_id
+  // JOIN users ON users_groups.user_id = users.id
 
-//   $data = array(":user_id" => $user_id);
-//   //   print_r($query);
+  // WHERE users_groups.user_id = :user_id";
 
-//   require_once("model/dbConnector.php");
-//   $result = executeQuerySelect($query, $data);
+  // $data = array(":user_id" => $user_id);
+  // //   print_r($query);
 
-//   if (count($result) === 1) {
-//     $result = $result[0];
+  // require_once("model/dbConnector.php");
+  // $result = executeQuerySelect($query, $data);
 
-//     if ($checkPassword) {
-//       return (password_verify($password, $result["password"]));
-//     }
+  // if (count($result) === 1) {
+  //   $result = $result[0];
 
-//     return true;
-//   }
+  //   if ($checkPassword) {
+  //     return (password_verify($password, $result["password"]));
+  //   }
 
-//   return false;
-// }
+  //   return true;
+  // }
+
+  // return false;
+}
 
 
 

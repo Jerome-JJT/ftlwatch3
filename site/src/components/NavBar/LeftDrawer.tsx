@@ -57,7 +57,9 @@ export default function LeftDrawer ({
       return ([
 
         <ListItem key={`${id}`}
-         onClick={() => { (elem.list && elem.list.length > 0) ? changeSub(id) : navigate(elem.route) }}>
+         onClick={() => { (elem.list && elem.list.length > 0)
+           ? changeSub(id)
+           : (elem.basefilter ? navigate(`${elem.route}?${elem.basefilter}`) : navigate(`${elem.route}`)) }}>
           <ListItemPrefix>
             {
               (
@@ -81,7 +83,8 @@ export default function LeftDrawer ({
         elem.list?.map((sub: any, subId: number) => {
           return (
             selectedSub === id &&
-            <ListItem key={`${id}_${subId}`} onClick={() => { navigate(sub.route); }} className="ml-4">
+            <ListItem className="ml-4" key={`${id}_${subId}`} onClick={() => {
+              sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`) }}>
 
               <ListItemPrefix>
                 <AiFillStar />

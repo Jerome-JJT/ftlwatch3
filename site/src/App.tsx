@@ -17,6 +17,7 @@ import LeftDrawer from './components/NavBar/LeftDrawer';
 import axios from 'axios';
 import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
 import Tableau from './components/Tableau/Tableau';
+// import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
   const loginer: UseLoginDto = useLogin();
@@ -79,6 +80,7 @@ export default function App (): JSX.Element {
             </>
           )}
           <Route path="/tableau" element={<Tableau loginer={loginer} />} />
+          {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
           <Route path="/login" element={<LogPage loginer={loginer} />} />
           <Route path="/loginapi" element={<LoginApi loginer={loginer} />} />
           <Route

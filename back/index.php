@@ -32,6 +32,10 @@ try {
             require_once("routes/login.php");
             break;
 
+        case "tableau":
+            require_once("routes/tableau.php");
+            break;
+
 
         default:
             print_r($_SERVER);

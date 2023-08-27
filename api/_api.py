@@ -92,10 +92,12 @@ def raw(req, for_test = False):
             return res
 
         elif (res.status_code == 401 and for_test == False):
+            fails += 1
             mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
             auth = get_headers(force_refresh = True)
 
         elif (res.status_code == 429):
+            fails += 1
             mylogger(f"Timeout api", LOGGER_INFO)
             time.sleep(1)
 
