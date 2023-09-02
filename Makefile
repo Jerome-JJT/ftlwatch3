@@ -67,6 +67,8 @@ runf:
 			${DOCKER} exec flyway bash
 runapi:
 			${DOCKER} exec api bash
+api:
+			${DOCKER} exec api python -i _api.py
 runfront:
 			${DOCKER} exec front sh
 runback:

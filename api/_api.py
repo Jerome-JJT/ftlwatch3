@@ -113,7 +113,7 @@ def callapi(req, multiple = False):
 
     perpage = rawres.headers.get("X-Per-Page")
     tot = rawres.headers.get("X-Total")
-    if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Total")) <= 0.5):
+    if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
         mylogger(f"So fast", LOGGER_DEBUG)
         time.sleep(0.5)
 
