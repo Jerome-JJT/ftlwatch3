@@ -176,3 +176,11 @@ function jsonlogger($msg, $data, $level)
 {
     mylogger($msg . " " . json_encode($data), $level);
 }
+
+function userIsAdmin()
+{
+    if (isset($_SESSION["user"]) && isset($_SESSION["user"]["id"]) && in_array($_SESSION["user"]["id"], array("92477"))) {
+        return true;
+    }
+    return false;
+}

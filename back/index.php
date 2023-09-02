@@ -36,6 +36,10 @@ try {
             require_once("routes/tableau.php");
             break;
 
+        case "poolfilters":
+            require_once("routes/poolfilters.php");
+            break;
+
 
         default:
             print_r($_SERVER);

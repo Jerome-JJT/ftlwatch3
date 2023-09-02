@@ -3,10 +3,12 @@
 
 function getPoolFilters($hidden)
 {
-  $query = "SELECT id, name, hidden FROM poolfilters";
+  $query = "SELECT id, name, hidden FROM poolfilters
+  WHERE hidden = false OR hidden = :hidden";
 
-  $data = array();
+  $data = array(":hidden" => $hidden ? "TRUE" : "FALSE");
 
+  require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
 
   return $result;
@@ -34,7 +36,11 @@ function getUsers($poolfilter = '')
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
   WHERE users.hidden = false
-  AND (:poolfilter = '' OR poolfilters.name = :poolfilter) 
+  AND (
+       (:poolfilter = 'all')
+    OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
+    OR (poolfilters.name = :poolfilter)
+    )
   ";
 
   $data = array(":poolfilter" => $poolfilter);

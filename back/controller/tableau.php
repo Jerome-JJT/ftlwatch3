@@ -40,7 +40,7 @@ function tableau_api($filter, $projects)
 
     $res = array();
 
-    $users = getUsers('');
+    $users = getUsers($filter);
 
     $res["values"] = $users;
 

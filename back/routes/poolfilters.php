@@ -1,7 +1,6 @@
 <?php
 
 require_once("controller/poolfilters.php");
-require_once("controller/me.php");
 
 $action = "";
 if (isset($_GET["action"])) {
