@@ -41,6 +41,7 @@ function getUsers($poolfilter = '')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
     OR (poolfilters.name = :poolfilter)
     )
+  ORDER BY login
   ";
 
   $data = array(":poolfilter" => $poolfilter);

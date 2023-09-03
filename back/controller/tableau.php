@@ -45,170 +45,22 @@ function tableau_api($filter, $projects)
     $res["values"] = $users;
 
     $res["columns"] = [
-        ["label" => "ID", "field" => "id", "sortable" => true],
-        ["label" => "Login", "field" => "login", "sortable" => true],
-        ["label" => "First Name", "field" => "first_name", "sortable" => true],
-        ["label" => "Last Name", "field" => "last_name", "sortable" => true],
-        ["label" => "Display Name", "field" => "display_name", "sortable" => true],
-        ["label" => "Avatar URL", "field" => "avatar_url", "sortable" => true],
-        ["label" => "Grade", "field" => "grade", "sortable" => true],
-        ["label" => "Level", "field" => "level", "sortable" => true],
-        ["label" => "Kind", "field" => "kind", "sortable" => true],
-        ["label" => "Staff", "field" => "is_staff", "sortable" => true],
-        ["label" => "Nbcursus", "field" => "nbcursus", "sortable" => true],
-        ["label" => "Has Cursus 21", "field" => "has_cursus21", "sortable" => true],
-        ["label" => "Has Cursus 9", "field" => "has_cursus9", "sortable" => true],
-        ["label" => "Pool Filter", "field" => "poolfilter", "sortable" => true]
+        ["label" => "ID", "field" => "id", "sort" => true, "fixed" => true, "width" => 70],
+        ["label" => "Image", "field" => "avatar_url", "sort" => true, "fixed" => true, "width" => 150],
+        ["label" => "Login", "field" => "login", "sort" => true, "fixed" => true, "width" => 100],
+        ["label" => "First Name", "field" => "first_name", "sort" => true],
+        ["label" => "Last Name", "field" => "last_name", "sort" => true],
+        ["label" => "Display Name", "field" => "display_name", "sort" => true],
+        ["label" => "Grade", "field" => "grade", "sort" => true],
+        ["label" => "Level", "field" => "level", "sort" => true],
+        ["label" => "Kind", "field" => "kind", "sort" => true],
+        ["label" => "Staff", "field" => "is_staff", "sort" => true],
+        ["label" => "Nbcursus", "field" => "nbcursus", "sort" => true],
+        ["label" => "Has Cursus 21", "field" => "has_cursus21", "sort" => true],
+        ["label" => "Has Cursus 9", "field" => "has_cursus9", "sort" => true],
+        ["label" => "Pool Filter", "field" => "poolfilter", "sort" => true]
     ];
 
-
-    // $res["values"] = [
-    //     [
-    //         "name" => "Tiger Nixon",
-    //         "position" => "System Architect",
-    //         "office" => "Edinburgh",
-    //         "age" => 61,
-    //         "date" => "2011/04/25",
-    //         "salary" => "$320,800"
-    //     ],
-    //     [
-    //         "name" => "Garrett Winters",
-    //         "position" => "Accountant",
-    //         "office" => "Tokyo",
-    //         "age" => 63,
-    //         "date" => "2011/07/25",
-    //         "salary" => "$170,750"
-    //     ],
-    //     [
-    //         "name" => "Ashton Cox",
-    //         "position" => "Junior Technical Author",
-    //         "office" => "San Francisco",
-    //         "age" => 66,
-    //         "date" => "2009/01/12",
-    //         "salary" => "$86,000"
-    //     ],
-    //     [
-    //         "name" => "Cedric Kelly",
-    //         "position" => "Senior Javascript Developer",
-    //         "office" => "Edinburgh",
-    //         "age" => 22,
-    //         "date" => "2012/03/29",
-    //         "salary" => "$433,060"
-    //     ],
-    //     [
-    //         "name" => "Airi Satou",
-    //         "position" => "Accountant",
-    //         "office" => "Tokyo",
-    //         "age" => 33,
-    //         "date" => "2008/11/28",
-    //         "salary" => "$162,700"
-    //     ],
-    //     [
-    //         "name" => "Brielle Williamson",
-    //         "position" => "Integration Specialist",
-    //         "office" => "New York",
-    //         "age" => 61,
-    //         "date" => "2012/12/02",
-    //         "salary" => "$372,000"
-    //     ],
-    //     [
-    //         "name" => "Herrod Chandler",
-    //         "position" => "Sales Assistant",
-    //         "office" => "San Francisco",
-    //         "age" => 59,
-    //         "date" => "2012/08/06",
-    //         "salary" => "$137,500"
-    //     ],
-    //     [
-    //         "name" => "Rhona Davidson",
-    //         "position" => "Integration Specialist",
-    //         "office" => "Tokyo",
-    //         "age" => 55,
-    //         "date" => "2010/10/14",
-    //         "salary" => "$327,900"
-    //     ],
-    //     [
-    //         "name" => "Colleen Hurst",
-    //         "position" => "Javascript Developer",
-    //         "office" => "San Francisco",
-    //         "age" => 39,
-    //         "date" => "2009/09/15",
-    //         "salary" => "$205,500"
-    //     ],
-    //     [
-    //         "name" => "Sonya Frost",
-    //         "position" => "Software Engineer",
-    //         "office" => "Edinburgh",
-    //         "age" => 23,
-    //         "date" => "2008/12/13",
-    //         "salary" => "$103,600"
-    //     ],
-    //     [
-    //         "name" => "Jena Gaines",
-    //         "position" => "Office Manager",
-    //         "office" => "London",
-    //         "age" => 30,
-    //         "date" => "2008/12/19",
-    //         "salary" => "$90,560"
-    //     ],
-    //     [
-    //         "name" => "Quinn Flynn",
-    //         "position" => "Support Lead",
-    //         "office" => "Edinburgh",
-    //         "age" => 22,
-    //         "date" => "2013/03/03",
-    //         "salary" => "$342,000"
-    //     ],
-    //     [
-    //         "name" => "Charde Marshall",
-    //         "position" => "Regional Director",
-    //         "office" => "San Francisco",
-    //         "age" => 36,
-    //         "date" => "2008/10/16",
-    //         "salary" => "$470,600"
-    //     ],
-    //     [
-    //         "name" => "Haley Kennedy",
-    //         "position" => "Senior Marketing Designer",
-    //         "office" => "London",
-    //         "age" => 43,
-    //         "date" => "2012/12/18",
-    //         "salary" => "$313,500"
-    //     ]
-    // ];
-
-    // $res["columns"] = [
-    //     [
-    //         "label" => "Name",
-    //         "field" => "name",
-    //         "sortable" => true
-    //     ],
-    //     [
-    //         "label" => "Position",
-    //         "field" => "position",
-    //         "sortable" => false
-    //     ],
-    //     [
-    //         "label" => "Office",
-    //         "field" => "office",
-    //         "sortable" => false
-    //     ],
-    //     [
-    //         "label" => "Age",
-    //         "field" => "age",
-    //         "sortable" => false
-    //     ],
-    //     [
-    //         "label" => "Start date",
-    //         "field" => "date",
-    //         "sortable" => true
-    //     ],
-    //     [
-    //         "label" => "Salary",
-    //         "field" => "salary",
-    //         "sortable" => false
-    //     ]
-    // ];
 
     jsonResponse($res, 200);
 
