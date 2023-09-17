@@ -36,6 +36,10 @@ try {
             require_once("routes/tableau.php");
             break;
 
+        // case "permissions":
+        //     require_once("routes/permissions.php");
+        //     break;
+
         case "poolfilters":
             require_once("routes/poolfilters.php");
             break;

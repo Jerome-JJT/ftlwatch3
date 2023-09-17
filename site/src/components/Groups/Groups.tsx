@@ -11,47 +11,39 @@ import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import Separator from '../Common/Separator';
 import Toasty from '../Common/Toasty';
 import { AiFillExclamationCircle } from 'react-icons/ai';
-import styled from 'styled-components';
 
-interface TableauProps {
+interface GroupsProps {
   loginer: UseLoginDto
 }
 
-class ColumnProps {
-  label: string = ''
-  field: string = ''
-  sort?: boolean = true
-  fixed?: boolean = false
-  width?: number
-}
+// class ColumnProps {
+//   label: string = ''
+//   field: string = ''
+//   sort?: boolean = true
+//   fixed?: boolean = false
+//   width?: number
+// }
 
-class PoolFilterProps {
-  id: string = ''
-  name: string = ''
-  hidden: boolean = true
-}
+// class PoolFilterProps {
+//   id: string = ''
+//   name: string = ''
+//   hidden: boolean = true
+// }
 
-function compareDates (a: string, b: string): number {
-  const [yearA, monthA] = a.split('.');
-  const [yearB, monthB] = b.split('.');
+const cols = [
+  "id",
+  "name",
+  "id",
+  "id",
+]
 
-  if (a.toLowerCase() === 'none.none') {
-    return 1;
-  } else if (b.toLowerCase() === 'none.none') {
-    return -1;
-  }
-
-  if (yearA !== yearB) {
-    return parseInt(yearA) - parseInt(yearB);
-  }
-
-  const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  return months.indexOf(monthA) - months.indexOf(monthB);
-}
+const vals = [
+  "",
+]
 
 export default function NavBar ({
   loginer
-}: TableauProps): JSX.Element {
+}: GroupsProps): JSX.Element {
   const datatable = React.useRef<HTMLDivElement | null>(null);
   const datatableSearch = React.useRef<HTMLInputElement | null>(null);
 
@@ -61,33 +53,26 @@ export default function NavBar ({
   console.log('default', defaultFilter)
 
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
-  const [filters, setFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+  // const [filters, setFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
   const [pageError, setPageError] = React.useState<string | undefined >(undefined);
 
-  React.useEffect(() => {
-    axios
-      .get('/?page=poolfilters&action=get',
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
+  // React.useEffect(() => {
+  //   axios
+  //     .get('/?page=poolfilters&action=get',
+  //       { withCredentials: true }
+  //     )
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
 
-          setFilters(res.data);
-        }
-      })
-      .catch((error) => {
-        return AxiosErrorText(error);
-      });
-  }, [])
+  //         setFilters(res.data);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       return AxiosErrorText(error);
+  //     });
+  // }, [])
 
-  React.useEffect(() => {
-  }, [])
-
-  const formatCell = (cell: any, value: any, row: any): void => {
-    console.log(cell, value, row)
-    cell.classList.add('bg-[#42A5F5]');
-  };
 
   React.useEffect(() => {
     console.log(datatable.current)
@@ -96,64 +81,72 @@ export default function NavBar ({
       datatable.current.innerHTML = '';
       initTE({ Datatable });
 
-      axios
-        .get(`/?page=tableau${usedFilter ? `&filter=${usedFilter}` : ''}`,
-          { withCredentials: true }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            const cols = res.data.columns as ColumnProps[];
 
-            const asyncTable = new Datatable(
-              datatable.current,
-              { columns: cols },
-              { loading: true }
-            );
 
-            if (datatableSearch.current !== null) {
-              datatableSearch.current.addEventListener('input', (e: any) => {
-                asyncTable.search(e.target.value);
-              });
-            }
+      const asyncTable = new Datatable(
+        datatable.current,
+        { columns: cols },
+        { loading: true }
+      );
 
-            if (res.data.values.length > 0) {
-              asyncTable.update(
-                {
-                  rows: res.data.values.map((row: any) => ({
-                    ...row,
-                    avatar_url: `<img style='min-width: 120px; max-height: 90px; object-fit: contain;' src='${row.avatar_url}'/>`
-                  }))
-                },
-                { loading: false }
-              );
-              setPageError(undefined);
-            }
-            else {
-              setPageError('No results found');
-            }
-          }
-        })
-        .catch((error) => {
-          // setLogged(false);
-          // setUserInfos({} as LoggedUserDto);
-          return AxiosErrorText(error);
-        });
+      asyncTable.update(
+        {
+          rows: vals.map((row: any) => ({
+            ...row,
+          }))
+        },
+        { loading: false }
+      );
+
+    //   axios
+    //     .get(`/?page=tableau${usedFilter ? `&filter=${usedFilter}` : ''}`,
+    //       { withCredentials: true }
+    //     )
+    //     .then((res) => {
+    //       if (res.status === 200) {
+    //         const cols = res.data.columns as ColumnProps[];
+
+    //         const asyncTable = new Datatable(
+    //           datatable.current,
+    //           { columns: cols },
+    //           { loading: true }
+    //         );
+
+    //         if (datatableSearch.current !== null) {
+    //           datatableSearch.current.addEventListener('input', (e: any) => {
+    //             asyncTable.search(e.target.value);
+    //           });
+    //         }
+
+    //         if (res.data.values.length > 0) {
+    //           asyncTable.update(
+    //             {
+    //               rows: res.data.values.map((row: any) => ({
+    //                 ...row,
+    //                 avatar_url: `<img style='min-width: 120px; max-height: 90px; object-fit: contain;' src='${row.avatar_url}'/>`
+    //               }))
+    //             },
+    //             { loading: false }
+    //           );
+    //           setPageError(undefined);
+    //         }
+    //         else {
+    //           setPageError('No results found');
+    //         }
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       // setLogged(false);
+    //       // setUserInfos({} as LoggedUserDto);
+    //       return AxiosErrorText(error);
+    //     });
     }
   }, [usedFilter])
 
-  const rotateTh = styled.section`
-    th {
-      transform rotate-90;
-      color: red;
-    }
-  `;
-
   //
   return (
-    <rotateTh>
-
     <div className='mx-8 mt-2'>
-      <div className='mb-2 flex flex-wrap justify-around gap-1'>
+      {/* <div className='mb-2 flex flex-wrap justify-around gap-1'>
         {
           filters?.map((filter) => {
             return (
@@ -169,7 +162,7 @@ export default function NavBar ({
           })
         }
       </div>
-      <Separator />
+      <Separator /> */}
       <div className='flex justify-center items-center text-lg font-medium tracking-wide'>
         Currently selected : { usedFilter }
       </div>
@@ -200,6 +193,5 @@ export default function NavBar ({
         data-te-max-height="720"
        className={classNames(pageError !== undefined ? 'hidden' : '')}></div>
     </div>
-    </rotateTh>
   );
 }

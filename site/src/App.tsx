@@ -80,6 +80,7 @@ export default function App (): JSX.Element {
             </>
           )}
           <Route path="/tableau" element={<Tableau loginer={loginer} />} />
+          <Route path="/groups" element={<Tableau loginer={loginer} />} />
           {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
           <Route path="/login" element={<LogPage loginer={loginer} />} />
           <Route path="/loginapi" element={<LoginApi loginer={loginer} />} />

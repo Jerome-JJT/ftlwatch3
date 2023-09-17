@@ -18,23 +18,23 @@ interface NavBarProps {
   setOpenedMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
-const screens = [
-  {
-    label: 'Home', url: 'Home'
-  },
-  {
-    label: 'Testing',
-    list: [
-      { label: 'Tests', url: 'Tests', icon: 'caretRight' },
-      { label: 'Permissions', url: 'Permissions' },
-      { label: 'User_Permissions', url: 'UserPermissions' },
-      { label: 'Groups', url: 'Groups' },
-      { label: 'Screen1', url: 'Screen1' }
-    ]
-  },
-  { label: 'Users', url: 'Users' },
-  { label: 'Images', url: 'Images' }
-]
+// const screens = [
+//   {
+//     label: 'Home', url: 'Home'
+//   },
+//   {
+//     label: 'Testing',
+//     list: [
+//       { label: 'Tests', url: 'Tests', icon: 'caretRight' },
+//       { label: 'Permissions', url: 'Permissions' },
+//       { label: 'User_Permissions', url: 'UserPermissions' },
+//       { label: 'Groups', url: 'Groups' },
+//       { label: 'Screen1', url: 'Screen1' }
+//     ]
+//   },
+//   { label: 'Users', url: 'Users' },
+//   { label: 'Images', url: 'Images' }
+// ]
 
 export default function LeftDrawer ({
   loginer,
@@ -96,7 +96,7 @@ export default function LeftDrawer ({
           )
         }),
 
-        (id < screens.length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
+        (id < (loginer.userPages || []).length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
 
       ])
     })
