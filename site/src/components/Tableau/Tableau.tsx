@@ -141,17 +141,8 @@ export default function NavBar ({
     }
   }, [usedFilter])
 
-  const rotateTh = styled.section`
-    th {
-      transform rotate-90;
-      color: red;
-    }
-  `;
-
   //
   return (
-    <rotateTh>
-
     <div className='mx-8 mt-2'>
       <div className='mb-2 flex flex-wrap justify-around gap-1'>
         {
@@ -176,7 +167,6 @@ export default function NavBar ({
       <Separator />
       { pageError !== undefined && (
         <>
-        {pageError}
         <Toasty addClass='bg-danger-100 text-danger-700' icon={<AiFillExclamationCircle size='20px'/>}>
           {pageError}
         </Toasty>
@@ -200,6 +190,5 @@ export default function NavBar ({
         data-te-max-height="720"
        className={classNames(pageError !== undefined ? 'hidden' : '')}></div>
     </div>
-    </rotateTh>
   );
 }
