@@ -49,7 +49,7 @@ function compareDates (a: string, b: string): number {
   return months.indexOf(monthA) - months.indexOf(monthB);
 }
 
-export default function NavBar ({
+export function TableauPage ({
   loginer
 }: TableauProps): JSX.Element {
   const datatable = React.useRef<HTMLDivElement | null>(null);

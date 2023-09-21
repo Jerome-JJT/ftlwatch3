@@ -11,18 +11,16 @@ import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import Separator from '../Common/Separator';
 import Toasty from '../Common/Toasty';
 import { AiFillExclamationCircle } from 'react-icons/ai';
+import { Checkbox } from '@material-tailwind/react';
 
 interface GroupsProps {
   loginer: UseLoginDto
 }
 
-// class ColumnProps {
-//   label: string = ''
-//   field: string = ''
-//   sort?: boolean = true
-//   fixed?: boolean = false
-//   width?: number
-// }
+class ColumnProps {
+  id: string = ''
+  name: string = ''
+}
 
 // class PoolFilterProps {
 //   id: string = ''
@@ -41,7 +39,7 @@ const vals = [
   "",
 ]
 
-export default function NavBar ({
+export function GroupsPage ({
   loginer
 }: GroupsProps): JSX.Element {
   const datatable = React.useRef<HTMLDivElement | null>(null);
@@ -74,6 +72,152 @@ export default function NavBar ({
   // }, [])
 
 
+  const aaa = async () => {
+    const res = await axios
+        .get(`/?page=permissions&action=groups_get`,
+          { withCredentials: true }
+        )
+        .then((res) => res)
+        .catch((error) => {
+          // setLogged(false);
+          // setUserInfos({} as LoggedUserDto);
+          return AxiosErrorText(error);
+        });
+
+
+        if (res.status === 200) {
+          const cols = res.data.columns as ColumnProps[];
+          // const cols = {
+          //   "columns": [
+          //     {
+          //       "label": "ID",
+          //       "field": "id",
+          //       "sort": true,
+          //       "fixed": true,
+          //       "width": 70
+          //     },
+          //     {
+          //       "label": "Image",
+          //       "field": "avatar_url",
+          //       "sort": true,
+          //       "fixed": true,
+          //       "width": 150
+          //     },
+          //     {
+          //       "label": "Login",
+          //       "field": "login",
+          //       "sort": true,
+          //       "fixed": true,
+          //       "width": 100
+          //     },
+          //     {
+          //       "label": "First Name",
+          //       "field": "first_name",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Last Name",
+          //       "field": "last_name",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Display Name",
+          //       "field": "display_name",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Grade",
+          //       "field": "grade",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Level",
+          //       "field": "level",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Kind",
+          //       "field": "kind",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Staff",
+          //       "field": "is_staff",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Nbcursus",
+          //       "field": "nbcursus",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Has Cursus 21",
+          //       "field": "has_cursus21",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Has Cursus 9",
+          //       "field": "has_cursus9",
+          //       "sort": true
+          //     },
+          //     {
+          //       "label": "Pool Filter",
+          //       "field": "poolfilter",
+          //       "sort": true
+          //     }
+          //   ]
+          // };
+          console.log('aaaa', res.data.values);
+          
+          const asyncTable = new Datatable(
+            datatable.current,
+            { columns: Object.values(cols) },
+            { loading: true }
+          );
+
+          // console.log('aaaa', res.data.values);
+
+          // const displayValues = Object.values(res.data.values).map((user_groups: any) => {
+
+          //   console.log(user_groups)
+          //   // return user_groups
+
+          //   Object.keys(user_groups).forEach((key) => {
+          //     if (key !== 'id' && key !== 'login') {
+          //       user_groups[key] = <Checkbox></Checkbox>
+          //     }
+          //   })
+
+          //   return user_groups
+          // })
+
+          // console.log('bbbb');
+          // console.log('bbbb', displayValues);
+          // if (datatableSearch.current !== null) {
+          //   datatableSearch.current.addEventListener('input', (e: any) => {
+          //     asyncTable.search(e.target.value);
+          //   });
+          // }
+
+          if (res.data.values.length > 0) {
+            asyncTable.update(
+              {
+                rows: res.data.values.map((row: any) => ({
+                  ...row,
+                }))
+              },
+              { loading: false }
+            );
+            setPageError(undefined);
+          }
+          else {
+            setPageError('No results found');
+          }
+        }
+      }
+  
+
+
   React.useEffect(() => {
     console.log(datatable.current)
 
@@ -81,65 +225,8 @@ export default function NavBar ({
       datatable.current.innerHTML = '';
       initTE({ Datatable });
 
-
-
-      const asyncTable = new Datatable(
-        datatable.current,
-        { columns: cols },
-        { loading: true }
-      );
-
-      asyncTable.update(
-        {
-          rows: vals.map((row: any) => ({
-            ...row,
-          }))
-        },
-        { loading: false }
-      );
-
-    //   axios
-    //     .get(`/?page=tableau${usedFilter ? `&filter=${usedFilter}` : ''}`,
-    //       { withCredentials: true }
-    //     )
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //         const cols = res.data.columns as ColumnProps[];
-
-    //         const asyncTable = new Datatable(
-    //           datatable.current,
-    //           { columns: cols },
-    //           { loading: true }
-    //         );
-
-    //         if (datatableSearch.current !== null) {
-    //           datatableSearch.current.addEventListener('input', (e: any) => {
-    //             asyncTable.search(e.target.value);
-    //           });
-    //         }
-
-    //         if (res.data.values.length > 0) {
-    //           asyncTable.update(
-    //             {
-    //               rows: res.data.values.map((row: any) => ({
-    //                 ...row,
-    //                 avatar_url: `<img style='min-width: 120px; max-height: 90px; object-fit: contain;' src='${row.avatar_url}'/>`
-    //               }))
-    //             },
-    //             { loading: false }
-    //           );
-    //           setPageError(undefined);
-    //         }
-    //         else {
-    //           setPageError('No results found');
-    //         }
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       // setLogged(false);
-    //       // setUserInfos({} as LoggedUserDto);
-    //       return AxiosErrorText(error);
-    //     });
+      aaa();
+      
     }
   }, [usedFilter])
 

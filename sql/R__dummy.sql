@@ -33,22 +33,28 @@ ON CONFLICT(id) DO NOTHING
 
 
 INSERT INTO "permissions" ("id", "name") VALUES
-  (1, 'Tuteurs'),
-  (2, 'BDE'),
-  (3, 'Admin'),
-  (4, 'Grant'),
-  (5, 'Event manager')
+  (1, 'Administration'),
+  (2, 'Updatation'),
+  (3, 'Event management'),
+  (4, 'Student'),
+  (5, 'View1'),
+  (6, 'View2'),
+  (7, 'View3'),
+  (8, 'View4')
   ON CONFLICT(id) DO NOTHING
 ;
 
 
 INSERT INTO "groups" ("id", "name") VALUES
-  (1, 'Tuteurs'),
-  (2, 'BDE'),
-  (3, 'Admin'),
-  (4, 'Grant'),
-  (5, 'Event manager'),
-  (6, 'Students')
+  (1, 'Admin'),
+  (2, 'Event manager'),
+  (3, 'Tuteurs'),
+  (4, 'BDE'),
+  (5, 'Students'),
+  (6, 'Stalk1'),
+  (7, 'Stalk2'),
+  (8, 'Stalk3'),
+  (9, 'Stalk4')
   ON CONFLICT(id) DO NOTHING
 ;
 
@@ -74,6 +80,9 @@ INSERT INTO "pages" ("id", "name", "order", "route", "basefilter", "submenu_id")
   (9, 'Credits', 30, 'credits', NULL, NULL)
   ON CONFLICT(id) DO NOTHING
 ;
+
+
+
 
 
 

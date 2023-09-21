@@ -16,7 +16,8 @@ import CreateAccountPage from './components/Log/CreateAccountPage';
 import LeftDrawer from './components/NavBar/LeftDrawer';
 import axios from 'axios';
 import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
-import Tableau from './components/Tableau/Tableau';
+import { TableauPage } from './components/Tableau/Tableau';
+import { GroupsPage } from './components/Groups/Groups';
 // import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
@@ -79,8 +80,8 @@ export default function App (): JSX.Element {
             <>
             </>
           )}
-          <Route path="/tableau" element={<Tableau loginer={loginer} />} />
-          <Route path="/groups" element={<Tableau loginer={loginer} />} />
+          <Route path="/tableau" element={<TableauPage loginer={loginer} />} />
+          <Route path="/groups" element={<GroupsPage loginer={loginer} />} />
           {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
           <Route path="/login" element={<LogPage loginer={loginer} />} />
           <Route path="/loginapi" element={<LoginApi loginer={loginer} />} />
