@@ -15,13 +15,19 @@ function groups_get()
 
     $res = array();
 
-    $res["columns"] = array_map(function ($value) { 
+    $res["columns"] = array_merge(array(array("label" => "Login", "field" => "login")),
+        array_map(function ($value) { 
         return array("label" => $value["name"], "field" => $value["id"]);
-    }, $tmp[0]);
+    }, $tmp[0]));
 
-    $res["values"] = $tmp[1];
+    $res["values"] = array();
+    
+    foreach ($tmp[1] as $key => $value) {
 
-    jsonlogger('aaa', $res, LOGGER_DEBUG());
+        array_push($res["values"], array_merge($value, array("login" => $key)));
+    }
+
+    // jsonlogger('aaa', $res, LOGGER_DEBUG());
 
 
     jsonResponse($res, 200);

@@ -18,8 +18,8 @@ interface GroupsProps {
 }
 
 class ColumnProps {
-  id: string = ''
-  name: string = ''
+  field: string = ''
+  label: string = ''
 }
 
 // class PoolFilterProps {
@@ -27,17 +27,6 @@ class ColumnProps {
 //   name: string = ''
 //   hidden: boolean = true
 // }
-
-const cols = [
-  "id",
-  "name",
-  "id",
-  "id",
-]
-
-const vals = [
-  "",
-]
 
 export function GroupsPage ({
   loginer
@@ -86,87 +75,9 @@ export function GroupsPage ({
 
 
         if (res.status === 200) {
-          const cols = res.data.columns as ColumnProps[];
-          // const cols = {
-          //   "columns": [
-          //     {
-          //       "label": "ID",
-          //       "field": "id",
-          //       "sort": true,
-          //       "fixed": true,
-          //       "width": 70
-          //     },
-          //     {
-          //       "label": "Image",
-          //       "field": "avatar_url",
-          //       "sort": true,
-          //       "fixed": true,
-          //       "width": 150
-          //     },
-          //     {
-          //       "label": "Login",
-          //       "field": "login",
-          //       "sort": true,
-          //       "fixed": true,
-          //       "width": 100
-          //     },
-          //     {
-          //       "label": "First Name",
-          //       "field": "first_name",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Last Name",
-          //       "field": "last_name",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Display Name",
-          //       "field": "display_name",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Grade",
-          //       "field": "grade",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Level",
-          //       "field": "level",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Kind",
-          //       "field": "kind",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Staff",
-          //       "field": "is_staff",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Nbcursus",
-          //       "field": "nbcursus",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Has Cursus 21",
-          //       "field": "has_cursus21",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Has Cursus 9",
-          //       "field": "has_cursus9",
-          //       "sort": true
-          //     },
-          //     {
-          //       "label": "Pool Filter",
-          //       "field": "poolfilter",
-          //       "sort": true
-          //     }
-          //   ]
-          // };
+          const tmp_cols = res.data.columns as ColumnProps[];
+          const cols = tmp_cols.map((v) => ({...v, field: v.field.toString()}))
+
           console.log('aaaa', res.data.values);
           
           const asyncTable = new Datatable(
@@ -177,19 +88,19 @@ export function GroupsPage ({
 
           // console.log('aaaa', res.data.values);
 
-          // const displayValues = Object.values(res.data.values).map((user_groups: any) => {
+          const displayValues = Object.values(res.data.values).map((user_groups: any) => {
 
-          //   console.log(user_groups)
-          //   // return user_groups
+            console.log(user_groups)
+            // return user_groups
 
-          //   Object.keys(user_groups).forEach((key) => {
-          //     if (key !== 'id' && key !== 'login') {
-          //       user_groups[key] = <Checkbox></Checkbox>
-          //     }
-          //   })
+            Object.keys(user_groups).forEach((key) => {
+              if (key !== 'id' && key !== 'login') {
+                user_groups[key] = `<input type='checkbox' onClick=checkboxClick ${user_groups[key] ? 'checked' : ''}>`
+              }
+            })
 
-          //   return user_groups
-          // })
+            return user_groups
+          })
 
           // console.log('bbbb');
           // console.log('bbbb', displayValues);
@@ -202,7 +113,7 @@ export function GroupsPage ({
           if (res.data.values.length > 0) {
             asyncTable.update(
               {
-                rows: res.data.values.map((row: any) => ({
+                rows: displayValues.map((row: any) => ({
                   ...row,
                 }))
               },
@@ -230,9 +141,16 @@ export function GroupsPage ({
     }
   }, [usedFilter])
 
+  const checkboxClick = () => {
+    alert('test')
+  }
+
   //
   return (
     <div className='mx-8 mt-2'>
+      <script>
+        
+      </script>
       {/* <div className='mb-2 flex flex-wrap justify-around gap-1'>
         {
           filters?.map((filter) => {
