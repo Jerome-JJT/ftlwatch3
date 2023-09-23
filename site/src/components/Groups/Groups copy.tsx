@@ -11,47 +11,42 @@ import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import Separator from '../Common/Separator';
 import Toasty from '../Common/Toasty';
 import { AiFillExclamationCircle } from 'react-icons/ai';
-import styled from 'styled-components';
+import {
+  Card,
+  CardHeader,
+  Input,
+  Typography,
+  Button,
+  CardBody,
+  Chip,
+  CardFooter,
+  Tabs,
+  TabsHeader,
+  Tab,
+  Avatar,
+  IconButton,
+  Tooltip,
+} from "@material-tailwind/react";
 
-interface TableauProps {
+
+interface GroupsProps {
   loginer: UseLoginDto
 }
 
 class ColumnProps {
-  label: string = ''
   field: string = ''
-  sort?: boolean = true
-  fixed?: boolean = false
-  width?: number
+  label: string = ''
 }
 
-class PoolFilterProps {
-  id: string = ''
-  name: string = ''
-  hidden: boolean = true
-}
+// class PoolFilterProps {
+//   id: string = ''
+//   name: string = ''
+//   hidden: boolean = true
+// }
 
-function compareDates (a: string, b: string): number {
-  const [yearA, monthA] = a.split('.');
-  const [yearB, monthB] = b.split('.');
-
-  if (a.toLowerCase() === 'none.none') {
-    return 1;
-  } else if (b.toLowerCase() === 'none.none') {
-    return -1;
-  }
-
-  if (yearA !== yearB) {
-    return parseInt(yearA) - parseInt(yearB);
-  }
-
-  const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  return months.indexOf(monthA) - months.indexOf(monthB);
-}
-
-export function TableauPage ({
+export function GroupsPage ({
   loginer
-}: TableauProps): JSX.Element {
+}: GroupsProps): JSX.Element {
   const datatable = React.useRef<HTMLDivElement | null>(null);
   const datatableSearch = React.useRef<HTMLInputElement | null>(null);
 
@@ -61,33 +56,94 @@ export function TableauPage ({
   console.log('default', defaultFilter)
 
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
-  const [filters, setFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+  // const [filters, setFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
   const [pageError, setPageError] = React.useState<string | undefined >(undefined);
 
-  React.useEffect(() => {
-    axios
-      .get('/?page=poolfilters&action=get',
-        { withCredentials: true }
-      )
-      .then((res) => {
+  // React.useEffect(() => {
+  //   axios
+  //     .get('/?page=poolfilters&action=get',
+  //       { withCredentials: true }
+  //     )
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
+
+  //         setFilters(res.data);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       return AxiosErrorText(error);
+  //     });
+  // }, [])
+
+
+  const aaa = async () => {
+    const res = await axios
+        .get(`/?page=permissions&action=groups_get`,
+          { withCredentials: true }
+        )
+        .then((res) => res)
+        .catch((error) => {
+          // setLogged(false);
+          // setUserInfos({} as LoggedUserDto);
+          return AxiosErrorText(error);
+        });
+
+
         if (res.status === 200) {
-          (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
+          const tmp_cols = res.data.columns as ColumnProps[];
+          const cols = tmp_cols.map((v) => ({...v, field: v.field.toString()}))
 
-          setFilters(res.data);
+          console.log('aaaa', res.data.values);
+          
+          const asyncTable = new Datatable(
+            datatable.current,
+            { columns: Object.values(cols) },
+            { loading: true }
+          );
+
+          // console.log('aaaa', res.data.values);
+
+          const displayValues = Object.values(res.data.values).map((user_groups: any) => {
+
+            console.log(user_groups)
+            // return user_groups
+
+            Object.keys(user_groups).forEach((key) => {
+              if (key !== 'id' && key !== 'login') {
+                user_groups[key] = `<input type='checkbox' onClick=checkboxClick ${user_groups[key] ? 'checked' : ''}>`
+              }
+            })
+
+            return user_groups
+          })
+
+          // console.log('bbbb');
+          // console.log('bbbb', displayValues);
+          // if (datatableSearch.current !== null) {
+          //   datatableSearch.current.addEventListener('input', (e: any) => {
+          //     asyncTable.search(e.target.value);
+          //   });
+          // }
+
+          if (res.data.values.length > 0) {
+            asyncTable.update(
+              {
+                rows: displayValues.map((row: any) => ({
+                  ...row,
+                }))
+              },
+              { loading: false }
+            );
+            setPageError(undefined);
+          }
+          else {
+            setPageError('No results found');
+          }
         }
-      })
-      .catch((error) => {
-        return AxiosErrorText(error);
-      });
-  }, [])
+      }
+  
 
-  React.useEffect(() => {
-  }, [])
-
-  const formatCell = (cell: any, value: any, row: any): void => {
-    console.log(cell, value, row)
-    cell.classList.add('bg-[#42A5F5]');
-  };
 
   React.useEffect(() => {
     console.log(datatable.current)
@@ -96,55 +152,22 @@ export function TableauPage ({
       datatable.current.innerHTML = '';
       initTE({ Datatable });
 
-      axios
-        .get(`/?page=tableau${usedFilter ? `&filter=${usedFilter}` : ''}`,
-          { withCredentials: true }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            const cols = res.data.columns as ColumnProps[];
-
-            const asyncTable = new Datatable(
-              datatable.current,
-              { columns: cols },
-              { loading: true }
-            );
-
-            if (datatableSearch.current !== null) {
-              datatableSearch.current.addEventListener('input', (e: any) => {
-                asyncTable.search(e.target.value);
-              });
-            }
-
-            if (res.data.values.length > 0) {
-              asyncTable.update(
-                {
-                  rows: res.data.values.map((row: any) => ({
-                    ...row,
-                    avatar_url: `<img style='min-width: 120px; max-height: 90px; object-fit: contain;' src='${row.avatar_url}'/>`
-                  }))
-                },
-                { loading: false }
-              );
-              setPageError(undefined);
-            }
-            else {
-              setPageError('No results found');
-            }
-          }
-        })
-        .catch((error) => {
-          // setLogged(false);
-          // setUserInfos({} as LoggedUserDto);
-          return AxiosErrorText(error);
-        });
+      aaa();
+      
     }
   }, [usedFilter])
+
+  const checkboxClick = () => {
+    alert('test')
+  }
 
   //
   return (
     <div className='mx-8 mt-2'>
-      <div className='mb-2 flex flex-wrap justify-around gap-1'>
+      <script>
+        
+      </script>
+      {/* <div className='mb-2 flex flex-wrap justify-around gap-1'>
         {
           filters?.map((filter) => {
             return (
@@ -160,13 +183,14 @@ export function TableauPage ({
           })
         }
       </div>
-      <Separator />
+      <Separator /> */}
       <div className='flex justify-center items-center text-lg font-medium tracking-wide'>
         Currently selected : { usedFilter }
       </div>
       <Separator />
       { pageError !== undefined && (
         <>
+        {pageError}
         <Toasty addClass='bg-danger-100 text-danger-700' icon={<AiFillExclamationCircle size='20px'/>}>
           {pageError}
         </Toasty>

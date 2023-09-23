@@ -93,11 +93,9 @@ function getUserGroups() {
     FROM login_users 
     
     LEFT JOIN groups_login_users ON groups_login_users.login_user_id = login_users.id
-    LEFT JOIN groups ON groups.id = groups_login_users.group_id ";
+    LEFT JOIN groups ON groups.id = groups_login_users.group_id";
 
-  // $data = array(":user_id" => $user_id);
   $data = array();
-  //   print_r($query);
 
   require_once("model/dbConnector.php");
   $users = executeQuerySelect($query, $data);
@@ -110,12 +108,15 @@ function getUserGroups() {
   }
 
   foreach ($users as $user) {
+    $users_groups[$user['login']]["id"] = $user["id"];
+    $users_groups[$user['login']]["login"] = $user['login'];
     if ($user['group_id'] != null) {
       $users_groups[$user['login']][$user['group_id']] = true;
     }
   }
 
-  return array($groups, $users_groups);
+
+  return array($groups, array_values($users_groups));
 }
 
 function needOnePermission($perms)

@@ -7,9 +7,7 @@ require_once("model/permissions.php");
 
 function groups_get()
 {
-    jsonlogger('aaa', array(), LOGGER_DEBUG());
     $tmp = getUserGroups();
-    jsonlogger('aaa', $tmp, LOGGER_DEBUG());
 
     // print_r($tmp);
 
@@ -22,10 +20,12 @@ function groups_get()
 
     $res["values"] = array();
     
-    foreach ($tmp[1] as $key => $value) {
 
-        array_push($res["values"], array_merge($value, array("login" => $key)));
-    }
+    $res['values'] = $tmp[1];
+    // foreach ($tmp[1] as $key => $value) {
+
+    //     array_push($res["values"], array_merge($value, array("login" => $key)));
+    // }
 
     // jsonlogger('aaa', $res, LOGGER_DEBUG());
 

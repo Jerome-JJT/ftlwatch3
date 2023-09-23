@@ -2,9 +2,21 @@ import classNames from 'classnames';
 import React, { type ReactElement } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import {
-  Alert,
-  initTE
-} from 'tw-elements';
+  Card,
+  CardHeader,
+  Input,
+  Typography,
+  Button,
+  CardBody,
+  Chip,
+  CardFooter,
+  Tabs,
+  TabsHeader,
+  Tab,
+  Avatar,
+  IconButton,
+  Tooltip,
+} from "@material-tailwind/react";
 
 interface ToastyProps {
   addClass?: string
@@ -13,8 +25,6 @@ interface ToastyProps {
 }
 
 const Toasty = ({ addClass, icon, children }: ToastyProps): JSX.Element => {
-  initTE({ Alert });
-
   return (
     <div
       className={classNames('mb-3 inline-flex w-full items-center rounded-lg px-6 py-5 text-base', addClass)}
