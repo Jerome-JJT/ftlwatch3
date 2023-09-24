@@ -12,6 +12,10 @@ switch ($action) {
         groups_get();
         break;
 
+    case "group_set":
+        group_set($_POST);
+        break;
+
 }
 
 exit();

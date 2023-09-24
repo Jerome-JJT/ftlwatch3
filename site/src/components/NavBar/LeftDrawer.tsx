@@ -6,11 +6,11 @@ import {
   ListItem,
   ListItemPrefix
 } from '@material-tailwind/react'
-import { AiFillCaretDown, AiFillCaretUp, AiFillHeart, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai'
+import { AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai'
 
 import { type UseLoginDto } from '../Hooks/useLogin'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 interface NavBarProps {
   loginer: UseLoginDto
@@ -106,7 +106,7 @@ export default function LeftDrawer ({
     <Drawer open={openedMenu === 'leftdrawer'} onClose={() => { setOpenedMenu('') }} className="p-4">
       <div className="mb-2 flex items-center justify-between p-4">
         <Typography variant="h5" color="blue-gray">
-          Side Menu
+          Menu
         </Typography>
         <IconButton variant="text" color="blue-gray" onClick={() => { setOpenedMenu('') }}>
           <AiOutlineClose />

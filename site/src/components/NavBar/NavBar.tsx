@@ -6,7 +6,7 @@ import { type UseLoginDto } from '../Hooks/useLogin'
 interface NavBarProps {
   loginer: UseLoginDto
   openedMenu: string
-  setOpenedMenu: Function
+  setOpenedMenu: (menu: string) => void
 }
 
 export default function NavBar ({

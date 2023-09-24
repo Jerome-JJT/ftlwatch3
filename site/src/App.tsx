@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import HomePage from './components/Home/HomePage';
-import LogPage from './components/Log/LogPage';
 
 import NavBar from './components/NavBar/NavBar';
 
@@ -16,6 +15,8 @@ import CreateAccountPage from './components/Log/CreateAccountPage';
 import LeftDrawer from './components/NavBar/LeftDrawer';
 import axios from 'axios';
 import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
+
+import { LogPage } from './components/Log/LogPage';
 import { TableauPage } from './components/Tableau/Tableau';
 import { GroupsPage } from './components/Groups/Groups';
 // import Place from './components/Place/Place';

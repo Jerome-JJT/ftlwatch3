@@ -1,46 +1,43 @@
-import React, { SyntheticEvent } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { UseLoginDto } from "../Hooks/useLogin";
-
+import React, { type SyntheticEvent } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { type UseLoginDto } from '../Hooks/useLogin';
 
 interface LogPageProps {
-  loginer: UseLoginDto;
+  loginer: UseLoginDto
 }
 
-export default function LogPage({ loginer }: LogPageProps) {
-  const [pageMessage, setPageMessage] = React.useState("");
+export function LogPage ({ loginer }: LogPageProps): JSX.Element {
+  const [pageMessage, setPageMessage] = React.useState('');
 
-  const [login, setLogin] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [login, setLogin] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault();
 
     console.log(login, password);
 
     axios
-        .post("/?page=login&action=login", 
-          `login=${login}&password=${password}`, {withCredentials: true}, 
-        )
-        .then((res) => {
-          if (res.status === 200) {
-
-            loginer.getUserData();
-            setPageMessage("Login successful, redirecting...");
-            setTimeout(() => {
-              navigate("/");
-            }, 3000);
-          } //
-          else {
-            setPageMessage("Login error");
-          }
-        })
-        .catch(() => setPageMessage("Login error"));
-      // }
-  
+      .post('/?page=login&action=login',
+          `login=${login}&password=${password}`, { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          loginer.getUserData();
+          setPageMessage('Login successful, redirecting...');
+          setTimeout(() => {
+            navigate('/');
+          }, 3000);
+        } //
+        else {
+          setPageMessage('Login error');
+        }
+      })
+      .catch(() => { setPageMessage('Login error'); });
+    // }
   };
 
   return (
@@ -57,7 +54,7 @@ export default function LogPage({ loginer }: LogPageProps) {
                 className="block w-3/5 rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-300 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 type="text"
                 value={login}
-                onChange={(e) => setLogin(e.target.value)}
+                onChange={(e) => { setLogin(e.target.value); }}
                 required
               />
             </div>
@@ -71,13 +68,13 @@ export default function LogPage({ loginer }: LogPageProps) {
                 className="block w-3/5 rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); }}
                 required
               />
             </div>
 
             <button
-              onClick={handleSubmit}
+              onClick={() => handleSubmit}
               className="center content-center rounded-lg bg-blue-700 px-5 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 md:w-auto"
             >
               Login

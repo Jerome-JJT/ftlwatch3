@@ -1,56 +1,50 @@
-import classNames from 'classnames';
-import React, { type ReactElement } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
+import React from 'react';
 import {
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
-  CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@material-tailwind/react";
+  Alert
+} from '@material-tailwind/react';
 
 interface ToastyProps {
-  addClass?: string
+  className: string
+  closeAlert: () => void
   icon?: React.ReactNode
   children?: React.ReactNode
 }
 
-const Toasty = ({ addClass, icon, children }: ToastyProps): JSX.Element => {
+const Toasty = ({ className, closeAlert, icon, children }: ToastyProps): JSX.Element => {
   return (
-    <div
-      className={classNames('mb-3 inline-flex w-full items-center rounded-lg px-6 py-5 text-base', addClass)}
-      role="alert"
-      data-te-alert-init
-      data-te-alert-show>
-      {icon && (
-        <span className="mr-2">
-          {(
-            React.Children.map(icon, (child) => {
-              return React.cloneElement(child as ReactElement, { size: '22px' });
-            })
-          )}
-        </span>
-      )}
+    <Alert
+      open={true}
+      icon={icon}
+      className={className}
+      onClose={closeAlert}>
       {children}
-      <button
-        type="button"
-        className="ml-auto box-content rounded-none border-none p-1 text-warning-900 opacity-50 hover:text-warning-900 hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-        data-te-alert-dismiss
-        aria-label="Close">
-        <span className="w-[1em] focus:opacity-100 disabled:pointer-events-none disabled:select-none disabled:opacity-25 [&.disabled]:pointer-events-none [&.disabled]:select-none [&.disabled]:opacity-25">
-          <AiOutlineClose size='22px'/>
-        </span>
-      </button>
-    </div>
+    </Alert>
+
+  // <div
+  //   className={classNames('mb-3 inline-flex w-full items-center rounded-lg px-6 py-5 text-base', addClass)}
+  //   role="alert"
+  //   data-te-alert-init
+  //   data-te-alert-show>
+  //   {icon && (
+  //     <span className="mr-2">
+  //       {(
+  //         React.Children.map(icon, (child) => {
+  //           return React.cloneElement(child as ReactElement, { size: '22px' });
+  //         })
+  //       )}
+  //     </span>
+  //   )}
+  //   {children}
+  //   <button
+  //     type="button"
+  //     className="ml-auto box-content rounded-none border-none p-1 text-warning-900 opacity-50 hover:text-warning-900 hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+  //     data-te-alert-dismiss
+  //     aria-label="Close">
+  //     <span className="w-[1em] focus:opacity-100 disabled:pointer-events-none disabled:select-none disabled:opacity-25 [&.disabled]:pointer-events-none [&.disabled]:select-none [&.disabled]:opacity-25">
+  //       <AiOutlineClose size='22px'/>
+  //     </span>
+  //   </button>
+  // </div>
   );
 };
 

@@ -9,28 +9,32 @@ function groups_get()
 {
     $tmp = getUserGroups();
 
-    // print_r($tmp);
-
     $res = array();
 
-    $res["columns"] = array_merge(array(array("label" => "Login", "field" => "login")),
-        array_map(function ($value) { 
-        return array("label" => $value["name"], "field" => $value["id"]);
-    }, $tmp[0]));
-
-    $res["values"] = array();
-    
+    $res["columns"] = array_merge(
+        array(array("label" => "Login", "field" => "login")),
+        array_map(function ($value) {
+            return array("label" => $value["name"], "field" => $value["id"]);
+        }, $tmp[0])
+    );
 
     $res['values'] = $tmp[1];
-    // foreach ($tmp[1] as $key => $value) {
-
-    //     array_push($res["values"], array_merge($value, array("login" => $key)));
-    // }
-
-    // jsonlogger('aaa', $res, LOGGER_DEBUG());
-
 
     jsonResponse($res, 200);
+}
+
+
+function group_set($post)
+{
+    if (isset($post["userId"]) && isset($post["permId"]) && isset($post["value"])) {
+
+        mylogger($post["userId"] . '  ' . $post["permId"] . '  ' . $post["value"], LOGGER_DEBUG());
+        $res = setUserGroup($post["userId"], $post["permId"], $post["value"]);
+
+        jsonResponse($res, 200);
+    } else {
+        jsonResponse(array(), 406);
+    }
 }
 
 
