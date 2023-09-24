@@ -72,7 +72,8 @@ function getUserPages($user_id)
 }
 
 
-function getUserGroups() {
+function getUserGroups()
+{
   $query = "SELECT groups.id, groups.name FROM groups";
 
   // $data = array(":user_id" => $user_id);
@@ -103,15 +104,15 @@ function getUserGroups() {
 
   $users_groups = array();
 
-  foreach (array_unique(array_column($users, "login")) as $user) {
+  foreach (array_unique(array_column($users, 'id')) as $user) {
     $users_groups[$user] = $group_ids;
   }
 
   foreach ($users as $user) {
-    $users_groups[$user['login']]["id"] = $user["id"];
-    $users_groups[$user['login']]["login"] = $user['login'];
+    $users_groups[$user['id']]['id'] = $user['id'];
+    $users_groups[$user['id']]['login'] = $user['login'];
     if ($user['group_id'] != null) {
-      $users_groups[$user['login']][$user['group_id']] = true;
+      $users_groups[$user['id']][$user['group_id']] = true;
     }
   }
 
