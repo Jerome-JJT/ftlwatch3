@@ -36,12 +36,12 @@ export default function App (): JSX.Element {
 
   axios.interceptors.response.use(
     function (response) {
-      if (logging) { console.log('inter res', response) }
+      if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response) }
 
       return response;
     },
     async function (error) {
-      if (logging) { console.log('myaxiosintercept', AxiosErrorText(error), error) }
+      if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error) }
 
       // console.log('ttt', error);
       if (error.response && error.response.status === 401) {

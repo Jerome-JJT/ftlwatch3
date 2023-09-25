@@ -29,13 +29,11 @@ export function GroupsPage ({
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  const setPermission = (userId: number, permId: number, value: boolean): void => {
-    axios
-      .post('/?page=permissions&action=group_set', {
-        userId,
-        permId,
-        value
-      })
+  const changePermission = async (userId: number, permId: number, value: boolean): Promise<boolean> => {
+    return await axios
+      .post('/?page=permissions&action=group_set', 
+        `userId=${userId}&permId=${permId}&=${value}`, { withCredentials: true }
+      )
       .then((res) => {
         if (res.status === 200) {
           // localStorage.setItem('token', res.data.access_token);
@@ -43,9 +41,11 @@ export function GroupsPage ({
         else {
           // setPageMessage('Error contacting 42 API');
         }
+        return true;
       })
       .catch((error) => {
         setPageError(AxiosErrorText(error));
+        return false;
       });
   }
 
@@ -65,7 +65,11 @@ export function GroupsPage ({
                   userGroups[key] = <Checkbox
                     id={`${userGroups.id}-${key}`}
                     defaultChecked={userGroups[key]}
-                    onChange={(e: any) => { setPermission(userGroups.id, parseInt(key), e.target.checked) }}
+                    onClick={async (e: any) => { 
+                      if(!(await changePermission(userGroups.id, parseInt(key), e.target.checked))) {
+                        e.target.checked = !e.target.checked;
+                      }
+                    }}
                   />
                 }
               })
@@ -93,7 +97,7 @@ export function GroupsPage ({
           <Toasty
             className='bg-red-100 text-danger-700 mb-2'
             icon={<AiFillExclamationCircle />}
-            closeAlert={() => { setPageError(''); }}>
+            closeAlert={() => { setPageError(undefined); }}>
 
             {pageError}
           </Toasty>

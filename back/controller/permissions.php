@@ -26,6 +26,7 @@ function groups_get()
 
 function group_set($post)
 {
+    print_r($post);
     if (isset($post["userId"]) && isset($post["permId"]) && isset($post["value"])) {
 
         mylogger($post["userId"] . '  ' . $post["permId"] . '  ' . $post["value"], LOGGER_DEBUG());
@@ -33,7 +34,7 @@ function group_set($post)
 
         jsonResponse($res, 200);
     } else {
-        jsonResponse(array(), 406);
+        jsonResponse(array(), 400);
     }
 }
 

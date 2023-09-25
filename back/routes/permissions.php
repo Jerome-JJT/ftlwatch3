@@ -7,6 +7,9 @@ if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+mylogger('testtttt   '.$action, LOGGER_DEBUG());
+
+
 switch ($action) {
     case "groups_get":
         groups_get();

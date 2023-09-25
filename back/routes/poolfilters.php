@@ -9,7 +9,7 @@ if (isset($_GET["action"])) {
 
 switch ($action) {
     case "get":
-        get($_POST);
+        get();
         break;
 
 }
