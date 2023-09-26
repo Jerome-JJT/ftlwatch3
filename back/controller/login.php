@@ -34,6 +34,7 @@ function login($post)
         if ($isLogin) {
             login_way($post["login"]);
         }
+        jsonResponse(array(), 400);
 
         // print_r("value");
         // print_r($isLogin);

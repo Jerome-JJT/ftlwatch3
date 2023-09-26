@@ -29,10 +29,10 @@ export function GroupsPage ({
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  const changePermission = async (userId: number, permId: number, value: boolean): Promise<boolean> => {
+  const changePermission = async (userId: number, groupId: number, value: boolean): Promise<boolean> => {
     return await axios
       .post('/?page=permissions&action=group_set', 
-        `userId=${userId}&permId=${permId}&=${value}`, { withCredentials: true }
+        `userId=${userId}&groupId=${groupId}&value=${value}`, { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {

@@ -26,13 +26,11 @@ function groups_get()
 
 function group_set($post)
 {
-    print_r($post);
-    if (isset($post["userId"]) && isset($post["permId"]) && isset($post["value"])) {
+    if (isset($post["userId"]) && isset($post["groupId"]) && isset($post["value"])) {
 
-        mylogger($post["userId"] . '  ' . $post["permId"] . '  ' . $post["value"], LOGGER_DEBUG());
-        $res = setUserGroup($post["userId"], $post["permId"], $post["value"]);
+        $res = setUserGroup($post["userId"], $post["groupId"], $post["value"]);
 
-        jsonResponse($res, 200);
+        jsonResponse(array(), $res ? 200 : 409);
     } else {
         jsonResponse(array(), 400);
     }
@@ -49,10 +47,8 @@ function login($post)
         if ($isLogin) {
             login_way($post["login"]);
         }
-
-        // print_r("value");
-        // print_r($isLogin);
-    } else {
+    }
+    else {
         jsonResponse(array(), 400);
     }
 }
@@ -101,8 +97,6 @@ function loginapi_callback($post)
         }
 
         login_way($meInfos["login"]);
-
-        // return ($token);
     } else {
         jsonResponse(array(), 400);
     }

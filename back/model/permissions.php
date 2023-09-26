@@ -75,14 +75,10 @@ function getUserPages($user_id)
 function getUserGroups()
 {
   $query = "SELECT groups.id, groups.name FROM groups";
-
-  // $data = array(":user_id" => $user_id);
   $data = array();
-  //   print_r($query);
 
   require_once("model/dbConnector.php");
   $groups = executeQuerySelect($query, $data);
-  // $group_names = array_map(function ($value) { return false; }, array_flip(array_column($groups, $name)));
   $group_ids = array_fill_keys(array_column($groups, "id"), false);
 
 
@@ -120,52 +116,39 @@ function getUserGroups()
   return array($groups, array_values($users_groups));
 }
 
-function setUserGroup($userId, $permId, $value)
+function setUserGroup($userId, $groupId, $value)
 {
-  // $query = "SELECT groups.id, groups.name FROM groups";
+  $query = "SELECT id FROM groups_login_users
+  WHERE login_user_id = :user_id AND group_id = :group_id";
 
-  // // $data = array(":user_id" => $user_id);
-  // $data = array();
-  // //   print_r($query);
+  $data = array(":user_id" => $userId, ":group_id" => $groupId);
 
-  // require_once("model/dbConnector.php");
-  // $groups = executeQuerySelect($query, $data);
-  // // $group_names = array_map(function ($value) { return false; }, array_flip(array_column($groups, $name)));
-  // $group_ids = array_fill_keys(array_column($groups, "id"), false);
+  require_once("model/dbConnector.php");
+  $user_group = executeQuerySelect($query, $data);
 
+  if (count($user_group) >= 1 && $value == 'false') {
 
-  // $query = "SELECT 
-  //   login_users.id, 
-  //   login_users.login, 
-  //   groups.id AS group_id, 
-  //   groups.name AS group_name 
-  //   FROM login_users 
+    $query = "DELETE FROM groups_login_users
+    WHERE login_user_id = :user_id AND group_id = :group_id";
 
-  //   LEFT JOIN groups_login_users ON groups_login_users.login_user_id = login_users.id
-  //   LEFT JOIN groups ON groups.id = groups_login_users.group_id";
+    $data = array(":user_id" => $userId, ":group_id" => $groupId);
 
-  // $data = array();
+    return executeQueryAction($query, $data);
+  }
+  else if (count($user_group) == 0 && $value == 'true') {
 
-  // require_once("model/dbConnector.php");
-  // $users = executeQuerySelect($query, $data);
+    $query = "INSERT INTO groups_login_users (login_user_id, group_id)
+    VALUES (:user_id, :group_id)";
 
+    $data = array(":user_id" => $userId, ":group_id" => $groupId);
 
-  // $users_groups = array();
-
-  // foreach (array_unique(array_column($users, 'id')) as $user) {
-  //   $users_groups[$user] = $group_ids;
-  // }
-
-  // foreach ($users as $user) {
-  //   $users_groups[$user['id']]['id'] = $user['id'];
-  //   $users_groups[$user['id']]['login'] = $user['login'];
-  //   if ($user['group_id'] != null) {
-  //     $users_groups[$user['id']][$user['group_id']] = true;
-  //   }
-  // }
+    return executeQueryAction($query, $data);
+  }
+  else {
+    return false;
+  }
 
   return true;
-  // return array($groups, array_values($users_groups));
 }
 
 function needOnePermission($perms)

@@ -2,7 +2,7 @@
 
 require_once("controller/_common.php");
 
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:8080');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 1000');
@@ -12,6 +12,17 @@ session_set_cookie_params(0, "/", $_SERVER["SERVER_NAME"], true, true);
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     jsonResponse(array(), 200);
+}
+
+if (1 == 0) {
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+    error_reporting(-1);
+}
+else {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 }
 
 session_start();

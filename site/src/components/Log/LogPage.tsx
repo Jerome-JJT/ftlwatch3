@@ -42,7 +42,7 @@ export function LogPage ({ loginer }: LogPageProps): JSX.Element {
 
   return (
     <div className="mt-6 flex justify-center">
-      <form className="w-98 center justify-center border border-gray-500 bg-gray-200 py-2 pt-10 shadow-lg">
+      <form onSubmit={handleSubmit} className="w-98 center justify-center border border-gray-500 bg-gray-200 py-2 pt-10 shadow-lg">
         <div className="content sm:w-98 lg:w-98 center mh-8 w-full content-center items-center justify-center text-center">
           <>
             <div className="center mb-6 flex w-80 content-center justify-center px-6 text-center">
@@ -74,7 +74,6 @@ export function LogPage ({ loginer }: LogPageProps): JSX.Element {
             </div>
 
             <button
-              onClick={() => handleSubmit}
               className="center content-center rounded-lg bg-blue-700 px-5 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 md:w-auto"
             >
               Login
