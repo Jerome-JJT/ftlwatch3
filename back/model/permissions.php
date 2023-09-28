@@ -87,7 +87,6 @@ function getUserGroups()
     login_users.id, 
     login_users.login, 
     groups.id AS group_id, 
-    groups.name AS group_name 
     FROM login_users 
     
     LEFT JOIN groups_login_users ON groups_login_users.login_user_id = login_users.id
@@ -167,7 +166,6 @@ function getGroupPerms()
       groups.id, 
       groups.name, 
       permissions.id AS permission_id, 
-      permissions.name AS permission_name 
       FROM groups 
       
       LEFT JOIN groups_permissions ON groups_permissions.group_id = groups.id

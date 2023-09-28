@@ -15,6 +15,7 @@ CREATE TABLE "login_users" (
 CREATE TABLE "groups" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
+    "slug" character varying, 
     "owner_id" integer, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
@@ -61,6 +62,7 @@ CREATE TABLE "pages" (
 CREATE TABLE "permissions" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
+    "slug" character varying, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     -- CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE SET NULL,
