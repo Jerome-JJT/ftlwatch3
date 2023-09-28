@@ -7,8 +7,6 @@ if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
-mylogger('testtttt   '.$action, LOGGER_DEBUG());
-
 
 switch ($action) {
     case "groups_get":
@@ -19,6 +17,13 @@ switch ($action) {
         group_set($_POST);
         break;
 
+    case "perms_get":
+        perms_get();
+        break;
+
+    case "perms_set":
+        perms_set($_POST);
+        break;
 }
 
 exit();

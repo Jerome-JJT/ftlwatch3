@@ -24,11 +24,11 @@ function groups_get()
 }
 
 
-function group_set($post)
+function group_set($data)
 {
-    if (isset($post["userId"]) && isset($post["groupId"]) && isset($post["value"])) {
+    if (isset($data["userId"]) && isset($data["groupId"]) && isset($data["value"])) {
 
-        $res = setUserGroup($post["userId"], $post["groupId"], $post["value"]);
+        $res = setUserGroup($data["userId"], $data["groupId"], $data["value"]);
 
         jsonResponse(array(), $res ? 200 : 409);
     } else {
@@ -37,15 +37,46 @@ function group_set($post)
 }
 
 
-function login($post)
+function perms_get()
+{
+    $tmp = getGroupPerms();
+
+    $res = array();
+
+    $res["columns"] = array_merge(
+        array(array("label" => "Name", "field" => "name")),
+        array_map(function ($value) {
+            return array("label" => $value["name"], "field" => $value["id"]);
+        }, $tmp[0])
+    );
+
+    $res['values'] = $tmp[1];
+
+    jsonResponse($res, 200);
+}
+
+
+function perms_set($data)
+{
+    if (isset($data["groupId"]) && isset($data["permId"]) && isset($data["value"])) {
+
+        $res = setGroupPerm($data["groupId"], $data["permId"], $data["value"]);
+
+        jsonResponse(array(), $res ? 200 : 409);
+    } else {
+        jsonResponse(array(), 400);
+    }
+}
+
+function login($data)
 {
 
-    if (isset($post["login"]) && isset($post["password"])) {
+    if (isset($data["login"]) && isset($data["password"])) {
 
-        $isLogin = loginUser($post["login"], $post["password"], true);
+        $isLogin = loginUser($data["login"], $data["password"], true);
 
         if ($isLogin) {
-            login_way($post["login"]);
+            login_way($data["login"]);
         }
     }
     else {
@@ -63,13 +94,13 @@ function loginapi_authorize()
     exit();
 }
 
-function loginapi_callback($post)
+function loginapi_callback($data)
 {
 
-    if (isset($post["code"])) {
+    if (isset($data["code"])) {
 
         require_once("controller/api.php");
-        $response = code_exchange($post["code"]);
+        $response = code_exchange($data["code"]);
 
         if ($response === false) {
             jsonResponse(array(), 406);
@@ -132,7 +163,6 @@ function storeUser($res, $exists = 0)
 
 function logout()
 {
-
     $_SESSION = array();
     session_destroy();
     jsonResponse(array(), 204);
