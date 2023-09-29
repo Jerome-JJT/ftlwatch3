@@ -117,7 +117,7 @@ function storeUser($res, $exists = 0)
         updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
     }
 
-    $singleGroup = upsertUserGroup($userInfos["id"], $userInfos["login"]);
+    $singleGroup = upsertUserGroup($res["id"], $res["login"]);
     if ($singleGroup != -1) {
         setUserGroupBySlugs($res["id"], array("g_student", "g_admin"));
     }

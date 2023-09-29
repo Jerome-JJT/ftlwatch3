@@ -166,14 +166,18 @@ function setUserGroupBySlugs($userId, $groupsSlugs)
   require_once("model/dbConnector.php");
   $groups = executeQuerySelect($query, $data);
 
+  // jsonLogger('affasf', $groups, LOGGER_DEBUG());
+
+  $groups = array_filter($groups, function ($v) use($groupsSlugs) { return in_array($v["slug"], $groupsSlugs); });
 
 
-    // $query = "INSERT INTO groups_login_users (login_user_id, group_id)
-    // VALUES (:user_id, :group_id)";
+  $query = "INSERT INTO groups_login_users (login_user_id, group_id)
+  VALUES (:user_id, :group_id)";
 
-    // $data = array(":user_id" => $userId, ":group_id" => $groupId);
+  $newdata = array_map(function ($v) use($userId) {return array(":user_id" => $userId, ":group_id" => $v);}, array_column($groups, "id"));
+  // jsonLogger('affasf', $newdata, LOGGER_DEBUG());
 
-    // return executeQueryAction($query, $data);
+  return executeQueryAction($query, $newdata, true);
 }
 
 

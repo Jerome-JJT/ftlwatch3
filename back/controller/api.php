@@ -7,8 +7,6 @@ function code_exchange($code) {
   $content = "client_id=".getenv("API_UID")."&client_secret=".getenv("API_SECRET");
   $content .= "&grant_type=authorization_code&code=".$code."&redirect_uri=".getenv("FRONT_PREFIX")."/loginapi";
 
-  print_r($content);
-
   $curl = curl_init();
   curl_setopt_array($curl, array(
       CURLOPT_URL => "https://api.intra.42.fr/oauth/token",
