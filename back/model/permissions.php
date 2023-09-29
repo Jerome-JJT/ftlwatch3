@@ -75,7 +75,9 @@ function getUserPages($user_id)
 
 function getUserGroups()
 {
-  $query = "SELECT groups.id, groups.name FROM groups";
+  $query = "SELECT groups.id, groups.name 
+  FROM groups
+  WHERE groups.owner_id IS NULL";
   $data = array();
 
   require_once("model/dbConnector.php");
@@ -86,11 +88,13 @@ function getUserGroups()
   $query = "SELECT 
     login_users.id, 
     login_users.login, 
-    groups.id AS group_id, 
+    groups.id AS group_id
     FROM login_users 
     
     LEFT JOIN groups_login_users ON groups_login_users.login_user_id = login_users.id
-    LEFT JOIN groups ON groups.id = groups_login_users.group_id";
+    LEFT JOIN groups ON groups.id = groups_login_users.group_id
+    
+    WHERE groups.owner_id IS NULL";
 
   $data = array();
 
@@ -152,6 +156,27 @@ function setUserGroup($userId, $groupId, $value)
 }
 
 
+
+function setUserGroupBySlugs($userId, $groupsSlugs)
+{
+  $query = "SELECT id, slug FROM groups";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $groups = executeQuerySelect($query, $data);
+
+
+
+    // $query = "INSERT INTO groups_login_users (login_user_id, group_id)
+    // VALUES (:user_id, :group_id)";
+
+    // $data = array(":user_id" => $userId, ":group_id" => $groupId);
+
+    // return executeQueryAction($query, $data);
+}
+
+
 function getGroupPerms()
 {
   $query = "SELECT permissions.id, permissions.name FROM permissions";
@@ -165,7 +190,7 @@ function getGroupPerms()
   $query = "SELECT 
       groups.id, 
       groups.name, 
-      permissions.id AS permission_id, 
+      permissions.id AS permission_id
       FROM groups 
       
       LEFT JOIN groups_permissions ON groups_permissions.group_id = groups.id
@@ -176,10 +201,11 @@ function getGroupPerms()
   require_once("model/dbConnector.php");
   $groups = executeQuerySelect($query, $data);
 
+  // jsonLogger('', $groups, LOGGER_DEBUG());
 
   $groups_perms = array();
 
-  foreach (array_unique(array_column($perms, 'id')) as $group) {
+  foreach (array_unique(array_column($groups, 'id')) as $group) {
     $groups_perms[$group] = $perms_ids;
   }
 

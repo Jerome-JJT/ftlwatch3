@@ -98,6 +98,53 @@ function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar
   return $success;
 }
 
+function upsertUserGroup($id, $login) {
+  $query = "SELECT id
+  FROM groups
+  WHERE owner_id = :id";
+
+  $data = array(":id" => $id);
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  if (count($result) >= 1) {
+    return -1;
+  }
+  else {
+    $query = "INSERT INTO groups (name, owner_id)
+    VALUES (:name, :owner_id)";
+
+    $data = array(
+      ":name" => "sg_".$login,
+      ":owner_id" => $id,
+    );
+
+    $success = executeQueryAction($query, $data);
+
+    if ($success) {
+      $query = "SELECT id
+      FROM groups
+      WHERE owner_id = :id";
+
+      $data = array(":id" => $id);
+
+      require_once("model/dbConnector.php");
+      $result = executeQuerySelect($query, $data);
+
+      if (count($result) >= 1) {
+        return $result[0]["id"];
+      }
+      else {
+        throw new Exception('User group not found after creation');
+      }
+    }
+    else {
+      throw new Exception('User group creation error by zero.');
+    }
+  }
+}
+
 //Add a new user to the database
 // function createUser($userEmail, $userName, $userPassword)
 // {

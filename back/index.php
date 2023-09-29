@@ -1,6 +1,7 @@
 <?php
 
 require_once("controller/_common.php");
+require_once("controller/authorization.php");
 
 // header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:8080');
@@ -26,6 +27,10 @@ else {
 }
 
 session_start();
+
+if (isset($_SESSION["user"])) {
+
+}
 
 // print_r($_SERVER);
 

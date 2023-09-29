@@ -6,13 +6,11 @@ require_once("model/permissions.php");
 function login_way($login)
 {
     $userInfos = getUserInfos($login);
-
+    
     // TODO get rights and groups
-
+    
     if (!isset($userInfos["error"])) {
         jsonlogger("SET USER", $userInfos, LOGGER_DEBUG());
-
-
 
         $_SESSION["user"] = $userInfos;
         $_SESSION["pages"] = getUserPages($userInfos["id"]);
@@ -26,7 +24,6 @@ function login_way($login)
 
 function login($post)
 {
-
     if (isset($post["login"]) && isset($post["password"])) {
 
         $isLogin = loginUser($post["login"], $post["password"], true);
@@ -118,6 +115,11 @@ function storeUser($res, $exists = 0)
         createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
     } else {
         updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+    }
+
+    $singleGroup = upsertUserGroup($userInfos["id"], $userInfos["login"]);
+    if ($singleGroup != -1) {
+        setUserGroupBySlugs($res["id"], array("g_student", "g_admin"));
     }
 }
 

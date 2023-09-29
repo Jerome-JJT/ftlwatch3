@@ -32,31 +32,33 @@ ON CONFLICT(id) DO NOTHING
 ;
 
 
-INSERT INTO "permissions" ("id", "name") VALUES
-  (1, 'Administration'),
-  (2, 'Updatation'),
-  (3, 'Event management'),
-  (4, 'Student'),
-  (5, 'View1'),
-  (6, 'View2'),
-  (7, 'View3'),
-  (8, 'View4')
+INSERT INTO "permissions" ("id", "name", "slug") VALUES
+  (1, 'Administration', 'p_admin'),
+  (2, 'Updatation', 'p_update'),
+  (3, 'Event management', 'p_event'),
+  (4, 'Student', 'p_student'),
+  (5, 'View1', 'p_view1'),
+  (6, 'View2', 'p_view2'),
+  (7, 'View3', 'p_view3'),
+  (8, 'View4', 'p_view4')
   ON CONFLICT(id) DO NOTHING
 ;
+SELECT setval('permissions_id_seq', (SELECT MAX(id) from "permissions"));
 
 
-INSERT INTO "groups" ("id", "name") VALUES
-  (1, 'Admin'),
-  (2, 'Event manager'),
-  (3, 'Tuteurs'),
-  (4, 'BDE'),
-  (5, 'Students'),
-  (6, 'Stalk1'),
-  (7, 'Stalk2'),
-  (8, 'Stalk3'),
-  (9, 'Stalk4')
+INSERT INTO "groups" ("id", "name", "slug") VALUES
+  (1, 'Admin', 'g_admin'),
+  (2, 'Event manager', 'g_event'),
+  (3, 'Tuteurs', 'g_tutor'),
+  (4, 'BDE', 'g_bde'),
+  (5, 'Students', 'g_student'),
+  (6, 'Stalk1', 'g_stalk1'),
+  (7, 'Stalk2', 'g_stalk2'),
+  (8, 'Stalk3', 'g_stalk3'),
+  (9, 'Stalk4', 'g_stalk4')
   ON CONFLICT(id) DO NOTHING
 ;
+SELECT setval('groups_id_seq', (SELECT MAX(id) from "groups"));
 
 
 INSERT INTO "submenus" ("id", "name", "order", "route") VALUES
