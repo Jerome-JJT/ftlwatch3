@@ -2,12 +2,11 @@ import React from 'react';
 import { type UseLoginDto } from '../Hooks/useLogin';
 import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
-import Toasty from '../Common/Toasty';
-import { AiFillExclamationCircle } from 'react-icons/ai';
 import {
   Checkbox
 } from '@material-tailwind/react';
 import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
 
 interface GroupsProps {
   loginer: UseLoginDto
@@ -21,10 +20,7 @@ class ColumnProps {
 export function GroupsPage ({
   loginer
 }: GroupsProps): JSX.Element {
-  // const [searchParams] = useSearchParams();
-  // const defaultFilter = searchParams.get('filter');
-
-  const [pageError, setPageError] = React.useState<string | undefined>(undefined);
+  const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
@@ -36,15 +32,12 @@ export function GroupsPage ({
       )
       .then((res) => {
         if (res.status === 200) {
-          // localStorage.setItem('token', res.data.access_token);
+          // addNotif('teest2', 'question', false);
         } //
-        else {
-          // setPageMessage('Error contacting 42 API');
-        }
         return true;
       })
       .catch((error) => {
-        setPageError(AxiosErrorText(error));
+        addNotif(AxiosErrorText(error), 'error');
         return false;
       });
   }
@@ -78,10 +71,9 @@ export function GroupsPage ({
               return userWithGroups
             })
             setValues(displayValues);
-            setPageError(undefined);
           }
           else {
-            setPageError('No results found');
+            addNotif('No results found', 'error');
           }
         }
       })
@@ -93,18 +85,6 @@ export function GroupsPage ({
   //
   return (
     <div className='mx-8 mt-2'>
-      {pageError !== undefined && (
-        <>
-          <Toasty
-            className='bg-red-100 text-danger-700 mb-2'
-            icon={<AiFillExclamationCircle />}
-            closeAlert={() => { setPageError(undefined); }}>
-
-            {pageError}
-          </Toasty>
-        </>
-      )}
-
       {(columns && values) &&
         <SuperTable
           columns={columns}

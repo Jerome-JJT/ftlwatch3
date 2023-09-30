@@ -8,6 +8,7 @@ import {
   Checkbox
 } from '@material-tailwind/react';
 import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
 
 interface PermissionsProps {
   loginer: UseLoginDto
@@ -21,6 +22,7 @@ class ColumnProps {
 export function PermissionsPage ({
   loginer
 }: PermissionsProps): JSX.Element {
+  const { addNotif } = useNotification();
   // const [searchParams] = useSearchParams();
   // const defaultFilter = searchParams.get('filter');
 
@@ -38,13 +40,10 @@ export function PermissionsPage ({
         if (res.status === 200) {
           // localStorage.setItem('token', res.data.access_token);
         } //
-        else {
-          // setPageMessage('Error contacting 42 API');
-        }
         return true;
       })
       .catch((error) => {
-        setPageError(AxiosErrorText(error));
+        addNotif(AxiosErrorText(error), 'error')
         return false;
       });
   }
@@ -81,30 +80,18 @@ export function PermissionsPage ({
             setPageError(undefined);
           }
           else {
-            setPageError('No results found');
+            addNotif('No results found', 'error')
           }
         }
       })
       .catch((error) => {
-        return AxiosErrorText(error);
+        addNotif(AxiosErrorText(error), 'error')
       });
   }, [])
 
   //
   return (
     <div className='mx-8 mt-2'>
-      {pageError !== undefined && (
-        <>
-          <Toasty
-            className='bg-red-100 text-danger-700 mb-2'
-            icon={<AiFillExclamationCircle />}
-            closeAlert={() => { setPageError(undefined); }}>
-
-            {pageError}
-          </Toasty>
-        </>
-      )}
-
       {(columns && values) &&
         <SuperTable
           columns={columns}
