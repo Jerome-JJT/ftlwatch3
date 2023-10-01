@@ -21,8 +21,16 @@ switch ($action) {
         perms_get();
         break;
 
-    case "perms_set":
-        perms_set($_POST);
+    case "perm_set":
+        perm_set($_POST);
+        break;
+
+    case "pages_get":
+        pages_get();
+        break;
+
+    case "page_set":
+        page_set($_POST);
         break;
 }
 

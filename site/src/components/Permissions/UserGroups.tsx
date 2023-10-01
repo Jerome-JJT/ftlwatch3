@@ -8,7 +8,7 @@ import {
 import { SuperTable } from '../Common/SuperTable';
 import { useNotification } from '../Notifications/NotificationsProvider';
 
-interface GroupsProps {
+interface UserGroupsProps {
   loginer: UseLoginDto
 }
 
@@ -17,9 +17,9 @@ class ColumnProps {
   label: string = ''
 }
 
-export function GroupsPage ({
+export function UserGroupsPage ({
   loginer
-}: GroupsProps): JSX.Element {
+}: UserGroupsProps): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
@@ -53,14 +53,16 @@ export function GroupsPage ({
             setColumns(res.data.columns as ColumnProps[]);
 
             const displayValues = res.data.values.map((userWithGroups: any) => {
-              Object.keys(userWithGroups).forEach((colKey) => {
-                if (colKey !== 'id' && colKey !== 'login') {
-                  userWithGroups[colKey] = <Checkbox
-                    id={`${userWithGroups.id}-${colKey}`}
-                    defaultChecked={userWithGroups[colKey]}
+              console.log(userWithGroups, res.data.columns);
+
+              res.data.columns.forEach((col: ColumnProps) => {
+                if (col.field !== 'id' && col.field !== 'login') {
+                  userWithGroups[col.field] = <Checkbox
+                    id={`${userWithGroups.id}-${col.field}`}
+                    defaultChecked={userWithGroups[col.field]}
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={async (e: any) => {
-                      if (!(await changePermission(userWithGroups.id, parseInt(colKey), e.target.checked))) {
+                      if (!(await changePermission(userWithGroups.id, parseInt(col.field), e.target.checked))) {
                         e.target.checked = !e.target.checked;
                       }
                     }}
@@ -78,7 +80,7 @@ export function GroupsPage ({
         }
       })
       .catch((error) => {
-        return AxiosErrorText(error);
+        addNotif(AxiosErrorText(error), 'error');
       });
   }, [])
 
@@ -90,7 +92,7 @@ export function GroupsPage ({
           columns={columns}
           values={values}
           tableTitle='Groups'
-          options={[1, 2, 3]}
+          options={[10, 20, 30]}
           reloadFunction={() => { setValues([]) }}
         />
       }

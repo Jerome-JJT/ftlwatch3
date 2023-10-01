@@ -16,6 +16,7 @@ CREATE TABLE "groups" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
     "slug" character varying, 
+    "corder" integer DEFAULT 99, 
     "owner_id" integer, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
@@ -28,7 +29,7 @@ CREATE TABLE "submenus" (
     "name" character varying NOT NULL, 
     "icon" character varying, 
 
-    "order" integer DEFAULT 30,
+    "corder" integer DEFAULT 30,
     "route" character varying, 
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
@@ -37,38 +38,40 @@ CREATE TABLE "submenus" (
 );
 
 
-CREATE TABLE "pages" (
-    "id" SERIAL NOT NULL, 
-
-    "name" character varying NOT NULL,
-    "icon" character varying, 
-    "order" integer DEFAULT 30,
-
-    "route" character varying, 
-    "basefilter" character varying, 
-
-    -- "parent_id" integer,
-    -- "permission_id" integer, 
-    "submenu_id" integer,
-
-    "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    -- CONSTRAINT "PARENT_ID" FOREIGN KEY("parent_id") REFERENCES "pages"("id") ON DELETE CASCADE,
-    CONSTRAINT "SUBMENU_ID" FOREIGN KEY("submenu_id") REFERENCES "submenus"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_PAGE_ID" PRIMARY KEY ("id")
-);
-
 
 CREATE TABLE "permissions" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
     "slug" character varying, 
+    "corder" integer DEFAULT 99, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     -- CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE SET NULL,
     CONSTRAINT "PK_PERMISSION_ID" PRIMARY KEY ("id")
 );
 
+
+CREATE TABLE "pages" (
+    "id" SERIAL NOT NULL, 
+
+    "name" character varying NOT NULL,
+    "icon" character varying, 
+    "corder" integer DEFAULT 30,
+
+    "route" character varying, 
+    "basefilter" character varying, 
+
+    -- "parent_id" integer,
+    "permission_id" integer, 
+    "submenu_id" integer,
+
+    "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
+    "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
+    -- CONSTRAINT "PARENT_ID" FOREIGN KEY("parent_id") REFERENCES "pages"("id") ON DELETE CASCADE,
+    CONSTRAINT "SUBMENU_ID" FOREIGN KEY("submenu_id") REFERENCES "submenus"("id") ON DELETE CASCADE,
+    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
+    CONSTRAINT "PK_PAGE_ID" PRIMARY KEY ("id")
+);
 
 -- CREATE TABLE "pages_permissions" (
 --     "id" SERIAL NOT NULL, 

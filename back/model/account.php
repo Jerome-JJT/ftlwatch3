@@ -112,10 +112,11 @@ function upsertUserGroup($id, $login) {
     return -1;
   }
   else {
-    $query = "INSERT INTO groups (name, owner_id)
-    VALUES (:name, :owner_id)";
+    $query = "INSERT INTO groups (id, name, owner_id)
+    VALUES (:id, :name, :owner_id)";
 
     $data = array(
+      ":id" => $id,
       ":name" => "sg_".$login,
       ":owner_id" => $id,
     );

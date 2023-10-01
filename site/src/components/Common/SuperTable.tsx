@@ -11,6 +11,7 @@ import {
   IconButton,
   Switch
 } from '@material-tailwind/react';
+import MySelect from './MySelect';
 
 class ColumnProps {
   field: string = ''
@@ -183,8 +184,7 @@ export function SuperTable ({
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           {options.length > 0 &&
             <div className="w-full md:w-72">
-              <select value={usersPerPage.toString()} onChange={handleUsersPerPageChange}
-                className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all border text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200">
+              <MySelect label='Items per page' value={usersPerPage.toString()} onChange={handleUsersPerPageChange}>
                 {options.map((option) =>
                   <option key={option.toString()}
                     value={option.toString()}>
@@ -192,7 +192,7 @@ export function SuperTable ({
                   </option>
                 )}
                 {hasOptionAll && <option key='all' value={`${values.length}`}>All</option>}
-              </select>
+              </MySelect>
             </div>
           }
 

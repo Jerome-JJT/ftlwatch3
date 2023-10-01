@@ -28,9 +28,9 @@ else {
 
 session_start();
 
-if (isset($_SESSION["user"])) {
+load_permissions();
 
-}
+jsonlogger('PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());
 
 // print_r($_SERVER);
 

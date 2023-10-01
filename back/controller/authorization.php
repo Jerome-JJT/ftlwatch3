@@ -1,29 +1,28 @@
 <?php
 require_once("controller/_common.php");
+require_once("model/permissions/permissions.php");
 
 
-// function login($data)
-// {
+function load_permissions() {
 
-//     if (isset($data["login"]) && isset($data["password"])) {
+    if (isset($_SESSION["user"]) && isset($_SESSION["user"]["id"])) {
 
-//         $isLogin = loginUser($data["login"], $data["password"], true);
+        $permissions = getUserPermissions($_SESSION["user"]["id"]);
 
-//         if ($isLogin) {
-//             login_way($data["login"]);
-//         }
-//     }
-//     else {
-//         jsonResponse(array(), 400);
-//     }
-// }
+        $_REQUEST["permissions"] = array_column($permissions, "permission_slug");
+    }
+    else {
+        $_REQUEST["permissions"] = array();
+    }
+}
 
-// function loginapi_authorize()
-// {
+function has_permission($perm) {
+    return in_array($perm, $_REQUEST["permissions"]);
+}
 
-//     $authorization_redirect_url = "https://api.intra.42.fr/oauth/authorize?response_type=code";
-//     $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("FRONT_PREFIX") . "/loginapi" . "&scope=public";
+function need_permission($perm) {
+    if (!has_permission($perm)) {
 
-//     header("Location: " . $authorization_redirect_url);
-//     exit();
-// }
+        jsonResponse(array(), 403);
+    }
+}

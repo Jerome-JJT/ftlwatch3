@@ -1,7 +1,8 @@
 <?php
 require_once("controller/_common.php");
 require_once("model/account.php");
-require_once("model/permissions.php");
+require_once("model/permissions/permissions.php");
+require_once("model/permissions/user_groups.php");
 
 function login_way($login)
 {

@@ -18,10 +18,12 @@ import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
 
 import { LogPage } from './components/Log/LogPage';
 import { TableauPage } from './components/Tableau/Tableau';
-import { GroupsPage } from './components/Groups/Groups';
-import { PermissionsPage } from './components/Permissions/Permissions';
+
 import { NotificationProvider } from './components/Notifications/NotificationsProvider';
 import { NotifDisplay } from './components/Notifications/NotifDisplay';
+import { UserGroupsPage } from './components/Permissions/UserGroups';
+import { GroupPermissionsPage } from './components/Permissions/GroupPermissions';
+import { PagePermissionsPage } from './components/Permissions/PagePermissions';
 // import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
@@ -85,8 +87,11 @@ export default function App (): JSX.Element {
               </>
             )}
             <Route path="/tableau" element={<TableauPage loginer={loginer} />} />
-            <Route path="/groups" element={<GroupsPage loginer={loginer} />} />
-            <Route path="/permissions" element={<PermissionsPage loginer={loginer} />} />
+
+            <Route path="/groups" element={<UserGroupsPage loginer={loginer} />} />
+            <Route path="/permissions" element={<GroupPermissionsPage loginer={loginer} />} />
+            <Route path="/pages" element={<PagePermissionsPage loginer={loginer} />} />
+
             {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
             <Route path="/login" element={<LogPage loginer={loginer} />} />
             <Route path="/loginapi" element={<LoginApi loginer={loginer} />} />
