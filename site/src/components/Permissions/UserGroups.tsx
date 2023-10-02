@@ -1,5 +1,4 @@
 import React from 'react';
-import { type UseLoginDto } from '../Hooks/useLogin';
 import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
@@ -8,18 +7,12 @@ import {
 import { SuperTable } from '../Common/SuperTable';
 import { useNotification } from '../Notifications/NotificationsProvider';
 
-interface UserGroupsProps {
-  loginer: UseLoginDto
-}
-
 class ColumnProps {
   field: string = ''
   label: string = ''
 }
 
-export function UserGroupsPage ({
-  loginer
-}: UserGroupsProps): JSX.Element {
+export function UserGroupsPage (): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
@@ -91,7 +84,7 @@ export function UserGroupsPage ({
         <SuperTable
           columns={columns}
           values={values}
-          tableTitle='Groups'
+          tableTitle='Pages'
           options={[10, 20, 30]}
           reloadFunction={() => { setValues([]) }}
         />

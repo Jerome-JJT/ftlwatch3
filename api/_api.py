@@ -18,6 +18,12 @@ from _utils import *
 token = ""
 tokencachefile = "/tmp/.token"
 
+if __name__ == "__main__":
+    print("raw(req)")
+    print("callapi(req, multiple = False)")
+    print("userify(user)")
+
+
 def test_token(token):
     check = raw("/v2/users/jjaqueme", for_test = True)
     return check.status_code == 200
@@ -92,14 +98,17 @@ def raw(req, for_test = False):
             return res
 
         elif (res.status_code == 401 and for_test == False):
-            fails += 1
             mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
             auth = get_headers(force_refresh = True)
 
         elif (res.status_code == 429):
-            fails += 1
             mylogger(f"Timeout api", LOGGER_INFO)
-            time.sleep(1)
+
+        else:
+            mylogger(f"Api http error: {res.status_code} {res.reason}", LOGGER_WARNING)
+
+        fails += 1
+        time.sleep(1)
 
     mylogger(f"Raw api failed {maxfails} times", LOGGER_ERROR)
     raise Exception(f"Raw api failed {maxfails} times") 

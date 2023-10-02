@@ -1,5 +1,4 @@
 import React from 'react';
-import { type UseLoginDto } from '../Hooks/useLogin';
 import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import { Select, Option, Input, Button } from '@material-tailwind/react';
@@ -8,39 +7,33 @@ import { SuperTable } from '../Common/SuperTable';
 import { useNotification } from '../Notifications/NotificationsProvider';
 import MySelect from '../Common/MySelect';
 
-interface PagePermissionsProps {
-  loginer: UseLoginDto
-}
-
 class ColumnProps {
   field: string = ''
   label: string = ''
 }
 
-export function PagePermissionsPage ({
-  loginer
-}: PagePermissionsProps): JSX.Element {
+export function PagePermissionsPage (): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  // const modifyPageOrder = async (pageId: number, value: string): Promise<boolean> => {
-  //   return await axios
-  //     .post('/?page=permissions&action=page_set',
-  //       `pageId=${pageId}&order=${value}`, { withCredentials: true }
-  //     )
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         // addNotif('teest2', 'question', false);
-  //       } //
-  //       return true;
-  //     })
-  //     .catch((error) => {
-  //       addNotif(AxiosErrorText(error), 'error');
-  //       return false;
-  //     });
-  // }
+  const modifyPageOrder = async (pageId: number, order: string): Promise<boolean> => {
+    return await axios
+      .post('/?page=permissions&action=page_set',
+        `pageId=${pageId}&order=${order}`, { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          // addNotif('teest2', 'question', false);
+        } //
+        return true;
+      })
+      .catch((error) => {
+        addNotif(AxiosErrorText(error), 'error');
+        return false;
+      });
+  }
 
   const modifyPagePermission = async (pageId: number, permissionId: string): Promise<boolean> => {
     return await axios
@@ -69,16 +62,17 @@ export function PagePermissionsPage ({
           if (res.data.values.length > 0) {
             setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((page: any, index: number) => {
+            const displayValues = res.data.values.map((page: any) => {
               res.data.columns.forEach((col: ColumnProps) => {
                 if (col.field === 'corder') {
+                  const corderId = `corder-${page.id}`
                   page[col.field] =
                     <div className="relative flex w-full max-w-[24rem]">
-                      <Input label='corder' type='text' defaultValue={page[col.field]}/>
+                      <Input id={corderId} label='corder' type='text' defaultValue={page[col.field]}/>
                       <Button
                         size="sm"
                         className="!absolute right-1 top-1 rounded"
-                        // onClick={}
+                        onClick={() => { void modifyPageOrder(page.id, (document.getElementById(corderId) as HTMLInputElement).value || null) }}
                       >
                         Save
                       </Button>
@@ -86,11 +80,8 @@ export function PagePermissionsPage ({
                 }
 
                 else if (col.field === 'permission') {
-                  // page[col.field] = page.permission_id || 'null';
-                  console.log(res.data.permission_options, page.permission_id)
-
                   page[col.field] = <MySelect
-                    value={page.permission_id?.toString() || 'null'}
+                    defaultValue={page.permission_id?.toString() || 'null'}
                     onChange={(v) => { void modifyPagePermission(page.id, v.target.value || 'null') }}>
 
                     <option key='null' value='null'>null</option>
@@ -125,7 +116,7 @@ export function PagePermissionsPage ({
           values={values}
           tableTitle='Groups'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]) }}
+          // reloadFunction={() => { setValues([]) }}
         />
       }
     </div>

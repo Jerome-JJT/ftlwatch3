@@ -34,9 +34,8 @@ function login($post)
         }
         jsonResponse(array(), 400);
 
-        // print_r("value");
-        // print_r($isLogin);
-    } else {
+    } //
+    else {
         jsonResponse(array(), 400);
     }
 }
@@ -120,14 +119,39 @@ function storeUser($res, $exists = 0)
 
     $singleGroup = upsertUserGroup($res["id"], $res["login"]);
     if ($singleGroup != -1) {
-        setUserGroupBySlugs($res["id"], array("g_student", "g_admin"));
+
+        $perms = array();
+
+        if (in_array(47, array_column($res['campus'], 'id'))) {
+            array_push($perms, 'g_student');
+            
+            if (in_array('BDE', array_column($res['groups'], 'name'))) {
+                array_push($perms, 'g_bde');
+            }
+
+            $achievements = array_column($res['achievements'], 'id');
+            if (in_array(103, $achievements) || 
+                in_array(104, $achievements) || 
+                in_array(105, $achievements) || 
+                in_array(106, $achievements) || 
+                in_array(1219, array_column($res['titles'], 'id'))) {
+
+                array_push($perms, 'g_tutor');
+            }
+            
+            if (in_array($res['id'], array(92477))) {
+                array_push($perms, 'g_admin', 'g_event', 'g_perm', 'g_stalk1', 'g_stalk2', 'g_stalk3', 'g_stalk4');
+            }
+        }
+
+
+        setUserGroupBySlugs($res["id"], $perms);
     }
 }
 
 
 function logout()
 {
-
     $_SESSION = array();
     session_destroy();
     jsonResponse(array(), 204);

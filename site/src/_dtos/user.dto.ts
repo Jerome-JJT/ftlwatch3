@@ -1,7 +1,7 @@
-export interface UserDto {
-  id: number;
+// export interface UserDto {
+//   id: number;
 
-  login: string;
+//   login: string;
 
-  avatar_url: string;
-}
+//   avatar_url: string;
+// }

@@ -1,10 +1,10 @@
-export interface LoggedUserDto {
-  id: number
+// export interface LoggedUserDto {
+//   id: number
 
-  login: string
-  display_name: string
+//   login: string
+//   display_name: string
 
-  avatar_url: string
+//   avatar_url: string
 
-  is_admin: boolean
-}
+//   is_admin: boolean
+// }

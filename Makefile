@@ -60,6 +60,8 @@ info:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh info
 migrate:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh migrate
+repair:
+			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh repair
 revert:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh undo
 

@@ -1,17 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { type UseLoginDto } from '../Hooks/useLogin';
+import { useLogin } from '../Hooks/LoginProvider';
 
-interface LoginApiProps {
-  loginer: UseLoginDto
-}
-
-export default function LoginApi ({ loginer }: LoginApiProps): JSX.Element {
-  const [pageMessage, setPageMessage] = React.useState('42 api loading');
-
+export default function LoginApi (): JSX.Element {
+  const { isLogged, getUserData } = useLogin();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const [pageMessage, setPageMessage] = React.useState('42 api loading');
 
   const code = searchParams.get('code');
 
@@ -23,7 +20,7 @@ export default function LoginApi ({ loginer }: LoginApiProps): JSX.Element {
         )
         .then((res) => {
           if (res.status === 200) {
-            loginer.getUserData();
+            getUserData();
 
             setPageMessage('Login successful, redirecting...');
             setTimeout(() => {
@@ -31,13 +28,13 @@ export default function LoginApi ({ loginer }: LoginApiProps): JSX.Element {
             }, 3000);
           } //
           else {
-            if (!loginer.logged) {
+            if (!isLogged) {
               setPageMessage('Error contacting 42 API');
             }
           }
         })
         .catch(() => {
-          if (!loginer.logged) {
+          if (!isLogged) {
             setPageMessage('Error contacting 42 API');
           }
         });

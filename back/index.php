@@ -3,6 +3,8 @@
 require_once("controller/_common.php");
 require_once("controller/authorization.php");
 
+http_response_code(501); // Return 501 by default if no response is specified
+
 // header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:8080');
 header('Access-Control-Allow-Credentials: true');

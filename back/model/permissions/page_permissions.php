@@ -36,6 +36,9 @@ function getPagePermissions()
 
 function setPagePermission($pageId, $permissionId) {
 
+  if ($permissionId == "null") {
+    $permissionId = null;
+  }
 
   $query = "UPDATE pages SET permission_id = :permission_id
   WHERE id = :page_id";
@@ -46,37 +49,13 @@ function setPagePermission($pageId, $permissionId) {
   return executeQueryAction($query, $data);
 }
 
-// function setUserGroup($userId, $groupId, $value)
-// {
-//   $query = "SELECT id FROM groups_login_users
-//   WHERE login_user_id = :user_id AND group_id = :group_id";
+function setPageOrder($pageId, $corder) {
 
-//   $data = array(":user_id" => $userId, ":group_id" => $groupId);
+  $query = "UPDATE pages SET corder = :corder
+  WHERE id = :page_id";
 
-//   require_once("model/dbConnector.php");
-//   $user_group = executeQuerySelect($query, $data);
+  $data = array(":corder" => $corder, ":page_id" => $pageId);
 
-//   if (count($user_group) >= 1 && $value == 'false') {
-
-//     $query = "DELETE FROM groups_login_users
-//     WHERE login_user_id = :user_id AND group_id = :group_id";
-
-//     $data = array(":user_id" => $userId, ":group_id" => $groupId);
-
-//     return executeQueryAction($query, $data);
-//   }
-//   else if (count($user_group) == 0 && $value == 'true') {
-
-//     $query = "INSERT INTO groups_login_users (login_user_id, group_id)
-//     VALUES (:user_id, :group_id)";
-
-//     $data = array(":user_id" => $userId, ":group_id" => $groupId);
-
-//     return executeQueryAction($query, $data);
-//   }
-//   else {
-//     return false;
-//   }
-
-//   return true;
-// }
+  require_once("model/dbConnector.php");
+  return executeQueryAction($query, $data);
+}

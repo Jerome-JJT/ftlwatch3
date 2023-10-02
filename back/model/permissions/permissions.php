@@ -6,7 +6,7 @@ function getUserPermissions($user_id) {
   $query = "SELECT permission_id, permission_name, permission_slug 
     FROM v_user_permissions
 
-    WHERE login_users_id = :user_id
+    WHERE login_user_id = :user_id
   ";
 
   $data = array(":user_id" => $user_id);
@@ -18,21 +18,29 @@ function getUserPermissions($user_id) {
 }
 
 
-function getUserPages($user_id)
+function getUserPages($userId)
 {
-  $query = "SELECT pages.id, pages.name, 
-  COALESCE(pages.icon, submenus.icon) AS icon,
-  COALESCE(pages.route, submenus.route) AS route, pages.basefilter, 
-  COALESCE(submenus.id, -1) AS submenu_id, 
-  submenus.name AS subname, submenus.icon AS subicon FROM pages 
-  LEFT JOIN submenus ON pages.submenu_id = submenus.id
+  $query = "SELECT 
+  v_page_menus.id, 
+  v_page_menus.name, 
+  v_page_menus.icon,
+  v_page_menus.route, 
+  v_page_menus.basefilter, 
+  v_page_menus.submenu_id, 
+  v_page_menus.subname, 
+  v_page_menus.subicon,
+  v_page_menus.permission_id
+  
+  FROM v_page_menus 
 
-  ORDER BY submenus.corder, pages.corder
+  JOIN v_user_permissions ON v_user_permissions.permission_id = v_page_menus.permission_id
+
+  WHERE v_user_permissions.login_user_id = :user_id
   ";
   // WHERE users_groups.user_id = :user_id
 
   // $data = array(":user_id" => $user_id);
-  $data = array();
+  $data = array(":user_id" => $userId);
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);

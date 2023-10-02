@@ -1,13 +1,11 @@
 import React, { type SyntheticEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { type UseLoginDto } from '../Hooks/useLogin';
+import { useLogin } from '../Hooks/LoginProvider';
 
-interface LogPageProps {
-  loginer: UseLoginDto
-}
+export function LogPage (): JSX.Element {
+  const { getUserData } = useLogin();
 
-export function LogPage ({ loginer }: LogPageProps): JSX.Element {
   const [pageMessage, setPageMessage] = React.useState('');
 
   const [login, setLogin] = React.useState('');
@@ -18,15 +16,13 @@ export function LogPage ({ loginer }: LogPageProps): JSX.Element {
   const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault();
 
-    console.log(login, password);
-
     axios
       .post('/?page=login&action=login',
           `login=${login}&password=${password}`, { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
-          loginer.getUserData();
+          getUserData();
           setPageMessage('Login successful, redirecting...');
           setTimeout(() => {
             navigate('/');

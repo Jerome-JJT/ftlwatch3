@@ -133,22 +133,22 @@ function LOGGER_DEBUG()
 {
     return 0;
 }
-;
+
 function LOGGER_INFO()
 {
     return 1;
 }
-;
+
 function LOGGER_WARNING()
 {
     return 2;
 }
-;
+
 function LOGGER_ERROR()
 {
     return 3;
 }
-;
+
 
 function mylogger($log, $level)
 {

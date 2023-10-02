@@ -1,16 +1,13 @@
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import ProfileButton from './ProfileButton'
-import { type UseLoginDto } from '../Hooks/useLogin'
 
 interface NavBarProps {
-  loginer: UseLoginDto
   openedMenu: string
   setOpenedMenu: (menu: string) => void
 }
 
 export default function NavBar ({
-  loginer,
   openedMenu,
   setOpenedMenu
 }: NavBarProps): JSX.Element {

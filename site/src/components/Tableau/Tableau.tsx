@@ -5,17 +5,11 @@ import { Link, useSearchParams } from 'react-router-dom';
 //   Datatable,
 //   initTE
 // } from 'tw-elements';
-import { type UseLoginDto } from '../Hooks/useLogin';
 import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import Separator from '../Common/Separator';
 import Toasty from '../Common/Toasty';
 import { AiFillExclamationCircle } from 'react-icons/ai';
-import styled from 'styled-components';
-
-interface TableauProps {
-  loginer: UseLoginDto
-}
 
 class ColumnProps {
   label: string = ''
@@ -49,9 +43,7 @@ function compareDates (a: string, b: string): number {
   return months.indexOf(monthA) - months.indexOf(monthB);
 }
 
-export function TableauPage ({
-  loginer
-}: TableauProps): JSX.Element {
+export function TableauPage (): JSX.Element {
   const datatable = React.useRef<HTMLDivElement | null>(null);
   const datatableSearch = React.useRef<HTMLInputElement | null>(null);
 

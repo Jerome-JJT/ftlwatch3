@@ -8,12 +8,11 @@ import {
 } from '@material-tailwind/react'
 import { AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai'
 
-import { type UseLoginDto } from '../Hooks/useLogin'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useLogin } from '../Hooks/LoginProvider'
 
 interface NavBarProps {
-  loginer: UseLoginDto
   openedMenu: string
   setOpenedMenu: React.Dispatch<React.SetStateAction<string>>
 }
@@ -37,10 +36,11 @@ interface NavBarProps {
 // ]
 
 export default function LeftDrawer ({
-  loginer,
   openedMenu,
   setOpenedMenu
 }: NavBarProps): JSX.Element {
+  const { userPages } = useLogin();
+
   const changeSub = (subId: number): void => {
     if (subId === selectedSub) {
       subId = -1
@@ -53,7 +53,7 @@ export default function LeftDrawer ({
   const navigate = useNavigate();
 
   function createDrawer (): any {
-    return loginer.userPages?.flatMap((elem, id) => {
+    return userPages?.flatMap((elem, id) => {
       return ([
 
         <ListItem key={`${id}`}
@@ -96,7 +96,7 @@ export default function LeftDrawer ({
           )
         }),
 
-        (id < (loginer.userPages || []).length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
+        (id < (userPages || []).length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
 
       ])
     })

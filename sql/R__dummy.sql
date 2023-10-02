@@ -8,7 +8,7 @@ SELECT
 permissions.id AS permission_id, 
 permissions.name AS permission_name, 
 permissions.slug AS permission_slug, 
-login_users.id AS login_users_id 
+login_users.id AS login_user_id 
 FROM permissions 
 
   JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
@@ -21,12 +21,34 @@ SELECT
 permissions.id AS permission_id, 
 permissions.name AS permission_name, 
 permissions.slug AS permission_slug, 
-login_users.id AS login_users_id 
+login_users.id AS login_user_id 
 FROM permissions 
 
   JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
   JOIN groups ON groups_permissions.group_id = groups.id
   JOIN login_users ON groups.owner_id = login_users.id
+);
+
+
+
+DROP VIEW IF EXISTS v_page_menus;
+
+CREATE VIEW v_page_menus AS (
+SELECT 
+  pages.id, 
+  pages.name, 
+  COALESCE(pages.icon, submenus.icon) AS icon,
+  COALESCE(pages.route, submenus.route) AS route,
+  pages.basefilter, 
+  COALESCE(submenus.id, -1) AS submenu_id, 
+  submenus.name AS subname, 
+  submenus.icon AS subicon,
+  pages.permission_id
+  
+  FROM pages 
+  LEFT JOIN submenus ON pages.submenu_id = submenus.id
+
+  ORDER BY submenus.corder, pages.corder
 );
 
 
@@ -74,6 +96,25 @@ INSERT INTO "groups" ("id", "name", "slug", "corder") VALUES
   ON CONFLICT(id) DO NOTHING
 ;
 -- SELECT setval('groups_id_seq', (SELECT MAX(id) from "groups")); -- Needed for automatic group creation
+
+
+INSERT INTO "groups_permissions" ("id", "permission_id", "group_id") VALUES
+  (1, 1, 1),
+  (2, 2, 1),
+  (3, 3, 1),
+  (4, 4, 1),
+  (5, 5, 1),
+  (6, 6, 1),
+  (7, 7, 1),
+  (8, 8, 1),
+  (9, 9, 1),
+  (12, 3, 2),
+  (10000, 1, 1)
+  ON CONFLICT(id) DO UPDATE
+  SET permission_id = EXCLUDED.permission_id, group_id = EXCLUDED.group_id;
+;
+-- ALTER SEQUENCE groups_permissions_id_seq MINVALUE 10000 START 10000 RESTART 10000;
+SELECT setval('groups_permissions_id_seq', (SELECT MAX(id) from "groups_permissions")); 
 
 
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES

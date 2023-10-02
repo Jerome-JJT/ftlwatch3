@@ -1,24 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { UseLoginDto } from "../Hooks/useLogin";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../Hooks/LoginProvider';
 
-
-interface LogoutProps {
-  loginer: UseLoginDto;
-}
-
-export default function Logout({ loginer }: LogoutProps) {
-  const [pageMessage, setPageMessage] = React.useState("Logout");
+export default function Logout (): JSX.Element {
+  const { logout } = useLogin();
   const navigate = useNavigate();
+  const [pageMessage, setPageMessage] = React.useState('Logout');
 
   React.useEffect(() => {
-    
-    loginer.logout();
-    setPageMessage("Logout successful, redirecting...");
+    logout();
+    setPageMessage('Logout successful, redirecting...');
     // loginer.getUserData();
 
     setTimeout(() => {
-      navigate("/");
+      navigate('/');
     }, 3000);
   }, []);
 

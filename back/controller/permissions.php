@@ -46,7 +46,7 @@ function perms_get()
     $res = array();
 
     $res["columns"] = array_merge(
-        array(array("label" => "Name", "field" => "name")),
+        array(array("label" => "Group name", "field" => "name")),
         array_map(function ($value) {
             return array("label" => $value["name"], "field" => $value["id"]);
         }, $tmp[0])
@@ -97,7 +97,14 @@ function page_set($data)
         $res = setPagePermission($data["pageId"], $data["permissionId"]);
 
         jsonResponse(array(), $res ? 200 : 409);
-    } else {
+    } //
+    else if (isset($data["pageId"]) && isset($data["order"])) {
+
+        $res = setPageOrder($data["pageId"], $data["order"]);
+
+        jsonResponse(array(), $res ? 200 : 409);
+    } //
+    else {
         jsonResponse(array(), 400);
     }
 }

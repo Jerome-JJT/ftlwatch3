@@ -1,5 +1,4 @@
 import React from 'react';
-import { type UseLoginDto } from '../Hooks/useLogin';
 import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
@@ -8,18 +7,12 @@ import {
 import { SuperTable } from '../Common/SuperTable';
 import { useNotification } from '../Notifications/NotificationsProvider';
 
-interface GroupPermissionsProps {
-  loginer: UseLoginDto
-}
-
 class ColumnProps {
   field: string = ''
   label: string = ''
 }
 
-export function GroupPermissionsPage ({
-  loginer
-}: GroupPermissionsProps): JSX.Element {
+export function GroupPermissionsPage (): JSX.Element {
   const { addNotif } = useNotification();
   // const [searchParams] = useSearchParams();
   // const defaultFilter = searchParams.get('filter');
