@@ -2,11 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLogin } from 'Hooks/LoginProvider';
-import { useNotification } from 'Notifications/NotificationsProvider';
 
 export default function LoginApi (): JSX.Element {
   const { isLogged, getUserData } = useLogin();
-  const { addNotif } = useNotification();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -35,8 +33,7 @@ export default function LoginApi (): JSX.Element {
             }
           }
         })
-        .catch((e) => {
-          console.log(e)
+        .catch(() => {
           if (!isLogged) {
             setPageMessage('Error contacting 42 API');
           }

@@ -29,7 +29,7 @@ function getUserPages($userId)
   v_page_menus.submenu_id, 
   v_page_menus.subname, 
   v_page_menus.subicon,
-  v_page_menus.permission_id
+  v_page_menus.subroute
   
   FROM v_page_menus 
 
@@ -45,21 +45,26 @@ function getUserPages($userId)
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
 
-  // jsonlogger('asd', $result, LOGGER_DEBUG());
-
   $realResult = array();
   foreach ($result as $elem) {
 
     $submenu = $elem["submenu_id"];
 
+    // If menu is part of a main menu
     if ($submenu != -1) {
       $flag = false;
 
+      // Add menu in main menu
       foreach ($realResult as &$testResult) {
         if ($testResult["submenu_id"] == $submenu) {
 
+          if ($elem == null || strlen($elem["route"]) == 0) {
+            $elem["route"] = $elem["subroute"];
+          }
           unset($elem["subname"]);
           unset($elem["subicon"]);
+          unset($elem["subroute"]);
+
 
           array_push($testResult["list"], $elem);
           $flag = true;
@@ -67,11 +72,17 @@ function getUserPages($userId)
         }
       }
 
+      // If main menu dont already have an entry
       if ($flag == false) {
         $submenu = $elem;
 
+        if ($elem == null || strlen($elem["route"]) == 0) {
+          $elem["route"] = $elem["subroute"];
+        }
         unset($elem["subname"]);
         unset($elem["subicon"]);
+        unset($elem["subroute"]);
+
 
         // $submenu["id"] = "sub_" . $submenu["id"];
         $submenu["name"] = $submenu["subname"];
@@ -79,6 +90,8 @@ function getUserPages($userId)
 
         unset($submenu["subname"]);
         unset($submenu["subicon"]);
+        unset($submenu["subroute"]);
+        unset($submenu["route"]);
         unset($submenu["basefilter"]);
 
         $submenu["list"] = array($elem);
@@ -88,6 +101,7 @@ function getUserPages($userId)
     } else {
       unset($elem["subname"]);
       unset($elem["subicon"]);
+      unset($elem["subroute"]);
 
       array_push($realResult, $elem);
     }

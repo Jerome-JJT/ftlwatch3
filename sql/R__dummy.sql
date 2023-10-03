@@ -43,6 +43,7 @@ SELECT
   COALESCE(submenus.id, -1) AS submenu_id, 
   submenus.name AS subname, 
   submenus.icon AS subicon,
+  submenus.route AS subroute,
   pages.permission_id
   
   FROM pages 
