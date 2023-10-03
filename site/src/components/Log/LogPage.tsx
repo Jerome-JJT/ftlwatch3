@@ -38,7 +38,7 @@ export function LogPage (): JSX.Element {
 
   return (
     <div className="mt-6 flex justify-center">
-      <form onSubmit={handleSubmit} className="w-98 center justify-center border border-gray-500 bg-gray-200 py-2 pt-10 shadow-lg">
+      <form onSubmit={(e) => { void handleSubmit(e) }} className="w-98 center justify-center border border-gray-500 bg-gray-200 py-2 pt-10 shadow-lg">
         <div className="content sm:w-98 lg:w-98 center mh-8 w-full content-center items-center justify-center text-center">
           <>
             <div className="center mb-6 flex w-80 content-center justify-center px-6 text-center">

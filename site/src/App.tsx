@@ -23,6 +23,7 @@ import { UserGroupsPage } from './components/Permissions/UserGroups';
 import { GroupPermissionsPage } from './components/Permissions/GroupPermissions';
 import { PagePermissionsPage } from './components/Permissions/PagePermissions';
 import { useLogin } from './components/Hooks/LoginProvider';
+import TestPage from './components/Test/Test';
 // import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
@@ -87,6 +88,7 @@ export default function App (): JSX.Element {
           <Route path="/groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />
           <Route path="/pages" element={<PagePermissionsPage />} />
+          <Route path="/test" element={<TestPage />} />
 
           {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
           <Route path="/login" element={<LogPage />} />

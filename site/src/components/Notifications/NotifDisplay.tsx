@@ -38,38 +38,6 @@ export function NotifDisplay (): JSX.Element {
     return <></>
   }
 
-  function NotifText (type: string): string {
-    let color;
-
-    switch (type) {
-      case 'question':
-        color = '#249e4b';
-        break;
-
-      case 'info':
-        color = '#2e93c9';
-        break;
-
-      case 'success':
-        color = '#2ec946';
-        break;
-
-      case 'warning':
-        color = '#a68416';
-        break;
-
-      case 'error':
-        color = '#d65142';
-        break;
-    }
-
-    if (color !== '') {
-      return `border-[${color}] bg-[${color}]/10 text-[${color}]`;
-    }
-
-    return ''
-  }
-
   //
   return (
     <StyledAlert className='fixed bottom-0 right-0 mb-5 mr-5 space-y-2'>
@@ -83,7 +51,7 @@ export function NotifDisplay (): JSX.Element {
           unmount: { x: 200 }
         }}
         onClose={() => { removeNotif(notif.id); }}
-        className={classNames('rounded-none border-l-4 font-medium', NotifText(notif.type))}
+        className={classNames('rounded-none border-l-4 font-medium', `notif-${notif.type}`)}
       >
         {notif.text}
       </Alert>

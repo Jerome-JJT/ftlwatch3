@@ -46,11 +46,10 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data);
           setIsLogged(true);
           setUserInfos(res.data.user as LoggedUser);
           setUserPages(res.data.pages as any[]);
-          addNotif(res.data.use.login, 'error');
+          addNotif(`Welcome ${res.data.user.login}!`, 'success');
         }
       })
       .catch((error) => {
@@ -69,8 +68,12 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
       .then((res) => {
         if (res.status === 204) {
           setIsLogged(false);
+          const saveLogin = userInfos?.login;
           setUserInfos({} as LoggedUser);
-          setUserPages({} as any);
+          setUserPages([]);
+          if (saveLogin) {
+            addNotif(`Goodbye ${saveLogin}!`, 'success');
+          }
         }
       })
       .catch((error) => {
