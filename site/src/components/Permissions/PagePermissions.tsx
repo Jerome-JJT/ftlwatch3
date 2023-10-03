@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from '../Hooks/AxiosErrorText';
-import { Select, Option, Input, Button } from '@material-tailwind/react';
+import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { Input, Button } from '@material-tailwind/react';
 
-import { SuperTable } from '../Common/SuperTable';
-import { useNotification } from '../Notifications/NotificationsProvider';
-import MySelect from '../Common/MySelect';
+import { SuperTable } from 'Common/SuperTable';
+import { useNotification } from 'Notifications/NotificationsProvider';
+import MySelect from 'Common/MySelect';
 
 class ColumnProps {
   field: string = ''
@@ -72,7 +72,7 @@ export function PagePermissionsPage (): JSX.Element {
                       <Button
                         size="sm"
                         className="!absolute right-1 top-1 rounded"
-                        onClick={() => { void modifyPageOrder(page.id, (document.getElementById(corderId) as HTMLInputElement).value || null) }}
+                        onClick={() => { void modifyPageOrder(page.id, (document.getElementById(corderId) as HTMLInputElement).value || '98') }}
                       >
                         Save
                       </Button>

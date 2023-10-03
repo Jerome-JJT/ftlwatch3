@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
   Checkbox
 } from '@material-tailwind/react';
-import { SuperTable } from '../Common/SuperTable';
-import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperTable } from 'Common/SuperTable';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 class ColumnProps {
   field: string = ''

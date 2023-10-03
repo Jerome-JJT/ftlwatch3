@@ -1,5 +1,5 @@
 import { Button } from '@material-tailwind/react';
-import { useNotification } from '../Notifications/NotificationsProvider';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 export default function TestPage (): JSX.Element {
   const { addNotif } = useNotification();

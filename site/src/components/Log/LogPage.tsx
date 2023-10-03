@@ -1,10 +1,12 @@
 import React, { type SyntheticEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useLogin } from '../Hooks/LoginProvider';
+import { useLogin } from 'Hooks/LoginProvider';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 export function LogPage (): JSX.Element {
   const { getUserData } = useLogin();
+  const { addNotif } = useNotification();
 
   const [pageMessage, setPageMessage] = React.useState('');
 
@@ -23,6 +25,7 @@ export function LogPage (): JSX.Element {
       .then((res) => {
         if (res.status === 200) {
           getUserData();
+          addNotif(`Welcome ${res.data.user.login}!`, 'success');
           setPageMessage('Login successful, redirecting...');
           setTimeout(() => {
             navigate('/');

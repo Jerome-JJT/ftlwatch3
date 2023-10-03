@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLogin } from '../Hooks/LoginProvider';
+import { useLogin } from 'Hooks/LoginProvider';
 
 export default function Logout (): JSX.Element {
   const { logout } = useLogin();

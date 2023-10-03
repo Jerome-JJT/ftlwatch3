@@ -1,10 +1,9 @@
-import React from 'react';
 import LogoInconnu from '../../assets/img/inconnu.jpeg';
 import { Link } from 'react-router-dom';
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import { AiFillSetting, AiOutlineLogin, AiOutlineLogout } from 'react-icons/ai';
 import classNames from 'classnames';
-import { useLogin } from '../Hooks/LoginProvider';
+import { useLogin } from 'Hooks/LoginProvider';
 
 export default function ProfileButton (): JSX.Element {
   const buttonColor = 'bg-[#CCCCCC]'

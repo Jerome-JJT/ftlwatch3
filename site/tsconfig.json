@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./",
+    "baseUrl": "./src/components/",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

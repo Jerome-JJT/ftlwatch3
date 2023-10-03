@@ -1,4 +1,4 @@
-import React, { type ReactNode, createContext, useContext, useState } from 'react';
+import { type ReactNode, createContext, useContext, useState } from 'react';
 
 export interface Notification {
   id: number

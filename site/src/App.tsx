@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
 
 import './App.css';
 
@@ -16,7 +16,6 @@ import axios from 'axios';
 import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
 
 import { LogPage } from './components/Log/LogPage';
-import { TableauPage } from './components/Tableau/Tableau';
 
 import { NotifDisplay } from './components/Notifications/NotifDisplay';
 import { UserGroupsPage } from './components/Permissions/UserGroups';
@@ -27,10 +26,16 @@ import TestPage from './components/Test/Test';
 // import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
-  const { isLogged, logout } = useLogin();
+  const { isLogged, getUserData, logout } = useLogin();
   const [openedMenu, setOpenedMenu] = React.useState('');
 
   const logging = import.meta.env.DEV;
+
+  React.useEffect(() => {
+    if (!location.pathname.includes('loginapi')) {
+      getUserData();
+    }
+  }, []);
 
   axios.interceptors.request.use(
     function (req) {
@@ -83,7 +88,6 @@ export default function App (): JSX.Element {
             <>
             </>
           )}
-          <Route path="/tableau" element={<TableauPage />} />
 
           <Route path="/groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />

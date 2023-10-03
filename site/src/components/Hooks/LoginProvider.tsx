@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, type ReactNode, createContext } from 'react';
 import { AxiosErrorText } from './AxiosErrorText';
-import { useNotification } from '../Notifications/NotificationsProvider';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 export interface LoggedUser {
   id: number
@@ -18,7 +18,7 @@ interface LoginContextProps {
   isLogged: boolean
   userInfos: LoggedUser | undefined
   userPages: any[]
-  getUserData: () => void
+  getUserData: (announce?: boolean) => void
   logout: () => void
 }
 
@@ -39,7 +39,7 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
   const [userInfos, setUserInfos] = React.useState<LoggedUser | undefined>();
   const [userPages, setUserPages] = React.useState<any[]>([]);
 
-  const getUserData = React.useCallback(() => {
+  const getUserData = React.useCallback((announce: boolean = false) => {
     axios
       .get('/?page=login&action=me',
         { withCredentials: true }
@@ -49,13 +49,17 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
           setIsLogged(true);
           setUserInfos(res.data.user as LoggedUser);
           setUserPages(res.data.pages as any[]);
-          addNotif(`Welcome ${res.data.user.login}!`, 'success');
+          if (announce) {
+            addNotif(`Welcome ${res.data.user.login}!`, 'success');
+          }
         }
       })
       .catch((error) => {
         setIsLogged(false);
         setUserInfos({} as LoggedUser);
-        addNotif(AxiosErrorText(error), 'error');
+        if (announce) {
+          addNotif(AxiosErrorText(error), 'error');
+        }
         return AxiosErrorText(error);
       });
   }, []);

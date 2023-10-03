@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-export default function HomePage() {
+export default function HomePage (): JSX.Element {
   return (
     <div className="mx-auto h-max max-w-md bg-white py-6 text-center shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-white">
       <h1 id="startPage" className="text-2xl">
@@ -11,7 +11,7 @@ export default function HomePage() {
         and GL for your games.
       </p>
       <i className="text-center text-sm text-gray-500 dark:text-gray-400">
-        To start a game, you need to{" "}
+        To start a game, you need to{' '}
         <span className="text-blue-600">log in</span> first!
       </i>
       <p className="text-center text-gray-500 dark:text-gray-400">Made by</p>
@@ -59,7 +59,7 @@ export default function HomePage() {
       </div>
       <div className="inline-flex">
         <Link
-          to={"https://github.com/Tosba74/ft_transcendance"}
+          to={'https://github.com/Tosba74/ft_transcendance'}
           className="mt-4 rounded-lg bg-cyan-500 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           GitHub

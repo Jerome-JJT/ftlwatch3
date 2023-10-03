@@ -10,7 +10,7 @@ import { AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillStar, AiOutlineClose 
 
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useLogin } from '../Hooks/LoginProvider'
+import { useLogin } from 'Hooks/LoginProvider'
 
 interface NavBarProps {
   openedMenu: string

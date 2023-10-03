@@ -1,10 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useLogin } from '../Hooks/LoginProvider';
+import { useLogin } from 'Hooks/LoginProvider';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 export default function LoginApi (): JSX.Element {
   const { isLogged, getUserData } = useLogin();
+  const { addNotif } = useNotification();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -13,14 +15,14 @@ export default function LoginApi (): JSX.Element {
   const code = searchParams.get('code');
 
   React.useEffect(() => {
-    if (code != null) {
+    if (code !== null) {
       axios
         .post('/?page=login&action=loginapi',
           `code=${code}`, { withCredentials: true }
         )
         .then((res) => {
           if (res.status === 200) {
-            getUserData();
+            getUserData(true);
 
             setPageMessage('Login successful, redirecting...');
             setTimeout(() => {
@@ -33,14 +35,15 @@ export default function LoginApi (): JSX.Element {
             }
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e)
           if (!isLogged) {
             setPageMessage('Error contacting 42 API');
           }
         });
     } //
     else if (code == null) {
-      if (!loginer.logged) {
+      if (!isLogged) {
         setPageMessage('Error missing infos for 42 API');
       }
     }
