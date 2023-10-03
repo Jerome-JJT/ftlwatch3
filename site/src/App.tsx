@@ -66,7 +66,8 @@ export default function App (): JSX.Element {
 
       <LeftDrawer
         openedMenu={openedMenu}
-        setOpenedMenu={setOpenedMenu} />
+        setOpenedMenu={setOpenedMenu}
+      />
 
       <div className="grow bg-gray-100 dark:bg-gray-400">
         <Routes>

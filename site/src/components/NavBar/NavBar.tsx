@@ -81,9 +81,7 @@ export default function NavBar ({
             />
           </Link>
 
-          <ProfileButton
-            loginer={loginer}
-          />
+          <ProfileButton />
 
         </div>
       </nav>
