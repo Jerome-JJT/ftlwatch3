@@ -20,7 +20,7 @@ export default function LoginApi (): JSX.Element {
         )
         .then((res) => {
           if (res.status === 200) {
-            getUserData(true);
+            getUserData({ announce: true });
 
             setPageMessage('Login successful, redirecting...');
             setTimeout(() => {

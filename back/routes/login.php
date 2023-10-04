@@ -32,7 +32,7 @@ switch ($action) {
         break;
 
     case "me":
-        me();
+        me(isset($_GET["reload"]));
         break;
 
     // case "searchGame":

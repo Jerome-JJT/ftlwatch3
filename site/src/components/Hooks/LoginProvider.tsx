@@ -14,11 +14,16 @@ export interface LoggedUser {
   is_admin: boolean
 }
 
+interface GetUserDataProps {
+  announce?: boolean
+  reload?: boolean
+}
+
 interface LoginContextProps {
   isLogged: boolean
   userInfos: LoggedUser | undefined
   userPages: any[]
-  getUserData: (announce?: boolean) => void
+  getUserData: (options?: GetUserDataProps) => void
   logout: () => void
 }
 
@@ -39,9 +44,9 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
   const [userInfos, setUserInfos] = React.useState<LoggedUser | undefined>();
   const [userPages, setUserPages] = React.useState<any[]>([]);
 
-  const getUserData = React.useCallback((announce: boolean = false) => {
+  const getUserData = React.useCallback(({ announce = false, reload = false }: GetUserDataProps = {}) => {
     axios
-      .get('/?page=login&action=me',
+      .get(`/?page=login&action=me${reload ? '&reload=true' : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
