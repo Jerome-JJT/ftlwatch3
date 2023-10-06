@@ -66,6 +66,9 @@ function loginapi_callback($post)
         $raw = json_decode($response);
 
         if (isset($raw->error)) {
+            if ($raw->error == "invalid_client") {
+                mylogger('API key probably expired', LOGGER_ERROR());
+            }
             jsonResponse(array("error" => $raw->error), 406);
         }
 
