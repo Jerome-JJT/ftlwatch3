@@ -1,19 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const withMT = require('@material-tailwind/react/utils/withMT');
+import withMT from '@material-tailwind/react/utils/withMT';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = withMT({
+export default withMT({
   content: [
     './src/*.{tsx, ts}',
     './src/**/*.{tsx, ts}',
     './src/**/**/*.{tsx, ts}',
     './src/**/**/**/*.{tsx, ts}',
     './src/assets/*.ts',
-    './index.html'
+    './index.html',
   // "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
-    extend: {}
-  }
+    extend: {},
+  },
   // plugins: [require("tw-elements/dist/plugin.cjs")],
-})
+});

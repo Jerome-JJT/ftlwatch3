@@ -137,6 +137,10 @@ services:
   nginx:
     build: ./_build/nginx
 
+    depends_on:
+      - front
+      - back
+
     ports:
       - "8080:80"
       # - "8443:443"
