@@ -4,13 +4,13 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemPrefix
-} from '@material-tailwind/react'
-import { AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai'
+  ListItemPrefix,
+} from '@material-tailwind/react';
+import { AiFillCaretDown, AiFillCaretUp, AiFillHome, AiFillStar, AiOutlineClose } from 'react-icons/ai';
 
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useLogin } from 'Hooks/LoginProvider'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from 'Hooks/LoginProvider';
 
 interface NavBarProps {
   openedMenu: string
@@ -35,31 +35,33 @@ interface NavBarProps {
 //   { label: 'Images', url: 'Images' }
 // ]
 
-export default function LeftDrawer ({
+export default function LeftDrawer({
   openedMenu,
-  setOpenedMenu
+  setOpenedMenu,
 }: NavBarProps): JSX.Element {
   const { userPages } = useLogin();
 
   const changeSub = (subId: number): void => {
     if (subId === selectedSub) {
-      subId = -1
+      subId = -1;
     }
 
-    setSelectedSub(subId)
-  }
+    setSelectedSub(subId);
+  };
 
-  const [selectedSub, setSelectedSub] = React.useState(-1)
+  const [selectedSub, setSelectedSub] = React.useState(-1);
   const navigate = useNavigate();
 
-  function createDrawer (): any {
+  function createDrawer(): any {
     return userPages?.flatMap((elem, id) => {
       return ([
 
         <ListItem key={`${id}`}
-         onClick={() => { (elem.list && elem.list.length > 0)
-           ? changeSub(id)
-           : (elem.basefilter ? navigate(`${elem.route}?${elem.basefilter}`) : navigate(`${elem.route}`)) }}>
+          onClick={() => {
+            (elem.list && elem.list.length > 0)
+              ? changeSub(id)
+              : (elem.basefilter ? navigate(`${elem.route}?${elem.basefilter}`) : navigate(`${elem.route}`));
+          }}>
           <ListItemPrefix>
             {
               (
@@ -84,7 +86,8 @@ export default function LeftDrawer ({
           return (
             selectedSub === id &&
             <ListItem className="ml-4" key={`${id}_${subId}`} onClick={() => {
-              sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`) }}>
+              sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
+            }}>
 
               <ListItemPrefix>
                 <AiFillStar />
@@ -93,22 +96,22 @@ export default function LeftDrawer ({
               {(sub.name && sub.name) || ''}
 
             </ListItem>
-          )
+          );
         }),
 
-        (id < (userPages || []).length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />
+        (id < (userPages || []).length - 1) && <hr key={`sep_${id}`} className="my-2 border-blue-gray-200" />,
 
-      ])
-    })
+      ]);
+    });
   }
 
   return (
-    <Drawer open={openedMenu === 'leftdrawer'} onClose={() => { setOpenedMenu('') }} className="p-4">
+    <Drawer open={openedMenu === 'leftdrawer'} onClose={() => { setOpenedMenu(''); }} className="p-4">
       <div className="mb-2 flex items-center justify-between p-4">
         <Typography variant="h5" color="blue-gray">
           Menu
         </Typography>
-        <IconButton variant="text" color="blue-gray" onClick={() => { setOpenedMenu('') }}>
+        <IconButton variant="text" color="blue-gray" onClick={() => { setOpenedMenu(''); }}>
           <AiOutlineClose />
         </IconButton>
       </div>
@@ -128,5 +131,5 @@ export default function LeftDrawer ({
 
       </List>
     </Drawer>
-  )
+  );
 }

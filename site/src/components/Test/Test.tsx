@@ -1,7 +1,7 @@
 import { Button } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 
-export default function TestPage (): JSX.Element {
+export default function TestPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   return (
@@ -10,11 +10,11 @@ export default function TestPage (): JSX.Element {
         Test page
       </h1>
 
-      <Button onClick={() => { addNotif('test', 'success', 0) }}>Success</Button>
-      <Button onClick={() => { addNotif('test', 'warning', 0) }}>Warning</Button>
-      <Button onClick={() => { addNotif('test', 'error', 0) }}>Error</Button>
-      <Button onClick={() => { addNotif('test', 'info', 0) }}>Info</Button>
-      <Button onClick={() => { addNotif('test', 'question', 0) }}>Question</Button>
+      <Button onClick={() => { addNotif('test', 'success', 0); }}>Success</Button>
+      <Button onClick={() => { addNotif('test', 'warning', 0); }}>Warning</Button>
+      <Button onClick={() => { addNotif('test', 'error', 0); }}>Error</Button>
+      <Button onClick={() => { addNotif('test', 'info', 0); }}>Info</Button>
+      <Button onClick={() => { addNotif('test', 'question', 0); }}>Question</Button>
 
     </div>
   );

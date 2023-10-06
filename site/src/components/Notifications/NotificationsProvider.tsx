@@ -18,7 +18,7 @@ interface NotificationContextProps {
 const NotificationContext = createContext<NotificationContextProps | undefined>(undefined);
 
 // Create a custom hook to use the context
-export function useNotification (): NotificationContextProps {
+export function useNotification(): NotificationContextProps {
   const context = useContext(NotificationContext);
   if (!context) {
     throw new Error('useNotification must be used within a NotificationProvider');
@@ -27,25 +27,25 @@ export function useNotification (): NotificationContextProps {
 }
 
 // NotificationProvider component
-export function NotificationProvider ({ children }: { children: ReactNode }): JSX.Element {
+export function NotificationProvider({ children }: { children: ReactNode }): JSX.Element {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   // Function to add a new notification
   const addNotif = (content: string, alertType: string, expires: number = 10): void => {
     const newNotif = {
-      id: Date.now(), // You can use a unique identifier like a timestamp
-      text: content,
-      type: alertType,
+      id:       Date.now(), // You can use a unique identifier like a timestamp
+      text:     content,
+      type:     alertType,
       expiring: expires > 0,
-      open: true
+      open:     true,
     };
 
     // Add the new notification to the state
-    setNotifications(old => {
-      if (old.filter(notif => notif.expiring).length >= 5) {
-        return [...old.filter(notif => notif.id !== old.find(n => n.expiring)?.id), newNotif];
+    setNotifications((old) => {
+      if (old.filter((notif) => notif.expiring).length >= 5) {
+        return [...old.filter((notif) => notif.id !== old.find((n) => n.expiring)?.id), newNotif];
       }
-      return [...old, newNotif]
+      return [...old, newNotif];
     });
 
     if (expires) {
@@ -57,7 +57,7 @@ export function NotificationProvider ({ children }: { children: ReactNode }): JS
 
   // Function to remove a notification by its ID
   const removeNotif = (id: number): void => {
-    setNotifications(old => {
+    setNotifications((old) => {
       const toCloseNotif = old.findIndex((notif) => notif.id === id);
 
       if (toCloseNotif !== -1) {
@@ -67,7 +67,7 @@ export function NotificationProvider ({ children }: { children: ReactNode }): JS
     });
 
     setTimeout(() => {
-      setNotifications(old => old.filter(notif => notif.id !== id));
+      setNotifications((old) => old.filter((notif) => notif.id !== id));
     }, 200);
   };
 
@@ -76,7 +76,7 @@ export function NotificationProvider ({ children }: { children: ReactNode }): JS
       value={{
         notifications,
         addNotif,
-        removeNotif
+        removeNotif,
       }}
     >
       {children}

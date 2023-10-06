@@ -1,27 +1,27 @@
-import React, { SyntheticEvent } from "react";
-import axios from "axios";
+import React, { SyntheticEvent } from 'react';
+import axios from 'axios';
 
 export default function CreateAccountPage() {
-  const [pageMessage, setPageMessage] = React.useState("");
+  const [pageMessage, setPageMessage] = React.useState('');
 
-  const [loginName, setLoginName] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [loginName, setLoginName] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
 
     // if (tfa === false) {
     axios
-      .post("/api/login/create", {
+      .post('/api/login/create', {
         username: loginName,
         password: password,
       })
       .then((res) => {
         if (res.status === 201) {
-          setPageMessage("Creation successful, redirecting...");
+          setPageMessage('Creation successful, redirecting...');
         } //
       })
-      .catch(() => setPageMessage("Login error"));
+      .catch(() => setPageMessage('Login error'));
     // }
   };
 

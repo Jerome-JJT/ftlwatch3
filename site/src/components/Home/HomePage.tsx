@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function HomePage (): JSX.Element {
+export default function HomePage(): JSX.Element {
   return (
     <div className="mx-auto h-max max-w-md bg-white py-6 text-center shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-white">
       <h1 id="startPage" className="text-2xl">

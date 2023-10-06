@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Checkbox
+  Checkbox,
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
@@ -10,14 +10,14 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 class ColumnProps {
-  field: string = ''
-  label: string = ''
+  field: string = '';
+  label: string = '';
 }
 
 class PoolFilterProps {
-  id: string = ''
-  name: string = ''
-  hidden: boolean = true
+  id: string = '';
+  name: string = '';
+  hidden: boolean = true;
 }
 
 const StyledTableau = styled.div`
@@ -29,7 +29,7 @@ const StyledTableau = styled.div`
   }
 `;
 
-export function TableauPage (): JSX.Element {
+export function TableauPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
   const defaultFilter = searchParams.get('filter');
@@ -74,30 +74,30 @@ export function TableauPage (): JSX.Element {
                 if (col.field === 'login') {
                   user[col.field] = <a
                     href={`https://profile.intra.42.fr/users/${user.login}`}
-                  >{user.login}</a>
+                  >{user.login}</a>;
                 }
                 else if (col.field === 'avatar_url') {
                   user[col.field] = <img
                     src={user[col.field]}
                     alt={user.login}
                     className='max-w-full max-h-full max-w-[60px] rounded-lg'
-                  />
+                  />;
                 }
-              })
+              });
 
-              return user
-            })
+              return user;
+            });
             setValues(displayValues);
           }
           else {
-            addNotif('No results found', 'error')
+            addNotif('No results found', 'error');
           }
         }
       })
       .catch((error) => {
-        addNotif(AxiosErrorText(error), 'error')
+        addNotif(AxiosErrorText(error), 'error');
       });
-  }, [])
+  }, [addNotif, usedFilter]);
 
   //
   return (
@@ -110,8 +110,8 @@ export function TableauPage (): JSX.Element {
             values={values}
             tableTitle='Tableau'
             options={[10, 25, 50, 100]}
-            reloadFunction={() => { setValues([]) }}
-            />
+            reloadFunction={() => { setValues([]); }}
+          />
         </StyledTableau>
       }
     </div>

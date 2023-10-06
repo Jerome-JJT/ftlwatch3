@@ -29,7 +29,7 @@ interface LoginContextProps {
 
 const LoginContext = createContext<LoginContextProps | undefined>(undefined);
 
-export function useLogin (): LoginContextProps {
+export function useLogin(): LoginContextProps {
   const context = useContext(LoginContext);
   if (!context) {
     throw new Error('useLogin must be used within a LoginProvider');
@@ -37,7 +37,7 @@ export function useLogin (): LoginContextProps {
   return context;
 }
 
-export function LoginProvider ({ children }: { children: ReactNode }): JSX.Element {
+export function LoginProvider({ children }: { children: ReactNode }): JSX.Element {
   const { addNotif } = useNotification();
 
   const [isLogged, setIsLogged] = React.useState(false);
@@ -67,7 +67,7 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
         }
         return AxiosErrorText(error);
       });
-  }, []);
+  }, [addNotif]);
 
   const logout = React.useCallback(() => {
     axios
@@ -88,7 +88,7 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
       .catch((error) => {
         return AxiosErrorText(error);
       });
-  }, []);
+  }, [addNotif, userInfos?.login]);
 
   return (
     <LoginContext.Provider
@@ -97,7 +97,7 @@ export function LoginProvider ({ children }: { children: ReactNode }): JSX.Eleme
         userInfos,
         userPages,
         getUserData,
-        logout
+        logout,
       }}
     >
       {children}

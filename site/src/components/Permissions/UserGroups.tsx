@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Checkbox
+  Checkbox,
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 
 class ColumnProps {
-  field: string = ''
-  label: string = ''
+  field: string = '';
+  label: string = '';
 }
 
-export function UserGroupsPage (): JSX.Element {
+export function UserGroupsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  const changePermission = async (userId: number, groupId: number, value: boolean): Promise<boolean> => {
-    return await axios
+  const changePermission = useCallback((userId: number, groupId: number, value: boolean): Promise<boolean> => {
+    return axios
       .post('/?page=permissions&action=group_set',
         `userId=${userId}&groupId=${groupId}&value=${value}`, { withCredentials: true }
       )
@@ -33,7 +33,7 @@ export function UserGroupsPage (): JSX.Element {
         addNotif(AxiosErrorText(error), 'error');
         return false;
       });
-  }
+  }, [addNotif]);
 
   React.useEffect(() => {
     axios
@@ -59,12 +59,12 @@ export function UserGroupsPage (): JSX.Element {
                         e.target.checked = !e.target.checked;
                       }
                     }}
-                  />
+                  />;
                 }
-              })
+              });
 
-              return userWithGroups
-            })
+              return userWithGroups;
+            });
             setValues(displayValues);
           }
           else {
@@ -75,7 +75,7 @@ export function UserGroupsPage (): JSX.Element {
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  }, [])
+  }, [addNotif, changePermission]);
 
   //
   return (
@@ -86,7 +86,7 @@ export function UserGroupsPage (): JSX.Element {
           values={values}
           tableTitle='Pages'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]) }}
+          reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

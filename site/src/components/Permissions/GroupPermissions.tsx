@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Checkbox
+  Checkbox,
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 
 class ColumnProps {
-  field: string = ''
-  label: string = ''
+  field: string = '';
+  label: string = '';
 }
 
-export function GroupPermissionsPage (): JSX.Element {
+export function GroupPermissionsPage(): JSX.Element {
   const { addNotif } = useNotification();
   // const [searchParams] = useSearchParams();
   // const defaultFilter = searchParams.get('filter');
@@ -22,8 +22,8 @@ export function GroupPermissionsPage (): JSX.Element {
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  const changePermission = async (userId: number, groupId: number, value: boolean): Promise<boolean> => {
-    return await axios
+  const changePermission = useCallback((userId: number, groupId: number, value: boolean): Promise<boolean> => {
+    return axios
       .post('/?page=permissions&action=perm_set',
         `groupId=${userId}&permId=${groupId}&value=${value}`, { withCredentials: true }
       )
@@ -34,10 +34,10 @@ export function GroupPermissionsPage (): JSX.Element {
         return true;
       })
       .catch((error) => {
-        addNotif(AxiosErrorText(error), 'error')
+        addNotif(AxiosErrorText(error), 'error');
         return false;
       });
-  }
+  }, [addNotif]);
 
   React.useEffect(() => {
     axios
@@ -61,24 +61,24 @@ export function GroupPermissionsPage (): JSX.Element {
                         e.target.checked = !e.target.checked;
                       }
                     }}
-                  />
+                  />;
                 }
-              })
+              });
 
-              return groupWithPerms
-            })
+              return groupWithPerms;
+            });
             setValues(displayValues);
             // setPageError(undefined);
           }
           else {
-            addNotif('No results found', 'error')
+            addNotif('No results found', 'error');
           }
         }
       })
       .catch((error) => {
-        addNotif(AxiosErrorText(error), 'error')
+        addNotif(AxiosErrorText(error), 'error');
       });
-  }, [])
+  }, [addNotif, changePermission]);
 
   //
   return (
@@ -89,7 +89,7 @@ export function GroupPermissionsPage (): JSX.Element {
           values={values}
           tableTitle='Permissions'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]) }}
+          reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

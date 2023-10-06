@@ -5,9 +5,9 @@ import { AiFillSetting, AiOutlineLogin, AiOutlineLogout, AiOutlineReload } from 
 import classNames from 'classnames';
 import { useLogin } from 'Hooks/LoginProvider';
 
-export default function ProfileButton (): JSX.Element {
-  const buttonColor = 'bg-[#CCCCCC]'
-  const textColor = 'text-black'
+export default function ProfileButton(): JSX.Element {
+  const buttonColor = 'bg-[#CCCCCC]';
+  const textColor = 'text-black';
   const { isLogged, userInfos, getUserData } = useLogin();
 
   return (
@@ -41,7 +41,7 @@ export default function ProfileButton (): JSX.Element {
         {(isLogged && (
 
           <>
-            <div onClick={() => { getUserData({ reload: true }) }}>
+            <div onClick={() => { getUserData({ reload: true }); }}>
               <MenuItem className={classNames('flex items-center gap-2 mb-2', buttonColor)}>
                 <AiOutlineReload className={classNames(textColor)} />
                 <Typography variant="small" className={classNames('font-normal', textColor)}>
@@ -61,19 +61,19 @@ export default function ProfileButton (): JSX.Element {
 
             <hr className="my-2 border-blue-gray-50" />
 
-              <Link to={'/logout'}>
-                <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
-                  <AiOutlineLogin className={classNames(textColor)} />
+            <Link to={'/logout'}>
+              <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
+                <AiOutlineLogin className={classNames(textColor)} />
 
-                  <Typography variant="small" className={classNames('font-normal', textColor)}>
+                <Typography variant="small" className={classNames('font-normal', textColor)}>
                     Logout
-                  </Typography>
-                </MenuItem>
-              </Link>
+                </Typography>
+              </MenuItem>
+            </Link>
           </>
 
         )) || (
-          <a href={`/api/?page=login&action=authorizeapi`}>
+          <a href={'/api/?page=login&action=authorizeapi'}>
             <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
               <AiOutlineLogout className={classNames(textColor)} />
 

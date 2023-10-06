@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLogin } from 'Hooks/LoginProvider';
 
-export default function LoginApi (): JSX.Element {
+export default function LoginApi(): JSX.Element {
   const { isLogged, getUserData } = useLogin();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -44,7 +44,7 @@ export default function LoginApi (): JSX.Element {
         setPageMessage('Error missing infos for 42 API');
       }
     }
-  }, []);
+  }, [code, getUserData, isLogged, navigate]);
 
   return (
     <>

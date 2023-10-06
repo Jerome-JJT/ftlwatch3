@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { AiOutlineCaretDown, AiOutlineCaretLeft, AiOutlineCaretUp, AiOutlineSync } from 'react-icons/ai';
 import {
   Card,
@@ -9,14 +9,14 @@ import {
   CardBody,
   CardFooter,
   IconButton,
-  Switch
+  Switch,
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import classNames from 'classnames';
 
 class ColumnProps {
-  field: string = ''
-  label: string = ''
+  field: string = '';
+  label: string = '';
 }
 
 class SuperTableProps {
@@ -31,7 +31,7 @@ class SuperTableProps {
   reloadFunction?: (() => void) | undefined;
 }
 
-export function SuperTable ({
+export function SuperTable({
   columns,
   values,
 
@@ -41,7 +41,7 @@ export function SuperTable ({
   options = [10, 30, 50, 100],
   hasOptionAll = true,
 
-  reloadFunction = undefined
+  reloadFunction = undefined,
 }: SuperTableProps): JSX.Element {
   // const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   // const [values, setValues] = React.useState<any[] | undefined>(undefined);
@@ -81,7 +81,7 @@ export function SuperTable ({
     }
   };
 
-  const customSort = (a: any, b: any): number => {
+  const customSort = useCallback((a: any, b: any): number => {
     const aValue = a[sortColumn];
     const bValue = b[sortColumn];
 
@@ -96,7 +96,7 @@ export function SuperTable ({
     else {
       return 0;
     }
-  };
+  }, [sortColumn]);
 
   const generatePageNumbers = (currentPage: number, totalPages: number, maxPages: number): number[] => {
     const halfMaxPages = Math.floor(maxPages / 2);
@@ -109,7 +109,7 @@ export function SuperTable ({
     }
 
     return pageNumbers;
-  }
+  };
 
   const totalPages = useMemo(() => Math.ceil((values?.length || 0) / usersPerPage), [values, usersPerPage]);
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
@@ -120,10 +120,11 @@ export function SuperTable ({
   const sortedValues = useMemo(() => [...values || []].sort((a, b): number => {
     if (sortDirection === 'asc') {
       return customSort(a, b);
-    } else {
+    }
+    else {
       return customSort(b, a);
     }
-  }), [values, sortColumn, sortDirection]);
+  }), [values, sortDirection, customSort]);
 
   const filteredUsers = useMemo(() => sortedValues.filter((user) => {
     const userValues = Object.values(user);
@@ -135,7 +136,7 @@ export function SuperTable ({
           return typeof value !== 'object' &&
           value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
             term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          )
+          );
         }
         );
       });
@@ -146,7 +147,7 @@ export function SuperTable ({
           return typeof value !== 'object' &&
           value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
             term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          )
+          );
         }
         );
       });
@@ -198,17 +199,17 @@ export function SuperTable ({
           }
 
           <div className="flex w-full md:w-72 gap-2">
-              <Switch
-                checked={doIncludeAll}
-                onChange={handleToggleIncludeAll}
-                label={
-                  <div>
-                    <Typography color="blue-gray" className="font-medium">
-                      {doIncludeAll ? 'AND' : 'OR'}
-                    </Typography>
-                  </div>
-                }
-              />
+            <Switch
+              checked={doIncludeAll}
+              onChange={handleToggleIncludeAll}
+              label={
+                <div>
+                  <Typography color="blue-gray" className="font-medium">
+                    {doIncludeAll ? 'AND' : 'OR'}
+                  </Typography>
+                </div>
+              }
+            />
             <Input
               label="Search"
               onChange={handleSearchChange}
@@ -237,8 +238,8 @@ export function SuperTable ({
                       {' '}
                       {sortColumn === value.field
                         ? (sortDirection === 'asc'
-                            ? <AiOutlineCaretUp/>
-                            : <AiOutlineCaretDown/>)
+                          ? <AiOutlineCaretUp/>
+                          : <AiOutlineCaretDown/>)
                         : <AiOutlineCaretLeft />}
                     </Typography>
                   </th>
@@ -259,9 +260,9 @@ export function SuperTable ({
 
                       <td key={`${value.id || value.login || index}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 table-cell', classes)}>
-                          <div className="h-full flex justify-center items-center">
-                            {value[col.field]}
-                          </div>
+                        <div className="h-full flex justify-center items-center">
+                          {value[col.field]}
+                        </div>
                       </td>
                     )}
                   </tr>
@@ -290,7 +291,7 @@ export function SuperTable ({
                 key={1}
                 variant='text'
                 size="sm"
-                onClick={() => { setCurrentPage(1) }}
+                onClick={() => { setCurrentPage(1); }}
               >
                 1
               </IconButton>
@@ -332,7 +333,7 @@ export function SuperTable ({
                 key={totalPages}
                 variant='text'
                 size="sm"
-                onClick={() => { setCurrentPage(totalPages) }}
+                onClick={() => { setCurrentPage(totalPages); }}
               >
                 {totalPages}
               </IconButton>
@@ -349,5 +350,5 @@ export function SuperTable ({
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

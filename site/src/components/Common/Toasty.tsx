@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Alert
+  Alert,
 } from '@material-tailwind/react';
 
 interface ToastyProps {

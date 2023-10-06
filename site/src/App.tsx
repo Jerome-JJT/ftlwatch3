@@ -26,7 +26,7 @@ import TestPage from './components/Test/Test';
 import { TableauPage } from 'Tableau/Tableau';
 // import Place from './components/Place/Place';
 
-export default function App (): JSX.Element {
+export default function App(): JSX.Element {
   const { isLogged, getUserData, logout } = useLogin();
   const [openedMenu, setOpenedMenu] = React.useState('');
 
@@ -36,23 +36,23 @@ export default function App (): JSX.Element {
     if (!location.pathname.includes('loginapi')) {
       getUserData();
     }
-  }, []);
+  }, [getUserData]);
 
   axios.interceptors.request.use(
-    function (req) {
-      req.baseURL = '/api'
+    (req) => {
+      req.baseURL = '/api';
       // req.meta.requestStartedAt = new Date().getTime();
       return req;
     });
 
   axios.interceptors.response.use(
-    function (response) {
-      if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response) }
+    (response) => {
+      if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response); }
 
       return response;
     },
-    async function (error) {
-      if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error) }
+    (error) => {
+      if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error); }
 
       if (error.response && error.response.status === 401) {
         logout();
@@ -60,7 +60,7 @@ export default function App (): JSX.Element {
       // if ((error.response && error.response.data && error.response.data.detail) === 'Invalid token.' && error.request.responseURL.indexOf("logout") === -1) {
       // }
 
-      return await Promise.reject(error);
+      return Promise.reject(error);
     }
   );
 

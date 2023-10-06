@@ -1,24 +1,24 @@
-import classNames from 'classnames'
-import { Link } from 'react-router-dom'
-import ProfileButton from './ProfileButton'
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import ProfileButton from './ProfileButton';
 
 interface NavBarProps {
   openedMenu: string
   setOpenedMenu: (menu: string) => void
 }
 
-export default function NavBar ({
+export default function NavBar({
   openedMenu,
-  setOpenedMenu
+  setOpenedMenu,
 }: NavBarProps): JSX.Element {
   const handleClick = (): void => {
     if (openedMenu !== 'leftdrawer') {
-      setOpenedMenu('leftdrawer')
+      setOpenedMenu('leftdrawer');
     } //
     else {
-      setOpenedMenu('')
+      setOpenedMenu('');
     }
-  }
+  };
 
   // const ref = React.useRef<HTMLDivElement | null>(null);
   // React.useEffect(() => {
@@ -86,5 +86,5 @@ export default function NavBar ({
         </div>
       </nav>
     </header>
-  )
+  );
 }
