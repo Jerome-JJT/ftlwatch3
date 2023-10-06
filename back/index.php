@@ -30,6 +30,11 @@ else {
 
 session_start();
 
+if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SESSION['CREATED'] > 30 * 60))) {
+    session_unset();
+    session_destroy();
+}
+
 load_permissions();
 
 jsonlogger('PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());

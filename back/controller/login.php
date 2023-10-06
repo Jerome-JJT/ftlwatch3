@@ -15,6 +15,7 @@ function login_way($login)
 
         $_SESSION["user"] = $userInfos;
         $_SESSION["pages"] = getUserPages($userInfos["id"]);
+        $_SESSION['CREATED'] = time();
     } else {
         mylogger("GET USER INFOS ERROR" . $userInfos["error"], LOGGER_ERROR());
 
