@@ -73,7 +73,7 @@ export default function ProfileButton (): JSX.Element {
           </>
 
         )) || (
-          <a href={`${import.meta.env.VITE_API_PREFIX}/?page=login&action=authorizeapi`}>
+          <a href={`/api/?page=login&action=authorizeapi`}>
             <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
               <AiOutlineLogout className={classNames(textColor)} />
 

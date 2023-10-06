@@ -45,7 +45,7 @@ function loginapi_authorize()
 {
 
     $authorization_redirect_url = "https://api.intra.42.fr/oauth/authorize?response_type=code";
-    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("FRONT_PREFIX") . "/loginapi" . "&scope=public";
+    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("CALLBACK_URL") . "&scope=public";
 
     header("Location: " . $authorization_redirect_url);
     exit();

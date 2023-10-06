@@ -47,3 +47,10 @@ services:
     #   - ./site:/app
 
 
+  nginx:
+    restart: "no"
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
+

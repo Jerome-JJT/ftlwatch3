@@ -40,7 +40,7 @@ export default function App (): JSX.Element {
 
   axios.interceptors.request.use(
     function (req) {
-      req.baseURL = `${import.meta.env.VITE_API_PREFIX}`
+      req.baseURL = '/api'
       // req.meta.requestStartedAt = new Date().getTime();
       return req;
     });

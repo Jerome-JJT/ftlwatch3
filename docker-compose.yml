@@ -68,8 +68,8 @@ services:
       - back
       - front
 
-    ports:
-      - "8888:80"
+    # ports:
+    #   - "8888:80"
 
     environment:
       DATABASE_CONNECT: 'pgsql'
@@ -80,7 +80,7 @@ services:
       DATABASE_USER: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-      FRONT_PREFIX: ${FRONT_PREFIX}
+      CALLBACK_URL: ${CALLBACK_URL}
 
       API_UID: ${API_UID}
       API_SECRET: ${API_SECRET}
@@ -91,8 +91,8 @@ services:
   front:
     build: ./_build/react
 
-    ports:
-     - "8080:5173"
+    # ports:
+    #  - "8080:5173"
     #  - "8443:443"
 
     volumes:
@@ -103,7 +103,6 @@ services:
 
     environment:
       API_UID: ${API_UID}
-      VITE_API_PREFIX: ${API_PREFIX}
 
     working_dir: /app
 
@@ -133,6 +132,21 @@ services:
       API_SECRET: ${API_SECRET}
 
     working_dir: /app
+
+
+  nginx:
+    build: ./_build/nginx
+
+    ports:
+      - "8080:80"
+      # - "8443:443"
+
+    # volumes:
+    #   - ./_datas:/app-datas
+
+    networks:
+      - front
+      - back
 
 
 networks:
