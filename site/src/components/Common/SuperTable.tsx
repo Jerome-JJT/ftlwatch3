@@ -12,6 +12,7 @@ import {
   Switch
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
+import classNames from 'classnames';
 
 class ColumnProps {
   field: string = ''
@@ -155,7 +156,7 @@ export function SuperTable ({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   return (
-    <Card className="h-full w-full">
+    <Card className="h-full w-full mb-8">
       <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
@@ -216,57 +217,59 @@ export function SuperTable ({
         </div>
       </CardHeader>
 
-      <CardBody className="overflow-scroll px-0">
-        <table className="mt-4 w-full min-w-max table-auto text-left">
-          <thead>
-            <tr className="even:bg-blue-gray-50/50">
-              {columns.map((value) => (
-                <th
-                  key={value.field}
-                  onClick={() => { handleSort(value.field); }}
-                  className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="flex items-center gap-2 font-normal leading-none opacity-70"
+      <CardBody>
+        <div className="mt-4 overflow-scroll border-black border border-2 resize-y">
+          <table className="w-full min-w-max table-auto text-left">
+            <thead className='sticky top-0'>
+              <tr className="bg-blue-gray-50">
+                {columns.map((value) => (
+                  <th
+                    key={value.field}
+                    onClick={() => { handleSort(value.field); }}
+                    className="cursor-pointer border-y border-blue-gray-100 p-4 transition-colors hover:bg-blue-gray-200"
                   >
-                    {value.label.toString()}
-                    {' '}
-                    {sortColumn === value.field
-                      ? (sortDirection === 'asc'
-                          ? <AiOutlineCaretUp/>
-                          : <AiOutlineCaretDown/>)
-                      : <AiOutlineCaretLeft />}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {displayedUsers.map((value, index) => {
-              const isLast = index === values.length - 1;
-              const classes = isLast
-                ? 'p-4'
-                : 'p-4 border-b border-blue-gray-50';
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="flex items-center text-center gap-2 font-normal leading-none opacity-70"
+                    >
+                      {value.label.toString()}
+                      {' '}
+                      {sortColumn === value.field
+                        ? (sortDirection === 'asc'
+                            ? <AiOutlineCaretUp/>
+                            : <AiOutlineCaretDown/>)
+                        : <AiOutlineCaretLeft />}
+                    </Typography>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {displayedUsers.map((value, index) => {
+                const isLast = index === values.length - 1;
+                const classes = isLast
+                  ? 'p-4'
+                  : 'p-4';
 
-              return (
-                <tr key={value.id || value.login || index}>
-                  {columns.map((col) =>
+                return (
+                  <tr key={value.id || value.login || index}
+                    className='border-b border-blue-gray-50'>
+                    {columns.map((col) =>
 
-                    <td key={`${value.id || value.login || index}-${col.field}`} className={classes}>
-                      <div className="flex items-center gap-3">
-                        <div className="flex flex-col">
-                          {value[col.field]}
-                        </div>
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                      <td key={`${value.id || value.login || index}-${col.field}`}
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 table-cell', classes)}>
+                          <div className="h-full flex justify-center items-center">
+                            {value[col.field]}
+                          </div>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </CardBody>
 
       <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

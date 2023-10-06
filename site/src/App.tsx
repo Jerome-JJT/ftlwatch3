@@ -23,6 +23,7 @@ import { GroupPermissionsPage } from './components/Permissions/GroupPermissions'
 import { PagePermissionsPage } from './components/Permissions/PagePermissions';
 import { useLogin } from './components/Hooks/LoginProvider';
 import TestPage from './components/Test/Test';
+import { TableauPage } from 'Tableau/Tableau';
 // import Place from './components/Place/Place';
 
 export default function App (): JSX.Element {
@@ -89,22 +90,20 @@ export default function App (): JSX.Element {
             </>
           )}
 
+          <Route path="/tableau" element={<TableauPage />} />
+
           <Route path="/groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />
           <Route path="/pages" element={<PagePermissionsPage />} />
+
           <Route path="/test" element={<TestPage />} />
 
           {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
+
           <Route path="/login" element={<LogPage />} />
           <Route path="/loginapi" element={<LoginApi />} />
-          <Route
-            path="/logout"
-            element={<Logout />}
-          />
-
-            <>
-              <Route path="/createaccount" element={<CreateAccountPage />} />
-            </>
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/createaccount" element={<CreateAccountPage />} />
         </Routes>
       </div>
       <NotifDisplay/>
