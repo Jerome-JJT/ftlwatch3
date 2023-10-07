@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, type ReactNode, createContext } from 'react';
+import { useContext, type ReactNode, createContext, useCallback, useState } from 'react';
 import { AxiosErrorText } from './AxiosErrorText';
 import { useNotification } from 'Notifications/NotificationsProvider';
 
@@ -40,11 +40,11 @@ export function useLogin(): LoginContextProps {
 export function LoginProvider({ children }: { children: ReactNode }): JSX.Element {
   const { addNotif } = useNotification();
 
-  const [isLogged, setIsLogged] = React.useState(false);
-  const [userInfos, setUserInfos] = React.useState<LoggedUser | undefined>();
-  const [userPages, setUserPages] = React.useState<any[]>([]);
+  const [isLogged, setIsLogged] = useState(false);
+  const [userInfos, setUserInfos] = useState<LoggedUser | undefined>();
+  const [userPages, setUserPages] = useState<any[]>([]);
 
-  const getUserData = React.useCallback(({ announce = false, reload = false }: GetUserDataProps = {}) => {
+  const getUserData = useCallback(({ announce = false, reload = false }: GetUserDataProps = {}) => {
     axios
       .get(`/?page=login&action=me${reload ? '&reload=true' : ''}`,
         { withCredentials: true }
@@ -69,7 +69,7 @@ export function LoginProvider({ children }: { children: ReactNode }): JSX.Elemen
       });
   }, [addNotif]);
 
-  const logout = React.useCallback(() => {
+  const logout = useCallback(() => {
     axios
       .get('/?page=login&action=logout',
         { withCredentials: true }

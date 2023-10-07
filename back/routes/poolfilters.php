@@ -8,8 +8,8 @@ if (isset($_GET["action"])) {
 }
 
 switch ($action) {
-    case "get":
-        get();
+    case "get_tableau":
+        get_tableau();
         break;
 
 }

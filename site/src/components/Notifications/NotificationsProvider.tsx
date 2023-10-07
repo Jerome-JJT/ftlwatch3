@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext, useState } from 'react';
+import { type ReactNode, createContext, useContext, useState, useCallback } from 'react';
 
 export interface Notification {
   id: number
@@ -30,8 +30,24 @@ export function useNotification(): NotificationContextProps {
 export function NotificationProvider({ children }: { children: ReactNode }): JSX.Element {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
+  // Function to remove a notification by its ID
+  const removeNotif = useCallback((id: number): void => {
+    setNotifications((old) => {
+      const toCloseNotif = old.findIndex((notif) => notif.id === id);
+
+      if (toCloseNotif !== -1) {
+        old[toCloseNotif].open = false;
+      }
+      return [...old];
+    });
+
+    setTimeout(() => {
+      setNotifications((old) => old.filter((notif) => notif.id !== id));
+    }, 200);
+  }, []);
+
   // Function to add a new notification
-  const addNotif = (content: string, alertType: string, expires: number = 10): void => {
+  const addNotif = useCallback((content: string, alertType: string, expires: number = 10): void => {
     const newNotif = {
       id:       Date.now(), // You can use a unique identifier like a timestamp
       text:     content,
@@ -53,23 +69,7 @@ export function NotificationProvider({ children }: { children: ReactNode }): JSX
         removeNotif(newNotif.id);
       }, 1000 * expires);
     }
-  };
-
-  // Function to remove a notification by its ID
-  const removeNotif = (id: number): void => {
-    setNotifications((old) => {
-      const toCloseNotif = old.findIndex((notif) => notif.id === id);
-
-      if (toCloseNotif !== -1) {
-        old[toCloseNotif].open = false;
-      }
-      return [...old];
-    });
-
-    setTimeout(() => {
-      setNotifications((old) => old.filter((notif) => notif.id !== id));
-    }, 200);
-  };
+  }, [removeNotif]);
 
   return (
     <NotificationContext.Provider

@@ -24,6 +24,7 @@ import { PagePermissionsPage } from './components/Permissions/PagePermissions';
 import { useLogin } from './components/Hooks/LoginProvider';
 import TestPage from './components/Test/Test';
 import { TableauPage } from 'Tableau/Tableau';
+import { ImagePage } from 'Image/Image';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -91,6 +92,7 @@ export default function App(): JSX.Element {
           )}
 
           <Route path="/tableau" element={<TableauPage />} />
+          <Route path="/image" element={<ImagePage />} />
 
           <Route path="/groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />

@@ -17,7 +17,7 @@ function load_permissions() {
 }
 
 function has_permission($perm) {
-    return in_array($perm, $_REQUEST["permissions"]);
+    return isset($_REQUEST["permissions"]) && in_array($perm, $_REQUEST["permissions"]);
 }
 
 function need_permission($perm) {

@@ -9,11 +9,19 @@ export default withMT({
     './src/**/**/*.{tsx, ts}',
     './src/**/**/**/*.{tsx, ts}',
     './src/assets/*.ts',
+    './src/*.ts',
     './index.html',
   // "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'roboto': ['Roboto'],
+      },
+    },
+
+
   },
+  // },
   // plugins: [require("tw-elements/dist/plugin.cjs")],
 });

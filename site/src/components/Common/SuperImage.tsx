@@ -10,31 +10,18 @@ import {
   CardFooter,
   IconButton,
   Switch,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
+  Tooltip,
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import classNames from 'classnames';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
+// class ColumnProps {
+//   field: string = '';
+//   label: string = '';
+// }
 
-class FilterProps {
-  id: string = '';
-  name: string = '';
-  hidden: boolean = true;
-}
-
-class SuperTableProps {
-  columns: ColumnProps[] = [];
+class ImageProps {
   values: any[] = [];
-
-  selectedFilter?: string | undefined;
-  filtersList?: FilterProps[] | undefined;
-  setFilter?: ((id: string) => void) | undefined;
 
   tableTitle?: string | undefined;
   tableDesc?: string | undefined;
@@ -44,13 +31,8 @@ class SuperTableProps {
   reloadFunction?: (() => void) | undefined;
 }
 
-export function SuperTable({
-  columns,
+export function SuperImage({
   values,
-
-  selectedFilter = undefined,
-  filtersList = undefined,
-  setFilter = undefined,
 
   tableTitle = undefined,
   tableDesc = undefined,
@@ -59,7 +41,7 @@ export function SuperTable({
   hasOptionAll = true,
 
   reloadFunction = undefined,
-}: SuperTableProps): JSX.Element {
+}: ImageProps): JSX.Element {
   // const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   // const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
@@ -68,11 +50,7 @@ export function SuperTable({
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [usersPerPage, setUsersPerPage] = React.useState(options[0]);
-
-  const [sortColumn, setSortColumn] = React.useState('id');
-  const [sortDirection, setSortDirection] = React.useState('asc');
-
-  const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
+  // const [usersPerPage, setUsersPerPage] = React.useState(values.length);
 
   const handleUsersPerPageChange = (value: any): void => {
     setUsersPerPage(parseInt(value.target.value));
@@ -87,36 +65,6 @@ export function SuperTable({
     setSearchQuery(event.target.value);
   };
 
-  const handleSort = (column: any): void => {
-    if (sortColumn === column && sortDirection === 'desc') {
-      setSortColumn('');
-    }
-    else if (sortColumn === column) {
-      setSortDirection('desc');
-    }
-    else {
-      setSortColumn(column);
-      setSortDirection('asc');
-    }
-  };
-
-  const customSort = useCallback((a: any, b: any): number => {
-    const aValue = a[sortColumn];
-    const bValue = b[sortColumn];
-
-    if (typeof aValue !== 'undefined' && typeof bValue !== 'undefined') {
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return aValue - bValue;
-      }
-      else {
-        return aValue.toString().localeCompare(bValue.toString());
-      }
-    }
-    else {
-      return 0;
-    }
-  }, [sortColumn]);
-
   const generatePageNumbers = (currentPage: number, totalPages: number, maxPages: number): number[] => {
     const halfMaxPages = Math.floor(maxPages / 2);
     const startPage = Math.max(currentPage - halfMaxPages, 1);
@@ -130,17 +78,7 @@ export function SuperTable({
     return pageNumbers;
   };
 
-
-  const sortedValues = useMemo(() => [...values || []].sort((a, b): number => {
-    if (sortDirection === 'asc') {
-      return customSort(a, b);
-    }
-    else {
-      return customSort(b, a);
-    }
-  }), [values, sortDirection, customSort]);
-
-  const filteredUsers = useMemo(() => sortedValues.filter((user) => {
+  const filteredUsers = useMemo(() => values.filter((user) => {
     const userValues = Object.values(user);
     const searchTerms = searchQuery.split(',');
 
@@ -166,7 +104,8 @@ export function SuperTable({
         );
       });
     }
-  }), [sortedValues, searchQuery, doIncludeAll]);
+  }), [values, searchQuery, doIncludeAll]);
+
 
   const totalPages = useMemo(() => Math.ceil((filteredUsers?.length || 0) / usersPerPage), [filteredUsers, usersPerPage]);
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
@@ -203,7 +142,7 @@ export function SuperTable({
           }
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-2">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           {options.length > 0 &&
             <div className="w-full md:w-72">
               <MySelect label='Items per page' value={usersPerPage.toString()} onChange={handleUsersPerPageChange}>
@@ -236,90 +175,38 @@ export function SuperTable({
             />
           </div>
         </div>
-
-        {filtersList && setFilter &&
-         <Accordion open={isSubmenuOpen} className=''>
-           <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Poolfilters</AccordionHeader>
-
-           <AccordionBody className='flex flex-wrap gap-2 justify-evenly'>
-
-             {filtersList.map((filter) => {
-               return (
-                 <Button
-                   key={filter.id}
-                   className={classNames(filter.id === selectedFilter ? 'bg-blue-900' : 'bg-blue-700')}
-
-                   //  type="button"
-                   //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                   onClick={() => { setFilter(filter.name); }}
-                 >
-                   {filter.hidden ? '$' : ''}{filter.name}
-                 </Button>
-               );
-             })}
-           </AccordionBody>
-         </Accordion>}
       </CardHeader>
 
-      <CardBody>
-        <div className="mt-4 overflow-scroll border-black border-2 resize-y">
-          <table className="w-full min-w-max table-auto text-left">
-            <thead className='sticky top-0'>
-              <tr className="bg-blue-gray-50">
-                {columns.map((value) => (
-                  <th
-                    key={value.field}
-                    onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-y border-blue-gray-100 p-4 transition-colors hover:bg-blue-gray-200"
-                  >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="flex items-center text-center gap-2 font-normal leading-none opacity-70"
-                    >
-                      {value.label.toString()}
-                      {' '}
-                      {sortColumn === value.field
-                        ? (sortDirection === 'asc'
-                          ? <AiOutlineCaretUp/>
-                          : <AiOutlineCaretDown/>)
-                        : <AiOutlineCaretLeft />}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {displayedUsers.length > 0 && displayedUsers.map((value, index) => {
-                const isLast = index === values.length - 1;
-                const classes = isLast
-                  ? 'p-4'
-                  : 'p-4';
+      <CardBody className='flex gap-2 flex-wrap justify-center'>
 
-                return (
-                  <tr key={value.id || value.login || index}
-                    className='border-b border-blue-gray-50'>
-                    {columns.map((col) =>
+        { displayedUsers.map((user) =>
 
-                      <td key={`${value.id || value.login || index}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 table-cell', classes)}>
-                        <div className="h-full flex justify-center items-center">
-                          {value[col.field]}
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                );
-              }) ||
-              <tr>
-                <td className='text-6xl  text-blue-500 font-bold text-center' colSpan={columns.length}>
-                  <br/>0 results<br/><br/>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+          <Card key={user.id} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
+            <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2'>
+              <img className='max-h-full rounded-lg object-contain' src={user.avatar_url} alt="profile-picture" />
+            </CardHeader>
+
+            <CardBody className="flex grow justify-evenly flex-col text-center align-center p-2">
+
+              <div>
+                <p color="blue-gray" className="mb-1">
+                  {user.first_name} {user.last_name}
+                </p>
+              </div>
+
+              <div>
+                <p color="blue-gray" className="mb-1">
+                  {user.poolfilter}
+                </p>
+              </div>
+            </CardBody>
+
+            <CardFooter className="pt-0 flex justify-center pb-4">
+              <a href={`https://profile.intra.42.fr/users/${user.login}`}><Button>{user.login}</Button></a>
+            </CardFooter>
+          </Card>
+        )}
+
       </CardBody>
 
       <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

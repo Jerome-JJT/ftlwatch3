@@ -1,9 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import {
-  Checkbox,
-} from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
@@ -29,6 +26,25 @@ const StyledTableau = styled.div`
   }
 `;
 
+function compareDates(a: string, b: string): number {
+  const [yearA, monthA] = a.split('.');
+  const [yearB, monthB] = b.split('.');
+
+  if (a.toLowerCase() === 'none.none') {
+    return 1;
+  }
+  else if (b.toLowerCase() === 'none.none') {
+    return -1;
+  }
+
+  if (yearA !== yearB) {
+    return parseInt(yearA) - parseInt(yearB);
+  }
+
+  const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+  return months.indexOf(monthA) - months.indexOf(monthB);
+}
+
 export function TableauPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
@@ -40,7 +56,9 @@ export function TableauPage(): JSX.Element {
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
-  const [filters, setFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+
+  const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+  // const [selectedPoolFilter, setSelectedPoolFilter] = React.useState<string | undefined>(undefined);
 
   // const changePermission = async (userId: number, groupId: number, value: boolean): Promise<boolean> => {
   //   return await axios
@@ -58,6 +76,23 @@ export function TableauPage(): JSX.Element {
   //       return false;
   //     });
   // }
+
+  React.useEffect(() => {
+    axios
+      .get('/?page=poolfilters&action=get_tableau',
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
+
+          setPoolFilters(res.data);
+        }
+      })
+      .catch((error) => {
+        return AxiosErrorText(error);
+      });
+  }, []);
 
   React.useEffect(() => {
     axios
@@ -80,7 +115,7 @@ export function TableauPage(): JSX.Element {
                   user[col.field] = <img
                     src={user[col.field]}
                     alt={user.login}
-                    className='max-w-full max-h-full max-w-[60px] rounded-lg'
+                    className='max-h-full max-w-[60px] rounded-lg'
                   />;
                 }
               });
@@ -90,7 +125,7 @@ export function TableauPage(): JSX.Element {
             setValues(displayValues);
           }
           else {
-            addNotif('No results found', 'error');
+            // addNotif('No results found', 'error');
           }
         }
       })
@@ -108,6 +143,11 @@ export function TableauPage(): JSX.Element {
           <SuperTable
             columns={columns}
             values={values}
+
+            selectedFilter={usedFilter}
+            filtersList={poolFilters}
+            setFilter={(id: string) => { setUsedFilter((prev) => prev !== id ? id : undefined); } }
+
             tableTitle='Tableau'
             options={[10, 25, 50, 100]}
             reloadFunction={() => { setValues([]); }}
