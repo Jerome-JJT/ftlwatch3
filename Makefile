@@ -6,7 +6,7 @@ COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
 
-ifeq ($(hostname), 42lwatch3)
+ifeq ($(shell hostname), 42lwatch3)
 	#Prod
 	DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
 else
@@ -21,7 +21,8 @@ build:
 			${DOCKER} build
 
 testenv:
-		echo ${DOCKER}
+		@echo $(hostname)
+		@echo ${DOCKER}
 
 start:
 			${DOCKER} up -d --build
