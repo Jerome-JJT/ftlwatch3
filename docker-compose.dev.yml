@@ -5,10 +5,6 @@ services:
   db:
     restart: "no"
 
-    ports:
-      - "5432:5432"
-
-
   adminer:
     restart: "no"
 
@@ -52,5 +48,9 @@ services:
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
+
+
+    ports:
+      - "8080:80"
 
 

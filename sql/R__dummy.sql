@@ -120,25 +120,25 @@ SELECT setval('groups_permissions_id_seq', (SELECT MAX(id) from "groups_permissi
 
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (1, 'Tableaux', 20, 'tableau'),
-  (2, 'Images', 21, 'images'),
+  (2, 'Images', 21, 'image'),
   (3, 'Admin', 5, NULL)
   ON CONFLICT(id) DO NOTHING
 ;
 
-INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id") VALUES
-  (1, 'Tableau cursus', 1, NULL, NULL, 1),
-  (2, 'Tableau current pool', 2, NULL, 'filter=currentpool', 1),
-  (3, 'Tableau current year', 3, NULL, 'filter=currentyear', 1),
-  (4, 'Tableau outer core', 4, NULL, 'projects=outer', 1),
+INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id", "permission_id") VALUES
+  (1, 'Tableau cursus', 1, NULL, NULL, 1, 1),
+  (2, 'Tableau current pool', 2, NULL, 'filter=currentpool', 1, 1),
+  (3, 'Tableau current year', 3, NULL, 'filter=currentyear', 1, 1),
+  (4, 'Tableau outer core', 4, NULL, 'projects=outer', 1, 1),
 
-  (5, 'Images cursus', 1, NULL, 'filter=currentcursus', 2),
-  (6, 'Images current pool', 2, NULL, 'filter=currentpool', 2),
-  (7, 'Images current year', 3, NULL, 'filter=currentyear', 2),
+  (5, 'Images cursus', 1, NULL, 'filter=currentcursus', 2, 2),
+  (6, 'Images current pool', 2, NULL, 'filter=currentpool', 2, 2),
+  (7, 'Images current year', 3, NULL, 'filter=currentyear', 2, 2),
 
-  (8, 'Admin', 20, 'admin', NULL, 3),
+  (8, 'Admin', 20, 'admin', NULL, 3, 3),
   (9, 'Credits', 30, 'credits', NULL, NULL),
-  (10, 'Groups', 20, 'groups', NULL, 3),
-  (11, 'Permissions', 20, 'permissions', NULL, 3)
+  (10, 'Groups', 20, 'groups', NULL, 3, 3),
+  (11, 'Permissions', 20, 'permissions', NULL, 3, 3)
   ON CONFLICT(id) DO NOTHING
 ;
 

@@ -19,9 +19,9 @@ services:
 #     environment:
 #       BUILD_TYPE: "Production" 
 
-#   nginx:
-#     restart: "on-failure"
+  nginx:
+    restart: "on-failure"
 
-#     ports:
-#       - "8080:80"
+    ports:
+      - "8081:80"
 

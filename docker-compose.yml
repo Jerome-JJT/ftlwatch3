@@ -49,9 +49,6 @@ services:
     # volumes:
     #   - ./adminer:/var/www/html
 
-    ports:
-      - "8081:8080"
-
     networks:
       - back
 
@@ -140,10 +137,6 @@ services:
     depends_on:
       - front
       - back
-
-    ports:
-      - "8080:80"
-      # - "8443:443"
 
     # volumes:
     #   - ./_datas:/app-datas

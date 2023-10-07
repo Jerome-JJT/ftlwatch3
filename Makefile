@@ -6,10 +6,10 @@ COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
 #Dev
-DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}
+DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
 
 #Prod
-# DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+DOCKERPROD		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
 
 all:		start
 
@@ -20,6 +20,9 @@ build:
 
 start:
 			${DOCKER} up -d --build
+
+startprod:
+			${DOCKERPROD} up -d --build
 
 ps:
 			${DOCKER} ps -a
