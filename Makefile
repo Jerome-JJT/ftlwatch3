@@ -5,11 +5,15 @@ COMPOSE_BASE		= -f ./docker-compose.yml
 COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
-#Dev
-DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
 
-#Prod
-DOCKERPROD		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+ifeq ($(hostname), 42lwatch3)
+	#Dev
+	DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
+else
+	#Prod
+	DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+endif
+
 
 all:		start
 
@@ -21,8 +25,6 @@ build:
 start:
 			${DOCKER} up -d --build
 
-startprod:
-			${DOCKERPROD} up -d --build
 
 ps:
 			${DOCKER} ps -a
