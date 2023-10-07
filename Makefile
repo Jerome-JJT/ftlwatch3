@@ -5,13 +5,14 @@ COMPOSE_BASE		= -f ./docker-compose.yml
 COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
+#Dev
+DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
 
 ifeq ($(shell hostname), 42lwatch3)
-	#Prod
-	DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
-else
-	#Dev
-	DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
+	ifeq ($(shell pwd), /var/www/ftlwatch3)
+		#Prod
+		DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+	endif
 endif
 
 
