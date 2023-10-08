@@ -18,13 +18,15 @@ import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
 import { LogPage } from './components/Log/LogPage';
 
 import { NotifDisplay } from './components/Notifications/NotifDisplay';
-import { UserGroupsPage } from './components/Permissions/UserGroups';
-import { GroupPermissionsPage } from './components/Permissions/GroupPermissions';
-import { PagePermissionsPage } from './components/Permissions/PagePermissions';
+import { UserGroupsPage } from './components/AdminPages/UserGroups';
+import { GroupPermissionsPage } from './components/AdminPages/GroupPermissions';
+import { PagePermissionsPage } from './components/AdminPages/PagePermissions';
 import { useLogin } from './components/Hooks/LoginProvider';
 import TestPage from './components/Test/Test';
 import { TableauPage } from 'Tableau/Tableau';
 import { ImagePage } from 'Image/Image';
+import { PoolfilterVisibilityPage } from 'AdminPages/PoolfilterVisibility';
+import { UsersVisibilityPage } from 'AdminPages/UsersVisibility';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -97,6 +99,8 @@ export default function App(): JSX.Element {
           <Route path="/groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />
           <Route path="/pages" element={<PagePermissionsPage />} />
+          <Route path="/poolfilters" element={<PoolfilterVisibilityPage />} />
+          <Route path="/users" element={<UsersVisibilityPage />} />
 
           <Route path="/test" element={<TestPage />} />
 

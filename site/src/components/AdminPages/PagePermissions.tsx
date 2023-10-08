@@ -20,7 +20,7 @@ export function PagePermissionsPage(): JSX.Element {
 
   const modifyPageOrder = useCallback((pageId: number, order: string): Promise<boolean> => {
     return axios
-      .post('/?page=permissions&action=page_set',
+      .post('/?page=admin&action=page_set',
         `pageId=${pageId}&order=${order}`, { withCredentials: true }
       )
       .then((res) => {
@@ -37,7 +37,7 @@ export function PagePermissionsPage(): JSX.Element {
 
   const modifyPagePermission = useCallback((pageId: number, permissionId: string): Promise<boolean> => {
     return axios
-      .post('/?page=permissions&action=page_set',
+      .post('/?page=admin&action=page_set',
         `pageId=${pageId}&permissionId=${permissionId}`, { withCredentials: true }
       )
       .then((res) => {
@@ -54,7 +54,7 @@ export function PagePermissionsPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=permissions&action=pages_get',
+      .get('/?page=admin&action=pages_get',
         { withCredentials: true }
       )
       .then((res) => {

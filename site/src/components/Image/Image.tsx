@@ -46,7 +46,7 @@ export function ImagePage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=poolfilters&action=get_tableau',
+      .get('/?page=poolfilters&action=get_image',
         { withCredentials: true }
       )
       .then((res) => {

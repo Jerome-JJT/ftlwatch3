@@ -1,19 +1,30 @@
 <?php
 
-
-function getPoolFilters($hidden)
+function getUsersShort()
 {
-  $query = "SELECT id, name, hidden FROM poolfilters
-  WHERE hidden = false OR hidden = :hidden";
+  $query = "SELECT 
+  users.id,
+  users.login,
+  users.avatar_url,
+  users.kind,
+  users.is_staff,
+  users.has_cursus21,
+  users.has_cursus9,
+  poolfilters.name AS poolfilter,
+  users.hidden
+  
+  FROM users
+  JOIN poolfilters ON users.poolfilter_id = poolfilters.id
+  ORDER BY login
+  ";
 
-  $data = array(":hidden" => $hidden ? "TRUE" : "FALSE");
+  $data = array();
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
 
   return $result;
 }
-
 
 function getUsers($poolfilter = '')
 {
@@ -50,4 +61,15 @@ function getUsers($poolfilter = '')
   $result = executeQuerySelect($query, $data);
 
   return $result;
+}
+
+function setUser($userId, $value)
+{
+  $query = "UPDATE users
+  SET hidden = :hidden
+  WHERE id = :user_id";
+
+  $data = array(":user_id" => $userId, ":hidden" => $value == "true" ? "TRUE" : "FALSE");
+
+  return executeQueryAction($query, $data);
 }

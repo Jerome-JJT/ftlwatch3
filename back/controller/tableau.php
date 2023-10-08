@@ -1,6 +1,7 @@
 <?php
 require_once("controller/_common.php");
-require_once("model/intra.php");
+require_once("model/users.php");
+require_once("model/poolfilters.php");
 
 
 

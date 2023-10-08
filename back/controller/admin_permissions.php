@@ -1,6 +1,6 @@
 <?php
 require_once("controller/_common.php");
-require_once("model/intra.php");
+require_once("model/users.php");
 require_once("model/permissions/user_groups.php");
 require_once("model/permissions/group_permissions.php");
 require_once("model/permissions/page_permissions.php");

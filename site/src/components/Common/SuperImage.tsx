@@ -141,7 +141,7 @@ export function SuperImage({
           }
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-2">
           {options.length > 0 &&
             <div className="w-full md:w-72">
               <MySelect label='Items per page' value={usersPerPage.toString()} onChange={handleUsersPerPageChange}>

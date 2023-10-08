@@ -12,24 +12,20 @@ class ColumnProps {
   label: string = '';
 }
 
-export function GroupPermissionsPage(): JSX.Element {
+export function UserGroupsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  // const [searchParams] = useSearchParams();
-  // const defaultFilter = searchParams.get('filter');
-
-  // const [pageError, setPageError] = React.useState<string | undefined>(undefined);
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const changePermission = useCallback((userId: number, groupId: number, value: boolean): Promise<boolean> => {
     return axios
-      .post('/?page=permissions&action=perm_set',
-        `groupId=${userId}&permId=${groupId}&value=${value}`, { withCredentials: true }
+      .post('/?page=admin&action=group_set',
+        `userId=${userId}&groupId=${groupId}&value=${value}`, { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
-          // localStorage.setItem('token', res.data.access_token);
+          // addNotif('teest2', 'question', false);
         } //
         return true;
       })
@@ -41,7 +37,7 @@ export function GroupPermissionsPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=permissions&action=perms_get',
+      .get('/?page=admin&action=groups_get',
         { withCredentials: true }
       )
       .then((res) => {
@@ -49,15 +45,17 @@ export function GroupPermissionsPage(): JSX.Element {
           if (res.data.values.length > 0) {
             setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((groupWithPerms: any) => {
+            const displayValues = res.data.values.map((userWithGroups: any) => {
+              console.log(userWithGroups, res.data.columns);
+
               res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field !== 'id' && col.field !== 'name') {
-                  groupWithPerms[col.field] = <Checkbox
-                    id={`${groupWithPerms.id}-${col.field}`}
-                    defaultChecked={groupWithPerms[col.field]}
+                if (col.field !== 'id' && col.field !== 'login') {
+                  userWithGroups[col.field] = <Checkbox
+                    id={`${userWithGroups.id}-${col.field}`}
+                    defaultChecked={userWithGroups[col.field]}
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={async (e: any) => {
-                      if (!(await changePermission(groupWithPerms.id, parseInt(col.field), e.target.checked))) {
+                      if (!(await changePermission(userWithGroups.id, parseInt(col.field), e.target.checked))) {
                         e.target.checked = !e.target.checked;
                       }
                     }}
@@ -65,10 +63,9 @@ export function GroupPermissionsPage(): JSX.Element {
                 }
               });
 
-              return groupWithPerms;
+              return userWithGroups;
             });
             setValues(displayValues);
-            // setPageError(undefined);
           }
           else {
             addNotif('No results found', 'error');
@@ -87,7 +84,7 @@ export function GroupPermissionsPage(): JSX.Element {
         <SuperTable
           columns={columns}
           values={values}
-          tableTitle='Permissions'
+          tableTitle='Pages'
           options={[10, 20, 30]}
           reloadFunction={() => { setValues([]); }}
         />

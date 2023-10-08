@@ -138,7 +138,9 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (8, 'Admin', 20, 'admin', NULL, 3, 3),
   (9, 'Credits', 30, 'credits', NULL, NULL, NULL),
   (10, 'Groups', 20, 'groups', NULL, 3, 3),
-  (11, 'Permissions', 20, 'permissions', NULL, 3, 3)
+  (11, 'Permissions', 20, 'permissions', NULL, 3, 3),
+  (12, 'Pages', 20, 'pages', NULL, 3, 3),
+  (13, 'Poolfilters', 20, 'poolfilters', NULL, 3, 3)
   ON CONFLICT(id) DO NOTHING
 ;
 

@@ -1,12 +1,15 @@
 <?php
 
-require_once("controller/permissions.php");
+require_once("controller/authorization.php");
+require_once("controller/admin_permissions.php");
+require_once("controller/admin_visibility.php");
 
 $action = "";
 if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+need_permission("p_admin");
 
 switch ($action) {
     case "groups_get":
@@ -31,6 +34,22 @@ switch ($action) {
 
     case "page_set":
         page_set($_POST);
+        break;
+
+    case "poolfilters_get":
+        poolfilters_get();
+        break;
+
+    case "poolfilter_set":
+        poolfilter_set($_POST);
+        break;
+
+    case "users_get":
+        users_get();
+        break;
+
+    case "user_set":
+        user_set($_POST);
         break;
 }
 
