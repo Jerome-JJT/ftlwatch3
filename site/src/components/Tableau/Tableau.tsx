@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Button } from '@material-tailwind/react';
+import Separator from 'Common/Separator';
+import classNames from 'classnames';
+import { comparePoolfilters } from 'Utils/comparePoolfilters';
 
 class ColumnProps {
   field: string = '';
@@ -26,56 +30,16 @@ const StyledTableau = styled.div`
   }
 `;
 
-function compareDates(a: string, b: string): number {
-  const [yearA, monthA] = a.split('.');
-  const [yearB, monthB] = b.split('.');
-
-  if (a.toLowerCase() === 'none.none') {
-    return 1;
-  }
-  else if (b.toLowerCase() === 'none.none') {
-    return -1;
-  }
-
-  if (yearA !== yearB) {
-    return parseInt(yearA) - parseInt(yearB);
-  }
-
-  const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  return months.indexOf(monthA) - months.indexOf(monthB);
-}
-
 export function TableauPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
   const defaultFilter = searchParams.get('filter');
 
-  // const [pageError, setPageError] = React.useState<string | undefined>(undefined);
-
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
-
   const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
-  // const [selectedPoolFilter, setSelectedPoolFilter] = React.useState<string | undefined>(undefined);
-
-  // const changePermission = async (userId: number, groupId: number, value: boolean): Promise<boolean> => {
-  //   return await axios
-  //     .post('/?page=permissions&action=perm_set',
-  //       `groupId=${userId}&permId=${groupId}&value=${value}`, { withCredentials: true }
-  //     )
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         // localStorage.setItem('token', res.data.access_token);
-  //       } //
-  //       return true;
-  //     })
-  //     .catch((error) => {
-  //       addNotif(AxiosErrorText(error), 'error')
-  //       return false;
-  //     });
-  // }
 
   React.useEffect(() => {
     axios
@@ -84,7 +48,7 @@ export function TableauPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          (res.data as PoolFilterProps[]).sort((a, b) => compareDates(a.name, b.name));
+          (res.data as PoolFilterProps[]).sort((a, b) => comparePoolfilters(a.name, b.name));
 
           setPoolFilters(res.data);
         }
@@ -134,6 +98,28 @@ export function TableauPage(): JSX.Element {
       });
   }, [addNotif, usedFilter]);
 
+  const subOptions = useMemo(() => (
+    <>
+      <div className='flex flex-wrap gap-2 justify-evenly'>
+
+        {poolFilters && poolFilters.map((filter) => {
+          return (
+            <Button
+              key={filter.id}
+              className={classNames(filter.name === usedFilter ? 'bg-blue-900' : (filter.hidden ? 'bg-blue-200' : 'bg-blue-700' ))}
+              //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+              onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }
+            >
+              {filter.name}
+            </Button>
+          );
+        })}
+      </div>
+      <Separator></Separator>
+    </>
+
+  ), [poolFilters, usedFilter]);
+
   //
   return (
     <div className='mx-8 mt-2'>
@@ -144,9 +130,7 @@ export function TableauPage(): JSX.Element {
             columns={columns}
             values={values}
 
-            selectedFilter={usedFilter}
-            filtersList={poolFilters}
-            setFilter={(id: string) => { setUsedFilter((prev) => prev !== id ? id : undefined); } }
+            subOptions={subOptions}
 
             tableTitle='Tableau'
             options={[10, 25, 50, 100]}

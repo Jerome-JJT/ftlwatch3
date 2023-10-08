@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 import { AiOutlineCaretDown, AiOutlineCaretLeft, AiOutlineCaretUp, AiOutlineSync } from 'react-icons/ai';
 import {
   Card,
@@ -16,26 +16,17 @@ import {
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import classNames from 'classnames';
-import Separator from './Separator';
 
 class ColumnProps {
   field: string = '';
   label: string = '';
 }
 
-class FilterProps {
-  id: string = '';
-  name: string = '';
-  hidden: boolean = true;
-}
-
 class SuperTableProps {
   columns: ColumnProps[] = [];
   values: any[] = [];
 
-  selectedFilter?: string | undefined;
-  filtersList?: FilterProps[] | undefined;
-  setFilter?: ((id: string) => void) | undefined;
+  subOptions?: ReactNode | undefined;
 
   tableTitle?: string | undefined;
   tableDesc?: string | undefined;
@@ -49,9 +40,7 @@ export function SuperTable({
   columns,
   values,
 
-  selectedFilter = undefined,
-  filtersList = undefined,
-  setFilter = undefined,
+  subOptions = undefined,
 
   tableTitle = undefined,
   tableDesc = undefined,
@@ -61,8 +50,6 @@ export function SuperTable({
 
   reloadFunction = undefined,
 }: SuperTableProps): JSX.Element {
-  // const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
-  // const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const [searchQuery, setSearchQuery] = React.useState('');
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
@@ -244,30 +231,16 @@ export function SuperTable({
           </div>
         </div>
 
-        {filtersList && setFilter &&
-         <Accordion open={isSubmenuOpen} className=''>
-           <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Poolfilters</AccordionHeader>
+        {subOptions &&
+          <Accordion open={isSubmenuOpen} className=''>
+            <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
 
-           <AccordionBody>
+            <AccordionBody>
 
-             <div className='flex flex-wrap gap-2 justify-evenly'>
-
-               {filtersList.map((filter) => {
-                 return (
-                   <Button
-                     key={filter.id}
-                     className={classNames(filter.name === selectedFilter ? 'bg-blue-900' : (filter.hidden ? 'bg-blue-200' : 'bg-blue-700' ))}
-                     //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                     onClick={() => { setFilter(filter.name); }}
-                   >
-                     {filter.name}
-                   </Button>
-                 );
-               })}
-             </div>
-             <Separator></Separator>
-           </AccordionBody>
-         </Accordion>}
+              {subOptions}
+            </AccordionBody>
+          </Accordion>
+        }
       </CardHeader>
 
       <CardBody>

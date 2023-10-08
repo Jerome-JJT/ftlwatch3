@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
-import { AiOutlineCaretDown, AiOutlineCaretLeft, AiOutlineCaretUp, AiOutlineSync } from 'react-icons/ai';
+import React, { ReactNode, useMemo } from 'react';
+import { AiOutlineSync } from 'react-icons/ai';
 import {
   Card,
   CardHeader,
@@ -10,18 +10,16 @@ import {
   CardFooter,
   IconButton,
   Switch,
-  Tooltip,
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
-import classNames from 'classnames';
-
-// class ColumnProps {
-//   field: string = '';
-//   label: string = '';
-// }
 
 class ImageProps {
   values: any[] = [];
+
+  subOptions?: ReactNode | undefined;
 
   tableTitle?: string | undefined;
   tableDesc?: string | undefined;
@@ -34,6 +32,8 @@ class ImageProps {
 export function SuperImage({
   values,
 
+  subOptions = undefined,
+
   tableTitle = undefined,
   tableDesc = undefined,
 
@@ -42,15 +42,14 @@ export function SuperImage({
 
   reloadFunction = undefined,
 }: ImageProps): JSX.Element {
-  // const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
-  // const [values, setValues] = React.useState<any[] | undefined>(undefined);
-
   const [searchQuery, setSearchQuery] = React.useState('');
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [usersPerPage, setUsersPerPage] = React.useState(options[0]);
   // const [usersPerPage, setUsersPerPage] = React.useState(values.length);
+
+  const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
 
   const handleUsersPerPageChange = (value: any): void => {
     setUsersPerPage(parseInt(value.target.value));
@@ -175,6 +174,17 @@ export function SuperImage({
             />
           </div>
         </div>
+
+        {subOptions &&
+         <Accordion open={isSubmenuOpen} className=''>
+           <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
+
+           <AccordionBody>
+
+             {subOptions}
+           </AccordionBody>
+         </Accordion>
+        }
       </CardHeader>
 
       <CardBody className='flex gap-2 flex-wrap justify-center'>
