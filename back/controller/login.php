@@ -35,7 +35,7 @@ function login($post)
         }
         jsonResponse(array(), 400);
 
-    } //
+    }
     else {
         jsonResponse(array(), 400);
     }

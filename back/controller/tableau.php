@@ -4,42 +4,58 @@ require_once("model/intra.php");
 
 
 
-function tableau_api($filter, $projects)
+function tableau_api($selectedFilter, $projects)
 {
 
-    // $validfilters = getPoolFilters(false);
+    $validFilters = getPoolFilters(has_permission("p_admin"));
 
-    // foreach ($validfilters as $filter) {
-    //     if (!in_array(substr($filter, 0, 4), $validfilters)) {
-    //         array_push($validfilters, substr($filter, 0, 4));
-    //     }
-    // }
+    $validFilters = array_map(function ($filter) { return $filter["name"]; }, $validFilters);
 
-    // array_push($validfilters, "cursus");
-    // array_push($validfilters, "all");
+    foreach ($validFilters as $filter) {
+        if (!in_array(substr($filter, 0, 4), $validFilters)) {
+            array_push($validFilters, substr($filter, 0, 4));
+        }
+    }
 
-    // if ($filter == "") {
-    //     $filter = "cursus";
-    // }
+    array_push($validFilters, "cursus");
+    array_push($validFilters, "all");
+    array_push($validFilters, "currentmonth");
+    array_push($validFilters, "currentyear");
 
-    // if (!in_array($filter, $validfilters)) {
-    //     jsonResponse(array("error" => "Unknown filter"), 404);
-    // }
+    if ($selectedFilter == "") {
+        $selectedFilter = "cursus";
+    }
+
+    if (!in_array($selectedFilter, $validFilters)) {
+        jsonResponse(array("error" => "Unknown filter"), 404);
+    }
 
     //TODO static in DB
-    $currentFilter = "2023september";
+    $currentFilter = "2023.september";
 
-    // if (substr($filter, 0, 4) == substr($currentFilter, 0, 4)) {
-    //     needOnePermission(array("tableau_currentyear"));
-    // } else if ($currentFilter) {
-    //     needOnePermission(array("tableau_currentpool"));
-    // }
+    if ($selectedFilter == "cursus") {
+        need_permission("p_view1");
+    }
+    else if ($selectedFilter == "currentmonth") {
+        need_permission("p_view2");
+        $selectedFilter = $currentFilter;
+    }
+    else if ($selectedFilter == "currentyear") {
+        need_permission("p_view3");
+        $selectedFilter = substr($currentFilter, 0, 4);
+    }
+    else {
+        need_permission("p_view4");
+    }
+    
+
+    // print_r($selectedFilter);
 
 
 
     $res = array();
 
-    $users = getUsers($filter);
+    $users = getUsers($selectedFilter);
 
     $res["values"] = $users;
 

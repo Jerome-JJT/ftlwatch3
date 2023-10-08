@@ -39,13 +39,12 @@ function getUsers($poolfilter = '')
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
-    OR (poolfilters.name = :poolfilter)
+    OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
     )
   ORDER BY login
   ";
 
   $data = array(":poolfilter" => $poolfilter);
-  // $data = array();
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);

@@ -23,6 +23,10 @@ function has_permission($perm) {
 function need_permission($perm) {
     if (!has_permission($perm)) {
 
+        $user = isset($_SESSION["user"]) && isset($_SESSION["user"]["login"]) ? $_SESSION["user"]["login"] : "anonymous";
+
+        mylogger($user." missing perm ".$perm." ".implode(", ", $_REQUEST["permissions"]), LOGGER_INFO());
+
         jsonResponse(array(), 403);
     }
 }

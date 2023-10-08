@@ -16,6 +16,7 @@ import {
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import classNames from 'classnames';
+import Separator from './Separator';
 
 class ColumnProps {
   field: string = '';
@@ -168,7 +169,13 @@ export function SuperTable({
     }
   }), [sortedValues, searchQuery, doIncludeAll]);
 
-  const totalPages = useMemo(() => Math.ceil((filteredUsers?.length || 0) / usersPerPage), [filteredUsers, usersPerPage]);
+  const totalPages = useMemo(() => {
+    const tot = Math.ceil((filteredUsers?.length || 0) / usersPerPage);
+    if (currentPage > tot) {
+      setCurrentPage(1);
+    }
+    return tot;
+  }, [currentPage, filteredUsers?.length, usersPerPage]);
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
 
   const startIndex = useMemo(() => (currentPage - 1) * usersPerPage, [currentPage, usersPerPage]);
@@ -241,22 +248,24 @@ export function SuperTable({
          <Accordion open={isSubmenuOpen} className=''>
            <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Poolfilters</AccordionHeader>
 
-           <AccordionBody className='flex flex-wrap gap-2 justify-evenly'>
+           <AccordionBody>
 
-             {filtersList.map((filter) => {
-               return (
-                 <Button
-                   key={filter.id}
-                   className={classNames(filter.id === selectedFilter ? 'bg-blue-900' : 'bg-blue-700')}
+             <div className='flex flex-wrap gap-2 justify-evenly'>
 
-                   //  type="button"
-                   //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                   onClick={() => { setFilter(filter.name); }}
-                 >
-                   {filter.hidden ? '$' : ''}{filter.name}
-                 </Button>
-               );
-             })}
+               {filtersList.map((filter) => {
+                 return (
+                   <Button
+                     key={filter.id}
+                     className={classNames(filter.name === selectedFilter ? 'bg-blue-900' : (filter.hidden ? 'bg-blue-200' : 'bg-blue-700' ))}
+                     //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                     onClick={() => { setFilter(filter.name); }}
+                   >
+                     {filter.name}
+                   </Button>
+                 );
+               })}
+             </div>
+             <Separator></Separator>
            </AccordionBody>
          </Accordion>}
       </CardHeader>
@@ -270,7 +279,7 @@ export function SuperTable({
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-y border-blue-gray-100 p-4 transition-colors hover:bg-blue-gray-200"
+                    className="cursor-pointer border-y border-blue-gray-100 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
                   >
                     <Typography
                       variant="small"
@@ -302,7 +311,7 @@ export function SuperTable({
                     {columns.map((col) =>
 
                       <td key={`${value.id || value.login || index}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 table-cell', classes)}>
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
                         <div className="h-full flex justify-center items-center">
                           {value[col.field]}
                         </div>

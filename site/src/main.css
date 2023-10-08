@@ -101,21 +101,21 @@ code {
 }
 
 .notif-question {
-  @apply border-[#f0abfc] bg-[#f0abfc]/10 text-[#f0abfc]
+  @apply border-pink-300 bg-pink-50 text-pink-300
 }
 
 .notif-info {
-  @apply border-[#3b82f6] bg-[#3b82f6]/10 text-[#3b82f6]
+  @apply border-blue-600 bg-blue-100 text-blue-600
 }
 
 .notif-success {
-  @apply border-[#2ec946] bg-[#2ec946]/10 text-[#2ec946]
+  @apply border-green-600 bg-green-100 text-green-600
 }
 
 .notif-warning {
-  @apply border-[#a68416] bg-[#a68416]/10 text-[#a68416]
+  @apply border-amber-800 bg-amber-100 text-amber-800
 }
 
 .notif-error {
-  @apply border-[#d65142] bg-[#d65142]/10 text-[#d65142]
+  @apply border-red-600 bg-red-100 text-red-600
 }
