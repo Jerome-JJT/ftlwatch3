@@ -98,11 +98,21 @@ def raw(req, for_test = False):
             return res
 
         elif (res.status_code == 401 and for_test == False):
+
             mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
             auth = get_headers(force_refresh = True)
 
+        # elif (res.status_code == 401):
+
+        #     rich.print(res)
+        #     return res
+
         elif (res.status_code == 429):
             mylogger(f"Timeout api", LOGGER_INFO)
+
+        elif (res.status_code == 404):
+            mylogger(f"NOT FOUND", LOGGER_ERROR)
+            return []
 
         else:
             mylogger(f"Api http error: {res.status_code} {res.reason}", LOGGER_WARNING)
@@ -137,7 +147,8 @@ def callapi(req, multiple = False):
 
             rawres = raw(page)
             res.extend(rawres.json())
-            if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Total")) <= 0.5):
+
+            if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
                 mylogger(f"So fast", LOGGER_DEBUG)
                 time.sleep(0.5)
 

@@ -12,7 +12,7 @@ from _api import *
 def import_users(update_all = False):
 
 
-    local_users = executeQuerySelect("SELECT * FROM users")
+    local_users = executeQuerySelect("SELECT id FROM users")
     local_users = {user["id"]: user for user in local_users} 
 
     poolfilters = executeQuerySelect("SELECT * FROM poolfilters")
