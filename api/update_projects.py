@@ -12,146 +12,204 @@ from _api import *
 
 
 
-def import_projects(team):
-    team_users = executeQuerySelect("SELECT id FROM team_user WHERE team_id = %(team_id)s",
+def import_project_rule(rules, project_id):
+    project_rules = executeQuerySelect("SELECT id FROM project_rules WHERE project_id = %(project_id)s",
     {
-        "team_id": team["id"]
+        "project_id": project_id
     })
-    team_users = [one["id"] for one in team_users]
+    project_rules = [one["id"] for one in project_rules]
 
-    for user in team["users"]:
-        good_id = f"""{team["id"]}_{user["id"]}"""
+    for rule in rules:
+        rule = rule['rule']
+
+        good_id = f"""{project_id}_{rule["id"]}"""
         try:
-            team_users.remove(good_id)
+            project_rules.remove(good_id)
         except:
             pass
-        mylogger(f"Import team_user {good_id} {user['login']}", LOGGER_INFO)
+        mylogger(f"Import project_team {good_id} {rule['name']}", LOGGER_INFO)
 
 
-        executeQueryAction("""INSERT INTO team_user (
-            "id", "team_id", "user_id", "is_leader"
+        executeQueryAction("""INSERT INTO project_rules (
+            "id", "project_id", "rule_id"
         ) VALUES (
-            %(id)s, %(team_id)s, %(user_id)s, %(is_leader)s
+            %(id)s, %(project_id)s, %(rule_id)s
         )
-        ON CONFLICT DO NOTHING
+        ON CONFLICT (id) DO NOTHING
         """, {
             "id": good_id,
-            "team_id": team["id"],
-            "user_id": user["id"],
-            "is_leader": user["leader"]
+            "project_id": project_id,
+            "rule_id": rule["id"]
         })
 
-    for toremove in team_users:
-        mylogger(f"Remove team_user {toremove}", LOGGER_INFO)
+    for toremove in project_rules:
+        mylogger(f"Remove project_rule {toremove}", LOGGER_INFO)
 
-
-        executeQueryAction("""DELETE FROM team_user WHERE
+        executeQueryAction("""DELETE FROM project_rules WHERE
             id = %(id)s
         )
         """, {
-            "id": team["id"]
+            "id": toremove
         })
 
 
+def import_rule(rules):
+    local_rules = None
 
-def import_team_scale(team):
-    for scale in team["scale_teams"]:
-        try:
-            team_users.remove(scale["id"])
-        except:
-            pass
-        mylogger(f"Import team_scale {scale['id']}", LOGGER_INFO)
+    for rule in rules:
+        rule = rule['rule']
 
-        executeQueryAction("""INSERT INTO team_scale (
-            "id", "team_id", "comment", "feedback", "final_mark",
-            "begin_at", "filled_at", "corrector_id", "created_at", "updated_at"
-        ) VALUES (
-            %(id)s, %(team_id)s, %(comment)s, %(feedback)s, %(final_mark)s,
-            %(begin_at)s, %(filled_at)s, %(corrector_id)s, %(created_at)s, %(updated_at)s
-        )
-        ON CONFLICT (id)
-        DO UPDATE SET
-            "comment" = EXCLUDED.comment,
-            "feedback" = EXCLUDED.feedback,
-            "final_mark" = EXCLUDED.final_mark,
-            "begin_at" = EXCLUDED.begin_at,
-            "filled_at" = EXCLUDED.filled_at,
-            "corrector_id" = EXCLUDED.corrector_id,
-            "updated_at" = EXCLUDED.updated_at
-        """, {
-            "id": scale["id"],
-            "team_id": team["id"],
-            "comment": scale["comment"],
-            "feedback": scale["feedback"],
-            "final_mark": scale["final_mark"],
-            "begin_at": scale["begin_at"],
-            "filled_at": scale["filled_at"],
-            "corrector_id": scale["corrector"]["id"] if (scale["corrector"] != 'invisible') else None,
-            "created_at": scale["created_at"],
-            "updated_at": scale["updated_at"]
-        })
+        if (local_rules == None):
+            local_rules = executeQuerySelect("SELECT id FROM rules")
+            local_rules = [one['id'] for one in local_rules]
+
+        if (rule['id'] not in local_rules):
+
+            executeQueryAction("""INSERT INTO rules (
+                "id", "name", "kind", "description", "slug", "internal_name"
+                ) VALUES (
+                %(id)s, %(name)s, %(kind)s, %(description)s, %(slug)s, %(internal_name)s
+            )
+            ON CONFLICT (id) DO NOTHING
+            """, {
+                "id": rule["id"], 
+                "name": rule["name"],
+                "kind": rule["kind"],
+                "description": rule["description"],
+                "slug": rule["slug"],
+                "internal_name": rule["internal_name"]
+            })
+        
+            local_rules = None
+            # local_rules = executeQuerySelect("SELECT id FROM rules")
+            # local_rules = [one['id'] for one in local_rules]
 
 
 
 def import_projects(update_all = False):
 
+    local_projects = executeQuerySelect("SELECT id FROM projects")
+    local_projects = {one["id"]: one for one in local_projects} 
 
-    local_titles = executeQuerySelect("SELECT id FROM projects")
-    local_titles = {title["id"]: title for title in local_titles} 
-
-    if (len(local_titles) == 0):
+    if (len(local_projects) == 0):
         update_all = True
 
-    teams = []
+    projects = []
 
     if (update_all):
-        teams = callapi("/v2/teams?sort=id", True)
+        projects = callapi("/v2/projects?sort=-id", True)
+        # projects = callapi("/v2/projects?sort=id&page[number]=13", False)
     else:
-        teams = callapi(f"/v2/teams?sort=-updated_at", False)
+        projects = callapi(f"/v2/projects?sort=-updated_at", False)
 
 
-    for team in teams:
+    for project in projects:
 
-        mylogger(f"Import team {team['id']} {team['name']}", LOGGER_INFO)
+        mylogger(f"Import project {project['id']} {project['slug']}", LOGGER_INFO)
 
-        executeQueryAction("""INSERT INTO teams (
-            "id", "name", "final_mark", "project_id", "status", 
-            "is_locked", "is_validated", "is_closed",
+        good_cursus = None
+        for cursus in project['cursus']:
+
+            if (cursus['id'] == 21):
+                good_cursus = cursus['id']
+            elif (cursus['id'] == 9 and good_cursus not in [21]):
+                good_cursus = cursus['id']
+            elif (cursus['id'] == 3 and good_cursus not in [21, 9]):
+                good_cursus = cursus['id']
+            
+        if (good_cursus == None and len(project['cursus']) > 0):
+            good_cursus = project['cursus'][0]['id']
+
+
+        good_session = None
+        for session in project['project_sessions']:
+
+            if (session['campus_id'] == 47):
+                good_session = session
+            elif (session['campus_id'] == None and good_session == None):
+                good_session = session
+
+        good_correction = None
+        for scale in (good_session['scales'] if 'scales' in good_session.keys() else []):
+            if (scale['is_primary'] == True):
+                good_correction = scale['correction_number']
+
+        has_moulinette = False
+        for upload in (good_session['uploads'] if 'uploads' in good_session.keys() else []):
+            if (upload['name'] == 'Moulinette'):
+                has_moulinette = True
+
+        good_rule_min = None
+        good_rule_max = None
+        good_rule_retry_delay = None
+        if (good_cursus == 21 and good_session):
+            rules = callapi(f"/v2/project_sessions/{good_session['id']}", False)
+
+            for rule in rules['project_sessions_rules']:
+
+                if (rule['rule']['slug'] == 'retriable-in-day'):
+                    good_rule_retry_delay = rule['params'][0]['value']
+
+                elif (rule['rule']['slug'] == 'group_validation-group-size-between-n-and-m'):
+                    good_rule_min = rule['params'][0]['value']
+                    good_rule_max = rule['params'][1]['value']
+
+            import_rule(rules['project_sessions_rules'])
+            import_project_rule(rules['project_sessions_rules'], project['id'])
+
+
+        executeQueryAction("""INSERT INTO projects (
+            "id", "name", "slug", "difficulty", "is_exam", "main_cursus", 
+
+            "session_is_solo", "session_estimate_time", "session_description", 
+            "session_has_moulinette", "session_correction_number",
+
+            "rule_min", "rule_max", "rule_retry_delay",
+
             "created_at", "updated_at"
             
             ) VALUES (
 
-            %(id)s, %(name)s, %(final_mark)s, %(project_id)s, %(status)s, 
-            %(is_locked)s, %(is_validated)s, %(is_closed)s, 
+            %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, 
+            %(session_is_solo)s, %(session_estimate_time)s, %(session_description)s, 
+            %(session_has_moulinette)s, %(session_correction_number)s, 
+            %(rule_min)s, %(rule_max)s, %(rule_retry_delay)s, 
             %(created_at)s, %(updated_at)s
         )
         ON CONFLICT (id)
         DO UPDATE SET
-            final_mark = EXCLUDED.final_mark,
-            status = EXCLUDED.status,
-            is_locked = EXCLUDED.is_locked,
-            is_validated = EXCLUDED.is_validated,
-            is_closed = EXCLUDED.is_closed,
+            session_is_solo = EXCLUDED.session_is_solo,
+            session_estimate_time = EXCLUDED.session_estimate_time,
+            session_description = EXCLUDED.session_description,
+            session_has_moulinette = EXCLUDED.session_has_moulinette,
+            session_correction_number = EXCLUDED.session_correction_number,
+            rule_min = EXCLUDED.rule_min,
+            rule_max = EXCLUDED.rule_max,
+            rule_retry_delay = EXCLUDED.rule_retry_delay,
             updated_at = EXCLUDED.updated_at
         """, {
-            "id": team["id"], 
-            "name": team["name"],
-            "final_mark": team["final_mark"],
-            "project_id": team["project_id"],
-            "status": team["status"],
+            "id": project["id"], 
+            "name": project["name"],
+            "slug": project["slug"],
+            "difficulty": project["difficulty"],
+            "is_exam": project["exam"],
+            "main_cursus": good_cursus,
 
-            "is_locked": team["locked?"],
-            "is_validated": team["validated?"],
-            "is_closed": team["closed?"],
+            "session_is_solo": session["solo"],
+            "session_estimate_time": session["estimate_time"],
+            "session_description": session["description"],
+            "session_has_moulinette": has_moulinette,
+            "session_correction_number": good_correction,
 
-            "created_at": team["created_at"],
-            "updated_at": team["updated_at"],
+            "rule_min": good_rule_min,
+            "rule_max": good_rule_max,
+            "rule_retry_delay": good_rule_retry_delay,
+
+            "created_at": project["created_at"],
+            "updated_at": project["updated_at"],
         })
-
-        import_team_user(team)
-        import_team_scale(team)
 
             
 
 
-import_teams(True)
+import_projects(True)

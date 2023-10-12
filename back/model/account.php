@@ -100,7 +100,7 @@ function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar
 
 function upsertUserGroup($id, $login) {
   $query = "SELECT id
-  FROM groups
+  FROM login_groups
   WHERE owner_id = :id";
 
   $data = array(":id" => $id);
@@ -112,7 +112,7 @@ function upsertUserGroup($id, $login) {
     return -1;
   }
   else {
-    $query = "INSERT INTO groups (id, name, owner_id)
+    $query = "INSERT INTO login_groups (id, name, owner_id)
     VALUES (:id, :name, :owner_id)";
 
     $data = array(
@@ -125,7 +125,7 @@ function upsertUserGroup($id, $login) {
 
     if ($success) {
       $query = "SELECT id
-      FROM groups
+      FROM login_groups
       WHERE owner_id = :id";
 
       $data = array(":id" => $id);

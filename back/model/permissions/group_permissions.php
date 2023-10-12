@@ -13,13 +13,13 @@ function getGroupPerms()
 
 
   $query = "SELECT 
-      groups.id, 
-      groups.name, 
+      login_groups.id, 
+      login_groups.name, 
       permissions.id AS permission_id
-      FROM groups 
+      FROM login_groups 
       
-      LEFT JOIN groups_permissions ON groups_permissions.group_id = groups.id
-      LEFT JOIN permissions ON permissions.id = groups_permissions.permission_id";
+      LEFT JOIN login_groups_permissions ON login_groups_permissions.group_id = login_groups.id
+      LEFT JOIN permissions ON permissions.id = login_groups_permissions.permission_id";
 
   $data = array();
 
@@ -48,7 +48,7 @@ function getGroupPerms()
 
 function setGroupPerm($groupId, $permId, $value)
 {
-  $query = "SELECT id FROM groups_permissions
+  $query = "SELECT id FROM login_groups_permissions
   WHERE group_id = :group_id AND permission_id = :perm_id";
 
   $data = array(":group_id" => $groupId, ":perm_id" => $permId);
@@ -58,7 +58,7 @@ function setGroupPerm($groupId, $permId, $value)
 
   if (count($group_perm) >= 1 && $value == 'false') {
 
-    $query = "DELETE FROM groups_permissions
+    $query = "DELETE FROM login_groups_permissions
     WHERE group_id = :group_id AND permission_id = :permission_id";
 
     $data = array(":group_id" => $groupId, ":permission_id" => $permId);
@@ -67,7 +67,7 @@ function setGroupPerm($groupId, $permId, $value)
   }
   else if (count($group_perm) == 0 && $value == 'true') {
 
-    $query = "INSERT INTO groups_permissions (group_id, permission_id)
+    $query = "INSERT INTO login_groups_permissions (login_group_id, permission_id)
     VALUES (:group_id, :permission_id)";
 
     $data = array(":group_id" => $groupId, ":permission_id" => $permId);

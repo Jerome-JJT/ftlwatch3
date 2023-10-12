@@ -12,7 +12,7 @@ CREATE TABLE "login_users" (
     CONSTRAINT "PK_LOGIN_USER_ID" PRIMARY KEY ("id")
 );
 
-CREATE TABLE "groups" (
+CREATE TABLE "login_groups" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
     "slug" character varying, 
@@ -21,7 +21,7 @@ CREATE TABLE "groups" (
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("owner_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_GROUP_ID" PRIMARY KEY ("id")
+    CONSTRAINT "PK_LOGIN_GROUP_ID" PRIMARY KEY ("id")
 );
 
 CREATE TABLE "submenus" (
@@ -83,21 +83,21 @@ CREATE TABLE "pages" (
 -- );
 
 
-CREATE TABLE "groups_permissions" (
+CREATE TABLE "login_groups_permissions" (
     "id" SERIAL NOT NULL, 
-    "group_id" integer NOT NULL, 
+    "login_group_id" integer NOT NULL, 
     "permission_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "LOGIN_GROUP_ID" FOREIGN KEY("login_group_id") REFERENCES "login_groups"("id") ON DELETE CASCADE,
     CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_PERMISSION_ID" PRIMARY KEY ("id")
 );
 
 
-CREATE TABLE "groups_login_users" (
+CREATE TABLE "login_groups_login_users" (
     "id" SERIAL NOT NULL, 
-    "group_id" integer NOT NULL, 
+    "login_group_id" integer NOT NULL, 
     "login_user_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "LOGIN_GROUP_ID" FOREIGN KEY("login_group_id") REFERENCES "login_groups"("id") ON DELETE CASCADE,
     CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("login_user_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_USER_ID" PRIMARY KEY ("id")
 );

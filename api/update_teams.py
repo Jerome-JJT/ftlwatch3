@@ -9,7 +9,9 @@ from _api import *
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
-
+local_teams = []
+current_limit = 300
+limit_checker = 300
 
 
 def import_team_user(team):
@@ -49,7 +51,7 @@ def import_team_user(team):
             id = %(id)s
         )
         """, {
-            "id": team["id"]
+            "id": toremove
         })
 
 
@@ -92,66 +94,75 @@ def import_team_scale(team):
         })
 
 
+def team_callback(team):
+    global team_teams
+
+    mylogger(f"Import team {team['id']} {team['name']}", LOGGER_INFO)
+
+    executeQueryAction("""INSERT INTO teams (
+        "id", "name", "final_mark", "project_id", "status", 
+        "is_locked", "is_validated", "is_closed",
+        "created_at", "updated_at"
+        
+        ) VALUES (
+
+        %(id)s, %(name)s, %(final_mark)s, %(project_id)s, %(status)s, 
+        %(is_locked)s, %(is_validated)s, %(is_closed)s, 
+        %(created_at)s, %(updated_at)s
+    )
+    ON CONFLICT (id)
+    DO UPDATE SET
+        final_mark = EXCLUDED.final_mark,
+        status = EXCLUDED.status,
+        is_locked = EXCLUDED.is_locked,
+        is_validated = EXCLUDED.is_validated,
+        is_closed = EXCLUDED.is_closed,
+        updated_at = EXCLUDED.updated_at
+    """, {
+        "id": team["id"], 
+        "name": team["name"],
+        "final_mark": team["final_mark"],
+        "project_id": team["project_id"],
+        "status": team["status"],
+
+        "is_locked": team["locked?"],
+        "is_validated": team["validated?"],
+        "is_closed": team["closed?"],
+
+        "created_at": team["created_at"],
+        "updated_at": team["updated_at"],
+    })
+
+    import_team_user(team)
+    import_team_scale(team)
+
+    if team["id"] not in local_teams:
+        current_limit = limit_checker
+    else:
+        current_limit -= 1
+
+    return (current_limit > 0)
+
 
 def import_teams(update_all = False):
+    global local_teams
 
+    local_teams = executeQuerySelect("SELECT id FROM teams")
+    local_teams = [one['id'] for one in local_teams] 
 
-    local_titles = executeQuerySelect("SELECT id FROM titles")
-    local_titles = {title["id"]: title for title in local_titles} 
-
-    if (len(local_titles) == 0):
+    if (len(local_teams) == 0):
         update_all = True
 
-    teams = []
-
     if (update_all):
-        teams = callapi("/v2/teams?filter[primary_campus]=47&sort=id", True)
+        callapi("/v2/teams?filter[primary_campus]=47&sort=id", True, team_callback, False)
     else:
-        teams = callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", False)
+        callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", True, team_callback, True)
 
 
-    for team in teams:
 
-        mylogger(f"Import team {team['id']} {team['name']}", LOGGER_INFO)
-
-        executeQueryAction("""INSERT INTO teams (
-            "id", "name", "final_mark", "project_id", "status", 
-            "is_locked", "is_validated", "is_closed",
-            "created_at", "updated_at"
-            
-            ) VALUES (
-
-            %(id)s, %(name)s, %(final_mark)s, %(project_id)s, %(status)s, 
-            %(is_locked)s, %(is_validated)s, %(is_closed)s, 
-            %(created_at)s, %(updated_at)s
-        )
-        ON CONFLICT (id)
-        DO UPDATE SET
-            final_mark = EXCLUDED.final_mark,
-            status = EXCLUDED.status,
-            is_locked = EXCLUDED.is_locked,
-            is_validated = EXCLUDED.is_validated,
-            is_closed = EXCLUDED.is_closed,
-            updated_at = EXCLUDED.updated_at
-        """, {
-            "id": team["id"], 
-            "name": team["name"],
-            "final_mark": team["final_mark"],
-            "project_id": team["project_id"],
-            "status": team["status"],
-
-            "is_locked": team["locked?"],
-            "is_validated": team["validated?"],
-            "is_closed": team["closed?"],
-
-            "created_at": team["created_at"],
-            "updated_at": team["updated_at"],
-        })
-
-        import_team_user(team)
-        import_team_scale(team)
+        
 
             
 
 
-import_teams(True)
+import_teams(False)

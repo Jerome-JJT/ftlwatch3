@@ -9,11 +9,11 @@ from _api import *
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
-def title_callback(title):
+def group_callback(group):
 
-    mylogger(f"Import title {title['id']} {title['name']}", LOGGER_INFO)
+    mylogger(f"Import group {group['id']} {group['name']}", LOGGER_INFO)
 
-    executeQueryAction("""INSERT INTO titles (
+    executeQueryAction("""INSERT INTO groups (
         "id", "name"
     ) VALUES (
         %(id)s, %(name)s
@@ -22,16 +22,18 @@ def title_callback(title):
     DO UPDATE SET
         "name" = EXCLUDED.name
     """, {
-        "id": title["id"],
-        "name": title["name"]
+        "id": group["id"],
+        "name": group["name"]
     })
 
     return True
 
-def import_titles():
+def import_groups():
 
-    callapi("/v2/titles?sort=id", True, title_callback, False)
+    callapi("/v2/groups?sort=id", True, group_callback, False)
 
 
 
-import_titles()
+
+
+import_groups()

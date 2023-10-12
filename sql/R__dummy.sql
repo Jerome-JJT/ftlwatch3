@@ -11,10 +11,10 @@ permissions.slug AS permission_slug,
 login_users.id AS login_user_id 
 FROM permissions 
 
-  JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
-  JOIN groups ON groups_permissions.group_id = groups.id
-  JOIN groups_login_users ON groups.id = groups_login_users.group_id
-  JOIN login_users ON groups_login_users.login_user_id = login_users.id
+  JOIN login_groups_permissions ON permissions.id = login_groups_permissions.permission_id
+  JOIN login_groups ON login_groups_permissions.login_group_id = login_groups.id
+  JOIN login_groups_login_users ON login_groups.id = login_groups_login_users.login_group_id
+  JOIN login_users ON login_groups_login_users.login_user_id = login_users.id
 UNION
 
 SELECT 
@@ -24,9 +24,9 @@ permissions.slug AS permission_slug,
 login_users.id AS login_user_id 
 FROM permissions 
 
-  JOIN groups_permissions ON permissions.id = groups_permissions.permission_id
-  JOIN groups ON groups_permissions.group_id = groups.id
-  JOIN login_users ON groups.owner_id = login_users.id
+  JOIN login_groups_permissions ON permissions.id = login_groups_permissions.permission_id
+  JOIN login_groups ON login_groups_permissions.login_group_id = login_groups.id
+  JOIN login_users ON login_groups.owner_id = login_users.id
 );
 
 
@@ -83,7 +83,7 @@ INSERT INTO "permissions" ("id", "name", "slug", "corder") VALUES
 -- SELECT setval('permissions_id_seq', (SELECT MAX(id) from "permissions"));
 
 
-INSERT INTO "groups" ("id", "name", "slug", "corder") VALUES
+INSERT INTO "login_groups" ("id", "name", "slug", "corder") VALUES
   (1, 'Admin', 'g_admin', 10),
   (2, 'Event manager', 'g_event', 20),
   (3, 'Tuteurs', 'g_tutor', 30),
@@ -99,7 +99,7 @@ INSERT INTO "groups" ("id", "name", "slug", "corder") VALUES
 -- SELECT setval('groups_id_seq', (SELECT MAX(id) from "groups")); -- Needed for automatic group creation
 
 
-INSERT INTO "groups_permissions" ("id", "permission_id", "group_id") VALUES
+INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id") VALUES
   (1, 1, 1),
   (2, 2, 1),
   (3, 3, 1),
@@ -112,10 +112,10 @@ INSERT INTO "groups_permissions" ("id", "permission_id", "group_id") VALUES
   (12, 3, 2),
   (10000, 1, 1)
   ON CONFLICT(id) DO UPDATE
-  SET permission_id = EXCLUDED.permission_id, group_id = EXCLUDED.group_id;
+  SET permission_id = EXCLUDED.permission_id, login_group_id = EXCLUDED.login_group_id;
 ;
 -- ALTER SEQUENCE groups_permissions_id_seq MINVALUE 10000 START 10000 RESTART 10000;
-SELECT setval('groups_permissions_id_seq', (SELECT MAX(id) from "groups_permissions")); 
+SELECT setval('login_groups_permissions_id_seq', (SELECT MAX(id) from "login_groups_permissions")); 
 
 
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES

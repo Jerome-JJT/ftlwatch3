@@ -9,11 +9,17 @@ DROP TABLE IF EXISTS "titles";
 DROP TABLE IF EXISTS "team_user";
 DROP TABLE IF EXISTS "team_scale";
 DROP TABLE IF EXISTS "teams";
+
+DROP TABLE IF EXISTS "rules";
+DROP TABLE IF EXISTS "project_rules";
 DROP TABLE IF EXISTS "projects";
+DROP TABLE IF EXISTS "project_types";
 
 DROP TABLE IF EXISTS "timedusers";
 DROP TABLE IF EXISTS "users";
 DROP TABLE IF EXISTS "poolfilters";
+
+DROP TABLE IF EXISTS "locations";
 
 
 DROP VIEW IF EXISTS "v_user_permissions";

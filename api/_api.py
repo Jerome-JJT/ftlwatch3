@@ -25,7 +25,10 @@ if __name__ == "__main__":
 
 
 def test_token(token):
-    check = raw("/v2/users/jjaqueme", for_test = True)
+    try:
+        check = raw("/v2/users/jjaqueme", for_test = True)
+    except:
+        return False
     return check.status_code == 200
 
 def get_headers(force_refresh = False):
@@ -89,7 +92,7 @@ def raw(req, for_test = False):
     mylogger(f"request to {req}", LOGGER_INFO)
 
     fails = 0
-    maxfails = 10
+    maxfails = 10 if not for_test else 2
 
     while (fails < maxfails):
         res = requests.get(url, headers=auth)
@@ -124,11 +127,17 @@ def raw(req, for_test = False):
     raise Exception(f"Raw api failed {maxfails} times") 
 
 
-def callapi(req, multiple = False):
+def callapi(req, multiple = False, callback = None, callback_limit = True):
 
     page = req
     rawres = raw(page)
     res = rawres.json()
+
+    if (multiple == True and callback != None):
+        for i in res:
+            if (callback_limit == False and callback(i) == False):
+                return False
+        res = []
 
     perpage = rawres.headers.get("X-Per-Page")
     tot = rawres.headers.get("X-Total")
@@ -147,6 +156,12 @@ def callapi(req, multiple = False):
 
             rawres = raw(page)
             res.extend(rawres.json())
+
+            if (multiple == True and callback != None):
+                for i in res:
+                    if (callback(i) == False):
+                        return False
+                res = []
 
             if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
                 mylogger(f"So fast", LOGGER_DEBUG)
