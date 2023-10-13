@@ -31,6 +31,9 @@ import { CoalitionsPage } from 'BasicPages/CoalitionsPage';
 import { CampusPage } from 'BasicPages/CampusPage';
 import { TitlesPage } from 'BasicPages/TitlesPage';
 import { ProductsPage } from 'BasicPages/ProductPage';
+import { CursusPage } from 'BasicPages/CursusPage';
+import { GroupsPage } from 'BasicPages/GroupsPage';
+import { AchievementsPage } from 'BasicPages/AchievementsPage';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -97,8 +100,11 @@ export default function App(): JSX.Element {
             </>
           )}
 
-          <Route path="/coalitions" element={<CoalitionsPage />} />
+          <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/campus" element={<CampusPage />} />
+          <Route path="/coalitions" element={<CoalitionsPage />} />
+          <Route path="/cursus" element={<CursusPage />} />
+          <Route path="/groups" element={<GroupsPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/titles" element={<TitlesPage />} />
 
@@ -106,11 +112,11 @@ export default function App(): JSX.Element {
           <Route path="/tableau" element={<TableauPage />} />
           <Route path="/image" element={<ImagePage />} />
 
-          <Route path="/groups" element={<UserGroupsPage />} />
+          <Route path="/login_users" element={<UsersVisibilityPage />} />
+          <Route path="/login_groups" element={<UserGroupsPage />} />
           <Route path="/permissions" element={<GroupPermissionsPage />} />
           <Route path="/pages" element={<PagePermissionsPage />} />
           <Route path="/poolfilters" element={<PoolfilterVisibilityPage />} />
-          <Route path="/users" element={<UsersVisibilityPage />} />
 
           <Route path="/test" element={<TestPage />} />
 

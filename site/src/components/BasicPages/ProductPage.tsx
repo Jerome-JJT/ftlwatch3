@@ -57,7 +57,7 @@ export function ProductsPage(): JSX.Element {
           className='flex h-40 justify-center bg-transparent shadow-none mx-2 mt-2'>
 
           <img className='h-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-black'
-            src={`https://cdn.intra.42.fr/${card.image.replace('/uploads/', '')}`}
+            src={card.image && `https://cdn.intra.42.fr/${card.image.replace('/uploads/', '')}`}
             onClick={() => {setFocusImage(card.image); setFocusText(card.name);}} />
         </CardHeader>
 

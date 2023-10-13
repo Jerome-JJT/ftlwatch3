@@ -1,12 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
+  Checkbox,
   Dialog,
   DialogBody,
   DialogHeader,
@@ -14,13 +13,10 @@ import {
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
 import { SuperCards } from 'Common/SuperCards';
-import Separator from 'Common/Separator';
-import classNames from 'classnames';
-import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { AiOutlineClose } from 'react-icons/ai';
 
 
-export function CoalitionsPage(): JSX.Element {
+export function AchievementsPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
   // const defaultFilter = searchParams.get('filter');
@@ -33,7 +29,7 @@ export function CoalitionsPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=basic&action=get_coalitions',
+      .get('/?page=basic&action=get_achievements',
         { withCredentials: true }
       )
       .then((res) => {
@@ -54,35 +50,49 @@ export function CoalitionsPage(): JSX.Element {
 
 
 
-  function CoalitionCard(card: any): JSX.Element {
+  function CchievementCard(card: any): JSX.Element {
+    console.log(card);
     return (
       <Card key={card.id}
         className="flex w-80 h-80 border-black border-2 overflow-hidden"
         style={{ backgroundColor: card.color }}>
 
         <CardHeader floated={false}
-          className='flex min-h-40 h-40 max-h-40 justify-center bg-transparent shadow-none mx-2 mt-2'>
+          className='flex flex-row min-h-32 h-32 max-h-32 gap-4 justify-start bg-transparent shadow-none mx-2 mt-2'>
 
-          <img className='max-h-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-white'
-            src={card.cover_url}
-            onClick={() => {setFocusImage(card.cover_url); setFocusText(card.name);}} />
+          <img className='max-h-full rounded-lg object-contain'
+            src={card.image && `https://cdn.intra.42.fr/${card.image.replace('/uploads/', '')}`} />
+
+          <div className='flex flex-col justify-around'>
+            <p color="blue-gray">
+              {card.achievement_name}
+            </p>
+
+            <p color="blue-gray">
+              Kind: {card.kind}
+            </p>
+
+            <div color="blue-gray" className="flex items-center">
+              <p>Visible</p> <Checkbox checked={card.has_lausanne} readOnly disabled></Checkbox>
+            </div>
+
+          </div>
+
         </CardHeader>
 
-        <CardBody className="flex flex-row grow gap-2 bg-white/50 text-center align-center mt-2 p-2">
+        <CardBody className="flex flex-row grow gap-2text-center align-center mt-2 p-2">
 
-          <div className='min-w-20 w-20 max-w-20 flex align-center justify-center'>
+          {/* <div className='min-w-20 w-20 max-w-20 flex align-center justify-center'>
             <img className='max-h-full max-w-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-white'
               src={card.image_url}
               onClick={() => {setFocusImage(card.image_url); setFocusText(card.name);}} />
 
-          </div>
+          </div> */}
 
           <div className="flex flex-col grow p-2 justify-evenly text-black">
+
             <p color="blue-gray" className="mb-1">
-              {card.achievement_name}
-            </p>
-            <p color="blue-gray" className="mb-1">
-              {card.slug}
+              {card.description}
             </p>
             <p color="blue-gray" className="mb-1">
               {card.campus_name} {card.cursus_name}
@@ -94,31 +104,29 @@ export function CoalitionsPage(): JSX.Element {
     );
   }
 
-  //
+
   return (
     <div className='mx-8 mt-2'>
       {(values) &&
         <SuperCards
           values={values}
-          customCard={CoalitionCard}
+          customCard={CchievementCard}
 
-          // subOptions={subOptions}
-
-          tableTitle='Coalitions'
+          tableTitle='Achievements'
           options={[10, 25, 50, 100]}
           reloadFunction={() => { setValues([]); }}
         />
       }
-      <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
+      {/* <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-between pr-4">
           <DialogHeader>{focusText || ''}</DialogHeader>
           <AiOutlineClose onClick={() => setFocusImage(undefined)}
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
         <DialogBody className='flex justify-center' divider>
-          <img className='max-h-[400px]' src={focusImage}/>
+          <img className='max-h-[400px]' src={focusImage && `https://cdn.intra.42.fr/${focusImage.replace('/uploads/', '')}`}/>
         </DialogBody>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 }

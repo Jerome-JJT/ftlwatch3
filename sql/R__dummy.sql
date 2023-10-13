@@ -140,7 +140,8 @@ SELECT setval('login_groups_permissions_id_seq', (SELECT MAX(id) from "login_gro
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (1, 'Tableaux', 20, 'tableau'),
   (2, 'Images', 21, 'image'),
-  (3, 'Admin', 5, NULL)
+  (3, 'Admin', 5, NULL),
+  (4, 'Basics', 3, NULL)
   ON CONFLICT(id) DO NOTHING
 ;
 
@@ -156,10 +157,19 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (8, 'Admin', 20, 'admin', NULL, 3, 3),
   (9, 'Credits', 30, 'credits', NULL, NULL, NULL),
-  (10, 'Groups', 20, 'groups', NULL, 3, 3),
+  (21, 'Login users', 20, 'login_users', NULL, 3, 3),
+  (10, 'Login groups', 20, 'login_groups', NULL, 3, 3),
   (11, 'Permissions', 20, 'permissions', NULL, 3, 3),
   (12, 'Pages', 20, 'pages', NULL, 3, 3),
-  (13, 'Poolfilters', 20, 'poolfilters', NULL, 3, 3)
+  (13, 'Poolfilters', 20, 'poolfilters', NULL, 3, 3),
+
+  (14, 'Coalitions', 20, 'coalitions', NULL, 4, 5),
+  (15, 'Products', 20, 'products', NULL, 4, 5),
+  (16, 'Titles', 20, 'titles', NULL, 4, 5),
+  (17, 'Campus', 20, 'campus', NULL, 4, 5),
+  (18, 'Cursus', 20, 'cursus', NULL, 4, 5),
+  (19, 'Achievements', 20, 'achievements', NULL, 4, 5),
+  (20, 'Groups', 20, 'groups', NULL, 4, 5)
   ON CONFLICT(id) DO NOTHING
 ;
 

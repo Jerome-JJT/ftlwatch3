@@ -11,7 +11,7 @@ class ColumnProps {
 }
 
 
-export function CampusPage(): JSX.Element {
+export function GroupsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
@@ -20,7 +20,7 @@ export function CampusPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=basic&action=get_campus',
+      .get('/?page=basic&action=get_groups',
         { withCredentials: true }
       )
       .then((res) => {
@@ -64,7 +64,7 @@ export function CampusPage(): JSX.Element {
           values={values}
 
 
-          tableTitle='Campus'
+          tableTitle='Groups'
           options={[10, 25, 50, 100]}
           reloadFunction={() => { setValues([]); }}
         />

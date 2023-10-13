@@ -18,7 +18,7 @@ function getGroupPerms()
       permissions.id AS permission_id
       FROM login_groups 
       
-      LEFT JOIN login_groups_permissions ON login_groups_permissions.group_id = login_groups.id
+      LEFT JOIN login_groups_permissions ON login_groups_permissions.login_group_id = login_groups.id
       LEFT JOIN permissions ON permissions.id = login_groups_permissions.permission_id";
 
   $data = array();
@@ -49,7 +49,7 @@ function getGroupPerms()
 function setGroupPerm($groupId, $permId, $value)
 {
   $query = "SELECT id FROM login_groups_permissions
-  WHERE group_id = :group_id AND permission_id = :perm_id";
+  WHERE login_group_id = :group_id AND permission_id = :perm_id";
 
   $data = array(":group_id" => $groupId, ":perm_id" => $permId);
 
@@ -59,7 +59,7 @@ function setGroupPerm($groupId, $permId, $value)
   if (count($group_perm) >= 1 && $value == 'false') {
 
     $query = "DELETE FROM login_groups_permissions
-    WHERE group_id = :group_id AND permission_id = :permission_id";
+    WHERE login_group_id = :group_id AND permission_id = :permission_id";
 
     $data = array(":group_id" => $groupId, ":permission_id" => $permId);
 
