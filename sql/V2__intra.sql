@@ -27,8 +27,8 @@ CREATE TABLE "users" (
     "poolfilter_id" integer NOT NULL,
 
     "hidden" boolean DEFAULT false,
-    "created_at" TIMESTAMP NOT NULL, 
-    "updated_at" TIMESTAMP NOT NULL, 
+    "created_at" TIMESTAMP, 
+    "updated_at" TIMESTAMP, 
     CONSTRAINT "POOLFILTER_ID" FOREIGN KEY("poolfilter_id") REFERENCES "poolfilters"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_USER_ID" PRIMARY KEY ("id")
 );
@@ -161,6 +161,7 @@ CREATE TABLE "locations" (
     "begin_at" TIMESTAMP NOT NULL, 
     "end_at" TIMESTAMP NOT NULL, 
     "date" character varying NOT NULL, 
+    "is_piscine" boolean NOT NULL, 
 
     "host" character varying NOT NULL, 
     "user_id" integer NOT NULL, 
@@ -279,6 +280,7 @@ CREATE TABLE "products" (
     "slug" character varying NOT NULL, 
     "description" character varying NOT NULL, 
     "price" integer NOT NULL, 
+    "quantity" integer, 
 
     "image" character varying NOT NULL, 
 

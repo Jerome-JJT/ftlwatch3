@@ -4,7 +4,7 @@
 
 function setUserGroupBySlugs($userId, $groupsSlugs)
 {
-  $query = "SELECT id, slug FROM groups";
+  $query = "SELECT id, slug FROM login_groups";
 
   $data = array();
 
@@ -16,7 +16,7 @@ function setUserGroupBySlugs($userId, $groupsSlugs)
   $groups = array_filter($groups, function ($v) use($groupsSlugs) { return in_array($v["slug"], $groupsSlugs); });
 
 
-  $query = "INSERT INTO groups_login_users (login_user_id, group_id)
+  $query = "INSERT INTO groups_login_users (login_user_id, login_group_id)
   VALUES (:user_id, :group_id)";
 
   $newdata = array_map(function ($v) use($userId) {return array(":user_id" => $userId, ":group_id" => $v);}, array_column($groups, "id"));
@@ -27,9 +27,9 @@ function setUserGroupBySlugs($userId, $groupsSlugs)
 
 function getUserGroups()
 {
-  $query = "SELECT groups.id, groups.name 
-  FROM groups
-  WHERE groups.owner_id IS NULL
+  $query = "SELECT login_groups.id, login_groups.name 
+  FROM login_groups
+  WHERE login_groups.owner_id IS NULL
   ORDER BY corder";
   $data = array();
 
@@ -41,11 +41,11 @@ function getUserGroups()
   $query = "SELECT 
     login_users.id, 
     login_users.login, 
-    groups.id AS group_id
+    login_groups.id AS group_id
     FROM login_users 
     
-    LEFT JOIN groups_login_users ON groups_login_users.login_user_id = login_users.id
-    LEFT JOIN groups ON groups.id = groups_login_users.group_id
+    LEFT JOIN login_groups_login_users ON groups_login_users.login_user_id = login_users.id
+    LEFT JOIN login_groups ON login_groups.id = groups_login_users.login_group_id
     
     WHERE groups.owner_id IS NULL";
 
@@ -75,8 +75,8 @@ function getUserGroups()
 
 function setUserGroup($userId, $groupId, $value)
 {
-  $query = "SELECT id FROM groups_login_users
-  WHERE login_user_id = :user_id AND group_id = :group_id";
+  $query = "SELECT id FROM login_groups_login_users
+  WHERE login_user_id = :user_id AND login_group_id = :group_id";
 
   $data = array(":user_id" => $userId, ":group_id" => $groupId);
 
@@ -85,8 +85,8 @@ function setUserGroup($userId, $groupId, $value)
 
   if (count($user_group) >= 1 && $value == 'false') {
 
-    $query = "DELETE FROM groups_login_users
-    WHERE login_user_id = :user_id AND group_id = :group_id";
+    $query = "DELETE FROM login_groups_login_users
+    WHERE login_user_id = :user_id AND login_group_id = :group_id";
 
     $data = array(":user_id" => $userId, ":group_id" => $groupId);
 
@@ -94,7 +94,7 @@ function setUserGroup($userId, $groupId, $value)
   }
   else if (count($user_group) == 0 && $value == 'true') {
 
-    $query = "INSERT INTO groups_login_users (login_user_id, group_id)
+    $query = "INSERT INTO login_groups_login_users (login_user_id, login_group_id)
     VALUES (:user_id, :group_id)";
 
     $data = array(":user_id" => $userId, ":group_id" => $groupId);

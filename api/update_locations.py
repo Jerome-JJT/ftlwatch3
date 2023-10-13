@@ -31,11 +31,14 @@ def location_callback(location):
         good_start_date = location['begin_at'][:10]
         good_end_date = location['end_at'][:10]
 
+        piscine_concern = f"{good_start_date[:4]}-10-01"
+        good_is_piscine = piscine_concern < good_start_date
+
         if (good_start_date == good_end_date):
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -43,6 +46,7 @@ def location_callback(location):
                 "begin_at": location["begin_at"],
                 "end_at": location["end_at"],
                 "date": good_start_date,
+                "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
             })
@@ -58,9 +62,9 @@ def location_callback(location):
 
 
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -68,14 +72,15 @@ def location_callback(location):
                 "begin_at": location["begin_at"],
                 "end_at": midnight_start,
                 "date": good_start_date,
+                "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
             })
 
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -83,6 +88,7 @@ def location_callback(location):
                 "begin_at": midnight_end,
                 "end_at": location["end_at"],
                 "date": good_end_date,
+                "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
             })

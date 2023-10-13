@@ -3,13 +3,16 @@ import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Checkbox,
 } from '@material-tailwind/react';
-import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { SuperImage } from 'Common/SuperImage';
+import { SuperCards } from 'Common/SuperCards';
 import Separator from 'Common/Separator';
 import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
@@ -33,6 +36,35 @@ class PoolFilterProps {
 //     padding: 4px;
 //   }
 // `;
+
+function ImageCard(card: any): JSX.Element {
+  return (
+    <Card key={card.id} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
+      <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2'>
+        <img className='max-h-full rounded-lg object-contain' src={card.avatar_url} alt="profile-picture" />
+      </CardHeader>
+
+      <CardBody className="flex grow justify-evenly flex-col text-center align-center p-2">
+
+        <div>
+          <p color="blue-gray" className="mb-1">
+            {card.first_name} {card.last_name}
+          </p>
+        </div>
+
+        <div>
+          <p color="blue-gray" className="mb-1">
+            {card.poolfilter}
+          </p>
+        </div>
+      </CardBody>
+
+      <CardFooter className="pt-0 flex justify-center pb-4">
+        <a href={`https://profile.intra.42.fr/cards/${card.login}`}><Button>{card.login}</Button></a>
+      </CardFooter>
+    </Card>
+  );
+}
 
 export function ImagePage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -108,8 +140,9 @@ export function ImagePage(): JSX.Element {
   return (
     <div className='mx-8 mt-2'>
       {(values) &&
-        <SuperImage
+        <SuperCards
           values={values}
+          customCard={ImageCard}
 
           subOptions={subOptions}
 

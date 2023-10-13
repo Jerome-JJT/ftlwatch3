@@ -53,6 +53,25 @@ SELECT
 );
 
 
+
+-- SELECT te.id AS team_id, te.name AS team_name, projects.name, users.id AS user_id
+-- FROM users
+-- JOIN team_user ON team_user.user_id = users.id
+-- JOIN (
+
+-- SELECT teams.id
+-- FROM teams
+-- JOIN team_user ON teams.id = team_user.team_id
+-- JOIN projects ON projects.id = teams.project_id
+
+-- WHERE projects.main_cursus = 21
+
+-- GROUP BY teams.id
+-- HAVING COUNT(team_user.id) >= 2
+-- ) te
+-- ON te.id = team_user.team_id;
+
+
 INSERT INTO "login_users" ("id", "login", "password", "first_name", "last_name", "display_name", "avatar_url", "color") VALUES
 (
   92477,	

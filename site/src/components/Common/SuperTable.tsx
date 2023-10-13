@@ -22,9 +22,9 @@ class ColumnProps {
   label: string = '';
 }
 
-class SuperTableProps {
-  columns: ColumnProps[] = [];
-  values: any[] = [];
+interface SuperTableProps {
+  columns: ColumnProps[];
+  values: any[];
 
   subOptions?: ReactNode | undefined;
 
@@ -280,7 +280,7 @@ export function SuperTable({
 
                 return (
                   <tr key={value.id || value.login || index}
-                    className='border-b border-blue-gray-50'>
+                    className='border-b border-gray-300 even:bg-blue-50 hover:bg-blue-gray-100'>
                     {columns.map((col) =>
 
                       <td key={`${value.id || value.login || index}-${col.field}`}

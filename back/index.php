@@ -73,15 +73,19 @@ try {
             require_once("routes/admin.php");
             break;
 
+        case "basic":
+            require_once("routes/basic.php");
+            break;
+
         case "poolfilters":
             require_once("routes/poolfilters.php");
             break;
 
 
-        default:
-            print_r($_SERVER);
-            print_r("<br><br>");
-            print_r($_REQUEST);
+        // default:
+            // print_r($_SERVER);
+            // print_r("<br><br>");
+            // print_r($_REQUEST);
         // print_r($_SERVER);
 
 

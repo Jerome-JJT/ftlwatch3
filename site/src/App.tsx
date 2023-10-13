@@ -27,6 +27,10 @@ import { TableauPage } from 'Tableau/Tableau';
 import { ImagePage } from 'Image/Image';
 import { PoolfilterVisibilityPage } from 'AdminPages/PoolfilterVisibility';
 import { UsersVisibilityPage } from 'AdminPages/UsersVisibility';
+import { CoalitionsPage } from 'BasicPages/CoalitionsPage';
+import { CampusPage } from 'BasicPages/CampusPage';
+import { TitlesPage } from 'BasicPages/TitlesPage';
+import { ProductsPage } from 'BasicPages/ProductPage';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -92,6 +96,12 @@ export default function App(): JSX.Element {
             <>
             </>
           )}
+
+          <Route path="/coalitions" element={<CoalitionsPage />} />
+          <Route path="/campus" element={<CampusPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/titles" element={<TitlesPage />} />
+
 
           <Route path="/tableau" element={<TableauPage />} />
           <Route path="/image" element={<ImagePage />} />

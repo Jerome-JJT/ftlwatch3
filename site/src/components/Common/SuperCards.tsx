@@ -16,8 +16,9 @@ import {
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 
-class ImageProps {
-  values: any[] = [];
+interface CardsProps {
+  values: any[];
+  customCard: (value: any) => JSX.Element;
 
   subOptions?: ReactNode | undefined;
 
@@ -29,8 +30,9 @@ class ImageProps {
   reloadFunction?: (() => void) | undefined;
 }
 
-export function SuperImage({
+export function SuperCards({
   values,
+  customCard,
 
   subOptions = undefined,
 
@@ -41,18 +43,18 @@ export function SuperImage({
   hasOptionAll = true,
 
   reloadFunction = undefined,
-}: ImageProps): JSX.Element {
+}: CardsProps): JSX.Element {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [usersPerPage, setUsersPerPage] = React.useState(options[0]);
-  // const [usersPerPage, setUsersPerPage] = React.useState(values.length);
+  const [cardsPerPage, setCardsPerPage] = React.useState(options[0]);
+  // const [cardsPerPage, setCardsPerPage] = React.useState(values.length);
 
   const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
 
-  const handleUsersPerPageChange = (value: any): void => {
-    setUsersPerPage(parseInt(value.target.value));
+  const handleCardsPerPageChange = (value: any): void => {
+    setCardsPerPage(parseInt(value.target.value));
     setCurrentPage(1);
   };
 
@@ -77,13 +79,13 @@ export function SuperImage({
     return pageNumbers;
   };
 
-  const filteredUsers = useMemo(() => values.filter((user) => {
-    const userValues = Object.values(user);
+  const filteredCards = useMemo(() => values.filter((card) => {
+    const cardValues = Object.values(card);
     const searchTerms = searchQuery.split(',');
 
     if (doIncludeAll) {
       return searchTerms.every((term) => {
-        return userValues.some((value: any) => {
+        return cardValues.some((value: any) => {
           return typeof value !== 'object' &&
           value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
             term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -94,7 +96,7 @@ export function SuperImage({
     }
     else {
       return searchTerms.some((term) => {
-        return userValues.some((value: any) => {
+        return cardValues.some((value: any) => {
           return typeof value !== 'object' &&
           value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
             term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -106,13 +108,13 @@ export function SuperImage({
   }), [values, searchQuery, doIncludeAll]);
 
 
-  const totalPages = useMemo(() => Math.ceil((filteredUsers?.length || 0) / usersPerPage), [filteredUsers, usersPerPage]);
+  const totalPages = useMemo(() => Math.ceil((filteredCards?.length || 0) / cardsPerPage), [filteredCards, cardsPerPage]);
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
 
-  const startIndex = useMemo(() => (currentPage - 1) * usersPerPage, [currentPage, usersPerPage]);
-  const endIndex = useMemo(() => startIndex + usersPerPage, [startIndex, usersPerPage]);
+  const startIndex = useMemo(() => (currentPage - 1) * cardsPerPage, [currentPage, cardsPerPage]);
+  const endIndex = useMemo(() => startIndex + cardsPerPage, [startIndex, cardsPerPage]);
 
-  const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
+  const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
 
   return (
     <Card className="h-full w-full mb-8">
@@ -144,7 +146,7 @@ export function SuperImage({
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-2">
           {options.length > 0 &&
             <div className="w-full md:w-72">
-              <MySelect label='Items per page' value={usersPerPage.toString()} onChange={handleUsersPerPageChange}>
+              <MySelect label='Items per page' value={cardsPerPage.toString()} onChange={handleCardsPerPageChange}>
                 {options.map((option) =>
                   <option key={option.toString()}
                     value={option.toString()}>
@@ -189,33 +191,7 @@ export function SuperImage({
 
       <CardBody className='flex gap-2 flex-wrap justify-center'>
 
-        { displayedUsers.map((user) =>
-
-          <Card key={user.id} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
-            <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2'>
-              <img className='max-h-full rounded-lg object-contain' src={user.avatar_url} alt="profile-picture" />
-            </CardHeader>
-
-            <CardBody className="flex grow justify-evenly flex-col text-center align-center p-2">
-
-              <div>
-                <p color="blue-gray" className="mb-1">
-                  {user.first_name} {user.last_name}
-                </p>
-              </div>
-
-              <div>
-                <p color="blue-gray" className="mb-1">
-                  {user.poolfilter}
-                </p>
-              </div>
-            </CardBody>
-
-            <CardFooter className="pt-0 flex justify-center pb-4">
-              <a href={`https://profile.intra.42.fr/users/${user.login}`}><Button>{user.login}</Button></a>
-            </CardFooter>
-          </Card>
-        )}
+        { displayedCards.map((card) => customCard(card) )}
 
       </CardBody>
 
