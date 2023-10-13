@@ -57,7 +57,7 @@ export function CoalitionsPage(): JSX.Element {
   function CoalitionCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
-        className="flex w-80 h-80 border-black border-2"
+        className="flex w-80 h-80 border-black border-2 overflow-hidden"
         style={{ backgroundColor: card.color }}>
 
         <CardHeader floated={false}
@@ -68,7 +68,7 @@ export function CoalitionsPage(): JSX.Element {
             onClick={() => {setFocusImage(card.cover_url); setFocusText(card.name);}} />
         </CardHeader>
 
-        <CardBody className="flex flex-row grow gap-2 text-center align-center p-2">
+        <CardBody className="flex flex-row grow gap-2 bg-white/50 rounded-lg text-center align-center mt-2 p-2">
 
           <div className='min-w-20 w-20 max-w-20 flex align-center justify-center'>
             <img className='max-h-full max-w-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-white'
@@ -77,7 +77,7 @@ export function CoalitionsPage(): JSX.Element {
 
           </div>
 
-          <div className="flex flex-col grow p-2 justify-evenly rounded-lg bg-white/50 text-black">
+          <div className="flex flex-col grow p-2 justify-evenly text-black">
             <p color="blue-gray" className="mb-1">
               {card.name}
             </p>
