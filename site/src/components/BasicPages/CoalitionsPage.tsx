@@ -1,35 +1,26 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Dialog,
   DialogBody,
   DialogHeader,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { useSearchParams } from 'react-router-dom';
 import { SuperCards } from 'Common/SuperCards';
-import Separator from 'Common/Separator';
-import classNames from 'classnames';
-import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { AiOutlineClose } from 'react-icons/ai';
 
 
 export function CoalitionsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
-  // const defaultFilter = searchParams.get('filter');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [focusText, setFocusText] = React.useState<string | undefined>(undefined);
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
-  // const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
 
   React.useEffect(() => {
     axios

@@ -6,26 +6,18 @@ import {
   CardBody,
   CardHeader,
   Checkbox,
-  Dialog,
-  DialogBody,
-  DialogHeader,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { useSearchParams } from 'react-router-dom';
 import { SuperCards } from 'Common/SuperCards';
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiFillGift } from 'react-icons/ai';
 
 
 export function AchievementsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
-  // const defaultFilter = searchParams.get('filter');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [focusText, setFocusText] = React.useState<string | undefined>(undefined);
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
-
-  // const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
 
   React.useEffect(() => {
     axios
@@ -51,7 +43,6 @@ export function AchievementsPage(): JSX.Element {
 
 
   function CchievementCard(card: any): JSX.Element {
-    console.log(card);
     return (
       <Card key={card.id}
         className="flex w-80 h-80 border-black border-2 overflow-hidden"
@@ -82,21 +73,15 @@ export function AchievementsPage(): JSX.Element {
 
         <CardBody className="flex flex-row grow gap-2text-center align-center mt-2 p-2">
 
-          {/* <div className='min-w-20 w-20 max-w-20 flex align-center justify-center'>
-            <img className='max-h-full max-w-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-white'
-              src={card.image_url}
-              onClick={() => {setFocusImage(card.image_url); setFocusText(card.name);}} />
-
-          </div> */}
-
           <div className="flex flex-col grow p-2 justify-evenly text-black">
-
-            <p color="blue-gray" className="mb-1">
+            <p color="blue-gray">
               {card.description}
             </p>
-            <p color="blue-gray" className="mb-1">
-              {card.campus_name} {card.cursus_name}
-            </p>
+            {
+              card.title_name && <p color="blue-gray" className="flex gap-1 items-center">
+                <AiFillGift size='24'/> {card.title_name}
+              </p>
+            }
           </div>
 
         </CardBody>

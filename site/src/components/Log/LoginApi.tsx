@@ -13,35 +13,37 @@ export default function LoginApi(): JSX.Element {
   const code = searchParams.get('code');
 
   React.useEffect(() => {
-    if (code !== null) {
-      axios
-        .post('/?page=login&action=loginapi',
-          `code=${code}`, { withCredentials: true }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            getUserData({ announce: true });
+    if (isLogged === false) {
+      if (code !== null) {
+        axios
+          .post('/?page=login&action=loginapi',
+            `code=${code}`, { withCredentials: true }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              getUserData({ announce: true });
 
-            setPageMessage('Login successful, redirecting...');
-            setTimeout(() => {
-              navigate('/');
-            }, 3000);
-          } //
-          else {
+              setPageMessage('Login successful, redirecting...');
+              setTimeout(() => {
+                navigate('/');
+              }, 3000);
+            } //
+            else {
+              if (!isLogged) {
+                setPageMessage('Error contacting 42 API');
+              }
+            }
+          })
+          .catch(() => {
             if (!isLogged) {
               setPageMessage('Error contacting 42 API');
             }
-          }
-        })
-        .catch(() => {
-          if (!isLogged) {
-            setPageMessage('Error contacting 42 API');
-          }
-        });
-    } //
-    else if (code == null) {
-      if (!isLogged) {
-        setPageMessage('Error missing infos for 42 API');
+          });
+      } //
+      else if (code == null) {
+        if (!isLogged) {
+          setPageMessage('Error missing infos for 42 API');
+        }
       }
     }
   }, [code, getUserData, isLogged, navigate]);
