@@ -163,15 +163,15 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (12, 'Pages', 20, 'pages', NULL, 3, 3),
   (13, 'Poolfilters', 20, 'poolfilters', NULL, 3, 3),
 
-  (14, 'Coalitions', 20, 'coalitions', NULL, 4, 5),
-  (15, 'Products', 20, 'products', NULL, 4, 5),
-  (16, 'Titles', 20, 'titles', NULL, 4, 5),
-  (17, 'Campus', 20, 'campus', NULL, 4, 5),
+  (19, 'Achievements', 5, 'achievements', NULL, 4, 5),
+  (17, 'Campus', 10, 'campus', NULL, 4, 5),
+  (14, 'Coalitions', 15, 'coalitions', NULL, 4, 5),
   (18, 'Cursus', 20, 'cursus', NULL, 4, 5),
-  (19, 'Achievements', 20, 'achievements', NULL, 4, 5),
-  (20, 'Groups', 20, 'groups', NULL, 4, 5),
-  (21, 'Rules', 20, 'rules', NULL, 4, 5),
-  (22, 'Products', 20, 'products', NULL, 4, 5)
+  (20, 'Groups', 25, 'groups', NULL, 4, 5),
+  (22, 'Projects', 30, 'projects', NULL, 4, 5),
+  (15, 'Products', 35, 'products', NULL, 4, 5),
+  (21, 'Rules', 40, 'rules', NULL, 4, 5),
+  (16, 'Titles', 45, 'titles', NULL, 4, 5)
   ON CONFLICT(id) DO NOTHING
 ;
 

@@ -16,8 +16,6 @@ export function AchievementsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
-  const [focusText, setFocusText] = React.useState<string | undefined>(undefined);
-  const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     axios
@@ -102,16 +100,6 @@ export function AchievementsPage(): JSX.Element {
           reloadFunction={() => { setValues([]); }}
         />
       }
-      {/* <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
-        <div className="flex items-center justify-between pr-4">
-          <DialogHeader>{focusText || ''}</DialogHeader>
-          <AiOutlineClose onClick={() => setFocusImage(undefined)}
-            className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
-        </div>
-        <DialogBody className='flex justify-center' divider>
-          <img className='max-h-[400px]' src={focusImage && `https://cdn.intra.42.fr/${focusImage.replace('/uploads/', '')}`}/>
-        </DialogBody>
-      </Dialog> */}
     </div>
   );
 }

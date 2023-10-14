@@ -5,10 +5,11 @@ import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from '@material-tailwind/react';
+import { Button, Dialog, DialogBody, DialogHeader } from '@material-tailwind/react';
 import Separator from 'Common/Separator';
 import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
+import { AiOutlineClose } from 'react-icons/ai';
 
 class ColumnProps {
   field: string = '';
@@ -40,6 +41,8 @@ export function TableauPage(): JSX.Element {
 
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
   const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+
+  const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     axios
@@ -76,10 +79,12 @@ export function TableauPage(): JSX.Element {
                   >{user.login}</a>;
                 }
                 else if (col.field === 'avatar_url') {
+                  const avatar_url = user[col.field];
                   user[col.field] = <img
-                    src={user[col.field]}
+                    src={avatar_url}
                     alt={user.login}
-                    className='max-h-full max-w-[60px] rounded-lg'
+                    onClick={() => setFocusImage(avatar_url)}
+                    className='max-h-full max-w-[60px] rounded-lg border-2 border-transparent cursor-pointer hover:border-black'
                   />;
                 }
               });
@@ -138,6 +143,15 @@ export function TableauPage(): JSX.Element {
           />
         </StyledTableau>
       }
+      <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
+        <div className="flex items-center justify-between pr-4">
+          <AiOutlineClose onClick={() => setFocusImage(undefined)}
+            className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
+        </div>
+        <DialogBody className='flex justify-center' divider>
+          <img className='max-h-[400px]' src={focusImage}/>
+        </DialogBody>
+      </Dialog>
     </div>
   );
 }

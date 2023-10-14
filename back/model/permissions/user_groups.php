@@ -44,10 +44,10 @@ function getUserGroups()
     login_groups.id AS group_id
     FROM login_users 
     
-    LEFT JOIN login_groups_login_users ON groups_login_users.login_user_id = login_users.id
-    LEFT JOIN login_groups ON login_groups.id = groups_login_users.login_group_id
+    LEFT JOIN login_groups_login_users ON login_groups_login_users.login_user_id = login_users.id
+    LEFT JOIN login_groups ON login_groups.id = login_groups_login_users.login_group_id
     
-    WHERE groups.owner_id IS NULL";
+    WHERE login_groups.owner_id IS NULL";
 
   $data = array();
 
