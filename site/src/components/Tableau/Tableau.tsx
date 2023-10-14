@@ -14,6 +14,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 class ColumnProps {
   field: string = '';
   label: string = '';
+  visible: boolean = true;
 }
 
 class PoolFilterProps {
@@ -69,7 +70,12 @@ export function TableauPage(): JSX.Element {
       .then((res) => {
         if (res.status === 200) {
           if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+            setColumns((prev) => (
+              res.data.columns as ColumnProps[]).map((c) => ({
+              ...c,
+              visible: prev?.find((cf) => cf.field === c.field)?.visible ?? true,
+            })
+            ));
 
             const displayValues = res.data.values.map((user: any) => {
               res.data.columns.forEach((col: ColumnProps) => {
@@ -101,6 +107,7 @@ export function TableauPage(): JSX.Element {
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addNotif, usedFilter]);
 
   const subOptions = useMemo(() => (
@@ -113,7 +120,7 @@ export function TableauPage(): JSX.Element {
               key={filter.id}
               className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option' ))}
               //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-              onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }
+              onClick={() => setUsedFilter(filter.name) }
             >
               {filter.name}
             </Button>
@@ -121,9 +128,33 @@ export function TableauPage(): JSX.Element {
         })}
       </div>
       <Separator></Separator>
+
+      <div className='flex flex-wrap gap-2 justify-evenly'>
+
+        {columns && columns.map((column) => {
+          return (
+            <Button
+              key={column.field}
+              className={classNames(column.visible ? 'selected-option' : 'available-option' )}
+
+              onClick={() =>
+                setColumns((prev) => prev && prev.map((pc) => {
+                  if (pc.field === column.field) {
+                    return { ...pc, visible: !pc.visible };
+                  }
+                  return pc;
+                }))
+              }
+            >
+              {column.label}
+            </Button>
+          );
+        })}
+      </div>
+      <Separator></Separator>
     </>
 
-  ), [poolFilters, usedFilter]);
+  ), [columns, poolFilters, usedFilter]);
 
   //
   return (

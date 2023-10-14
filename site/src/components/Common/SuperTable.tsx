@@ -20,6 +20,7 @@ import classNames from 'classnames';
 class ColumnProps {
   field: string = '';
   label: string = '';
+  visible: boolean = true;
 }
 
 interface SuperTableProps {
@@ -249,7 +250,7 @@ export function SuperTable({
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
               <tr className="bg-blue-gray-50">
-                {columns.map((value) => (
+                {columns.map((value) => value.visible && (
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
@@ -282,7 +283,7 @@ export function SuperTable({
                 return (
                   <tr key={value.id || value.login || index}
                     className='border-b border-gray-300 even:bg-blue-50 hover:bg-blue-gray-100'>
-                    {columns.map((col) =>
+                    {columns.map((col) => col.visible && (
 
                       <td key={`${value.id || value.login || index}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
@@ -290,7 +291,7 @@ export function SuperTable({
                           {value[col.field]}
                         </div>
                       </td>
-                    )}
+                    ))}
                   </tr>
                 );
               }) ||

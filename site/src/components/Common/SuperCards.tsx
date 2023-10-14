@@ -197,7 +197,14 @@ export function SuperCards({
 
       <CardBody className='flex gap-2 flex-wrap justify-center'>
 
-        { displayedCards.map((card) => customCard(card) )}
+        { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
+
+          <tr>
+            <td className='text-6xl  text-blue-500 font-bold text-center'>
+              <br/>0 results<br/><br/>
+            </td>
+          </tr>
+        }
 
       </CardBody>
 
