@@ -163,6 +163,7 @@ export function SuperTable({
     }
     return tot;
   }, [currentPage, filteredUsers?.length, usersPerPage]);
+
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
 
   const startIndex = useMemo(() => (currentPage - 1) * usersPerPage, [currentPage, usersPerPage]);

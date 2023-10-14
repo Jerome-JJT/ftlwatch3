@@ -103,7 +103,11 @@ def project_callback(project):
 
 
     good_session = None
+    backup_session = None
     for session in project['project_sessions']:
+
+        if (session['campus_id'] == None):
+            backup_session = session
 
         if (session['campus_id'] == 47):
             good_session = session
@@ -123,8 +127,19 @@ def project_callback(project):
     good_rule_min = None
     good_rule_max = None
     good_rule_retry_delay = None
+    good_scale_duration = None
     if (good_cursus == 21 and good_session):
         rules = callapi(f"/v2/project_sessions/{good_session['id']}", False)
+        scales = callapi(f"/v2/project_sessions/{good_session['id']}/scale_teams?sort=-updated_at&page[size]=1", False)
+
+        try:
+            good_scale_duration = scales[0]['scale']['duration']
+        except:
+            scales = callapi(f"/v2/project_sessions/{backup_session['id']}/scale_teams?sort=-updated_at&page[size]=1", False)
+            try:
+                good_scale_duration = scales[0]['scale']['duration']
+            except:
+                pass
 
         for rule in rules['project_sessions_rules']:
 
@@ -142,8 +157,8 @@ def project_callback(project):
     executeQueryAction("""INSERT INTO projects (
         "id", "name", "slug", "difficulty", "is_exam", "main_cursus", 
 
-        "session_is_solo", "session_estimate_time", "session_description", 
-        "session_has_moulinette", "session_correction_number",
+        "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
+        "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
 
         "rule_min", "rule_max", "rule_retry_delay",
 
@@ -152,21 +167,26 @@ def project_callback(project):
         ) VALUES (
 
         %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, 
-        %(session_is_solo)s, %(session_estimate_time)s, %(session_description)s, 
-        %(session_has_moulinette)s, %(session_correction_number)s, 
+        %(session_id)s, %(session_is_solo)s, %(session_estimate_time)s, %(session_duration_days)s, %(session_duration_days)s,
+        %(session_description)s, %(session_has_moulinette)s, %(session_correction_number)s, %(session_scale_duration)s, 
         %(rule_min)s, %(rule_max)s, %(rule_retry_delay)s, 
         %(created_at)s, %(updated_at)s
     )
     ON CONFLICT (id)
     DO UPDATE SET
-        session_is_solo = EXCLUDED.session_is_solo,
-        session_estimate_time = EXCLUDED.session_estimate_time,
-        session_description = EXCLUDED.session_description,
-        session_has_moulinette = EXCLUDED.session_has_moulinette,
-        session_correction_number = EXCLUDED.session_correction_number,
-        rule_min = EXCLUDED.rule_min,
-        rule_max = EXCLUDED.rule_max,
-        rule_retry_delay = EXCLUDED.rule_retry_delay,
+        main_cursus = COALESCE(projects.main_cursus, EXCLUDED.main_cursus),
+        session_id = COALESCE(projects.session_id, EXCLUDED.session_id),
+        session_is_solo = COALESCE(projects.session_is_solo, EXCLUDED.session_is_solo),
+        session_estimate_time = COALESCE(projects.session_estimate_time, EXCLUDED.session_estimate_time),
+        session_duration_days = COALESCE(projects.session_duration_days, EXCLUDED.session_duration_days),
+        session_terminating_after = COALESCE(projects.session_terminating_after, EXCLUDED.session_terminating_after),
+        session_description = COALESCE(projects.session_description, EXCLUDED.session_description),
+        session_has_moulinette = COALESCE(projects.session_has_moulinette, EXCLUDED.session_has_moulinette),
+        session_correction_number = COALESCE(projects.session_correction_number, EXCLUDED.session_correction_number),
+        session_scale_duration = COALESCE(projects.session_scale_duration, EXCLUDED.session_scale_duration),
+        rule_min = COALESCE(projects.rule_min, EXCLUDED.rule_min),
+        rule_max = COALESCE(projects.rule_max, EXCLUDED.rule_max),
+        rule_retry_delay = COALESCE(projects.rule_retry_delay, EXCLUDED.rule_retry_delay),
         updated_at = EXCLUDED.updated_at
     """, {
         "id": project["id"], 
@@ -176,11 +196,15 @@ def project_callback(project):
         "is_exam": project["exam"],
         "main_cursus": good_cursus,
 
-        "session_is_solo": session["solo"],
-        "session_estimate_time": session["estimate_time"],
-        "session_description": session["description"],
+        "session_id": good_session["id"] if good_session else None,
+        "session_is_solo": good_session["solo"] if good_session else None,
+        "session_estimate_time": good_session["estimate_time"] if good_session else None,
+        "session_duration_days": good_session["duration_days"] if good_session else None,
+        "session_terminating_after": good_session["terminating_after"] if good_session else None,
+        "session_description": good_session["description"] if good_session else None,
         "session_has_moulinette": has_moulinette,
         "session_correction_number": good_correction,
+        "session_scale_duration": good_scale_duration,
 
         "rule_min": good_rule_min,
         "rule_max": good_rule_max,

@@ -42,7 +42,7 @@ export function AchievementsPage(): JSX.Element {
 
 
 
-  function CchievementCard(card: any): JSX.Element {
+  function AchievementCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
         className="flex w-80 h-80 border-black border-2 overflow-hidden"
@@ -95,7 +95,7 @@ export function AchievementsPage(): JSX.Element {
       {(values) &&
         <SuperCards
           values={values}
-          customCard={CchievementCard}
+          customCard={AchievementCard}
 
           tableTitle='Achievements'
           options={[10, 25, 50, 100]}

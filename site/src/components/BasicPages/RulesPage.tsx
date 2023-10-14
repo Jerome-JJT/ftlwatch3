@@ -10,7 +10,7 @@ class ColumnProps {
 }
 
 
-export function TitlesPage(): JSX.Element {
+export function RulesPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
@@ -19,7 +19,7 @@ export function TitlesPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=basic&action=get_titles',
+      .get('/?page=basic&action=get_rules',
         { withCredentials: true }
       )
       .then((res) => {
@@ -63,7 +63,7 @@ export function TitlesPage(): JSX.Element {
           values={values}
 
 
-          tableTitle='Titles'
+          tableTitle='Rules'
           options={[10, 25, 50, 100]}
           reloadFunction={() => { setValues([]); }}
         />

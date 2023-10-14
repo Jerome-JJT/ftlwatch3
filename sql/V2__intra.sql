@@ -90,11 +90,15 @@ CREATE TABLE "projects" (
 
     "main_cursus" integer,
 
+    "session_id" integer,
     "session_is_solo" boolean,
     "session_estimate_time" character varying,
+    "session_duration_days" integer,
+    "session_terminating_after" integer,
     "session_description" character varying,
     "session_has_moulinette" boolean,
     "session_correction_number" integer,
+    "session_scale_duration" integer,
 
     "rule_min" integer,
     "rule_max" integer,

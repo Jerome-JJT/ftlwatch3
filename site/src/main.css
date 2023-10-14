@@ -119,3 +119,16 @@ code {
 .notif-error {
   @apply border-red-600 bg-red-100 text-red-600
 }
+
+
+.selected-option {
+  @apply bg-blue-900
+}
+
+.hidden-option {
+  @apply bg-blue-200
+}
+
+.available-option {
+  @apply bg-blue-600
+}

@@ -81,6 +81,7 @@ export function SuperCards({
 
   const filteredCards = useMemo(() => values.filter((card) => {
     const cardValues = Object.values(card);
+    // console.log(cardValues);
     const searchTerms = searchQuery.split(',');
 
     if (doIncludeAll) {
@@ -107,8 +108,13 @@ export function SuperCards({
     }
   }), [values, searchQuery, doIncludeAll]);
 
-
-  const totalPages = useMemo(() => Math.ceil((filteredCards?.length || 0) / cardsPerPage), [filteredCards, cardsPerPage]);
+  const totalPages = useMemo(() => {
+    const tot = Math.ceil((filteredCards?.length || 0) / cardsPerPage);
+    if (currentPage > tot) {
+      setCurrentPage(1);
+    }
+    return tot;
+  }, [cardsPerPage, currentPage, filteredCards?.length]);
   const pageNumbers = useMemo(() => generatePageNumbers(currentPage, totalPages, 5), [currentPage, totalPages]);
 
   const startIndex = useMemo(() => (currentPage - 1) * cardsPerPage, [currentPage, cardsPerPage]);

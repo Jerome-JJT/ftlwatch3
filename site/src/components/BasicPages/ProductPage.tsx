@@ -104,7 +104,7 @@ export function ProductsPage(): JSX.Element {
           values={values}
           customCard={ProductCard}
 
-          tableTitle='Coalitions'
+          tableTitle='Products'
           options={[10, 25, 50, 100]}
           reloadFunction={() => { setValues([]); }}
         />

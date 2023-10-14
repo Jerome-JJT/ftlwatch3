@@ -169,7 +169,9 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (17, 'Campus', 20, 'campus', NULL, 4, 5),
   (18, 'Cursus', 20, 'cursus', NULL, 4, 5),
   (19, 'Achievements', 20, 'achievements', NULL, 4, 5),
-  (20, 'Groups', 20, 'groups', NULL, 4, 5)
+  (20, 'Groups', 20, 'groups', NULL, 4, 5),
+  (21, 'Rules', 20, 'rules', NULL, 4, 5),
+  (22, 'Products', 20, 'products', NULL, 4, 5)
   ON CONFLICT(id) DO NOTHING
 ;
 

@@ -35,6 +35,8 @@ import { CursusPage } from 'BasicPages/CursusPage';
 import { GroupsPage } from 'BasicPages/GroupsPage';
 import { AchievementsPage } from 'BasicPages/AchievementsPage';
 import { TeamsPage } from 'Teams/TeamsPage';
+import { RulesPage } from 'BasicPages/RulesPage';
+import { ProjectsPage } from 'BasicPages/ProjectsPage';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -108,6 +110,8 @@ export default function App(): JSX.Element {
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/titles" element={<TitlesPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/rules" element={<RulesPage />} />
 
 
           <Route path="/tableau" element={<TableauPage />} />
