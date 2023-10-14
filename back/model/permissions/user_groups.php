@@ -16,7 +16,7 @@ function setUserGroupBySlugs($userId, $groupsSlugs)
   $groups = array_filter($groups, function ($v) use($groupsSlugs) { return in_array($v["slug"], $groupsSlugs); });
 
 
-  $query = "INSERT INTO groups_login_users (login_user_id, login_group_id)
+  $query = "INSERT INTO login_groups_login_users (login_user_id, login_group_id)
   VALUES (:user_id, :group_id)";
 
   $newdata = array_map(function ($v) use($userId) {return array(":user_id" => $userId, ":group_id" => $v);}, array_column($groups, "id"));
