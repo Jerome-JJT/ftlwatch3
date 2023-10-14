@@ -96,25 +96,33 @@ def import_team_scale(team):
 
 def team_callback(team):
     global team_teams
+    global limit_checker
+    global current_limit
 
     mylogger(f"Import team {team['id']} {team['name']}", LOGGER_INFO)
 
+    team_user_ids = list(map(lambda x: x['id'], team['users']))
+    team_user_ids.sort()
+    team_user_ids = list(map(lambda x: str(x), team_user_ids))
+    good_retry_common = f"{team['project_id']}_{'_'.join(team_user_ids)}"
+
     executeQueryAction("""INSERT INTO teams (
-        "id", "name", "final_mark", "project_id", "status", 
+        "id", "name", "final_mark", "project_id", "retry_common", "status", 
         "is_locked", "is_validated", "is_closed",
         "created_at", "updated_at"
         
         ) VALUES (
 
-        %(id)s, %(name)s, %(final_mark)s, %(project_id)s, %(status)s, 
+        %(id)s, %(name)s, %(final_mark)s, %(project_id)s, %(retry_common)s, %(status)s, 
         %(is_locked)s, %(is_validated)s, %(is_closed)s, 
         %(created_at)s, %(updated_at)s
     )
     ON CONFLICT (id)
     DO UPDATE SET
         final_mark = EXCLUDED.final_mark,
+        project_id = EXCLUDED.project_id,
+        retry_common = EXCLUDED.retry_common,
         status = EXCLUDED.status,
-        is_locked = EXCLUDED.is_locked,
         is_validated = EXCLUDED.is_validated,
         is_closed = EXCLUDED.is_closed,
         updated_at = EXCLUDED.updated_at
@@ -123,6 +131,7 @@ def team_callback(team):
         "name": team["name"],
         "final_mark": team["final_mark"],
         "project_id": team["project_id"],
+        "retry_common": good_retry_common,
         "status": team["status"],
 
         "is_locked": team["locked?"],
@@ -157,6 +166,7 @@ def import_teams(update_all = False):
         callapi("/v2/teams?filter[primary_campus]=47&sort=id", True, team_callback, False)
     else:
         callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", True, team_callback, True)
+        # callapi(f"/v2/teams?filter[primary_campus]=47&range[id]=1960372,1960392", False, team_callback, True)
 
 
 
@@ -165,4 +175,4 @@ def import_teams(update_all = False):
             
 
 
-import_teams(False)
+import_teams(True)

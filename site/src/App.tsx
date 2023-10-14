@@ -34,6 +34,7 @@ import { ProductsPage } from 'BasicPages/ProductPage';
 import { CursusPage } from 'BasicPages/CursusPage';
 import { GroupsPage } from 'BasicPages/GroupsPage';
 import { AchievementsPage } from 'BasicPages/AchievementsPage';
+import { TeamsPage } from 'Teams/TeamsPage';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -111,6 +112,7 @@ export default function App(): JSX.Element {
 
           <Route path="/tableau" element={<TableauPage />} />
           <Route path="/image" element={<ImagePage />} />
+          <Route path="/teams" element={<TeamsPage />} />
 
           <Route path="/login_users" element={<UsersVisibilityPage />} />
           <Route path="/login_groups" element={<UserGroupsPage />} />

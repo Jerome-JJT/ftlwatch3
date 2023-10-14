@@ -3,6 +3,7 @@
 import os
 import glob
 import sys
+import datetime
 import time
 import requests
 import rich
@@ -129,13 +130,16 @@ def raw(req, for_test = False):
 
 def callapi(req, multiple = False, callback = None, callback_limit = True):
 
+    start_time = time.time()
+
     page = req
     rawres = raw(page)
     res = rawres.json()
 
-    if (multiple == True and callback != None):
+    if (type(res) == type([]) and callback != None):
         for i in res:
-            if (callback_limit == False and callback(i) == False):
+            cb_res = callback(i)
+            if (callback_limit == True and cb_res == False):
                 return False
         res = []
 
@@ -157,15 +161,22 @@ def callapi(req, multiple = False, callback = None, callback_limit = True):
             rawres = raw(page)
             res.extend(rawres.json())
 
-            if (multiple == True and callback != None):
+            if (type(res) == type([]) and callback != None):
                 for i in res:
-                    if (callback(i) == False):
+                    cb_res = callback(i)
+                    if (callback_limit == True and cb_res == False):
                         return False
                 res = []
 
             if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
                 mylogger(f"So fast", LOGGER_DEBUG)
                 time.sleep(0.5)
+
+    end_time = time.time()
+    mylogger(f"""Request {req} {'mult' if multiple else ''} {'with' if callback != None else 'without'} callback, 
+    start:\t{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')}, 
+    end:\t{datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')}, 
+    elapsed:\t{end_time - start_time}""", LOGGER_DEBUG)
 
     return res
 

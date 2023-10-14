@@ -81,6 +81,10 @@ try {
             require_once("routes/poolfilters.php");
             break;
 
+        case "teams":
+            require_once("routes/teams.php");
+            break;
+
 
         // default:
             // print_r($_SERVER);
@@ -105,7 +109,10 @@ try {
         //   break;
     }
 
-} catch (Exception $e) {
+    jsonResponse(array(), 510);
+
+}
+catch (Exception $e) {
     mylogger('Uncaught top level exception: ' . $e->getMessage(), LOGGER_ERROR());
     jsonResponse(array(), 500);
 }

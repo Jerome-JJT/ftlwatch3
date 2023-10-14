@@ -115,12 +115,13 @@ CREATE TABLE "teams" (
     "final_mark" integer,
 
     "project_id" integer NOT NULL,
+    "retry_common" character varying NOT NULL,
 
     "status" character varying NOT NULL,
 
     "is_locked" boolean NOT NULL,
-    "is_validated" character varying,
-    "is_closed" character varying NOT NULL,
+    "is_validated" boolean,
+    "is_closed" boolean NOT NULL,
 
     "created_at" TIMESTAMP NOT NULL, 
     "updated_at" TIMESTAMP NOT NULL, 
