@@ -164,7 +164,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (40, 'Rules', 40, 'rules', NULL, 4, 5),
   (45, 'Titles', 45, 'titles', NULL, 4, 5),
 
-  (90, 'Credits', 30, 'admin/credits', NULL, NULL, NULL),
+  (90, 'About', 30, 'about', NULL, NULL, NULL),
 
   (100, 'Admin', 20, 'admin/admin', NULL, 3, 3),
   (110, 'Login groups', 20, 'admin/groups', NULL, 3, 3),
