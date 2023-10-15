@@ -138,8 +138,8 @@ services:
       - front
       - back
 
-    # volumes:
-    #   - ./_datas:/app-datas
+    volumes:
+      - ./static:/var/www/static
 
     networks:
       - front

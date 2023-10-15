@@ -178,19 +178,19 @@ export function SuperTable({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   return (
-    <Card className="h-full w-full mb-8 dark:bg-white/40 dark:shadow-white">
-      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible bg-transparent">
-        <div className="mb-8 flex items-center justify-between gap-8">
+    <Card className="super-big-card">
+      <CardHeader floated={false} shadow={false} className="super-big-header">
+        <div className="super-big-header-content">
           <div>
             {tableTitle &&
-              <Typography variant="h5" color="blue-gray">
+              <p className="super-title">
                 {tableTitle}
-              </Typography>
+              </p>
             }
             {tableDesc &&
-              <Typography color="gray" className="mt-1 font-normal">
+              <p className="super-description">
                 {tableDesc}
-              </Typography>
+              </p>
             }
           </div>
 
@@ -204,9 +204,9 @@ export function SuperTable({
           }
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-2">
+        <div className="super-settings-bar">
           {options.length > 0 &&
-            <div className="w-full md:w-72">
+            <div>
               <MySelect label='Items per page' value={usersPerPage.toString()} onChange={handleUsersPerPageChange}>
                 {options.map((option) =>
                   <option key={option.toString()}
@@ -219,7 +219,7 @@ export function SuperTable({
             </div>
           }
 
-          <div className="flex w-full md:w-72 gap-2">
+          <div>
             <Switch
               checked={doIncludeAll}
               onChange={handleToggleIncludeAll}
@@ -234,8 +234,8 @@ export function SuperTable({
             <Input
               label="Search"
               onChange={handleSearchChange}
-              className='dark:!border-gray-700'
-              labelProps={{ className: 'dark:!text-gray-300' }}
+              className='super-fields-border'
+              labelProps={{ className: 'super-fields-label' }}
             />
           </div>
         </div>
@@ -289,8 +289,9 @@ export function SuperTable({
 
                 return (
                   <tr key={value.id || value.login || index}
-                    className='border-b border-gray-300 dark:odd:bg-gray-400
-                    even:bg-blue-50 dark:even:bg-blue-gray-300 hover:bg-blue-gray-100 dark:hover:bg-blue-gray-500'>
+                    className='border-b border-gray-300
+                    odd:bg-white even:bg-blue-50  hover:bg-blue-gray-100
+                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-300 dark:hover:bg-blue-gray-500'>
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${value.id || value.login || index}-${col.field}`}
@@ -314,7 +315,7 @@ export function SuperTable({
         </div>
       </CardBody>
 
-      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+      <CardFooter className="super-big-footer">
         <Button
           variant="outlined"
           size="sm"

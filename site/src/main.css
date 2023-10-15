@@ -100,14 +100,59 @@ code {
   @apply font-medium
 }
 
+p, .my-text {
+  @apply text-blue-gray-400 dark:text-gray-200;
+}
+
 .my-content {
   @apply mx-8 mt-2
 }
 
 
 .my-cards>div {
-  @apply bg-black/5;
+  @apply bg-transparent;
 }
+
+.super-big-card {
+  @apply h-full w-full mb-8 dark:bg-gray-600 dark:shadow-white overflow-hidden;
+  @apply bg-white/40;
+}
+
+.super-big-header {
+  @apply rounded-none overflow-visible bg-transparent;
+}
+.super-big-header-content {
+  @apply mb-8 flex items-center justify-between gap-8;
+}
+
+.super-title {
+  @apply text-xl text-black font-semibold;
+}
+.super-description {
+  @apply mt-1 font-normal;
+}
+
+.super-settings-bar {
+  @apply flex flex-col items-center justify-between gap-4 md:flex-row mb-2;
+}
+.super-settings-bar>div {
+  @apply flex flex-row w-full md:w-72 gap-2;
+}
+
+.super-big-footer {
+  @apply flex items-center justify-between border-t p-4 ;
+  @apply border-blue-gray-50 dark:border-blue-gray-900 bg-white dark:bg-gray-600;
+}
+
+.super-fields-border {
+  @apply dark:!border-gray-700;
+}
+
+.super-fields-label {
+  @apply !text-gray-900 dark:!text-gray-300;
+}
+
+
 
 .notif-question {
   @apply border-pink-300 bg-pink-50 text-pink-300

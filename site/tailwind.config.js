@@ -16,6 +16,9 @@ export default withMT({
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'animals': 'url(\'/static/animals.png\')',
+      },
       fontFamily: {
         'roboto': ['Roboto'],
       },

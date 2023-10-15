@@ -20,32 +20,12 @@ export default function NavBar({
     }
   };
 
-  // const ref = React.useRef<HTMLDivElement | null>(null);
-  // React.useEffect(() => {
-  //   const checkIfClickedOutside = (e: any) => {
-  //     if (ref && !loginer.logged) {
-  //       if (
-  //         openedMenu &&
-  //         openedMenu === "burger" &&
-  //         !ref.current?.contains(e.target)
-  //       ) {
-  //         setOpenedMenu("");
-  //       }
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", checkIfClickedOutside);
 
-  //   return () => {
-  //     document.removeEventListener("mousedown", checkIfClickedOutside);
-  //   };
-  // }, [openedMenu, loginer.logged, setOpenedMenu]);
-
-  //
   return (
     <header className="top-0 z-50 w-full">
       <nav
         className={classNames(
-          'z-50 px-2 py-2.5 shadow-lg sm:px-4'
+          'z-50 px-2 py-2.5 shadow-lg sm:px-4 bg-white/80 dark:bg-gray-700/80'
         )}
       >
         <div className="mx-auto flex flex-wrap items-center justify-between">

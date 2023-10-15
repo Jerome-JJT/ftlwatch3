@@ -122,17 +122,17 @@ export function SuperCards({
   const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
 
   return (
-    <Card className="h-full w-full mb-8 dark:bg-white/40 dark:shadow-white">
-      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible bg-transparent">
-        <div className="mb-8 flex items-center justify-between gap-8">
+    <Card className="super-big-card">
+      <CardHeader floated={false} shadow={false} className="super-big-header">
+        <div className="super-big-header-content">
           <div>
             {tableTitle &&
-              <p className='text-xl text-black font-semibold'>
+              <p className='super-title'>
                 {tableTitle}
               </p>
             }
             {tableDesc &&
-              <p className="mt-1 font-normal">
+              <p className="super-description">
                 {tableDesc}
               </p>
             }
@@ -148,9 +148,9 @@ export function SuperCards({
           }
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-2">
+        <div className="super-settings-bar">
           {options.length > 0 &&
-            <div className="w-full md:w-72">
+            <div>
               <MySelect label='Items per page' value={cardsPerPage.toString()} onChange={handleCardsPerPageChange}>
                 {options.map((option) =>
                   <option key={option.toString()}
@@ -163,7 +163,7 @@ export function SuperCards({
             </div>
           }
 
-          <div className="flex w-full md:w-72 gap-2">
+          <div>
             <Switch
               checked={doIncludeAll}
               onChange={handleToggleIncludeAll}
@@ -178,8 +178,8 @@ export function SuperCards({
             <Input
               label="Search"
               onChange={handleSearchChange}
-              className='dark:!border-gray-700'
-              labelProps={{ className: 'dark:!text-gray-300' }}
+              className='super-fields-border'
+              labelProps={{ className: 'super-fields-label' }}
             />
           </div>
         </div>
@@ -207,7 +207,7 @@ export function SuperCards({
 
       </CardBody>
 
-      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+      <CardFooter className="super-big-footer">
         <Button
           variant="outlined"
           size="sm"

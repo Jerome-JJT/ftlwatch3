@@ -81,17 +81,17 @@ export default function App(): JSX.Element {
 
   return (
     <Router>
-      <NavBar
-        openedMenu={openedMenu}
-        setOpenedMenu={setOpenedMenu}
-      />
+      <div className="grow bg-gray-300 dark:bg-gray-800">
+        <NavBar
+          openedMenu={openedMenu}
+          setOpenedMenu={setOpenedMenu}
+        />
 
-      <LeftDrawer
-        openedMenu={openedMenu}
-        setOpenedMenu={setOpenedMenu}
-      />
+        <LeftDrawer
+          openedMenu={openedMenu}
+          setOpenedMenu={setOpenedMenu}
+        />
 
-      <div className="grow bg-gray-100 dark:bg-gray-800">
         <Routes>
           <Route path="/" element={<HomePage />} />
 
