@@ -10,7 +10,6 @@ import NavBar from './components/NavBar/NavBar';
 import LoginApi from './components/Log/LoginApi';
 import Logout from './components/Log/Logout';
 
-import CreateAccountPage from './components/Log/CreateAccountPage';
 import LeftDrawer from './components/NavBar/LeftDrawer';
 import axios from 'axios';
 import { AxiosErrorText } from './components/Hooks/AxiosErrorText';
@@ -38,6 +37,9 @@ import { RulesPage } from 'BasicPages/RulesPage';
 import { ProjectsPage } from 'BasicPages/ProjectsPage';
 import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
 // import Place from './components/Place/Place';
+
+
+
 
 export default function App(): JSX.Element {
   const { isLogged, getUserData, logout } = useLogin();
@@ -89,7 +91,7 @@ export default function App(): JSX.Element {
         setOpenedMenu={setOpenedMenu}
       />
 
-      <div className="grow bg-gray-100 dark:bg-gray-400">
+      <div className="grow bg-gray-100 dark:bg-gray-800">
         <Routes>
           <Route path="/" element={<HomePage />} />
 

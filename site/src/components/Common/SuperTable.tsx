@@ -178,8 +178,8 @@ export function SuperTable({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   return (
-    <Card className="h-full w-full mb-8">
-      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible">
+    <Card className="h-full w-full mb-8 dark:bg-white/40 dark:shadow-white">
+      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible bg-transparent">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             {tableTitle &&
@@ -234,6 +234,8 @@ export function SuperTable({
             <Input
               label="Search"
               onChange={handleSearchChange}
+              className='dark:!border-gray-700'
+              labelProps={{ className: 'dark:!text-gray-300' }}
             />
           </div>
         </div>
@@ -259,7 +261,7 @@ export function SuperTable({
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-y border-blue-gray-100 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
+                    className="cursor-pointer border-y border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
                   >
                     <Typography
                       variant="small"
@@ -287,7 +289,8 @@ export function SuperTable({
 
                 return (
                   <tr key={value.id || value.login || index}
-                    className='border-b border-gray-300 even:bg-blue-50 hover:bg-blue-gray-100'>
+                    className='border-b border-gray-300 dark:odd:bg-gray-400
+                    even:bg-blue-50 dark:even:bg-blue-gray-300 hover:bg-blue-gray-100 dark:hover:bg-blue-gray-500'>
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${value.id || value.login || index}-${col.field}`}

@@ -100,6 +100,15 @@ code {
   @apply font-medium
 }
 
+.my-content {
+  @apply mx-8 mt-2
+}
+
+
+.my-cards>div {
+  @apply bg-black/5;
+}
+
 .notif-question {
   @apply border-pink-300 bg-pink-50 text-pink-300
 }

@@ -17,23 +17,6 @@ interface NavBarProps {
   setOpenedMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
-// const screens = [
-//   {
-//     label: 'Home', url: 'Home'
-//   },
-//   {
-//     label: 'Testing',
-//     list: [
-//       { label: 'Tests', url: 'Tests', icon: 'caretRight' },
-//       { label: 'Permissions', url: 'Permissions' },
-//       { label: 'User_Permissions', url: 'UserPermissions' },
-//       { label: 'Groups', url: 'Groups' },
-//       { label: 'Screen1', url: 'Screen1' }
-//     ]
-//   },
-//   { label: 'Users', url: 'Users' },
-//   { label: 'Images', url: 'Images' }
-// ]
 
 export default function LeftDrawer({
   openedMenu,
@@ -57,6 +40,7 @@ export default function LeftDrawer({
       return ([
 
         <ListItem key={`${id}`}
+          className='hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
           onClick={() => {
             (elem.list && elem.list.length > 0)
               ? changeSub(id)
@@ -67,33 +51,35 @@ export default function LeftDrawer({
               (
                 (
                   (elem.list && elem.list.length > 0 && selectedSub === id) &&
-                  <AiFillCaretUp />
+                  <AiFillCaretUp className='my-text' />
                 ) ||
 
                 (
                   elem.list && elem.list.length > 0 &&
-                <AiFillCaretDown />)
+                <AiFillCaretDown className='my-text' />)
               ) ||
 
-              <AiFillStar />
+              <AiFillStar className='my-text' />
             }
           </ListItemPrefix>
 
-          {(elem.name && elem.name) || ''}
+          <p>{(elem.name && elem.name) || ''}</p>
         </ListItem>,
 
         elem.list?.map((sub: any, subId: number) => {
           return (
             selectedSub === id &&
-            <ListItem className="ml-4" key={`${id}_${subId}`} onClick={() => {
-              sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
-            }}>
+            <ListItem key={`${id}_${subId}`}
+              className='ml-4 hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
+              onClick={() => {
+                sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
+              }}>
 
               <ListItemPrefix>
-                <AiFillStar />
+                <AiFillStar className='my-text' />
               </ListItemPrefix>
 
-              {(sub.name && sub.name) || ''}
+              <p>{(sub.name && sub.name) || ''}</p>
 
             </ListItem>
           );
@@ -106,24 +92,31 @@ export default function LeftDrawer({
   }
 
   return (
-    <Drawer open={openedMenu === 'leftdrawer'} onClose={() => { setOpenedMenu(''); }} className="p-4">
+    <Drawer
+      open={openedMenu === 'leftdrawer'}
+      onClose={() => { setOpenedMenu(''); }}
+      className="p-4 dark:text-white dark:bg-gray-600"
+    >
       <div className="mb-2 flex items-center justify-between p-4">
-        <Typography variant="h5" color="blue-gray">
+        <p className='text-xl font-bold'>
           Menu
-        </Typography>
-        <IconButton variant="text" color="blue-gray" onClick={() => { setOpenedMenu(''); }}>
-          <AiOutlineClose />
+        </p>
+        <IconButton variant="text" onClick={() => { setOpenedMenu(''); }}>
+          <AiOutlineClose size='24' />
         </IconButton>
       </div>
 
-      <List>
+      <List className='text-none my-text'>
 
-        <ListItem key={'home'} onClick={() => { navigate('/'); }}>
+        <ListItem key={'home'}
+          className='hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
+          onClick={() => { navigate('/'); }}
+        >
           <ListItemPrefix>
-            <AiFillHome />
+            <AiFillHome className='my-text' />
           </ListItemPrefix>
 
-          {'Home'}
+          <p>Home</p>
         </ListItem>
         <hr key={'sep_home'} className="my-2 border-blue-gray-200" />
 

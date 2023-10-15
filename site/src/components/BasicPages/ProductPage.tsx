@@ -47,7 +47,7 @@ export function ProductsPage(): JSX.Element {
   function ProductCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
-        className="flex w-80 border-black border-2">
+        className="flex w-96 border-black border-2">
 
         <CardHeader floated={false}
           className='flex h-40 justify-center bg-transparent shadow-none mx-2 mt-2'>
@@ -61,7 +61,7 @@ export function ProductsPage(): JSX.Element {
 
         <CardBody className="flex flex-row grow gap-2 p-3 text-center align-center">
 
-          <div className="flex flex-col grow justify-evenly rounded-lg bg-white/50 text-black">
+          <div className="flex flex-col grow justify-evenly rounded-lg bg-white/50 dark:bg-gray-600 text-black">
 
             <div color="blue-gray" className="mb-1 flex flex-row gap-x-2 flex-wrap justify-around">
               <p className='flex align-center'>
@@ -75,7 +75,7 @@ export function ProductsPage(): JSX.Element {
               </p>
             </div>
 
-            <textarea readOnly className='bg-transparent border p-1 w-full' rows={6}>
+            <textarea readOnly className='my-text bg-transparent border dark:border-gray-700 p-1 w-full' rows={6}>
 
               {card.description}
             </textarea>
@@ -94,7 +94,7 @@ export function ProductsPage(): JSX.Element {
 
   //
   return (
-    <div className='mx-8 mt-2'>
+    <div className='my-content'>
       {(values) &&
         <SuperCards
           values={values}

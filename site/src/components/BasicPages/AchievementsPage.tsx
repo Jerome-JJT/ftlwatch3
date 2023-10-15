@@ -85,7 +85,7 @@ export function AchievementsPage(): JSX.Element {
 
 
   return (
-    <div className='mx-8 mt-2'>
+    <div className='my-content'>
       {(values) &&
         <SuperCards
           values={values}

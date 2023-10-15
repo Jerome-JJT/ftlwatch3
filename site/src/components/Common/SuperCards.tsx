@@ -122,19 +122,19 @@ export function SuperCards({
   const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
 
   return (
-    <Card className="h-full w-full mb-8">
-      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible">
+    <Card className="h-full w-full mb-8 dark:bg-white/40 dark:shadow-white">
+      <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible bg-transparent">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             {tableTitle &&
-              <Typography variant="h5" color="blue-gray">
+              <p className='text-xl text-black font-semibold'>
                 {tableTitle}
-              </Typography>
+              </p>
             }
             {tableDesc &&
-              <Typography color="gray" className="mt-1 font-normal">
+              <p className="mt-1 font-normal">
                 {tableDesc}
-              </Typography>
+              </p>
             }
           </div>
 
@@ -178,6 +178,8 @@ export function SuperCards({
             <Input
               label="Search"
               onChange={handleSearchChange}
+              className='dark:!border-gray-700'
+              labelProps={{ className: 'dark:!text-gray-300' }}
             />
           </div>
         </div>
@@ -194,7 +196,7 @@ export function SuperCards({
         }
       </CardHeader>
 
-      <CardBody className='flex gap-2 flex-wrap justify-center'>
+      <CardBody className='flex gap-2 flex-wrap justify-center my-cards'>
 
         { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
 

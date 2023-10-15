@@ -25,7 +25,7 @@ export default function ProfileButton(): JSX.Element {
         />
       </MenuHandler>
 
-      <MenuList>
+      <MenuList className='dark:bg-gray-900'>
         {isLogged && userInfos && (
           <>
             <Typography tabIndex={0} variant="small" className="font-normal outline-none">

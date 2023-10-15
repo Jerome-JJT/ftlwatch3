@@ -80,7 +80,7 @@ export function UsersVisibilityPage(): JSX.Element {
 
 
   return (
-    <div className='mx-8 mt-2'>
+    <div className='my-content'>
       {(columns && values) &&
         <SuperTable
           columns={columns}
