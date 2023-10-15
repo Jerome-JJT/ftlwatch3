@@ -154,32 +154,39 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
 ;
 
 INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id", "permission_id") VALUES
-  (1, 'Tableau cursus', 1, NULL, NULL, 1, 1),
-  (2, 'Tableau current pool', 2, NULL, 'filter=currentpool', 1, 1),
-  (3, 'Tableau current year', 3, NULL, 'filter=currentyear', 1, 1),
-  (4, 'Tableau outer core', 4, NULL, 'projects=outer', 1, 1),
+  (5, 'Achievements', 5, 'achievements', NULL, 4, 5),
+  (10, 'Campus', 10, 'campus', NULL, 4, 5),
+  (15, 'Coalitions', 15, 'coalitions', NULL, 4, 5),
+  (20, 'Cursus', 20, 'cursus', NULL, 4, 5),
+  (25, 'Groups', 25, 'groups', NULL, 4, 5),
+  (30, 'Projects', 30, 'projects', NULL, 4, 5),
+  (35, 'Products', 35, 'products', NULL, 4, 5),
+  (40, 'Rules', 40, 'rules', NULL, 4, 5),
+  (45, 'Titles', 45, 'titles', NULL, 4, 5),
 
-  (5, 'Images cursus', 1, NULL, 'filter=currentcursus', 2, 2),
-  (6, 'Images current pool', 2, NULL, 'filter=currentpool', 2, 2),
-  (7, 'Images current year', 3, NULL, 'filter=currentyear', 2, 2),
+  (90, 'Credits', 30, 'admin/credits', NULL, NULL, NULL),
 
-  (8, 'Admin', 20, 'admin/admin', NULL, 3, 3),
-  (9, 'Credits', 30, 'admin/credits', NULL, NULL, NULL),
-  (21, 'Login users', 20, 'admin/users', NULL, 3, 3),
-  (10, 'Login groups', 20, 'admin/groups', NULL, 3, 3),
-  (11, 'Permissions', 20, 'admin/permissions', NULL, 3, 3),
-  (12, 'Pages', 20, 'admin/pages', NULL, 3, 3),
-  (13, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 3),
+  (100, 'Admin', 20, 'admin/admin', NULL, 3, 3),
+  (110, 'Login groups', 20, 'admin/groups', NULL, 3, 3),
+  (115, 'Permissions', 20, 'admin/permissions', NULL, 3, 3),
+  (120, 'Pages', 20, 'admin/pages', NULL, 3, 3),
+  (125, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 3),
 
-  (19, 'Achievements', 5, 'achievements', NULL, 4, 5),
-  (17, 'Campus', 10, 'campus', NULL, 4, 5),
-  (14, 'Coalitions', 15, 'coalitions', NULL, 4, 5),
-  (18, 'Cursus', 20, 'cursus', NULL, 4, 5),
-  (20, 'Groups', 25, 'groups', NULL, 4, 5),
-  (22, 'Projects', 30, 'projects', NULL, 4, 5),
-  (15, 'Products', 35, 'products', NULL, 4, 5),
-  (23, 'Rules', 40, 'rules', NULL, 4, 5),
-  (16, 'Titles', 45, 'titles', NULL, 4, 5)
+  (105, 'Users visibility', 20, 'admin/users', NULL, 3, 3),
+  (125, 'Projects visibility', 20, 'admin/projects', NULL, 3, 3),
+
+  (200, 'Tableau infos', 1, NULL, 'filter=cursus&infos', 1, 1),
+  (205, 'Tableau cursus common core', 2, NULL, 'filter=cursus&projects=common-core', 1, 1),
+  (210, 'Tableau cursus outer core', 4, NULL, 'filter=cursus&projects=outer-core', 1, 1),
+
+  (215, 'Tableau current month', 2, NULL, 'filter=currentmonth&projects=c-piscine', 1, 1),
+  (220, 'Tableau current year', 3, NULL, 'filter=currentyear&projects=c-piscine', 1, 1),
+
+  (250, 'Images cursus', 1, NULL, 'filter=cursus', 2, 2),
+  (255, 'Images current month', 2, NULL, 'filter=currentmonth', 2, 2),
+  (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 2)
+
+
   ON CONFLICT(id) DO NOTHING
 ;
 

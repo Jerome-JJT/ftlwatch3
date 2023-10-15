@@ -6,7 +6,6 @@ function loginUser($login, $password, $checkPassword = true)
 {
   $query = "SELECT id, login, password FROM login_users WHERE login = :login";
   $data = array(":login" => $login);
-  //   print_r($query);
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
@@ -15,7 +14,12 @@ function loginUser($login, $password, $checkPassword = true)
     $result = $result[0];
 
     if ($checkPassword) {
-      return (password_verify($password, $result["password"]));
+      if ($result["password"] != null) {
+        return (password_verify($password, $result["password"]));
+      }
+      else {
+        return false;
+      }
     }
 
     return true;

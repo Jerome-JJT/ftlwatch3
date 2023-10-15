@@ -93,36 +93,42 @@ export default function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
 
-          <Route path="/achievements" element={<AchievementsPage />} />
-          <Route path="/campus" element={<CampusPage />} />
-          <Route path="/coalitions" element={<CoalitionsPage />} />
-          <Route path="/cursus" element={<CursusPage />} />
-          <Route path="/groups" element={<GroupsPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/titles" element={<TitlesPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/rules" element={<RulesPage />} />
-
-
-          <Route path="/tableau" element={<TableauPage />} />
-          <Route path="/image" element={<ImagePage />} />
-          <Route path="/teams" element={<TeamsPage />} />
-
-          <Route path="/admin/login_users" element={<UsersVisibilityPage />} />
-          <Route path="/admin/login_groups" element={<UserGroupsPage />} />
-          <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
-          <Route path="/admin/pages" element={<GroupPermissionsPage />} />
-          <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
-          <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
-
-          <Route path="/test" element={<TestPage />} />
-
-          {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
-
           <Route path="/login" element={<LogPage />} />
           <Route path="/loginapi" element={<LoginApi />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/createaccount" element={<CreateAccountPage />} />
+
+          {isLogged && <>
+            <Route path="/logout" element={<Logout />} />
+
+            <Route path="/achievements" element={<AchievementsPage />} />
+            <Route path="/campus" element={<CampusPage />} />
+            <Route path="/coalitions" element={<CoalitionsPage />} />
+            <Route path="/cursus" element={<CursusPage />} />
+            <Route path="/groups" element={<GroupsPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/titles" element={<TitlesPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/rules" element={<RulesPage />} />
+
+
+            <Route path="/tableau" element={<TableauPage />} />
+            <Route path="/image" element={<ImagePage />} />
+            <Route path="/teams" element={<TeamsPage />} />
+
+            {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
+            <Route path="/admin/login_groups" element={<UserGroupsPage />} />
+            <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
+            <Route path="/admin/pages" element={<GroupPermissionsPage />} />
+            <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
+
+            <Route path="/admin/users" element={<UsersVisibilityPage />} />
+            <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
+
+
+            {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
+
+
+            <Route path="/test" element={<TestPage />} />
+          </>}
         </Routes>
       </div>
       <NotifDisplay/>
