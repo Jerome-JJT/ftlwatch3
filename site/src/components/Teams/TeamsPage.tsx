@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
@@ -8,7 +8,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Checkbox,
   Popover,
   PopoverContent,
@@ -17,50 +16,25 @@ import {
   Typography,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { useSearchParams } from 'react-router-dom';
 import { SuperCards } from 'Common/SuperCards';
 import { AiFillStar } from 'react-icons/ai';
 import { longDate, shortDate } from 'Utils/dateUtils';
 
-// class ColumnProps {
-//   field: string = '';
-//   label: string = '';
-// }
-
-// class PoolFilterProps {
-//   id: string = '';
-//   name: string = '';
-//   hidden: boolean = true;
-// }
-
-// const StyledTableau = styled.div`
-//   tbody tr td {
-//     height: 100px;
-//     min-height: 100px;
-//     max-height: 100px;
-//     padding: 4px;
-//   }
-// `;
 
 
 
 
 export function TeamsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
-  const defaultFilter = searchParams.get('filter');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
-
-  const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
-  // const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
 
 
 
   function TeamCard(card: any): JSX.Element {
 
     const users = Object.values(card.users);
-    users.sort((a: any, b: any) => {
+    users.sort((a: any, _b: any) => {
       return a.id === card.leader_id ? 1 : 0;
     });
 
@@ -162,19 +136,13 @@ export function TeamsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-
-            setValues(res.data.values);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
         }
       })
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  }, [addNotif, usedFilter]);
+  }, [addNotif]);
 
   // const subOptions = useMemo(() => (
   //   <>

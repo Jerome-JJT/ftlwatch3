@@ -7,20 +7,14 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Checkbox,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { SuperCards } from 'Common/SuperCards';
 import Separator from 'Common/Separator';
 import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
 
 class PoolFilterProps {
   id: string = '';
@@ -28,14 +22,7 @@ class PoolFilterProps {
   hidden: boolean = true;
 }
 
-// const StyledTableau = styled.div`
-//   tbody tr td {
-//     height: 100px;
-//     min-height: 100px;
-//     max-height: 100px;
-//     padding: 4px;
-//   }
-// `;
+
 
 function ImageCard(card: any): JSX.Element {
   return (
@@ -100,13 +87,7 @@ export function ImagePage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-
-            setValues(res.data.values);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
         }
       })
       .catch((error) => {

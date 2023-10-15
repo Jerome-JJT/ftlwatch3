@@ -101,6 +101,12 @@ def project_callback(project):
     if (good_cursus == None and len(project['cursus']) > 0):
         good_cursus = project['cursus'][0]['id']
 
+    good_has_lausanne = False
+    for campus in project['campus']:
+
+        if (campus['id'] == 47):
+            good_has_lausanne = True
+
 
     good_session = None
     backup_session = None
@@ -155,7 +161,7 @@ def project_callback(project):
 
 
     executeQueryAction("""INSERT INTO projects (
-        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", 
+        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "has_lausanne", 
 
         "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
         "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
@@ -166,7 +172,7 @@ def project_callback(project):
         
         ) VALUES (
 
-        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, 
+        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, %(has_lausanne)s, 
         %(session_id)s, %(session_is_solo)s, %(session_estimate_time)s, %(session_duration_days)s, %(session_duration_days)s,
         %(session_description)s, %(session_has_moulinette)s, %(session_correction_number)s, %(session_scale_duration)s, 
         %(rule_min)s, %(rule_max)s, %(rule_retry_delay)s, 
@@ -175,6 +181,7 @@ def project_callback(project):
     ON CONFLICT (id)
     DO UPDATE SET
         main_cursus = COALESCE(projects.main_cursus, EXCLUDED.main_cursus),
+        has_lausanne = COALESCE(projects.has_lausanne, EXCLUDED.has_lausanne),
         session_id = COALESCE(projects.session_id, EXCLUDED.session_id),
         session_is_solo = COALESCE(projects.session_is_solo, EXCLUDED.session_is_solo),
         session_estimate_time = COALESCE(projects.session_estimate_time, EXCLUDED.session_estimate_time),
@@ -195,6 +202,7 @@ def project_callback(project):
         "difficulty": project["difficulty"],
         "is_exam": project["exam"],
         "main_cursus": good_cursus,
+        "has_lausanne": good_has_lausanne,
 
         "session_id": good_session["id"] if good_session else None,
         "session_is_solo": good_session["solo"] if good_session else None,

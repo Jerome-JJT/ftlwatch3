@@ -31,13 +31,7 @@ export function ProductsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-
-            setValues(res.data.values);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
         }
       })
       .catch((error) => {
@@ -50,8 +44,7 @@ export function ProductsPage(): JSX.Element {
   function ProductCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
-        className="flex w-80 border-black border-2"
-        style={{ backgroundColor: card.color }}>
+        className="flex w-80 border-black border-2">
 
         <CardHeader floated={false}
           className='flex h-40 justify-center bg-transparent shadow-none mx-2 mt-2'>

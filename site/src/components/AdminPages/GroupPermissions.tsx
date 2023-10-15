@@ -6,11 +6,8 @@ import {
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
 
 export function GroupPermissionsPage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -46,33 +43,27 @@ export function GroupPermissionsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((groupWithPerms: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field !== 'id' && col.field !== 'name') {
-                  groupWithPerms[col.field] = <Checkbox
-                    id={`${groupWithPerms.id}-${col.field}`}
-                    defaultChecked={groupWithPerms[col.field]}
-                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                    onClick={async (e: any) => {
-                      if (!(await changePermission(groupWithPerms.id, parseInt(col.field), e.target.checked))) {
-                        e.target.checked = !e.target.checked;
-                      }
-                    }}
-                  />;
-                }
-              });
-
-              return groupWithPerms;
+          const displayValues = res.data.values.map((groupWithPerms: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
+              if (col.field !== 'id' && col.field !== 'name') {
+                groupWithPerms[col.field] = <Checkbox
+                  id={`${groupWithPerms.id}-${col.field}`}
+                  defaultChecked={groupWithPerms[col.field]}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick={async (e: any) => {
+                    if (!(await changePermission(groupWithPerms.id, parseInt(col.field), e.target.checked))) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
+                />;
+              }
             });
-            setValues(displayValues);
-            // setPageError(undefined);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+
+            return groupWithPerms;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

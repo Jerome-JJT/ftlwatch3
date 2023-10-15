@@ -6,11 +6,8 @@ import {
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
 
 export function UserGroupsPage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -42,34 +39,28 @@ export function UserGroupsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((userWithGroups: any) => {
-              console.log(userWithGroups, res.data.columns);
+          const displayValues = res.data.values.map((userWithGroups: any) => {
 
-              res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field !== 'id' && col.field !== 'login') {
-                  userWithGroups[col.field] = <Checkbox
-                    id={`${userWithGroups.id}-${col.field}`}
-                    defaultChecked={userWithGroups[col.field]}
-                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                    onClick={async (e: any) => {
-                      if (!(await changePermission(userWithGroups.id, parseInt(col.field), e.target.checked))) {
-                        e.target.checked = !e.target.checked;
-                      }
-                    }}
-                  />;
-                }
-              });
-
-              return userWithGroups;
+            res.data.columns.forEach((col: ColumnProps) => {
+              if (col.field !== 'id' && col.field !== 'login') {
+                userWithGroups[col.field] = <Checkbox
+                  id={`${userWithGroups.id}-${col.field}`}
+                  defaultChecked={userWithGroups[col.field]}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick={async (e: any) => {
+                    if (!(await changePermission(userWithGroups.id, parseInt(col.field), e.target.checked))) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
+                />;
+              }
             });
-            setValues(displayValues);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+
+            return userWithGroups;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

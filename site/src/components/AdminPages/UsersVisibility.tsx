@@ -6,11 +6,9 @@ import {
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
+
 
 export function UsersVisibilityPage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -41,40 +39,35 @@ export function UsersVisibilityPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((user: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
+          const displayValues = res.data.values.map((user: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
 
-                if (col.field === 'avatar_url') {
-                  user[col.field] = <img
-                    src={user[col.field]}
-                    alt={user.login}
-                    className='max-h-full max-w-[60px] rounded-lg'
-                  />;
-                }
-                else if (col.field === 'hidden') {
+              if (col.field === 'avatar_url') {
+                user[col.field] = <img
+                  src={user[col.field]}
+                  alt={user.login}
+                  className='max-h-full max-w-[60px] rounded-lg'
+                />;
+              }
+              else if (col.field === 'hidden') {
 
-                  user[col.field] = <Checkbox
-                    id={`${user.id}-${col.field}`}
-                    defaultChecked={user[col.field]}
-                    onClick={async (e: any) => {
-                      if (!(await changePermission(user.id, e.target.checked))) {
-                        e.target.checked = !e.target.checked;
-                      }
-                    }}
-                  />;
-                }
-              });
-
-              return user;
+                user[col.field] = <Checkbox
+                  id={`${user.id}-${col.field}`}
+                  defaultChecked={user[col.field]}
+                  onClick={async (e: any) => {
+                    if (!(await changePermission(user.id, e.target.checked))) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
+                />;
+              }
             });
-            setValues(displayValues);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+
+            return user;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

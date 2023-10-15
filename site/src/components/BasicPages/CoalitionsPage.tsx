@@ -29,13 +29,7 @@ export function CoalitionsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-
-            setValues(res.data.values);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
         }
       })
       .catch((error) => {
@@ -70,13 +64,13 @@ export function CoalitionsPage(): JSX.Element {
 
           <div className="flex flex-col grow p-2 justify-evenly text-black">
             <p color="blue-gray" className="mb-1">
-              {card.achievement_name}
+              {card.name}
             </p>
             <p color="blue-gray" className="mb-1">
               {card.slug}
             </p>
             <p color="blue-gray" className="mb-1">
-              {card.campus_name} {card.cursus_name}
+              {card.campus_name} - {card.cursus_name}
             </p>
           </div>
 

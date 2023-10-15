@@ -24,13 +24,7 @@ export function AchievementsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-
-            setValues(res.data.values);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
         }
       })
       .catch((error) => {
@@ -43,8 +37,7 @@ export function AchievementsPage(): JSX.Element {
   function AchievementCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
-        className="flex w-80 h-80 border-black border-2 overflow-hidden"
-        style={{ backgroundColor: card.color }}>
+        className="flex w-80 h-80 border-black border-2 overflow-hidden">
 
         <CardHeader floated={false}
           className='flex flex-row min-h-32 h-32 max-h-32 gap-4 justify-start bg-transparent shadow-none mx-2 mt-2'>

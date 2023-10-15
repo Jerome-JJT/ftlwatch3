@@ -60,18 +60,18 @@ export default function App(): JSX.Element {
 
   axios.interceptors.response.use(
     (response) => {
+      // eslint-disable-next-line no-console
       if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response); }
 
       return response;
     },
     (error) => {
+      // eslint-disable-next-line no-console
       if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error); }
 
       if (error.response && error.response.status === 401) {
         logout();
       }
-      // if ((error.response && error.response.data && error.response.data.detail) === 'Invalid token.' && error.request.responseURL.indexOf("logout") === -1) {
-      // }
 
       return Promise.reject(error);
     }

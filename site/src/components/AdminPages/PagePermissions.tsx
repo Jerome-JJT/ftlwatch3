@@ -6,11 +6,9 @@ import { Input, Button } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import MySelect from 'Common/MySelect';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
+
 
 export function PagePermissionsPage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -59,14 +57,13 @@ export function PagePermissionsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((page: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field === 'corder') {
-                  const corderId = `corder-${page.id}`;
-                  page[col.field] =
+          const displayValues = res.data.values.map((page: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
+              if (col.field === 'corder') {
+                const corderId = `corder-${page.id}`;
+                page[col.field] =
                     <div className="relative flex w-full max-w-[24rem]">
                       <Input id={corderId} label='corder' type='text' defaultValue={page[col.field]}/>
                       <Button
@@ -77,29 +74,25 @@ export function PagePermissionsPage(): JSX.Element {
                         Save
                       </Button>
                     </div>;
-                }
+              }
 
-                else if (col.field === 'permission') {
-                  page[col.field] = <MySelect
-                    defaultValue={page.permission_id?.toString() || 'null'}
-                    onChange={(v) => { void modifyPagePermission(page.id, v.target.value || 'null'); }}>
+              else if (col.field === 'permission') {
+                page[col.field] = <MySelect
+                  defaultValue={page.permission_id?.toString() || 'null'}
+                  onChange={(v) => { void modifyPagePermission(page.id, v.target.value || 'null'); }}>
 
-                    <option key='null' value='null'>null</option>
-                    {res.data.permission_options.map((perm: any) => {
-                      return <option key={perm.id} value={perm.id.toString()}>{perm.name}</option>;
-                    })}
+                  <option key='null' value='null'>null</option>
+                  {res.data.permission_options.map((perm: any) => {
+                    return <option key={perm.id} value={perm.id.toString()}>{perm.name}</option>;
+                  })}
 
-                  </MySelect>;
-                }
-              });
-
-              return page;
+                </MySelect>;
+              }
             });
-            setValues(displayValues);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+
+            return page;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

@@ -1,12 +1,12 @@
 
 export function comparePoolfilters(a: string, b: string): number {
-  const [yearA, monthA] = a.split('.');
-  const [yearB, monthB] = b.split('.');
+  const [yearA, monthA] = String(a).split('.');
+  const [yearB, monthB] = String(b).split('.');
 
-  if (a.toLowerCase() === 'none.none') {
+  if (String(a).toLowerCase() === 'none.none') {
     return 1;
   }
-  else if (b.toLowerCase() === 'none.none') {
+  else if (String(b).toLowerCase() === 'none.none') {
     return -1;
   }
 

@@ -11,7 +11,6 @@ import {
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
-import { AiFillGift } from 'react-icons/ai';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
 
@@ -35,14 +34,9 @@ export function ProjectsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
 
-            setValues(res.data.values);
-            setCursus(res.data.cursus);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+          setValues(res.data.values);
+          setCursus(res.data.cursus);
         }
       })
       .catch((error) => {
@@ -55,8 +49,7 @@ export function ProjectsPage(): JSX.Element {
   function ProjectCard(card: any): JSX.Element {
     return (
       <Card key={card.id}
-        className="flex w-84 min-w-84 max-w-84 flex-col border-black border-2 overflow-hidden"
-        style={{ backgroundColor: card.color }}>
+        className="w-96 border-black border-2 overflow-hidden">
 
         <CardHeader floated={false} className='text-center shadow-none text-xl m-0 mt-1'>
           <p>
@@ -71,15 +64,21 @@ export function ProjectsPage(): JSX.Element {
             <p>Cursus</p>
             <div>{card.main_cursus}</div>
 
-            <p>Difficulty</p>
-            <p>
-              {card.difficulty}
-            </p>
+            {(card.difficulty !== undefined && card.difficulty !== null) && <>
+              <p>Difficulty</p>
+              <p>
+                {card.difficulty}
+              </p>
+            </>
+            }
 
-            <p>Duration</p>
-            <p>
-              {card.session_duration_days ? `${card.session_duration_days} days` : card.session_estimate_time }
-            </p>
+            {(card.session_duration_days !== undefined && card.session_duration_days !== null) && <>
+              <p>Duration</p>
+              <p>
+                {card.session_duration_days ? `${card.session_duration_days} days` : card.session_estimate_time }
+              </p>
+            </>
+            }
 
             {card.session_scale_duration && <>
               <p>Slot</p>
@@ -118,7 +117,7 @@ export function ProjectsPage(): JSX.Element {
               <p>
                 Min: {card.rule_min || '-'}
               </p>
-              <p >
+              <p>
                 Max: {card.rule_max || '-'}
               </p>
             </>
@@ -139,7 +138,7 @@ export function ProjectsPage(): JSX.Element {
         <CardFooter className='flex flex-col bg-black/20 p-1 h-40'>
           <textarea className='w-full grow border p-2' readOnly defaultValue={card.session_description} />
           <p className='text-center'>
-            {card.slug}
+            {card.id} {card.slug}
           </p>
         </CardFooter>
       </Card>
@@ -174,7 +173,6 @@ export function ProjectsPage(): JSX.Element {
             <Button
               key={cursu.id}
               className={classNames(cursu.id === selectedCursus ? 'selected-option' : 'available-option' )}
-              //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
               onClick={() => { setSelectedCursus((prev) => prev !== cursu.id ? cursu.id : undefined); } }
             >
               {cursu.name}

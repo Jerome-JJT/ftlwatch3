@@ -89,6 +89,7 @@ CREATE TABLE "projects" (
     "is_exam" boolean NOT NULL, 
 
     "main_cursus" integer,
+    "has_lausanne" boolean,
 
     "session_id" integer,
     "session_is_solo" boolean,

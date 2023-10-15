@@ -81,7 +81,6 @@ export function SuperCards({
 
   const filteredCards = useMemo(() => values.filter((card) => {
     const cardValues = Object.values(card);
-    // console.log(cardValues);
     const searchTerms = searchQuery.split(',');
 
     if (doIncludeAll) {
@@ -199,11 +198,9 @@ export function SuperCards({
 
         { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
 
-          <tr>
-            <td className='text-6xl  text-blue-500 font-bold text-center'>
-              <br/>0 results<br/><br/>
-            </td>
-          </tr>
+          <div className='text-6xl text-blue-500 font-bold text-center'>
+            <br/>0 results<br/><br/>
+          </div>
         }
 
       </CardBody>

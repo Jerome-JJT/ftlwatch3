@@ -3,12 +3,8 @@ import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { ColumnProps } from 'Utils/columnsProps';
 
-
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
 
 
 export function GroupsPage(): JSX.Element {
@@ -25,29 +21,27 @@ export function GroupsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((user: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
-                // if (col.field === 'login') {
-                //   user[col.field] = <a
-                //     href={`https://profile.intra.42.fr/users/${user.login}`}
-                //   >{user.login}</a>;
-                // }
-                // else if (col.field === 'avatar_url') {
-                //   user[col.field] = <img
-                //     src={user[col.field]}
-                //     alt={user.login}
-                //     className='max-h-full max-w-[60px] rounded-lg'
-                //   />;
-                // }
-              });
+          const displayValues = res.data.values.map((user: any) => {
+            // res.data.columns.forEach((col: ColumnProps) => {
+            // if (col.field === 'login') {
+            //   user[col.field] = <a
+            //     href={`https://profile.intra.42.fr/users/${user.login}`}
+            //   >{user.login}</a>;
+            // }
+            // else if (col.field === 'avatar_url') {
+            //   user[col.field] = <img
+            //     src={user[col.field]}
+            //     alt={user.login}
+            //     className='max-h-full max-w-[60px] rounded-lg'
+            //   />;
+            // }
+            // });
 
-              return user;
-            });
-            setValues(displayValues);
-          }
+            return user;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

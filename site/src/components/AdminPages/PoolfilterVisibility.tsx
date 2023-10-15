@@ -6,11 +6,8 @@ import {
 } from '@material-tailwind/react';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-}
 
 export function PoolfilterVisibilityPage(): JSX.Element {
   const { addNotif } = useNotification();
@@ -41,32 +38,27 @@ export function PoolfilterVisibilityPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns(res.data.columns as ColumnProps[]);
+          setColumns(res.data.columns as ColumnProps[]);
 
-            const displayValues = res.data.values.map((poolfilter: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field === 'hidden') {
+          const displayValues = res.data.values.map((poolfilter: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
+              if (col.field === 'hidden') {
 
-                  poolfilter[col.field] = <Checkbox
-                    id={`${poolfilter.id}-${col.field}`}
-                    defaultChecked={poolfilter[col.field]}
-                    onClick={async (e: any) => {
-                      if (!(await changePermission(poolfilter.id, e.target.checked))) {
-                        e.target.checked = !e.target.checked;
-                      }
-                    }}
-                  />;
-                }
-              });
-
-              return poolfilter;
+                poolfilter[col.field] = <Checkbox
+                  id={`${poolfilter.id}-${col.field}`}
+                  defaultChecked={poolfilter[col.field]}
+                  onClick={async (e: any) => {
+                    if (!(await changePermission(poolfilter.id, e.target.checked))) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
+                />;
+              }
             });
-            setValues(displayValues);
-          }
-          else {
-            addNotif('No results found', 'error');
-          }
+
+            return poolfilter;
+          });
+          setValues(displayValues);
         }
       })
       .catch((error) => {

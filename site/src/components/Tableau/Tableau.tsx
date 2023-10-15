@@ -5,20 +5,15 @@ import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Dialog, DialogBody, DialogHeader } from '@material-tailwind/react';
+import { Button, Dialog, DialogBody } from '@material-tailwind/react';
 import Separator from 'Common/Separator';
 import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { AiOutlineClose } from 'react-icons/ai';
+import { ColumnProps } from 'Utils/columnsProps';
 
-class ColumnProps {
-  field: string = '';
-  label: string = '';
-  visible: boolean = true;
-}
 
 class PoolFilterProps {
-  id: string = '';
   name: string = '';
   hidden: boolean = true;
 }
@@ -36,90 +31,82 @@ export function TableauPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
   const defaultFilter = searchParams.get('filter');
+  const defaultProjects = searchParams.get('projects');
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
   const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
+  const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
+
+  const [projects, setProjects] = React.useState<string[] | undefined>(undefined);
+  const [usedProjects, setUsedProjects] = React.useState<string | undefined>(defaultProjects !== null ? defaultProjects : 'common-core');
 
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
+
   React.useEffect(() => {
+    window.history.replaceState(null, '', `/tableau?${usedFilter ? `filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`);
     axios
-      .get('/?page=poolfilters&action=get_tableau',
+      .get(`/?page=tableau&action=get${usedFilter ? `&filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
-          (res.data as PoolFilterProps[]).sort((a, b) => comparePoolfilters(a.name, b.name));
-
-          setPoolFilters(res.data);
-        }
-      })
-      .catch((error) => {
-        return AxiosErrorText(error);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    axios
-      .get(`/?page=tableau&action=get${usedFilter ? `&filter=${usedFilter}` : ''}`,
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          if (res.data.values.length > 0) {
-            setColumns((prev) => (
-              res.data.columns as ColumnProps[]).map((c) => ({
+          setColumns((prev) =>
+            (res.data.columns as ColumnProps[]).map((c) => ({
               ...c,
               visible: prev?.find((cf) => cf.field === c.field)?.visible ?? true,
-            })
-            ));
+            }))
+          );
 
-            const displayValues = res.data.values.map((user: any) => {
-              res.data.columns.forEach((col: ColumnProps) => {
-                if (col.field === 'login') {
-                  user[col.field] = <a
-                    href={`https://profile.intra.42.fr/users/${user.login}`}
-                  >{user.login}</a>;
-                }
-                else if (col.field === 'avatar_url') {
-                  const avatar_url = user[col.field];
-                  user[col.field] = <img
-                    src={avatar_url}
-                    alt={user.login}
-                    onClick={() => setFocusImage(avatar_url)}
-                    className='max-h-full max-w-[60px] rounded-lg border-2 border-transparent cursor-pointer hover:border-black'
-                  />;
-                }
-              });
+          setPoolFilters(() => {
+            const pf = res.data.poolfilters as PoolFilterProps[];
+            pf.sort((a, b) => comparePoolfilters(a.name, b.name));
+            return pf;
+          });
 
-              return user;
+          setProjects(res.data.projects as string[]);
+
+
+          const displayValues = res.data.values.map((user: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
+              if (col.field === 'login') {
+                user[col.field] = <a
+                  href={`https://profile.intra.42.fr/users/${user.login}`}
+                >{user.login}</a>;
+              }
+              else if (col.field === 'avatar_url') {
+                const avatar_url = user[col.field];
+                user[col.field] = <img
+                  src={avatar_url}
+                  alt={user.login}
+                  onClick={() => setFocusImage(avatar_url)}
+                  className='max-h-full max-w-[60px] rounded-lg border-2 border-transparent cursor-pointer hover:border-black'
+                />;
+              }
             });
-            setValues(displayValues);
-          }
-          else {
-            // addNotif('No results found', 'error');
-          }
+
+            return user;
+          });
+
+          setValues(displayValues);
         }
       })
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addNotif, usedFilter]);
+  }, [addNotif, usedFilter, usedProjects]);
 
   const subOptions = useMemo(() => (
     <>
-      <div className='flex flex-wrap gap-2 justify-evenly'>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
 
         {poolFilters && poolFilters.map((filter) => {
           return (
             <Button
-              key={filter.id}
+              key={filter.name}
               className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option' ))}
-              //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
               onClick={() => setUsedFilter(filter.name) }
             >
               {filter.name}
@@ -127,9 +114,10 @@ export function TableauPage(): JSX.Element {
           );
         })}
       </div>
+
       <Separator></Separator>
 
-      <div className='flex flex-wrap gap-2 justify-evenly'>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
 
         {columns && columns.map((column) => {
           return (
@@ -151,10 +139,29 @@ export function TableauPage(): JSX.Element {
           );
         })}
       </div>
+
+      <Separator></Separator>
+
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
+
+        {projects && projects.map((project) => {
+          return (
+            <Button
+              key={project}
+              className={classNames(project === usedProjects ? 'selected-option' : 'available-option' )}
+
+              onClick={() => setUsedProjects(project) }
+            >
+              {project}
+            </Button>
+          );
+        })}
+      </div>
+
       <Separator></Separator>
     </>
 
-  ), [columns, poolFilters, usedFilter]);
+  ), [columns, poolFilters, projects, usedFilter, usedProjects]);
 
   //
   return (
@@ -175,7 +182,7 @@ export function TableauPage(): JSX.Element {
         </StyledTableau>
       }
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
-        <div className="flex items-center justify-between pr-4">
+        <div className="flex items-center justify-end p-2 pr-4">
           <AiOutlineClose onClick={() => setFocusImage(undefined)}
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>

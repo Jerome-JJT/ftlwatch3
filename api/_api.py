@@ -112,7 +112,13 @@ def raw(req, for_test = False):
         #     return res
 
         elif (res.status_code == 429):
-            mylogger(f"Timeout api", LOGGER_INFO)
+            ttl = res.headers.get('Retry-After')
+
+            mylogger(f"Timeout api 429, retry: {ttl}", LOGGER_WARNING)
+            if ttl != None and int(ttl) < 300:
+                time.sleep(int(ttl))
+            else:
+                time.sleep(300)
 
         elif (res.status_code == 404):
             mylogger(f"NOT FOUND", LOGGER_ERROR)

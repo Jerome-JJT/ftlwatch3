@@ -2,46 +2,116 @@
 require_once("controller/_common.php");
 require_once("model/users.php");
 require_once("model/poolfilters.php");
+require_once("model/simples/cursus.php");
 
 
 
-function tableau_api($selectedFilter, $projects)
+function get_tableau_poolfilters()
+{
+    $poolfilters = getPoolFilters(has_permission("p_admin"));
+
+    
+    if (has_permission("p_view4")) {
+        foreach ($poolfilters as $filter) {
+            $newKey = substr($filter["name"], 0, 4);
+    
+            if ($newKey == "None") {
+                continue;
+            }
+
+            if (!in_array($newKey, array_column($poolfilters, "name"))) {
+                array_push($poolfilters, array("name" => $newKey, "hidden" => true));
+            }
+        }
+
+        array_unshift($poolfilters, array("name" => "all", "hidden" => true));
+    }
+    if (has_permission("p_view3")) {
+        array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
+    }
+    if (has_permission("p_view2")) {
+        array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
+    }
+    array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
+
+
+    return $poolfilters;
+}
+
+
+function get_tableau_projects()
+{
+    $projectFilters = array("infos", "42cursus", "common-core", "outer-core", "piscine-c");
+
+    
+    if (has_permission("p_view4")) {
+        foreach ($poolfilters as $filter) {
+            $newKey = substr($filter["name"], 0, 4);
+    
+            if ($newKey == "None") {
+                continue;
+            }
+
+            if (!in_array($newKey, array_column($poolfilters, "name"))) {
+                array_push($poolfilters, array("name" => $newKey, "hidden" => true));
+            }
+        }
+
+        array_unshift($poolfilters, array("name" => "all", "hidden" => true));
+    }
+    if (has_permission("p_view3")) {
+        array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
+    }
+    if (has_permission("p_view2")) {
+        array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
+    }
+    array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
+
+
+    return $poolfilters;
+}
+
+
+
+function tableau_api($selectedFilter, $selectedProjects)
 {
 
-    $validFilters = getPoolFilters(has_permission("p_admin"));
+    $filters = get_tableau_poolfilters();
+    $validFilters = array_map(function ($filter) { return $filter["name"]; }, $filters);
 
-    $validFilters = array_map(function ($filter) { return $filter["name"]; }, $validFilters);
-
-    foreach ($validFilters as $filter) {
-        if (!in_array(substr($filter, 0, 4), $validFilters)) {
-            array_push($validFilters, substr($filter, 0, 4));
-        }
-    }
-
-    array_push($validFilters, "cursus");
-    array_push($validFilters, "all");
-    array_push($validFilters, "currentmonth");
-    array_push($validFilters, "currentyear");
+    $projectFilters = array("infos", "common-core", "internship", "outer-core", "c-piscine");
+    $cursus = getCursus();
+    $validProjectFilters = array_merge($projectFilters, array_map(function ($cursu) { return $cursu["slug"]; }, $cursus));
 
     if ($selectedFilter == "") {
         $selectedFilter = "cursus";
     }
+    if ($selectedProjects == "") {
+        $selectedProjects = "42cursus";
+    }
 
     if (!in_array($selectedFilter, $validFilters)) {
-        jsonResponse(array("error" => "Unknown filter"), 404);
+        jsonResponse(array("error" => "Unknown pool filter"), 404);
+    }
+
+    else if (!in_array($selectedProjects, $validProjectFilters)) {
+        jsonResponse(array("error" => "Unknown project filter"), 404);
     }
 
     //TODO static in DB
     $currentFilter = "2023.september";
 
-    if ($selectedFilter == "cursus") {
+    if ($selectedFilter == "cursus" && in_array($selectedProjects, array("42cursus", "common-core", "outer-core"))) {
+        need_permission("p_student");
+    }
+    else if ($selectedFilter == "cursus" && in_array($selectedProjects, array("infos"))) {
         need_permission("p_view1");
     }
-    else if ($selectedFilter == "currentmonth") {
+    else if ($selectedFilter == "currentmonth" && in_array($selectedProjects, array("c-piscine"))) {
         need_permission("p_view2");
         $selectedFilter = $currentFilter;
     }
-    else if ($selectedFilter == "currentyear") {
+    else if ($selectedFilter == "currentyear" && in_array($selectedProjects, array("c-piscine"))) {
         need_permission("p_view3");
         $selectedFilter = substr($currentFilter, 0, 4);
     }
@@ -50,32 +120,82 @@ function tableau_api($selectedFilter, $projects)
     }
     
 
-    // print_r($selectedFilter);
-
-
-
     $res = array();
+    
+    $res["poolfilters"] = $filters;
+    $res["projects"] = $projectFilters;
 
-    $users = getUsers($selectedFilter);
 
-    $res["values"] = $users;
 
-    $res["columns"] = [
-        ["label" => "ID", "field" => "id", "sort" => true, "fixed" => true, "width" => 70],
-        ["label" => "Image", "field" => "avatar_url", "sort" => true, "fixed" => true, "width" => 150],
-        ["label" => "Login", "field" => "login", "sort" => true, "fixed" => true, "width" => 100],
-        ["label" => "First Name", "field" => "first_name", "sort" => true],
-        ["label" => "Last Name", "field" => "last_name", "sort" => true],
-        ["label" => "Display Name", "field" => "display_name", "sort" => true],
-        ["label" => "Grade", "field" => "grade", "sort" => true],
-        ["label" => "Level", "field" => "level", "sort" => true],
-        ["label" => "Kind", "field" => "kind", "sort" => true],
-        ["label" => "Staff", "field" => "is_staff", "sort" => true],
-        ["label" => "Nbcursus", "field" => "nbcursus", "sort" => true],
-        ["label" => "Has Cursus 21", "field" => "has_cursus21", "sort" => true],
-        ["label" => "Has Cursus 9", "field" => "has_cursus9", "sort" => true],
-        ["label" => "Pool Filter", "field" => "poolfilter", "sort" => true]
-    ];
+    if ($selectedProjects === "infos") {
+        $users = getUsers($selectedFilter);
+
+        $res["values"] = $users;
+    
+        $res["columns"] = [
+            ["label" => "ID", "field" => "id"],
+            ["label" => "Image", "field" => "avatar_url"],
+            ["label" => "Login", "field" => "login"],
+            ["label" => "First Name", "field" => "first_name"],
+            ["label" => "Last Name", "field" => "last_name"],
+            ["label" => "Display Name", "field" => "display_name"],
+            ["label" => "Grade", "field" => "grade"],
+            ["label" => "Level", "field" => "level"],
+            ["label" => "Kind", "field" => "kind"],
+            ["label" => "Staff", "field" => "is_staff"],
+            ["label" => "Nbcursus", "field" => "nbcursus"],
+            ["label" => "Has Cursus 21", "field" => "has_cursus21"],
+            ["label" => "Has Cursus 9", "field" => "has_cursus9"],
+            ["label" => "Pool Filter", "field" => "poolfilter"]
+        ];
+    }
+    else {
+
+        $teams = get_user_projects($selectedFilter, $selectedProjects);
+        
+        
+        $cols = array();
+        $tmp = array();
+
+
+        foreach ($teams as $team) {
+
+            if (!isset($tmp[$team['user_id']])) {
+                $tmp[$team['user_id']] = array(
+                    'user_id' => $team['user_id'],
+                    'login' => $team['login'],
+                    'first_name' => $team['first_name'],
+                    'last_name' => $team['last_name'],
+                    'display_name' => $team['display_name'],
+                    'avatar_url' => $team['avatar_url'],
+                );
+            }
+
+            if (!isset($cols[$team['project_slug']])) {
+                $cols[$team['project_slug']] = array(
+                    "label" => $team['project_slug'],
+                    "field" => $team['project_id'],
+                );
+            }
+
+            $tmp[$team['user_id']][$team['project_id']] = $team['final_mark'];
+        }
+
+        $res["columns"] = array_merge(
+            [
+                ["label" => "ID", "field" => "user_id"],
+                ["label" => "Image", "field" => "avatar_url"],
+                ["label" => "Login", "field" => "login"],
+                ["label" => "First Name", "field" => "first_name"],
+                ["label" => "Last Name", "field" => "last_name"],
+                ["label" => "Display Name", "field" => "display_name"]
+            ],
+            array_values($cols)
+        );
+        
+
+        $res["values"] = array_values($tmp);
+    }
 
 
     jsonResponse($res, 200);
