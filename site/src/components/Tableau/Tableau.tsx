@@ -119,6 +119,32 @@ export function TableauPage(): JSX.Element {
 
       <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
 
+        <Button
+          key={'all'}
+          className='available-option'
+
+          onClick={() =>
+            setColumns((prev) => prev && prev.map((pc) => {
+              return { ...pc, visible: true };
+            }))
+          }
+        >
+          All
+        </Button>
+
+        <Button
+          key={'none'}
+          className='available-option'
+
+          onClick={() =>
+            setColumns((prev) => prev && prev.map((pc) => {
+              return { ...pc, visible: false };
+            }))
+          }
+        >
+          None
+        </Button>
+
         {columns && columns.map((column) => {
           return (
             <Button

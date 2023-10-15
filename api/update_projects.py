@@ -89,6 +89,7 @@ def project_callback(project):
     mylogger(f"Import project {project['id']} {project['slug']}", LOGGER_INFO)
 
     good_cursus = None
+    good_project_type = None
     for cursus in project['cursus']:
 
         if (cursus['id'] == 21):
@@ -100,6 +101,9 @@ def project_callback(project):
         
     if (good_cursus == None and len(project['cursus']) > 0):
         good_cursus = project['cursus'][0]['id']
+
+    if (good_cursus == 21):
+        good_project_type = 2 # Outer core
 
     good_has_lausanne = False
     for campus in project['campus']:
@@ -161,7 +165,7 @@ def project_callback(project):
 
 
     executeQueryAction("""INSERT INTO projects (
-        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "has_lausanne", 
+        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", 
 
         "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
         "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
@@ -172,7 +176,7 @@ def project_callback(project):
         
         ) VALUES (
 
-        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, %(has_lausanne)s, 
+        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, %(project_type_id)s, %(has_lausanne)s, 
         %(session_id)s, %(session_is_solo)s, %(session_estimate_time)s, %(session_duration_days)s, %(session_duration_days)s,
         %(session_description)s, %(session_has_moulinette)s, %(session_correction_number)s, %(session_scale_duration)s, 
         %(rule_min)s, %(rule_max)s, %(rule_retry_delay)s, 
@@ -202,6 +206,7 @@ def project_callback(project):
         "difficulty": project["difficulty"],
         "is_exam": project["exam"],
         "main_cursus": good_cursus,
+        "project_type_id": good_project_type,
         "has_lausanne": good_has_lausanne,
 
         "session_id": good_session["id"] if good_session else None,

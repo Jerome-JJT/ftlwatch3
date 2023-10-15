@@ -2,6 +2,7 @@
 require_once("controller/_common.php");
 require_once("model/poolfilters.php");
 require_once("model/users.php");
+require_once("model/simples/projects.php");
 
 
 
@@ -41,7 +42,7 @@ function users_get()
 
     $res = array();
 
-    $res["columns"] = [
+    $res["columns"] = array(
         ["label" => "ID", "field" => "id"],
         ["label" => "Image", "field" => "avatar_url"],
         ["label" => "Login", "field" => "login"],
@@ -51,7 +52,7 @@ function users_get()
         ["label" => "Has Cursus 21", "field" => "has_cursus21"],
         ["label" => "Has Cursus 9", "field" => "has_cursus9"],
         ["label" => "Pool Filter", "field" => "poolfilter"]
-    ];
+    );
     $res['values'] = $tmp;
 
     jsonResponse($res, 200);
@@ -69,3 +70,56 @@ function user_set($data)
         jsonResponse(array(), 400);
     }
 }
+
+
+
+
+function projects_get()
+{
+    $tmp = getProjectsVisibility();
+
+    $res = array();
+
+    $res["columns"] = array(
+        // ["label" => "Name", "field" => "name"],
+        ["label" => "Slug", "field" => "slug"],
+        ["label" => "Cursus", "field" => "main_cursus"],
+        ["label" => "Corder", "field" => "corder"],
+        // ["label" => "Hidden", "field" => "hidden"],
+        ["label" => "Project type", "field" => "project_type"]
+    );
+
+    $res['values'] = $tmp[0];
+
+    $res['project_types'] = $tmp[1];
+
+    jsonResponse($res, 200);
+}
+
+
+function project_set($data)
+{
+    if (isset($data["projectId"]) && isset($data["order"])) {
+
+        $res = setProjectOrder($data["projectId"], $data["order"]);
+
+        jsonResponse(array(), $res ? 200 : 409);
+    }
+    // else if (isset($data["projectId"]) && isset($data["hidden"])) {
+
+    //     $res = setProjectVisibility($data["projectId"], $data["hidden"]);
+
+    //     jsonResponse(array(), $res ? 200 : 409);
+    // } 
+    else if (isset($data["projectId"]) && isset($data["typeId"])) {
+
+        $res = setProjectType($data["projectId"], $data["typeId"]);
+
+        jsonResponse(array(), $res ? 200 : 409);
+    } 
+    else {
+        jsonResponse(array(), 400);
+    }
+}
+
+

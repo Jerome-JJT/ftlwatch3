@@ -37,6 +37,7 @@ import { AchievementsPage } from 'BasicPages/AchievementsPage';
 import { TeamsPage } from 'Teams/TeamsPage';
 import { RulesPage } from 'BasicPages/RulesPage';
 import { ProjectsPage } from 'BasicPages/ProjectsPage';
+import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
 // import Place from './components/Place/Place';
 
 export default function App(): JSX.Element {
@@ -118,11 +119,12 @@ export default function App(): JSX.Element {
           <Route path="/image" element={<ImagePage />} />
           <Route path="/teams" element={<TeamsPage />} />
 
-          <Route path="/login_users" element={<UsersVisibilityPage />} />
-          <Route path="/login_groups" element={<UserGroupsPage />} />
-          <Route path="/permissions" element={<GroupPermissionsPage />} />
-          <Route path="/pages" element={<PagePermissionsPage />} />
-          <Route path="/poolfilters" element={<PoolfilterVisibilityPage />} />
+          <Route path="/admin/login_users" element={<UsersVisibilityPage />} />
+          <Route path="/admin/login_groups" element={<UserGroupsPage />} />
+          <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
+          <Route path="/admin/pages" element={<PagePermissionsPage />} />
+          <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
+          <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
 
           <Route path="/test" element={<TestPage />} />
 

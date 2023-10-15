@@ -137,6 +137,14 @@ INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id")
 SELECT setval('login_groups_permissions_id_seq', (SELECT MAX(id) from "login_groups_permissions")); 
 
 
+INSERT INTO "project_types" ("id", "name") VALUES
+  (1, 'common-core'),
+  (2, 'internship'),
+  (3, 'outer-core')
+  ON CONFLICT(id) DO NOTHING
+;
+
+
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (1, 'Tableaux', 20, 'tableau'),
   (2, 'Images', 21, 'image'),
@@ -155,13 +163,13 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (6, 'Images current pool', 2, NULL, 'filter=currentpool', 2, 2),
   (7, 'Images current year', 3, NULL, 'filter=currentyear', 2, 2),
 
-  (8, 'Admin', 20, 'admin', NULL, 3, 3),
-  (9, 'Credits', 30, 'credits', NULL, NULL, NULL),
-  (21, 'Login users', 20, 'login_users', NULL, 3, 3),
-  (10, 'Login groups', 20, 'login_groups', NULL, 3, 3),
-  (11, 'Permissions', 20, 'permissions', NULL, 3, 3),
-  (12, 'Pages', 20, 'pages', NULL, 3, 3),
-  (13, 'Poolfilters', 20, 'poolfilters', NULL, 3, 3),
+  (8, 'Admin', 20, 'admin/admin', NULL, 3, 3),
+  (9, 'Credits', 30, 'admin/credits', NULL, NULL, NULL),
+  (21, 'Login users', 20, 'admin/users', NULL, 3, 3),
+  (10, 'Login groups', 20, 'admin/groups', NULL, 3, 3),
+  (11, 'Permissions', 20, 'admin/permissions', NULL, 3, 3),
+  (12, 'Pages', 20, 'admin/pages', NULL, 3, 3),
+  (13, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 3),
 
   (19, 'Achievements', 5, 'achievements', NULL, 4, 5),
   (17, 'Campus', 10, 'campus', NULL, 4, 5),

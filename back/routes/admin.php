@@ -51,6 +51,15 @@ switch ($action) {
     case "user_set":
         user_set($_POST);
         break;
+
+
+    case "projects_get":
+        projects_get();
+        break;
+
+    case "project_set":
+        project_set($_POST);
+        break;
 }
 
 exit();

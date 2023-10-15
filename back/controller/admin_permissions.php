@@ -76,16 +76,15 @@ function pages_get()
 
     $res = array();
 
-    $res["columns"] = array_merge(
-        // array(array("label" => "Name", "field" => "name")),
-        array_map(function ($value) {
-            return array("label" => $value["name"], "field" => $value["id"]);
-        }, $tmp[0])
+    $res["columns"] = array(
+        array("label" => "Name", "field" => "name"),
+        array("label" => "corder", "field" => "corder"),
+        array("label" => "Permission", "field" => "permission")
     );
 
-    $res['values'] = $tmp[1];
+    $res['values'] = $tmp[0];
 
-    $res['permission_options'] = $tmp[2];
+    $res['permission_options'] = $tmp[1];
 
     jsonResponse($res, 200);
 }
@@ -97,13 +96,13 @@ function page_set($data)
         $res = setPagePermission($data["pageId"], $data["permissionId"]);
 
         jsonResponse(array(), $res ? 200 : 409);
-    } //
+    }
     else if (isset($data["pageId"]) && isset($data["order"])) {
 
         $res = setPageOrder($data["pageId"], $data["order"]);
 
         jsonResponse(array(), $res ? 200 : 409);
-    } //
+    }
     else {
         jsonResponse(array(), 400);
     }

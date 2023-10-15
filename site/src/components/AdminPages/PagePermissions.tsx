@@ -107,7 +107,7 @@ export function PagePermissionsPage(): JSX.Element {
         <SuperTable
           columns={columns}
           values={values}
-          tableTitle='Groups'
+          tableTitle='Pages'
           options={[10, 20, 30]}
           // reloadFunction={() => { setValues([]) }}
         />

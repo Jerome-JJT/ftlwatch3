@@ -25,13 +25,8 @@ function getPagePermissions()
 
   $pages = executeQuerySelect($query, $data);
 
-  $columns = array(
-    array("id" => "name", "name" => "Name"),
-    array("id" => "corder", "name" => "corder"),
-    array("id" => "permission", "name" => "Permission")
-  );
 
-  return array($columns, $pages, $permissions);
+  return array($pages, $permissions);
 }
 
 function setPagePermission($pageId, $permissionId) {

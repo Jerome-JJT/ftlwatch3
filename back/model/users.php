@@ -46,7 +46,7 @@ function getUsers($poolfilter = '')
   
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
-  WHERE users.hidden = false
+  WHERE users.hidden = FALSE
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
@@ -101,7 +101,7 @@ function get_user_projects($poolfilter, $projects)
 
 
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
-  WHERE users.hidden = false
+  WHERE users.hidden = FALSE
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
@@ -114,7 +114,7 @@ function get_user_projects($poolfilter, $projects)
     )
 
   GROUP BY users.id, projects.id
-  ORDER BY projects.corder, projects.id
+  ORDER BY projects.corder, projects.slug
   ";
 
   $data = array(":poolfilter" => $poolfilter, ":projects" => $projects);

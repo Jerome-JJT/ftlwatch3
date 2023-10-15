@@ -107,6 +107,9 @@ export function ProjectsPage(): JSX.Element {
             <p>Moulinette</p>
             <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.session_has_moulinette} readOnly disabled /></div>
 
+            <p>Lausanne</p>
+            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.has_lausanne} readOnly disabled /></div>
+
             {card.session_correction_number && <>
               <p>Correction</p>
               <p>{card.session_correction_number}</p>

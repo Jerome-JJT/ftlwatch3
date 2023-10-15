@@ -93,6 +93,15 @@ export function SuperTable({
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return aValue - bValue;
       }
+      else if (aValue !== null && bValue === null) {
+        return -1;
+      }
+      else if (bValue !== null && aValue === null) {
+        return 1;
+      }
+      else if (aValue === null && bValue === null) {
+        return 0;
+      }
       else {
         return aValue.toString().localeCompare(bValue.toString());
       }
