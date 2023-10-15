@@ -19,6 +19,7 @@ import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
 import { AiFillStar } from 'react-icons/ai';
 import { longDate, shortDate } from 'Utils/dateUtils';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 
@@ -29,7 +30,7 @@ export function TeamsPage(): JSX.Element {
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-
+  React.useEffect(() => {document.title = commonTitle('Teams');}, []);
 
   function TeamCard(card: any): JSX.Element {
 

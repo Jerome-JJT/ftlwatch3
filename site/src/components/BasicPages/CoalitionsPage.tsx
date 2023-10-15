@@ -12,6 +12,7 @@ import {
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
 import { AiOutlineClose } from 'react-icons/ai';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 export function CoalitionsPage(): JSX.Element {
@@ -21,6 +22,7 @@ export function CoalitionsPage(): JSX.Element {
   const [focusText, setFocusText] = React.useState<string | undefined>(undefined);
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
+  React.useEffect(() => {document.title = commonTitle('Coalitions page');}, []);
 
   React.useEffect(() => {
     axios

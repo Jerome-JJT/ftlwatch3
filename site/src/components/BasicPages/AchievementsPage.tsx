@@ -10,12 +10,15 @@ import {
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
 import { AiFillGift } from 'react-icons/ai';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 export function AchievementsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+
+  React.useEffect(() => {document.title = commonTitle('Achievements page');}, []);
 
   React.useEffect(() => {
     axios

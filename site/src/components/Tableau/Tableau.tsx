@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { AiOutlineClose } from 'react-icons/ai';
 import { ColumnProps } from 'Utils/columnsProps';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 class PoolFilterProps {
@@ -44,6 +45,7 @@ export function TableauPage(): JSX.Element {
 
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
+  React.useEffect(() => {document.title = commonTitle('Tableau');}, []);
 
   React.useEffect(() => {
     window.history.replaceState(null, '', `/tableau?${usedFilter ? `filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`);

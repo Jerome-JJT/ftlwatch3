@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from 'Hooks/LoginProvider';
 import { useNotification } from 'Notifications/NotificationsProvider';
+import { commonTitle } from 'Utils/commonTitle';
 
 export function LogPage(): JSX.Element {
   const { getUserData } = useLogin();
@@ -14,6 +15,8 @@ export function LogPage(): JSX.Element {
   const [password, setPassword] = React.useState('');
 
   const navigate = useNavigate();
+
+  React.useEffect(() => {document.title = commonTitle('Login');}, []);
 
   const handleSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();

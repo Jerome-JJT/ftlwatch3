@@ -13,6 +13,7 @@ import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
+import { commonTitle } from 'Utils/commonTitle';
 
 class CursusProps {
   id: string = '';
@@ -26,6 +27,7 @@ export function ProjectsPage(): JSX.Element {
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
   const [selectedCursus, setSelectedCursus] = React.useState<CursusProps | undefined>(undefined);
 
+  React.useEffect(() => {document.title = commonTitle('Rules page');}, []);
 
   React.useEffect(() => {
     axios

@@ -1,6 +1,11 @@
+import { commonTitle } from 'Utils/commonTitle';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function HomePage(): JSX.Element {
+
+  React.useEffect(() => {document.title = commonTitle('Home');}, []);
+
   return (
     <div className="mx-auto h-max max-w-md bg-white py-6 text-center shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-white">
       <h1 id="startPage" className="text-2xl">

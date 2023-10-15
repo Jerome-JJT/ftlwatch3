@@ -4,6 +4,7 @@ import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { ColumnProps } from 'Utils/columnsProps';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 
@@ -13,6 +14,7 @@ export function TitlesPage(): JSX.Element {
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
+  React.useEffect(() => {document.title = commonTitle('Titles page');}, []);
 
   React.useEffect(() => {
     axios

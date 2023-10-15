@@ -7,6 +7,7 @@ import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import MySelect from 'Common/MySelect';
 import { ColumnProps } from 'Utils/columnsProps';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 
@@ -15,6 +16,8 @@ export function ProjectsVisibilityPage(): JSX.Element {
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+
+  React.useEffect(() => {document.title = commonTitle('Projects visibility page');}, []);
 
   const modifyProjectOrder = useCallback((projectId: number, order: string): Promise<boolean> => {
     return axios

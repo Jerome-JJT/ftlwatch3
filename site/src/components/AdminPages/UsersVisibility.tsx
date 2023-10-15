@@ -7,6 +7,7 @@ import {
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { ColumnProps } from 'Utils/columnsProps';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 
@@ -14,6 +15,8 @@ export function UsersVisibilityPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+
+  React.useEffect(() => {document.title = commonTitle('User visibility page');}, []);
 
   const changePermission = useCallback((userId: number, value: boolean): Promise<boolean> => {
     return axios

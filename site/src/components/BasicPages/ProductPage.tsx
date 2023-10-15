@@ -15,6 +15,7 @@ import { SuperCards } from 'Common/SuperCards';
 import { AiFillDollarCircle, AiOutlineClose } from 'react-icons/ai';
 import { FaInfinity } from 'react-icons/fa';
 import Separator from 'Common/Separator';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 export function ProductsPage(): JSX.Element {
@@ -23,6 +24,8 @@ export function ProductsPage(): JSX.Element {
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [focusText, setFocusText] = React.useState<string | undefined>(undefined);
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
+
+  React.useEffect(() => {document.title = commonTitle('Products page');}, []);
 
   React.useEffect(() => {
     axios

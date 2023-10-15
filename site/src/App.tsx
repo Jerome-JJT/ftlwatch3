@@ -20,7 +20,6 @@ import { LogPage } from './components/Log/LogPage';
 import { NotifDisplay } from './components/Notifications/NotifDisplay';
 import { UserGroupsPage } from './components/AdminPages/UserGroups';
 import { GroupPermissionsPage } from './components/AdminPages/GroupPermissions';
-import { PagePermissionsPage } from './components/AdminPages/PagePermissions';
 import { useLogin } from './components/Hooks/LoginProvider';
 import TestPage from './components/Test/Test';
 import { TableauPage } from 'Tableau/Tableau';
@@ -94,16 +93,6 @@ export default function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
 
-          {!isLogged && (
-            <>
-              <Route path="/start" element={<p></p>} />
-            </>
-          )}
-          {isLogged && (
-            <>
-            </>
-          )}
-
           <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/campus" element={<CampusPage />} />
           <Route path="/coalitions" element={<CoalitionsPage />} />
@@ -122,7 +111,7 @@ export default function App(): JSX.Element {
           <Route path="/admin/login_users" element={<UsersVisibilityPage />} />
           <Route path="/admin/login_groups" element={<UserGroupsPage />} />
           <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
-          <Route path="/admin/pages" element={<PagePermissionsPage />} />
+          <Route path="/admin/pages" element={<GroupPermissionsPage />} />
           <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
           <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
 

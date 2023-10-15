@@ -7,12 +7,15 @@ import {
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { ColumnProps } from 'Utils/columnsProps';
+import { commonTitle } from 'Utils/commonTitle';
 
 
 export function PoolfilterVisibilityPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+
+  React.useEffect(() => {document.title = commonTitle('Poolfilter page');}, []);
 
   const changePermission = useCallback((poolfilterId: number, value: boolean): Promise<boolean> => {
     return axios
