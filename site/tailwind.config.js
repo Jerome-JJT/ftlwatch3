@@ -5,6 +5,7 @@ import withMT from '@material-tailwind/react/utils/withMT';
 export default withMT({
   darkMode: false,
   content:  [
+    './src/main.css',
     './src/*.{tsx, ts}',
     './src/**/*.{tsx, ts}',
     './src/**/**/*.{tsx, ts}',

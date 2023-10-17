@@ -7,6 +7,7 @@ import { commonTitle } from 'Utils/commonTitle';
 import { Button, Card, Checkbox, Input } from '@material-tailwind/react';
 import MySelect from 'Common/MySelect';
 import { AiFillAccountBook } from 'react-icons/ai';
+import MyInput from 'Common/MyInput';
 
 export function SettingsPage(): JSX.Element {
   const { getUserData } = useLogin();
@@ -57,17 +58,25 @@ export function SettingsPage(): JSX.Element {
         </p>
         <form className="">
           <div className="mb-4 flex flex-col gap-6">
-            <Input size="lg" label="Link github" />
+
+            <MyInput label="Link github" />
+            <MyInput />
 
             <div className='flex flex-row gap-2'>
               <div>
-                <MySelect label='Theme' className=''>
+              <MySelect label='Theme' className=''>
                   <option>Color</option>
                   <option>Animals</option>
                   <option>Cursed</option>
                 </MySelect>
+
               </div>
 
+                <MySelect className=''>
+                  <option>Color</option>
+                  <option>Animals</option>
+                  <option>Cursed</option>
+                </MySelect>
 
 
               <Input type='color'

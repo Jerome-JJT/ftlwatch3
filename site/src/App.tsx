@@ -36,6 +36,7 @@ import { TeamsPage } from 'Teams/TeamsPage';
 import { RulesPage } from 'BasicPages/RulesPage';
 import { ProjectsPage } from 'BasicPages/ProjectsPage';
 import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
+import { SettingsPage } from 'Log/Settings';
 // import Place from './components/Place/Place';
 
 
@@ -100,6 +101,7 @@ export default function App(): JSX.Element {
 
           {isLogged && <>
             <Route path="/logout" element={<Logout />} />
+            <Route path="/settings" element={<SettingsPage />} />
 
             <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="/campus" element={<CampusPage />} />
