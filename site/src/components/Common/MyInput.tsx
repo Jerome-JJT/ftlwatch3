@@ -15,32 +15,20 @@ const MyInput = (props: MyInputProps): JSX.Element => {
         w-full h-full bg-transparent
         font-sans font-normal outline outline-0 focus:outline-0
         disabled:border-0 transition-all placeholder-shown:border
-        border focus:border-2 border-t-transparent focus:border-t-transparent
+        border focus:border-2
+        border-t-transparent focus:border-t-transparent
+        dark:border-t-transparent dark:focus:border-t-transparent
         text-sm px-3 py-3 rounded-md
-
 
         text-blue-gray-700 dark:!text-gray-300
         border-blue-gray-200 dark:border-gray-700
-        focus:border-gray-900
+        focus:border-gray-900 dark:focus:border-gray-900
 
         placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200
+        dark:placeholder-shown:border-gray-700 dark:placeholder-shown:border-t-gray-700
         disabled:bg-blue-gray-50
-
         "
       />
-
-      {/*
-                px-3 py-3 placeholder-shown:border rounded-md
-
-                !text-gray-900 dark:!text-gray-300
-                disabled:bg-blue-gray-50
-
-                border-blue-gray-200 dark:!border-gray-700
-
-                placeholder-shown:border-blue-gray-200
-                placeholder-shown:border-t-blue-gray-200
-
-                focus:border-gray-900 */}
 
       <label className="flex w-full h-full
       select-none pointer-events-none absolute
@@ -72,18 +60,6 @@ const MyInput = (props: MyInputProps): JSX.Element => {
     </div>
 
   );
-  //  peer-focus:before:border-gray-900      peer-focus:after:border-gray-900
-  // before:border-blue-gray-200 after:border-blue-gray-200
-
-
 };
-// text-gray-900 dark:!text-gray-300
-//      border-blue-gray-200   before:border-blue-gray-200   after:border-blue-gray-200
-// dark:!border-gray-700   dark:before:!border-gray-700   dark:after:!border-gray-700
-
-//       peer-placeholder-shown:text-blue-gray-500      peer-disabled:peer-placeholder-shown:text-blue-gray-500
-// dark:peer-placeholder-shown:text-blue-gray-500 dark:peer-disabled:peer-placeholder-shown:text-blue-gray-500
-//      peer-focus:!text-gray-900        peer-focus:before:!border-gray-900      peer-focus:after:!border-gray-900
-// dark:peer-focus:border-gray-700 dark:peer-focus:before:!border-gray-700 dark:peer-focus:after:!border-gray-700
 
 export default MyInput;

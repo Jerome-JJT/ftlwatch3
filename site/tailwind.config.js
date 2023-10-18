@@ -3,9 +3,9 @@ import withMT from '@material-tailwind/react/utils/withMT';
 
 /** @type {import('tailwindcss').Config} */
 export default withMT({
-  darkMode: false,
+  darkMode: 'media',
   content:  [
-    './src/main.css',
+    // './src/main.css',
     './src/*.{tsx, ts}',
     './src/**/*.{tsx, ts}',
     './src/**/**/*.{tsx, ts}',

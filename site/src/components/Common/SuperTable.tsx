@@ -17,6 +17,7 @@ import {
 import MySelect from './MySelect';
 import classNames from 'classnames';
 import { ColumnProps } from 'Utils/columnsProps';
+import MyInput from './MyInput';
 
 
 interface SuperTableProps {
@@ -231,11 +232,9 @@ export function SuperTable({
                 </div>
               }
             />
-            <Input
+            <MyInput
               label="Search"
               onChange={handleSearchChange}
-              className='super-fields-border'
-              labelProps={{ className: 'super-fields-label' }}
             />
           </div>
         </div>

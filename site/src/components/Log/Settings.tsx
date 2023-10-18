@@ -1,10 +1,8 @@
 import React, { type SyntheticEvent } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from 'Hooks/LoginProvider';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { commonTitle } from 'Utils/commonTitle';
-import { Button, Card, Checkbox, Input } from '@material-tailwind/react';
+import { Button, Card, Checkbox } from '@material-tailwind/react';
 import MySelect from 'Common/MySelect';
 import { AiFillAccountBook } from 'react-icons/ai';
 import MyInput from 'Common/MyInput';
@@ -64,7 +62,7 @@ export function SettingsPage(): JSX.Element {
 
             <div className='flex flex-row gap-2'>
               <div>
-              <MySelect label='Theme' className=''>
+                <MySelect label='Theme' className=''>
                   <option>Color</option>
                   <option>Animals</option>
                   <option>Cursed</option>
@@ -72,11 +70,11 @@ export function SettingsPage(): JSX.Element {
 
               </div>
 
-                <MySelect className=''>
-                  <option>Color</option>
-                  <option>Animals</option>
-                  <option>Cursed</option>
-                </MySelect>
+              {/* <MySelect className=''>
+                <option>Color</option>
+                <option>Animals</option>
+                <option>Cursed</option>
+              </MySelect>
 
 
               <Input type='color'
@@ -85,14 +83,10 @@ export function SettingsPage(): JSX.Element {
                 className='fields-special-container'
                 labelProps={{ className: ' fields-special-label' }}
                 containerProps={{ className: '!min-w-[80px]' }}
-              />
+              /> */}
 
             </div>
 
-            <Input size="lg" label="Email"
-              className='super-field-border super-field-label'
-              labelProps={{ className: 'super-field-border super-field-label' }} />
-            <Input type="password" size="lg" label="Password" />
           </div>
           <Checkbox
             label={

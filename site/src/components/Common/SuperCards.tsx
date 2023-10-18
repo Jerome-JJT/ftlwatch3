@@ -15,6 +15,7 @@ import {
   AccordionBody,
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
+import MyInput from './MyInput';
 
 interface CardsProps {
   values: any[];
@@ -175,11 +176,9 @@ export function SuperCards({
                 </div>
               }
             />
-            <Input
+            <MyInput
               label="Search"
               onChange={handleSearchChange}
-              className='super-fields-border'
-              labelProps={{ className: 'super-fields-label' }}
             />
           </div>
         </div>
