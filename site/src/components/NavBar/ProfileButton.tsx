@@ -1,4 +1,4 @@
-import LogoInconnu from '../../assets/img/inconnu.jpeg';
+import LogoInconnu from '../../assets/inconnu.jpeg';
 import { Link } from 'react-router-dom';
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import { AiFillSetting, AiOutlineLogin, AiOutlineLogout, AiOutlineReload } from 'react-icons/ai';

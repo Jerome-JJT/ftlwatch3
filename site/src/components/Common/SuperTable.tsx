@@ -253,7 +253,7 @@ export function SuperTable({
       </CardHeader>
 
       <CardBody>
-        <div className="mt-4 overflow-auto border-black border-2 resize-y">
+        <div className="mt-4 overflow-auto border-black border-2 h-800 resize-y">
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
               <tr className="bg-blue-gray-50">
@@ -261,7 +261,7 @@ export function SuperTable({
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-y border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
+                    className="cursor-pointer border-b border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
                   >
                     <Typography
                       variant="small"

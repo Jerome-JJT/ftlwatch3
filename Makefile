@@ -47,6 +47,8 @@ logspostg:
 			${DOCKER} logs db
 logsf:
 			${DOCKER} logs flyway
+logsnginx:
+			${DOCKER} logs nginx
 
 flogsfront:
 			${DOCKER} logs -f front
@@ -56,6 +58,8 @@ flogsback2:
 			${DOCKER} logs -f back
 flogspostg:
 			${DOCKER} logs -f db
+flogsnginx:
+			${DOCKER} logs -f nginx
 
 refront:
 			${DOCKER} restart front
@@ -87,7 +91,8 @@ runpostg:
 			${DOCKER} exec postgres bash
 rundb:
 			${DOCKER} exec postgres psql --host=postgres --dbname=test_db --username=user -W
-
+runnginx:
+			${DOCKER} exec nginx bash
 
 
 
