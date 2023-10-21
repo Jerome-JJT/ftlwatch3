@@ -47,9 +47,7 @@ def import_team_user(team):
         mylogger(f"Remove team_user {toremove}", LOGGER_INFO)
 
 
-        executeQueryAction("""DELETE FROM team_user WHERE
-            id = %(id)s
-        )
+        executeQueryAction("""DELETE FROM team_user WHERE id = %(id)s
         """, {
             "id": toremove
         })

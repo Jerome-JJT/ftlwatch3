@@ -17,9 +17,10 @@ CREATE TABLE "users" (
    
     "kind" character varying NOT NULL,
     "is_staff" boolean NOT NULL,
-    "wallet" boolean NOT NULL,  
-    "evalpoints" boolean NOT NULL,
-    -- "coalpoints" boolean NOT NULL,
+    "is_active" boolean NOT NULL,
+    "is_alumni" boolean NOT NULL,
+    "wallet" integer NOT NULL,  
+    "correction_point" integer NOT NULL,
     
     "nbcursus" integer NOT NULL,
     "has_cursus21" boolean NOT NULL,
@@ -51,7 +52,6 @@ CREATE TABLE "timedusers" (
     "days" integer,
     "correction_point" integer,
     "wallet" integer,
-    "coalition_points" integer,
     "level" character varying,
 
     "date" character varying NOT NULL,
@@ -61,6 +61,8 @@ CREATE TABLE "timedusers" (
     -- CONSTRAINT "USER_ID" FOREIGN KEY("user_id") REFERENCES "users"("id"), -- intented to avoid loss on user delete
     CONSTRAINT "PK_TIMEDUSER_ID" PRIMARY KEY ("id")
 );
+CREATE UNIQUE INDEX idx_entry_timedusers ON timedusers(date, user_id);
+
 
 CREATE TABLE "project_types" (
     "id" SERIAL NOT NULL, 
@@ -199,8 +201,6 @@ CREATE TABLE "titles_users" (
 
     "title_id" integer NOT NULL,
     "user_id" integer NOT NULL,
-    "created_at" TIMESTAMP NOT NULL, 
-    "updated_at" TIMESTAMP NOT NULL, 
     CONSTRAINT "PK_TITLE_USER_ID" PRIMARY KEY ("id")
 );
 

@@ -45,9 +45,7 @@ def import_project_rule(rules, project_id):
     for toremove in project_rules:
         mylogger(f"Remove project_rule {toremove}", LOGGER_INFO)
 
-        executeQueryAction("""DELETE FROM project_rules WHERE
-            id = %(id)s
-        )
+        executeQueryAction("""DELETE FROM project_rules WHERE id = %(id)s
         """, {
             "id": toremove
         })

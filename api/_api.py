@@ -179,7 +179,7 @@ def callapi(req, multiple = False, callback = None, callback_limit = True):
                 time.sleep(0.5)
 
     end_time = time.time()
-    mylogger(f"""Request {req} {'mult' if multiple else ''} {'with' if callback != None else 'without'} callback, 
+    mylogger(f"""Request {req} {'mult' if multiple else 'direct'} {'with' if callback != None else 'without'} callback, 
     start:\t{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     end:\t{datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     elapsed:\t{end_time - start_time}""", LOGGER_DEBUG)

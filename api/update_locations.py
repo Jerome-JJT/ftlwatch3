@@ -4,7 +4,8 @@
 from _utils import *
 from _dbConnector import *
 from _api import *
-from dateutil.parser import parse
+# from dateutil.parser import parse
+from dateutil import parser
 import datetime
 
 
@@ -51,8 +52,8 @@ def location_callback(location):
                 "user_id": location["user"]["id"],
             })
         else:
-            begin_at = parse(location["begin_at"])
-            end_at = parse(location["end_at"])
+            begin_at = parser.parse(location["begin_at"])
+            end_at = parser.parse(location["end_at"])
 
             date1 = begin_at.date()
             date2 = end_at.date()
