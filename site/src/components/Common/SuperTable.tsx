@@ -18,6 +18,7 @@ import MySelect from './MySelect';
 import classNames from 'classnames';
 import { ColumnProps } from 'Utils/columnsProps';
 import MyInput from './MyInput';
+import { createKey } from 'Utils/createKey';
 
 
 interface SuperTableProps {
@@ -179,7 +180,7 @@ export function SuperTable({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   return (
-    <Card className="super-big-card">
+    <Card className="big-card super-big-card">
       <CardHeader floated={false} shadow={false} className="super-big-header">
         <div className="super-big-header-content">
           <div>
@@ -241,7 +242,7 @@ export function SuperTable({
 
         {subOptions &&
           <Accordion open={isSubmenuOpen} className=''>
-            <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
+            <AccordionHeader className='py-2 my-text' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
 
             <AccordionBody>
 
@@ -252,7 +253,7 @@ export function SuperTable({
       </CardHeader>
 
       <CardBody>
-        <div className="mt-4 overflow-scroll border-black border-2 resize-y">
+        <div className="mt-4 overflow-auto border-black border-2 resize-y">
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
               <tr className="bg-blue-gray-50">
@@ -287,13 +288,13 @@ export function SuperTable({
                   : 'p-4';
 
                 return (
-                  <tr key={value.id || value.login || index}
+                  <tr key={createKey(value, index)}
                     className='border-b border-gray-300
                     odd:bg-white even:bg-blue-50  hover:bg-blue-gray-100
-                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-300 dark:hover:bg-blue-gray-500'>
+                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'>
                     {columns.map((col) => col.visible !== false && (
 
-                      <td key={`${value.id || value.login || index}-${col.field}`}
+                      <td key={`${createKey(value, index)}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
                         <div className="h-full flex justify-center items-center">
                           {value[col.field]}
@@ -304,7 +305,7 @@ export function SuperTable({
                 );
               }) ||
               <tr>
-                <td className='text-6xl  text-blue-500 font-bold text-center' colSpan={columns.length}>
+                <td className='text-6xl text-blue-500 font-bold text-center' colSpan={columns.length}>
                   <br/>0 results<br/><br/>
                 </td>
               </tr>

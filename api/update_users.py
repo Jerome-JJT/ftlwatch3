@@ -166,7 +166,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     })
 
 
-    good_days = (parser.parse(good_blackhole) - datetime.datetime.now()).days if good_blackhole != None else -1
+    good_days = (parser.parse(good_blackhole).replace(tzinfo=None) - datetime.datetime.now().replace(tzinfo=None)).days if good_blackhole != None else -1
     
     import_title_user(full_user)
     timed_user_log(good_days, full_user["correction_point"], full_user["wallet"], 
@@ -208,33 +208,26 @@ def user_callback(user, cursus21_ids, local_users):
         
     else:
 
-        executeQueryAction("""INSERT INTO users (
-            "id", "login", "first_name", "last_name", "display_name", "avatar_url",
-            "kind", "is_staff", "is_active", "is_alumni", "wallet", "correction_point",
-            "created_at", "updated_at"
-        ) VALUES (
-            %(id)s, %(login)s, %(first_name)s, %(last_name)s, %(display_name)s, %(avatar_url)s,
-            %(kind)s, %(is_staff)s, %(is_active)s, %(is_alumni)s, %(wallet)s, %(correction_point)s,
-            %(created_at)s, %(updated_at)s
-        )
-        ON CONFLICT (id)
-        DO UPDATE SET
-            "login" = EXCLUDED.login,
-            "first_name" = EXCLUDED.first_name,
-            "last_name" = EXCLUDED.last_name,
-            "display_name" = EXCLUDED.display_name,
-            "avatar_url" = EXCLUDED.avatar_url,
+        executeQueryAction("""UPDATE users SET
+            "login" = %(login)s,
+            "first_name" = %(first_name)s,
+            "last_name" = %(last_name)s,
+            "display_name" = %(display_name)s,
+            "avatar_url" = %(avatar_url)s,
 
-            "kind" = EXCLUDED.kind,
-            "is_staff" = EXCLUDED.is_staff,
-            "is_active" = EXCLUDED.is_active,
-            "is_alumni" = EXCLUDED.is_alumni,
-            "wallet" = EXCLUDED.wallet,
-            "correction_point" = EXCLUDED.correction_point,
+            "kind" = %(kind)s,
+            "is_staff" = %(is_staff)s,
+            "is_active" = %(is_active)s,
+            "is_alumni" = %(is_alumni)s,
+            "wallet" = %(wallet)s,
+            "correction_point" = %(correction_point)s,
 
-            "created_at" = EXCLUDED.created_at,
-            "updated_at" = EXCLUDED.updated_at,
+            "created_at" = %(created_at)s,
+            "updated_at" = %(updated_at)s
+
+            WHERE id = %(id)s
         """, {
+            "id": user["id"],
             "login": user["login"],
             "first_name": good_firstname,
             "last_name": user["last_name"],
@@ -252,11 +245,7 @@ def user_callback(user, cursus21_ids, local_users):
             "updated_at": user["updated_at"],
         })
 
-        timed_user_log(-1, user["correction_point"], user["wallet"], -1, datetime.now().strftime("%Y-%m-%d"), user["id"])
-
-
-    
-
+        timed_user_log(-1, user["correction_point"], user["wallet"], -1, datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
 
     return True
 
@@ -268,7 +257,7 @@ def import_users():
     # local_users = {user["id"]: user for user in local_users} 
     local_users = [user["id"] for user in local_users] 
 
-    all_users = callapi("/v2/campus/47/users?filter[login]=jjaqueme", False)
+    all_users = callapi("/v2/campus/47/users?sort=id", True)
     cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47", True)
     # cursus_users = {user["user"]["id"]: user for user in cursus_users} 
     cursus21_ids = [user["user"]["id"] for user in cursus_users]
@@ -279,12 +268,6 @@ def import_users():
 
     for user in all_users:
         user_callback(user, cursus21_ids, local_users)
-
-
-#update_strategy "all" => /campus + /v2/users/login    yearly creates if not exists
-#update_strategy "cursus" => /v2/users/login only has_cursus_21    daily
-
-#update_strategy "photos" => /v2/campus=sort-id * 200  rentree
 
 
 import_users()

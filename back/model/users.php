@@ -93,10 +93,10 @@ function get_user_projects($poolfilter, $projects)
   
   FROM users
 
-  JOIN team_user ON team_user.user_id = users.id
-  JOIN teams ON teams.id = team_user.team_id
-  JOIN projects ON projects.id = teams.project_id
-  JOIN cursus ON cursus.id = projects.main_cursus
+  LEFT JOIN team_user ON team_user.user_id = users.id
+  LEFT JOIN teams ON teams.id = team_user.team_id
+  LEFT JOIN projects ON projects.id = teams.project_id
+  LEFT JOIN cursus ON cursus.id = projects.main_cursus
   LEFT JOIN project_types ON project_types.id = projects.project_type_id
 
 
@@ -107,9 +107,10 @@ function get_user_projects($poolfilter, $projects)
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
     )
-  AND projects.has_lausanne = TRUE
+  AND (projects.has_lausanne IS NULL OR projects.has_lausanne <> FALSE)
   AND (
-       (:projects = cursus.slug)
+       (projects.id IS NULL)
+    OR (:projects = cursus.slug)
     OR (:projects = project_types.name)
     )
 

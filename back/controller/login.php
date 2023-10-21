@@ -80,6 +80,8 @@ function loginapi_callback($post)
             jsonResponse(array("error" => $meInfos->error), 401);
         }
 
+        // jsonlogger('Response', $meInfos, LOGGER_DEBUG());
+
 
         if (!loginUser($meInfos["login"], null, false)) {
             storeUser($meInfos, 0);

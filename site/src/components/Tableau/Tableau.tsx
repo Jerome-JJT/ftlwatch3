@@ -102,7 +102,7 @@ export function TableauPage(): JSX.Element {
 
   const subOptions = useMemo(() => (
     <>
-      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
 
         {poolFilters && poolFilters.map((filter) => {
           return (
@@ -119,7 +119,7 @@ export function TableauPage(): JSX.Element {
 
       <Separator></Separator>
 
-      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
 
         <Button
           key={'all'}
@@ -170,7 +170,7 @@ export function TableauPage(): JSX.Element {
 
       <Separator></Separator>
 
-      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-scroll'>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
 
         {projects && projects.map((project) => {
           return (

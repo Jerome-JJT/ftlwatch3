@@ -100,6 +100,11 @@ code {
   @apply font-medium
 }
 
+a {
+  @apply text-indigo-500 hover:text-indigo-400;
+  @apply text-indigo-900 hover:text-indigo-800;
+}
+
 p, .my-text {
   @apply text-blue-gray-400 dark:text-gray-200;
 }
@@ -115,7 +120,7 @@ p, .my-text {
 
 
 .big-card {
-  @apply mb-8 dark:bg-gray-600 dark:shadow-white overflow-hidden;
+  @apply mb-8 dark:bg-gray-600 dark:shadow-gray-400 overflow-hidden rounded-xl;
   @apply bg-white/40;
 }
 .super-big-card {
@@ -144,45 +149,12 @@ p, .my-text {
 }
 
 .super-big-footer {
-  @apply flex items-center justify-between border-t p-4 ;
-  @apply border-blue-gray-50 dark:border-blue-gray-900 bg-white dark:bg-gray-600;
+  @apply flex items-center justify-between border-t p-4 rounded-b-xl;
+  @apply border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600;
+  @apply bg-white/40;
+  @apply bg-transparent;
+
 }
-
-
-.internal-fields-container {
-  @apply border-t-transparent focus:border-t-transparent;
-  @apply dark:border-t-transparent dark:focus:border-t-transparent;
-  @apply w-full h-full bg-transparent;
-  @apply font-sans font-normal;
-  @apply outline outline-0 focus:outline-0;
-  @apply disabled:border-0;
-  @apply transition-all;
-  @apply border focus:border-2;
-  @apply text-sm
-}
-
-.internal-fields-container-colors {
-  @apply text-blue-gray-700;
-  @apply disabled:bg-blue-gray-50;
-
-  @apply border-blue-gray-200 dark:border-gray-700;
-
-  @apply placeholder-shown:border-blue-gray-200;
-  @apply placeholder-shown:border-t-blue-gray-200;
-
-  @apply focus:border-gray-900;
-}
-
-
-
-/* .super-fields-border {
-  @apply dark:!border-gray-700;
-} */
-
-/* .super-fields-label {
-  @apply !text-gray-900 dark:!text-gray-300;
-} */
-
 
 
 .notif-question {

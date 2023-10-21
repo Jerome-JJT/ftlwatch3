@@ -119,7 +119,7 @@ export default function App(): JSX.Element {
             <Route path="/teams" element={<TeamsPage />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
-            <Route path="/admin/login_groups" element={<UserGroupsPage />} />
+            <Route path="/admin/groups" element={<UserGroupsPage />} />
             <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
             <Route path="/admin/pages" element={<GroupPermissionsPage />} />
             <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />

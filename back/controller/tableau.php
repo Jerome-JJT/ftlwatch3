@@ -171,14 +171,17 @@ function tableau_api($selectedFilter, $selectedProjects)
                 );
             }
 
-            if (!isset($cols[$team['project_slug']])) {
-                $cols[$team['project_slug']] = array(
-                    "label" => $team['project_slug'],
-                    "field" => $team['project_id'],
-                );
-            }
+            if ($team['project_id'] != null) {
 
-            $tmp[$team['user_id']][$team['project_id']] = $team['final_mark'];
+                if (!isset($cols[$team['project_slug']])) {
+                    $cols[$team['project_slug']] = array(
+                        "label" => $team['project_slug'],
+                        "field" => $team['project_id'],
+                    );
+                }
+    
+                $tmp[$team['user_id']][$team['project_id']] = $team['final_mark'];
+            }
         }
 
         $res["columns"] = array_merge(
