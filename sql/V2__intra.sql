@@ -14,15 +14,26 @@ CREATE TABLE "users" (
     "last_name" character varying NOT NULL,  
     "display_name" character varying NOT NULL, 
     "avatar_url" character varying NOT NULL,
-
-    "grade" character varying DEFAULT '',
-    "level" character varying NOT NULL,
+   
     "kind" character varying NOT NULL,
     "is_staff" boolean NOT NULL,
+    "wallet" boolean NOT NULL,  
+    "evalpoints" boolean NOT NULL,
+    -- "coalpoints" boolean NOT NULL,
     
     "nbcursus" integer NOT NULL,
     "has_cursus21" boolean NOT NULL,
     "has_cursus9" boolean NOT NULL,
+    "cursus21_coalition_id" integer,
+    "cursus9_coalition_id" integer,
+
+    "blackhole" TIMESTAMP,
+    "freezedate" TIMESTAMP,
+    "grade" character varying,
+    "level" character varying,
+
+    "is_bde" boolean NOT NULL,
+    "is_tutor" boolean NOT NULL,
 
     "poolfilter_id" integer NOT NULL,
 
@@ -37,9 +48,11 @@ CREATE TABLE "users" (
 CREATE TABLE "timedusers" (
     "id" SERIAL NOT NULL, 
 
-    "correction_point" integer NOT NULL,
-    "wallet" integer NOT NULL,
-    "coalition_points" integer NOT NULL,
+    "days" integer,
+    "correction_point" integer,
+    "wallet" integer,
+    "coalition_points" integer,
+    "level" character varying,
 
     "date" character varying NOT NULL,
     "user_id" integer NOT NULL,
