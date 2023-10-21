@@ -118,6 +118,15 @@ function tableau_api($selectedFilter, $selectedProjects)
     else {
         need_permission("p_view4");
     }
+
+    if ($selectedFilter == "currentmonth") {
+        $selectedFilter = $currentFilter;
+    }
+    else if ($selectedFilter == "currentyear") {
+        $selectedFilter = substr($currentFilter, 0, 4);
+    }
+
+    mylogger($selectedFilter, LOGGER_DEBUG());
     
 
     $res = array();
@@ -128,7 +137,7 @@ function tableau_api($selectedFilter, $selectedProjects)
 
 
     if ($selectedProjects === "infos") {
-        $users = getUsers($selectedFilter);
+        $users = getUsers(has_permission("p_admin"), $selectedFilter);
 
         $res["values"] = $users;
     
@@ -136,22 +145,37 @@ function tableau_api($selectedFilter, $selectedProjects)
             ["label" => "ID", "field" => "id"],
             ["label" => "Image", "field" => "avatar_url"],
             ["label" => "Login", "field" => "login"],
-            ["label" => "First Name", "field" => "first_name"],
-            ["label" => "Last Name", "field" => "last_name"],
+            ["label" => "First Name", "field" => "first_name", "visible" => false],
+            ["label" => "Last Name", "field" => "last_name", "visible" => false],
             ["label" => "Display Name", "field" => "display_name"],
-            ["label" => "Grade", "field" => "grade"],
+
+            ["label" => "Kind", "field" => "kind", "visible" => false],
+            ["label" => "Staff", "field" => "is_staff", "visible" => false],
+            ["label" => "Active", "field" => "is_active", "visible" => false],
+            ["label" => "Alumni", "field" => "is_alumni", "visible" => false],
+            ["label" => "BDE", "field" => "is_bde"],
+            ["label" => "Tutor", "field" => "is_tutor"],
+            
+            ["label" => "Wallets", "field" => "wallet"],
+            ["label" => "Points", "field" => "correction_point"],
+
+            ["label" => "Grade", "field" => "grade", "visible" => false],
             ["label" => "Level", "field" => "level"],
-            ["label" => "Kind", "field" => "kind"],
-            ["label" => "Staff", "field" => "is_staff"],
+
+            ["label" => "Pool Filter", "field" => "poolfilter"],
             ["label" => "Nbcursus", "field" => "nbcursus"],
+
             ["label" => "Has Cursus 21", "field" => "has_cursus21"],
-            ["label" => "Has Cursus 9", "field" => "has_cursus9"],
-            ["label" => "Pool Filter", "field" => "poolfilter"]
+            ["label" => "Has Cursus 9", "field" => "has_cursus9", "visible" => false],
+            ["label" => "Coaltions 21", "field" => "cursus21_coalition"],
+            ["label" => "Coalition 9", "field" => "cursus9_coalition", "visible" => false],
+
+            ["label" => "Blackhole", "field" => "blackhole"],
         ];
     }
     else {
 
-        $teams = get_user_projects($selectedFilter, $selectedProjects);
+        $teams = get_user_projects(has_permission("p_admin"), $selectedFilter, $selectedProjects);
         
         
         $cols = array();

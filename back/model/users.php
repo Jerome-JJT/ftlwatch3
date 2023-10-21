@@ -26,7 +26,7 @@ function getUsersShort()
   return $result;
 }
 
-function getUsers($poolfilter = '')
+function getUsers($hidden, $poolfilter = '')
 {
   $query = "SELECT 
   users.id,
@@ -35,18 +35,36 @@ function getUsers($poolfilter = '')
   users.last_name,
   users.display_name,
   users.avatar_url,
-  users.grade,
-  users.level,
+
   users.kind,
   users.is_staff,
+  users.is_active,
+  users.is_alumni,
+  users.wallet,  
+  users.correction_point,
+
   users.nbcursus,
   users.has_cursus21,
   users.has_cursus9,
+  cursus21_coalition.name AS cursus21_coalition,
+  cursus9_coalition.name AS cursus9_coalition,
+  
+  users.blackhole,
+  users.grade,
+  users.level,
+
+  users.is_bde,
+  users.is_tutor,
+
   poolfilters.name AS poolfilter
   
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
-  WHERE users.hidden = FALSE
+
+  LEFT JOIN coalitions cursus21_coalition ON cursus21_coalition.id = users.cursus21_coalition_id 
+  LEFT JOIN coalitions cursus9_coalition ON cursus9_coalition.id = users.cursus9_coalition_id 
+
+  WHERE (users.hidden = false OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
@@ -55,7 +73,7 @@ function getUsers($poolfilter = '')
   ORDER BY login
   ";
 
-  $data = array(":poolfilter" => $poolfilter);
+  $data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
@@ -77,7 +95,7 @@ function setUser($userId, $value)
 
 
 
-function get_user_projects($poolfilter, $projects)
+function get_user_projects($hidden, $poolfilter, $projects)
 {
   $query = "SELECT 
   users.id AS user_id,
@@ -101,7 +119,8 @@ function get_user_projects($poolfilter, $projects)
 
 
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
-  WHERE users.hidden = FALSE
+
+  WHERE (users.hidden = FALSE OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
@@ -118,7 +137,7 @@ function get_user_projects($poolfilter, $projects)
   ORDER BY projects.corder, projects.slug
   ";
 
-  $data = array(":poolfilter" => $poolfilter, ":projects" => $projects);
+  $data = array(":poolfilter" => $poolfilter, ":projects" => $projects, ":hidden" => $hidden == true ? "TRUE" : "FALSE");
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);

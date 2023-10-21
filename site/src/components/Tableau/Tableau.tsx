@@ -58,7 +58,7 @@ export function TableauPage(): JSX.Element {
           setColumns((prev) =>
             (res.data.columns as ColumnProps[]).map((c) => ({
               ...c,
-              visible: prev?.find((cf) => cf.field === c.field)?.visible ?? true,
+              visible: prev?.find((cf) => cf.field === c.field)?.visible ?? (c.visible ?? true),
             }))
           );
 

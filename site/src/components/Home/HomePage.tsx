@@ -35,15 +35,12 @@ export default function HomePage(): JSX.Element {
         </CardBody>
 
         <CardFooter className="pt-0 flex gap-2">
-          {/* <Link
-  //       to={'https://github.com/Tosba74/ft_transcendance'}
-  //       className="mt-4 rounded-lg bg-cyan-500 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-  //     >
-  //       GitHub
-  //     </Link> */}
+          {
+            !isLogged &&
           <Link to={'/loginapi'}>
             <Button color='blue'>Sign in</Button>
           </Link>
+          }
 
           <Link to={'https://github.com/Jerome-JJT/ftlwatch3'}>
             <Button color='deep-purple'>Github</Button>
@@ -51,16 +48,5 @@ export default function HomePage(): JSX.Element {
         </CardFooter>
       </Card>
     </div>
-
-
-  //   <div className="inline-flex">
-  //     <Link
-  //       to={'https://github.com/Tosba74/ft_transcendance'}
-  //       className="mt-4 rounded-lg bg-cyan-500 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-  //     >
-  //       GitHub
-  //     </Link>
-  //   </div>
-  // </div>
   );
 }
