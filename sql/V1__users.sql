@@ -2,15 +2,46 @@ CREATE TABLE "login_users" (
     "id" SERIAL NOT NULL, 
     "login" character varying NOT NULL, 
     "password" character varying, 
+
     "first_name" character varying NOT NULL DEFAULT '', 
     "last_name" character varying NOT NULL DEFAULT '', 
     "display_name" character varying NOT NULL DEFAULT '', 
     "avatar_url" character varying NOT NULL DEFAULT '',
-    "color" integer NOT NULL DEFAULT -1,
+
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "PK_LOGIN_USER_ID" PRIMARY KEY ("id")
 );
+
+CREATE TABLE "themes" (
+    "id" SERIAL NOT NULL, 
+
+    "name" character varying NOT NULL, 
+    "image" character varying NOT NULL,
+    "corder" integer DEFAULT 99,
+
+    CONSTRAINT "PK_THEME_ID" PRIMARY KEY ("id")
+);
+
+
+CREATE TABLE "login_user_profiles" (
+    "id" SERIAL NOT NULL, 
+
+    "theme_id" integer NOT NULL DEFAULT 1,
+    "color" character varying DEFAULT '0xFFFFFF',
+
+    "terms" boolean DEFAULT TRUE,
+    "ads" boolean DEFAULT TRUE,
+
+    "github_link" character varying,
+    "ban_date" character varying,
+    "css_click" integer NOT NULL DEFAULT 0,
+
+    CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("id") REFERENCES "login_users"("id"),
+    CONSTRAINT "THEME_ID" FOREIGN KEY("theme_id") REFERENCES "themes"("id"),
+    CONSTRAINT "PK_LOGIN_USER_PROFILE_ID" PRIMARY KEY ("id")
+);
+
 
 CREATE TABLE "login_groups" (
     "id" SERIAL NOT NULL, 
@@ -61,7 +92,6 @@ CREATE TABLE "pages" (
     "route" character varying, 
     "basefilter" character varying, 
 
-    -- "parent_id" integer,
     "permission_id" integer, 
     "submenu_id" integer,
 
@@ -72,15 +102,6 @@ CREATE TABLE "pages" (
     CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_PAGE_ID" PRIMARY KEY ("id")
 );
-
--- CREATE TABLE "pages_permissions" (
---     "id" SERIAL NOT NULL, 
---     "page_id" integer NOT NULL, 
---     "permission_id" integer NOT NULL, 
---     CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE CASCADE,
---     CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
---     CONSTRAINT "PK_PAGE_PERMISSION_ID" PRIMARY KEY ("id")
--- );
 
 
 CREATE TABLE "login_groups_permissions" (

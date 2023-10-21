@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css';
@@ -43,7 +43,7 @@ import { SettingsPage } from 'Log/Settings';
 
 
 export default function App(): JSX.Element {
-  const { isLogged, getUserData, logout } = useLogin();
+  const { isLogged, userInfos, getUserData, logout } = useLogin();
   const [openedMenu, setOpenedMenu] = React.useState('');
 
   const logging = import.meta.env.DEV;
@@ -80,9 +80,17 @@ export default function App(): JSX.Element {
     }
   );
 
+  console.log({
+    backgroundImage: userInfos?.theme_image !== '' ? userInfos?.theme_image : undefined,
+    backgroundColor: userInfos?.theme_image !== '' ? undefined : userInfos?.theme_color,
+  });
+
   return (
     <Router>
-      <div className="grow bg-gray-300 dark:bg-gray-800">
+      <div className="grow bg-gray-300 dark:bg-gray-800" style={{
+        backgroundImage: userInfos?.theme_image !== '' ? userInfos?.theme_image : undefined,
+        backgroundColor: userInfos?.theme_image !== '' ? undefined : userInfos?.theme_color,
+      }}>
         <NavBar
           openedMenu={openedMenu}
           setOpenedMenu={setOpenedMenu}

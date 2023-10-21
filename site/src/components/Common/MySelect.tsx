@@ -4,15 +4,20 @@ import React from 'react';
 interface MySelectProps extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
   className?: string
   label?: string
+  labelProps?: string
+  containerProps?: string
 }
 
 const MySelect = (props: MySelectProps): JSX.Element => {
+  const { className, label, labelProps, containerProps, ...selectProps } = props;
+
+
   return (
-    <div className='relative w-full min-w-[200px] h-10'>
+    <div className={classNames('relative w-full min-w-[200px] h-10', containerProps)}>
       <select
-        {...props}
+        {...selectProps}
         className={classNames(
-          props.className,
+          className,
           `
           peer
           w-full h-full bg-transparent
@@ -36,8 +41,8 @@ const MySelect = (props: MySelectProps): JSX.Element => {
       >
         {props.children}
       </select>
-      {props.label &&
-        <label className="flex w-full h-full
+      {label &&
+        <label className={classNames(`flex w-full h-full
         select-none pointer-events-none absolute
         left-0 font-normal !overflow-visible truncate
         leading-tight peer-focus:leading-tight peer-disabled:text-transparent
@@ -61,8 +66,8 @@ const MySelect = (props: MySelectProps): JSX.Element => {
 
       peer-disabled:peer-placeholder-shown:text-blue-gray-500
       peer-placeholder-shown:text-blue-gray-500
-        ">
-          {props.label}
+        `, labelProps)}>
+          {label}
         </label>
       }
     </div>

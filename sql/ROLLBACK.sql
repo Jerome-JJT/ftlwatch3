@@ -42,6 +42,8 @@ DROP TABLE IF EXISTS "submenus";
 
 DROP TABLE IF EXISTS "permissions";
 
+DROP TABLE IF EXISTS "login_user_profiles";
+DROP TABLE IF EXISTS "themes";
 DROP TABLE IF EXISTS "login_groups";
 DROP TABLE IF EXISTS "login_users";
 

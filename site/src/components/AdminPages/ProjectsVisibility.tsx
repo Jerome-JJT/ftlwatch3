@@ -27,7 +27,7 @@ export function ProjectsVisibilityPage(): JSX.Element {
       .then((res) => {
         if (res.status === 200) {
           // addNotif('teest2', 'question', false);
-        } //
+        }
         return true;
       })
       .catch((error) => {

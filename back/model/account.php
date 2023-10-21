@@ -33,9 +33,15 @@ function loginUser($login, $password, $checkPassword = true)
 //Get user informations for session storage, (username, join date, score)
 function getUserInfos($login)
 {
-  $query = "SELECT id, login, display_name, avatar_url
+  $query = "SELECT login_users.id, login_users.login, login_users.display_name, login_users.avatar_url,
+  themes.id AS theme_id, themes.image AS theme_image, login_user_profiles.color AS theme_color, login_user_profiles.terms
   FROM login_users
-  WHERE login = :login";
+  
+  JOIN login_user_profiles ON login_user_profiles.id = login_users.id
+  JOIN themes ON themes.id = login_user_profiles.theme_id
+
+  WHERE login = :login
+  ";
 
   $data = array(":login" => $login);
 
@@ -49,17 +55,23 @@ function getUserInfos($login)
       "id" => $result["id"],
       "login" => $result["login"],
       "display_name" => $result["display_name"],
-      "avatar_url" => $result["avatar_url"]
+      "avatar_url" => $result["avatar_url"],
+
+      "theme_id" => $result["theme_id"],
+      "theme_image" => $result["theme_image"],
+      "theme_color" => $result["theme_color"],
+      "terms" => $result["terms"]
     );
   }
 
   return array("error" => "Not found");
 }
 
-function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
+
+function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url)
 {
-  $query = "INSERT INTO login_users (id, login, password, first_name, last_name, display_name, avatar_url, color)
-  VALUES (:id, :login, NULL, :first_name, :last_name, :display_name, :avatar_url, :color)";
+  $query = "INSERT INTO login_users (id, login, password, first_name, last_name, display_name, avatar_url)
+  VALUES (:id, :login, NULL, :first_name, :last_name, :display_name, :avatar_url)";
 
   $data = array(
     ":id" => $id,
@@ -68,23 +80,28 @@ function createAccount($id, $login, $firstname, $lastname, $displayname, $avatar
     ":last_name" => $lastname,
     ":display_name" => $displayname,
     ":avatar_url" => $avatar_url,
-    ":color" => $color,
   );
 
   $success = executeQueryAction($query, $data);
+
+  $query = "INSERT INTO login_user_profiles (id) VALUES (:id) ON CONFLICT DO NOTHING";
+  $data = array(
+    ":id" => $id
+  );
+
+  $success &= executeQueryAction($query, $data);
 
   return $success;
 }
 
 
-function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url, $color)
+function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar_url)
 {
   $query = "UPDATE login_users SET 
     first_name = :first_name, 
     last_name = :last_name, 
     display_name = :display_name, 
-    avatar_url = :avatar_url, 
-    color =  :color
+    avatar_url = :avatar_url
     WHERE id = :id AND login = :login";
 
   $data = array(
@@ -94,7 +111,6 @@ function updateAccount($id, $login, $firstname, $lastname, $displayname, $avatar
     ":last_name" => $lastname,
     ":display_name" => $displayname,
     ":avatar_url" => $avatar_url,
-    ":color" => $color,
   );
 
   $success = executeQueryAction($query, $data);

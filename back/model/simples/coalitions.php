@@ -7,8 +7,8 @@ function getCoalitions()
   coalitions.image_url, coalitions.cover_url, coalitions.color,
   campus.name AS campus_name, cursus.name AS cursus_name
   FROM coalitions
-  JOIN campus ON campus.id = coalitions.campus_id
-  JOIN cursus ON cursus.id = coalitions.cursus_id
+  LEFT JOIN campus ON campus.id = coalitions.campus_id
+  LEFT JOIN cursus ON cursus.id = coalitions.cursus_id
   ORDER BY bloc_id";
   $data = array();
 

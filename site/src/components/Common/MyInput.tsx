@@ -1,15 +1,21 @@
+import classNames from 'classnames';
 import React from 'react';
 
 interface MyInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   className?: string
   label?: string
+  labelProps?: string
+  containerProps?: string
 }
 
 const MyInput = (props: MyInputProps): JSX.Element => {
+
+  const { label, labelProps, containerProps, ...inputProps } = props;
+
   return (
-    <div className="relative w-full min-w-[200px] h-11">
+    <div className={classNames('relative w-full min-w-[200px] h-10', containerProps)}>
       <input
-        {...props}
+        {...inputProps}
         placeholder=" "
         className="peer
         w-full h-full bg-transparent
@@ -30,7 +36,7 @@ const MyInput = (props: MyInputProps): JSX.Element => {
         "
       />
 
-      <label className="flex w-full h-full
+      <label className={classNames(`flex w-full h-full
       select-none pointer-events-none absolute
       left-0 font-normal !overflow-visible truncate
       leading-tight peer-focus:leading-tight peer-disabled:text-transparent
@@ -54,8 +60,9 @@ const MyInput = (props: MyInputProps): JSX.Element => {
 
       peer-disabled:peer-placeholder-shown:text-blue-gray-500
       peer-placeholder-shown:text-blue-gray-500
-        ">
-          Link github
+        `, labelProps)}
+      >
+        {label || ''}
       </label>
     </div>
 

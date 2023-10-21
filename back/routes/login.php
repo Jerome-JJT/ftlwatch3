@@ -1,7 +1,6 @@
 <?php
 
 require_once("controller/login.php");
-require_once("controller/me.php");
 
 $action = "";
 if (isset($_GET["action"])) {
@@ -30,20 +29,6 @@ switch ($action) {
     case "logout":
         logout();
         break;
-
-    case "me":
-        me(isset($_GET["reload"]));
-        break;
-
-    // case "searchGame":
-//   require_once("controler/gameGeneration.php");
-//   searchGame($_POST);
-//   break;
-
-    // case "upload":
-    //   require_once("controler/uploading.php");
-    //   uploadTrack($_POST, $_FILES);
-//   break;
 }
 
 exit();

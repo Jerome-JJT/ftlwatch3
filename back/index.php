@@ -65,6 +65,10 @@ try {
             require_once("routes/login.php");
             break;
 
+        case "me":
+            require_once("routes/me.php");
+            break;
+
         case "tableau":
             require_once("routes/tableau.php");
             break;

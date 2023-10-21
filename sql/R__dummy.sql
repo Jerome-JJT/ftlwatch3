@@ -54,34 +54,38 @@ SELECT
 
 
 
--- SELECT te.id AS team_id, te.name AS team_name, projects.name, users.id AS user_id
--- FROM users
--- JOIN team_user ON team_user.user_id = users.id
--- JOIN (
 
--- SELECT teams.id
--- FROM teams
--- JOIN team_user ON teams.id = team_user.team_id
--- JOIN projects ON projects.id = teams.project_id
+INSERT INTO "themes" ("id", "name", "image") VALUES
+  (1, 'Default', ''),
+  (7, 'Colors', ''),
+  (20, 'Ducks', '/static/logo.png'),
+  (21, 'Animals', '/static/animals.png'),
+  (22, 'Cursed', '/static/cursed,.png'),
+  (30, 'Processes', '/static/processes.png'),
+  (31, 'Cores', '/static/cores.png'),
+  (32, 'Threads', '/static/threads.png')
 
--- WHERE projects.main_cursus = 21
-
--- GROUP BY teams.id
--- HAVING COUNT(team_user.id) >= 2
--- ) te
--- ON te.id = team_user.team_id;
+  ON CONFLICT(id) DO NOTHING
+;
 
 
-INSERT INTO "login_users" ("id", "login", "password", "first_name", "last_name", "display_name", "avatar_url", "color") VALUES
+
+INSERT INTO "login_users" ("id", "login", "password", "first_name", "last_name", "display_name", "avatar_url") VALUES
 (
   92477,	
   'jjaqueme',	
-  '$2y$10$zkVsh/BQ4BhgL6BvefCjaOMUdcsUyp3RInjURFwF3rhNAhIfZHPMO',	
+  NULL,	
   'Jerome',	
   'Jaquemet',	
   'Jerome',	
-  'https://cdn.intra.42.fr/users/072f80b99d4a207794928fdf92cf14b1/small_jjaqueme.jpg',	
-  -1
+  'https://cdn.intra.42.fr/users/072f80b99d4a207794928fdf92cf14b1/small_jjaqueme.jpg'
+)
+ON CONFLICT(id) DO NOTHING
+;
+
+INSERT INTO "login_user_profiles" ("id") VALUES
+(
+  92477
 )
 ON CONFLICT(id) DO NOTHING
 ;
@@ -190,28 +194,3 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   ON CONFLICT(id) DO NOTHING
 ;
 
-
-
-
-
-
--- INSERT INTO "pages" ("id", "name", "icon", "order", "route") VALUES
---   (1, 'Tableaux', '', 20, 'tableaux'),
---   (2, 'Images', '', 21, 'images'),
---   (3, 'Admin', '', 5, 'admin')
---   ON CONFLICT(id) DO NOTHING
--- ;
-
--- INSERT INTO "pages" ("id", "name", "icon", "order", "route", "basefilter", "parent_id") VALUES
---   (4, 'Tableau cursus', '', 1, '', 'filter=cursus', 1),
---   (5, 'Tableau current pool', '', 2, '', 'filter=currentpool', 1),
---   (6, 'Tableau current year', '', 3, '', 'filter=currentyear', 1),
---   (7, 'Tableau ouffter core', '', 4, '', 'projects=outer', 1),
-
---   (8, 'Images cursus', '', 1, '', 'filter=currentcursus', 2),
---   (9, 'Images current pool', '', 2, '', 'filter=currentpool', 2),
---   (10, 'Images current year', '', 3, '', 'filter=currentyear', 2),
-
---   (11, 'Admin', '', 20, '', '', 3)
---   ON CONFLICT(id) DO NOTHING
--- ;

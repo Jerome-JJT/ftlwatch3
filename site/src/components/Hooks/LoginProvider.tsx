@@ -12,6 +12,11 @@ export interface LoggedUser {
   avatar_url: string
 
   is_admin: boolean
+
+  theme_id: number
+  theme_image: string
+  theme_color: string
+  terms: boolean
 }
 
 interface GetUserDataProps {
@@ -46,7 +51,7 @@ export function LoginProvider({ children }: { children: ReactNode }): JSX.Elemen
 
   const getUserData = useCallback(({ announce = false, reload = false }: GetUserDataProps = {}) => {
     axios
-      .get(`/?page=login&action=me${reload ? '&reload=true' : ''}`,
+      .get(`/?page=me&action=get${reload ? '&reload=true' : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -104,95 +109,3 @@ export function LoginProvider({ children }: { children: ReactNode }): JSX.Elemen
     </LoginContext.Provider>
   );
 }
-
-// export interface UseLoginDto {
-//   logged: boolean
-//   setLogged: React.Dispatch<React.SetStateAction<boolean>>
-
-//   userInfos: LoggedUserDto | undefined
-//   userPages: any[] | undefined
-//   logout: () => void
-
-//   getUserData: () => void
-// }
-
-// const useLogin = (): UseLoginDto => {
-//   const { addNotif } = useNotification();
-//   const [logged, setLogged] = React.useState(false);
-//   const [userInfos, setUserInfos] = React.useState<LoggedUserDto | undefined>();
-//   const [userPages, setUserPages] = React.useState<any[]>([]);
-
-//   // const getUsers = async () => {
-
-//   //   const data = await axios.get(`/api/users/`,
-//   //     { withCredentials: true, },
-//   //   )
-//   //     .then((api_response) => {
-
-//   //       return api_response.data
-
-//   //     })
-//   //     .catch((error) => {
-
-//   //       return AxiosErrorText(error);
-//   //     });
-
-//   //   return data;
-//   // };
-
-//   const getUserData = React.useCallback(() => {
-//     axios
-//       .get('/?page=login&action=me',
-//         { withCredentials: true }
-//       )
-//       .then((res) => {
-//         if (res.status === 200) {
-//           console.log(res.data);
-//           setLogged(true);
-//           setUserInfos(res.data.user as LoggedUserDto);
-//           setUserPages(res.data.pages as any[]);
-//           addNotif(res.data.use.login, 'error');
-//         }
-//       })
-//       .catch((error) => {
-//         setLogged(false);
-//         setUserInfos({} as LoggedUserDto);
-//         addNotif(AxiosErrorText(error), 'error');
-//         return AxiosErrorText(error);
-//       });
-//   }, []);
-
-//   const logout = React.useCallback(() => {
-//     axios
-//       .get('/?page=login&action=logout',
-//         { withCredentials: true }
-//       )
-//       .then((res) => {
-//         if (res.status === 204) {
-//           setLogged(false);
-//           setUserInfos({} as LoggedUserDto);
-//           setUserPages({} as any);
-//         }
-//       })
-//       .catch((error) => {
-//         return AxiosErrorText(error);
-//       });
-//   }, []);
-
-//   React.useEffect(() => {
-//     if (!logged) {
-//       getUserData();
-//     }
-//   }, [getUserData, logged]);
-
-//   return {
-//     logged,
-//     setLogged,
-//     userInfos,
-//     userPages,
-//     getUserData,
-//     logout
-//   };
-// };
-
-// export default useLogin;

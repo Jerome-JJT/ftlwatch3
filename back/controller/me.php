@@ -1,5 +1,7 @@
 <?php
 require_once("model/permissions/permissions.php");
+require_once("model/profile.php");
+require_once("model/account.php");
 
 function me($reload = false)
 {
@@ -9,6 +11,7 @@ function me($reload = false)
   if (isset($_SESSION["user"])) {
 
     if ($reload) {
+      $_SESSION["user"] = getUserInfos($_SESSION["user"]["login"]);
       $_SESSION["pages"] = getUserPages($_SESSION["user"]["id"]);
     }
 
@@ -20,7 +23,36 @@ function me($reload = false)
       ),
       200
     );
-  } else {
+  } 
+  else {
     jsonResponse(array(), 400);
   }
+}
+
+function themes_get()
+{
+  $res = array();
+  $res["themes"] = getThemes();
+
+  jsonResponse($res, 200);
+}
+
+
+
+function settings_set($data)
+{
+
+  if (isset($_SESSION["user"])) {
+
+    $res = setSettings(
+      $_SESSION["user"]["id"],
+      isset($data["themeValue"]) ? $data["themeValue"] : null,
+      isset($data["themeColor"]) ? $data["themeColor"] : null,
+      isset($data["terms"]) ? $data["terms"] : null,
+    );
+
+    jsonResponse(array(), $res ? 200 : 409);
+  }
+
+  jsonResponse(array(), 403);
 }

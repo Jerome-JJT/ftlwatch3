@@ -1,4 +1,5 @@
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@material-tailwind/react';
+import AppLogo from '../../assets/logo_transparent_small.png';
+import { Button, Card, CardBody, CardFooter } from '@material-tailwind/react';
 import { useLogin } from 'Hooks/LoginProvider';
 import { commonTitle } from 'Utils/commonTitle';
 import React from 'react';
@@ -16,9 +17,17 @@ export default function HomePage(): JSX.Element {
       <Card className="mt-6 max-w-[600px] dark:bg-gray-600">
 
         <CardBody className=''>
-          <p className='text-center text-3xl text-black dark:text-white tracking-wide font-extrabold'>
-            Welcome to 42lwatch (V3) !
-          </p>
+          <div className='flex flex-row justify-center items-center gap-4'>
+            <img src={AppLogo}
+              className="h-12 flip-horizontal"
+            />
+            <p className='text-center text-3xl text-black dark:text-white tracking-wide font-extrabold'>
+              Welcome to 42lwatch (V3) !
+            </p>
+            <img src={AppLogo}
+              className="h-12"
+            />
+          </div>
 
           <p className="my-2">
             The (best) website for everything related to 42Lausanne (student side)

@@ -112,15 +112,10 @@ function storeUser($res, $exists = 0)
         $good_avatar_url = $res["image"]["link"];
     }
 
-    $good_number = -1;
-    if (isset($res['coalition_id'])) {
-        $good_number = $res['coalition_id'];
-    }
-
     if ($exists == 0) {
-        createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+        createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url);
     } else {
-        updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+        updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url);
     }
 
     $singleGroup = upsertUserGroup($res["id"], $res["login"]);
@@ -129,7 +124,10 @@ function storeUser($res, $exists = 0)
         $perms = array();
 
         if (in_array(47, array_column($res['campus'], 'id'))) {
-            array_push($perms, 'g_student');
+
+            if (in_array(21, array_column($res['cursus_users'], 'cursus_id'))) {
+                array_push($perms, 'g_student');
+            }
             
             if (in_array('BDE', array_column($res['groups'], 'name'))) {
                 array_push($perms, 'g_bde');

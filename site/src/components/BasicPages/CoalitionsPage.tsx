@@ -42,10 +42,11 @@ export function CoalitionsPage(): JSX.Element {
 
 
   function CoalitionCard(card: any): JSX.Element {
+    console.log(card);
     return (
       <Card key={card.id}
-        className="flex w-80 h-80 border-black border-2 overflow-hidden"
-        style={{ backgroundColor: card.color }}>
+        className="flex w-80 h-80 big-card border-black border-2 overflow-hidden"
+        style={{ backgroundColor: card.color ? card.color.toString().replace(';', '') : '#FFFFFF' }}>
 
         <CardHeader floated={false}
           className='flex min-h-40 h-40 max-h-40 justify-center bg-transparent shadow-none mx-2 mt-2'>

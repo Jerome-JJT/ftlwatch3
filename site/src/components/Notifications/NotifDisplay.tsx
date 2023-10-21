@@ -5,6 +5,7 @@ import { useNotification } from './NotificationsProvider';
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillQuestionCircle, AiFillWarning } from 'react-icons/ai';
 import classNames from 'classnames';
 import styled from 'styled-components';
+import AppLogo from '../../assets/logo_transparent_small.png';
 
 const StyledAlert = styled.div`
   button {
@@ -53,7 +54,10 @@ export function NotifDisplay(): JSX.Element {
           onClose={() => { removeNotif(notif.id); }}
           className={classNames('rounded-none border-l-4 font-medium', `notif-${notif.type}`)}
         >
-          {notif.text}
+          <div className='flex flex-row gap-2 '>
+            {notif.text}
+            <img className='h-[28px]' src={AppLogo} />
+          </div>
         </Alert>
       )}
     </StyledAlert>
