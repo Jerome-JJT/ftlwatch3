@@ -297,7 +297,15 @@ export function SuperTable({
                       <td key={`${createKey(value, index)}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
                         <div className="h-full flex justify-center items-center">
-                          {value[col.field]}
+                          {
+                            value[col.field] === undefined ? 'undefined' : (
+                              value[col.field] === null ? 'null' : (
+                                typeof value[col.field] === 'object' ?
+                                  value[col.field] :
+                                  value[col.field].toString()
+                              )
+                            )
+                          }
                         </div>
                       </td>
                     ))}

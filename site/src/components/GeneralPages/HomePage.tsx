@@ -35,7 +35,7 @@ export default function HomePage(): JSX.Element {
 
           {!isLogged &&
             <p>
-              To access most of the pages, you need to be <Link to="loginapi">logged</Link> first
+              To access most of the pages, you need to be <a href="/api/?page=login&action=authorizeapi">logged</a> first
             </p>
           }
           <p className="my-2">
@@ -46,9 +46,9 @@ export default function HomePage(): JSX.Element {
         <CardFooter className="pt-0 flex gap-2">
           {
             !isLogged &&
-          <Link to={'/loginapi'}>
+          <a href={'/api/?page=login&action=authorizeapi'}>
             <Button color='blue'>Sign in</Button>
-          </Link>
+          </a>
           }
 
           <Link to={'https://github.com/Jerome-JJT/ftlwatch3'}>

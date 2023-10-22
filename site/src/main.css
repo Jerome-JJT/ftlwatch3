@@ -116,6 +116,10 @@ p, .my-text {
   @apply text-blue-gray-400 dark:text-gray-200;
 }
 
+input[type='checkbox'] { 
+  @apply border-black;
+}
+
 .my-content {
   @apply mx-8 mt-2
 }
@@ -128,10 +132,10 @@ p, .my-text {
 
 .big-card {
   @apply mb-8 dark:bg-gray-600 dark:shadow-gray-400 overflow-hidden rounded-xl;
+  @apply bg-white/50;
 }
 .super-big-card {
   @apply h-full w-full;
-  @apply bg-white/40;
 }
 
 .super-big-header {

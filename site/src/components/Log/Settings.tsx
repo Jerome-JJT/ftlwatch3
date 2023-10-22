@@ -6,21 +6,16 @@ import MyInput from 'Common/MyInput';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { useLogin } from 'Hooks/LoginProvider';
+import { ThemeProps } from 'Utils/themeProps';
 
 
-
-interface ThemeProps {
-  id: number
-  name: string
-  image: string
-}
 
 
 export function SettingsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const { userInfos } = useLogin();
+  const { userInfos, getUserData } = useLogin();
 
-  const [themes, setThemes] = React.useState<any[] | undefined>(undefined);
+  const [themes, setThemes] = React.useState<ThemeProps[] | undefined>(undefined);
 
   const [themeValue, setThemeValue] = React.useState(userInfos?.theme_id);
   const [themeColor, setThemeColor] = React.useState(userInfos?.theme_color);
@@ -52,6 +47,7 @@ export function SettingsPage(): JSX.Element {
       .then((res) => {
         if (res.status === 200) {
           addNotif('Save success', 'success');
+          getUserData({ reload: true });
         }
         return true;
       })
@@ -59,7 +55,7 @@ export function SettingsPage(): JSX.Element {
         addNotif(AxiosErrorText(error), 'error');
         return false;
       });
-  }, [addNotif, themeColor, themeValue]);
+  }, [addNotif, getUserData, themeColor, themeValue]);
 
   return (
     <div className='my-content flex justify-center'>
@@ -99,7 +95,7 @@ export function SettingsPage(): JSX.Element {
                 onChange={(e) => setThemeColor(e.target.value)}
               /> ||
               themes?.some((theme) => !theme.name.toLowerCase().includes('default') && theme.id === themeValue) &&
-              <img className='h-10' src={themes?.find((theme) => theme.id === themeValue).image }/>
+              <img className='h-10' src={themes?.find((theme) => theme.id === themeValue)?.image }/>
             }
           </div>
         </div>
@@ -132,3 +128,4 @@ export function SettingsPage(): JSX.Element {
 
   );
 }
+

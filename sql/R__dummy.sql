@@ -58,9 +58,9 @@ SELECT
 INSERT INTO "themes" ("id", "name", "image") VALUES
   (1, 'Default', ''),
   (7, 'Colors', ''),
-  (20, 'Ducks', '/static/logo.png'),
+  (20, 'Ducks', '/static/logo_gray.png'),
   (21, 'Animals', '/static/animals.png'),
-  (22, 'Cursed', '/static/cursed,.png'),
+  (22, 'Cursed', '/static/teletubbies.png'),
   (30, 'Processes', '/static/processes.png'),
   (31, 'Cores', '/static/cores.png'),
   (32, 'Threads', '/static/threads.png')

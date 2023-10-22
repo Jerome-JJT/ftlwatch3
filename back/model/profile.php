@@ -12,7 +12,7 @@ function getThemes() {
 
 
 
-function setSettings($userId, $themeValue, $themeColor, $terms) {
+function setSettings($userId, $themeId, $themeColor, $terms) {
 
   $query = "UPDATE login_user_profiles SET 
   
@@ -24,12 +24,91 @@ function setSettings($userId, $themeValue, $themeColor, $terms) {
 
   $data = array(
     ":userId" => $userId,
-    ":theme_id" => $themeValue,
+    ":theme_id" => $themeId,
     ":color" => $themeColor,
     ":terms" => $terms,
   );
 
   require_once("model/dbConnector.php");
   return executeQueryAction($query, $data);
+}
+
+
+function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, $terms) {
+
+  $query = "UPDATE login_user_profiles SET 
+  
+  theme_id = COALESCE(:theme_id, theme_id),
+  color = COALESCE(:color, color),
+  github_link = COALESCE(:github_link, github_link),
+  terms = COALESCE(:terms, terms)
+
+  WHERE id = :userId";
+
+  $data = array(
+    ":userId" => $userId,
+    ":theme_id" => $themeId,
+    ":color" => $themeColor,
+    ":github_link" => $githubLink,
+    ":terms" => $terms,
+  );
+
+  require_once("model/dbConnector.php");
+  return executeQueryAction($query, $data);
+}
+
+
+function setPassword($userId, $hashedPassword) {
+
+  $query = "UPDATE login_users SET 
+  
+  password = :password
+
+  WHERE id = :userId";
+
+  $data = array(
+    ":userId" => $userId,
+    ":password" => $hashedPassword,
+  );
+
+  require_once("model/dbConnector.php");
+  return executeQueryAction($query, $data);
+}
+
+
+
+function getProfiles()
+{
+  $query = "SELECT 
+  login_users.id AS user_id,
+  login_users.login,
+  login_users.avatar_url,
+
+  CASE WHEN login_users.password IS NOT NULL 
+  THEN TRUE ELSE FALSE END AS password,
+
+  login_user_profiles.theme_id,
+  login_user_profiles.color,
+
+  login_user_profiles.github_link,
+  login_user_profiles.ban_date,
+  login_user_profiles.css_click,
+  login_user_profiles.ads,
+  login_user_profiles.terms
+  
+  FROM login_users
+
+  JOIN login_user_profiles ON login_user_profiles.id = login_users.id
+  JOIN themes ON themes.id = login_user_profiles.theme_id
+
+  ORDER BY login_users.id
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
 }
 

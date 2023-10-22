@@ -123,7 +123,7 @@ export function SuperCards({
   const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
 
   return (
-    <Card className="super-big-card">
+    <Card className="big-card super-big-card">
       <CardHeader floated={false} shadow={false} className="super-big-header">
         <div className="super-big-header-content">
           <div>

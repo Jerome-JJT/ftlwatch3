@@ -95,7 +95,7 @@ function setUser($userId, $value)
 
 
 
-function get_user_projects($hidden, $poolfilter, $projects)
+function getUserProjects($hidden, $poolfilter, $projects)
 {
   $query = "SELECT 
   users.id AS user_id,
@@ -144,4 +144,5 @@ function get_user_projects($hidden, $poolfilter, $projects)
 
   return $result;
 }
+
 

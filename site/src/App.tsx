@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css';
 
-import HomePage from './components/Home/HomePage';
+import HomePage from './components/GeneralPages/HomePage';
 
 import NavBar from './components/NavBar/NavBar';
 
@@ -37,6 +37,8 @@ import { RulesPage } from 'BasicPages/RulesPage';
 import { ProjectsPage } from 'BasicPages/ProjectsPage';
 import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
 import { SettingsPage } from 'Log/Settings';
+import NotFoundPage from 'GeneralPages/NotFoundPage';
+import { UsersProfilesPage } from 'AdminPages/UsersProfiles';
 // import Place from './components/Place/Place';
 
 
@@ -87,9 +89,9 @@ export default function App(): JSX.Element {
 
   return (
     <Router>
-      <div className="grow bg-gray-300 dark:bg-gray-800" style={{
-        backgroundImage: userInfos?.theme_image !== '' ? userInfos?.theme_image : undefined,
-        backgroundColor: userInfos?.theme_image !== '' ? undefined : userInfos?.theme_color,
+      <div className="grow bg-gray-300 dark:bg-gray-800 bg-center bg-cover" style={{
+        backgroundImage: userInfos?.theme_image !== '' ? `url('${userInfos?.theme_image}')` : undefined,
+        backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
       }}>
         <NavBar
           openedMenu={openedMenu}
@@ -131,6 +133,7 @@ export default function App(): JSX.Element {
             <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
             <Route path="/admin/pages" element={<GroupPermissionsPage />} />
             <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
+            <Route path="/admin/profiles" element={<UsersProfilesPage />} />
 
             <Route path="/admin/users" element={<UsersVisibilityPage />} />
             <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
@@ -141,6 +144,8 @@ export default function App(): JSX.Element {
 
             <Route path="/test" element={<TestPage />} />
           </>}
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
       <NotifDisplay/>

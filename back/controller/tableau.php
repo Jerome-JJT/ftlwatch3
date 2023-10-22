@@ -175,7 +175,7 @@ function tableau_api($selectedFilter, $selectedProjects)
     }
     else {
 
-        $teams = get_user_projects(has_permission("p_admin"), $selectedFilter, $selectedProjects);
+        $teams = getUserProjects(has_permission("p_admin"), $selectedFilter, $selectedProjects);
         
         
         $cols = array();

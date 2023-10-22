@@ -3,6 +3,7 @@
 require_once("controller/authorization.php");
 require_once("controller/admin_permissions.php");
 require_once("controller/admin_visibility.php");
+require_once("controller/admin_profiles.php");
 
 $action = "";
 if (isset($_GET["action"])) {
@@ -52,6 +53,17 @@ switch ($action) {
         user_set($_POST);
         break;
 
+    case "profiles_get":
+        profiles_get();
+        break;
+
+    case "profile_set":
+        profile_set($_POST);
+        break;
+
+    case "password_set":
+        password_set($_POST);
+        break;
 
     case "projects_get":
         projects_get();
