@@ -270,4 +270,5 @@ def import_users():
         user_callback(user, cursus21_ids, local_users)
 
 
-import_users()
+if __name__ == "__main__":
+    import_users()

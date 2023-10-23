@@ -46,11 +46,10 @@ def bloc_callback(bloc):
     return True
 
 def import_coalitions():
-
     callapi("/v2/blocs?sort=id", True, bloc_callback, False)
 
 
 
 
-
-import_coalitions()
+if __name__ == "__main__":
+    import_coalitions()

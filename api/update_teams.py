@@ -154,7 +154,7 @@ def team_callback(team):
 def import_teams(update_all = False):
     global local_teams
 
-    local_teams = executeQuerySelect("SELECT id FROM teams")
+    local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 1000")
     local_teams = [one['id'] for one in local_teams] 
 
     if (len(local_teams) == 0):
@@ -172,5 +172,5 @@ def import_teams(update_all = False):
 
             
 
-
-import_teams(True)
+if __name__ == "__main__":
+    import_teams(True)

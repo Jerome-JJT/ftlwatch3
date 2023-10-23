@@ -33,9 +33,8 @@ def cursus_callback(cursus):
     return True
 
 def import_cursus():
-
     callapi("/v2/cursus?sort=id", True, cursus_callback, False)
 
 
-
-import_cursus()
+if __name__ == "__main__":
+    import_cursus()

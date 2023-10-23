@@ -44,11 +44,10 @@ def campus_callback(campus):
     return True
 
 def import_campus():
-
     callapi("/v2/campus?sort=id", True, campus_callback, False)
 
 
 
 
-
-import_campus()
+if __name__ == "__main__":
+    import_campus()

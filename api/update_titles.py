@@ -33,5 +33,5 @@ def import_titles():
     callapi("/v2/titles?sort=id", True, title_callback, False)
 
 
-
-import_titles()
+if __name__ == "__main__":
+    import_titles()

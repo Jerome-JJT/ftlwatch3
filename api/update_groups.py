@@ -29,11 +29,10 @@ def group_callback(group):
     return True
 
 def import_groups():
-
     callapi("/v2/groups?sort=id", True, group_callback, False)
 
 
 
 
-
-import_groups()
+if __name__ == "__main__":
+    import_groups()

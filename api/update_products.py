@@ -43,8 +43,8 @@ def product_callback(product):
     return True
 
 def import_products():
-
     callapi("/v2/products?sort=id", True, product_callback, False)
 
 
-import_products()
+if __name__ == "__main__":
+    import_products()

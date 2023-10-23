@@ -40,11 +40,10 @@ def achievement_callback(achievement):
     return True
 
 def import_achievements():
-
     callapi("/v2/achievements?sort=id", True, achievement_callback, False)
 
 
 
 
-
-import_achievements()
+if __name__ == "__main__":
+    import_achievements()

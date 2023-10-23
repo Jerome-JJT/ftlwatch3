@@ -246,5 +246,5 @@ def import_projects(update_all = False):
 
             
 
-
-import_projects(True)
+if __name__ == "__main__":
+    import_projects(True)

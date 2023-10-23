@@ -21,6 +21,8 @@ limit_checker = 300
 
 def location_callback(location):
     global local_locations
+    global current_limit
+    global limit_checker
 
     if location["id"] not in local_locations:
         current_limit = limit_checker
@@ -102,7 +104,7 @@ def location_callback(location):
 def import_locations(update_all = False):
     global local_locations
 
-    local_locations = executeQuerySelect("SELECT id FROM locations")
+    local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")
     local_locations = [one["id"] for one in local_locations] 
 
     if (len(local_locations) == 0):
@@ -118,5 +120,5 @@ def import_locations(update_all = False):
 
 
 
-
-import_locations(True)
+if __name__ == "__main__":
+    import_locations(True)
