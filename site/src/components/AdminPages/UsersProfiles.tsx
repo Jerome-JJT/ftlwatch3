@@ -3,7 +3,6 @@ import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
   Button,
-  Checkbox,
   Dialog,
   DialogBody,
 } from '@material-tailwind/react';
