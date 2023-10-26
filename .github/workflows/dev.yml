@@ -10,7 +10,7 @@ on:
       - '*'
 
 jobs:
-dev  build:
+  build:
     name: Build and Test
     runs-on: ubuntu-latest
 
