@@ -15,7 +15,7 @@ if (isset($_GET["action"])) {
 
 require_once("controller/authorization.php");
 
-need_permission("p_student");
+need_permission("p_47student");
 
 
 require_once("controller/tableau.php");

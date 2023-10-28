@@ -78,7 +78,7 @@ export function UserGroupsPage(): JSX.Element {
         <SuperTable
           columns={columns}
           values={values}
-          tableTitle='Pages'
+          tableTitle='User groups'
           options={[10, 20, 30]}
           reloadFunction={() => { setValues([]); }}
         />

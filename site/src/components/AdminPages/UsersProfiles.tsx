@@ -108,7 +108,7 @@ export function UsersProfilesPage(): JSX.Element {
           reloadFunction={() => { setValues([]); }}
         />
       }
-      <Dialog className='dark:bg-gray-500' open={focusedProfile !== undefined} handler={() => setFocusedProfile(undefined)}>
+      <Dialog className='dark:bg-gray-600' open={focusedProfile !== undefined} handler={() => setFocusedProfile(undefined)}>
         <div className="flex items-center justify-end p-2 pr-4">
           <AiOutlineClose onClick={() => setFocusedProfile(undefined)}
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />

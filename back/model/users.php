@@ -15,6 +15,8 @@ function getUsersShort()
   
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
+
+  WHERE (users.hidden = false OR users.hidden = :hidden)
   ORDER BY login
   ";
 
@@ -80,6 +82,41 @@ function getUsers($hidden, $poolfilter = '')
 
   return $result;
 }
+
+
+function getUserImages($hidden, $poolfilter = '')
+{
+  $query = "SELECT 
+  users.id,
+  users.login,
+  users.first_name,
+  users.last_name,
+  users.display_name,
+  users.avatar_url,
+
+  poolfilters.name AS poolfilter
+  
+  FROM users
+  JOIN poolfilters ON users.poolfilter_id = poolfilters.id
+
+  WHERE (users.hidden = false OR users.hidden = :hidden)
+  AND (
+       (:poolfilter = 'all')
+    OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
+    OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
+    )
+  ORDER BY login
+  ";
+
+  $data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
+
+
 
 function setUser($userId, $value)
 {

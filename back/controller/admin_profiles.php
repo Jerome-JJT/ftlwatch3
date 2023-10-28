@@ -46,14 +46,16 @@ function profile_set($data)
         if (isset($data["theme_id"]) && 
             isset($data["color"]) && 
             isset($data["github_link"]) && 
-            isset($data["terms"]) ) {
+            isset($data["terms"]) &&
+            isset($data["can_change_theme"]) ) {
                 
             $res = setSettingsAdmin(
                 $data["user_id"], 
                 $data["theme_id"], 
                 $data["color"], 
                 $data["github_link"], 
-                $data["terms"]
+                $data["terms"],
+                $data["can_change_theme"]
             );
     
             jsonResponse(array(), $res ? 200 : 409);

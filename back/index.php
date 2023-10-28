@@ -35,6 +35,10 @@ else {
 
 session_start();
 
+print_r($_SERVER);
+print_r($_REQUEST);
+
+
 if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SESSION['CREATED'] > 120 * 60))) {
     session_unset();
     session_destroy();
@@ -71,6 +75,10 @@ try {
 
         case "tableau":
             require_once("routes/tableau.php");
+            break;
+
+        case "image":
+            require_once("routes/image.php");
             break;
 
         case "admin":

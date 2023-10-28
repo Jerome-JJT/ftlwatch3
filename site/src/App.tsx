@@ -82,11 +82,6 @@ export default function App(): JSX.Element {
     }
   );
 
-  console.log({
-    backgroundImage: userInfos?.theme_image !== '' ? userInfos?.theme_image : undefined,
-    backgroundColor: userInfos?.theme_image !== '' ? undefined : userInfos?.theme_color,
-  });
-
   return (
     <Router>
       <div className="grow bg-gray-300 dark:bg-gray-800 bg-center bg-cover" style={{

@@ -102,11 +102,9 @@ export function SettingsPage(): JSX.Element {
 
         <Checkbox
           checked={terms}
-          onChange={() => setTerms((prev) => !prev)}
           readOnly
-          disabled
           label={
-            <p className="my-text flex items-center font-normal text-gray-200">
+            <p className="my-text flex items-center font-normal">
               I agree the
               <a className="font-medium transition-colors hover:text-gray-900 ">
                 &nbsp;Terms and Conditions

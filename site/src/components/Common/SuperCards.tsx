@@ -184,7 +184,7 @@ export function SuperCards({
 
         {subOptions &&
          <Accordion open={isSubmenuOpen} className=''>
-           <AccordionHeader className='py-2' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
+           <AccordionHeader className='py-2 my-text' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
 
            <AccordionBody>
 

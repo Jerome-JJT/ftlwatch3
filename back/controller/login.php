@@ -125,8 +125,10 @@ function storeUser($res, $exists = 0)
 
         if (in_array(47, array_column($res['campus'], 'id'))) {
 
-            if (in_array(21, array_column($res['cursus_users'], 'cursus_id'))) {
-                array_push($perms, 'g_student');
+            array_push($perms, 'g_logged');
+
+            if (in_array(21, array_column($res['cursus_users'], 'cursus_id')) && in_array(47, array_column($res['campus'], 'id'))) {
+                array_push($perms, 'g_47student');
             }
             
             if (in_array('BDE', array_column($res['groups'], 'name'))) {

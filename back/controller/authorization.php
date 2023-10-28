@@ -25,7 +25,7 @@ function need_permission($perm) {
 
         $user = isset($_SESSION["user"]) && isset($_SESSION["user"]["login"]) ? $_SESSION["user"]["login"] : "anonymous";
 
-        mylogger($user." missing perm ".$perm." ".implode(", ", $_REQUEST["permissions"]), LOGGER_INFO());
+        mylogger($user." missing perm ".$perm." has ".implode(", ", $_REQUEST["permissions"]), LOGGER_INFO());
 
         jsonResponse(array(), 403);
     }

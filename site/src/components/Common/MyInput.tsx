@@ -27,11 +27,11 @@ const MyInput = (props: MyInputProps): JSX.Element => {
         text-sm px-3 py-3 rounded-md
 
         text-blue-gray-700 dark:!text-gray-300
-        border-blue-gray-200 dark:border-gray-700
+        border-blue-gray-200 dark:border-gray-500
         focus:border-gray-900 dark:focus:border-gray-900
 
         placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200
-        dark:placeholder-shown:border-gray-700 dark:placeholder-shown:border-t-gray-700
+        dark:placeholder-shown:border-gray-500 dark:placeholder-shown:border-t-gray-500
         disabled:bg-blue-gray-50
         "
       />
@@ -50,11 +50,11 @@ const MyInput = (props: MyInputProps): JSX.Element => {
       peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none
       after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[4.1]
 
-      text-gray-500 dark:!text-gray-300
+      text-gray-700 dark:!text-gray-300
       peer-focus:text-gray-900
 
       before:border-blue-gray-200 after:border-blue-gray-200
-      dark:before:border-gray-700 dark:after:border-gray-700
+      dark:before:border-gray-500 dark:after:border-gray-500
 
       peer-focus:before:!border-gray-900 peer-focus:after:!border-gray-900
 

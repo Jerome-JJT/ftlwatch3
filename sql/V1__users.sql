@@ -29,6 +29,7 @@ CREATE TABLE "login_user_profiles" (
 
     "theme_id" integer NOT NULL DEFAULT 1,
     "color" character varying DEFAULT '0xFFFFFF',
+    "can_change_theme" boolean NOT NULL DEFAULT TRUE,
 
     "terms" boolean DEFAULT TRUE,
     "ads" boolean DEFAULT TRUE,

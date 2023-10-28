@@ -10,24 +10,31 @@ if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+
+if (has_permission("p_perm")) {
+
+    switch ($action) {
+        case "groups_get":
+            groups_get();
+            break;
+    
+        case "group_set":
+            group_set($_POST);
+            break;
+    
+        case "perms_get":
+            perms_get();
+            break;
+    
+        case "perm_set":
+            perm_set($_POST);
+            break;
+    }
+}
+
 need_permission("p_admin");
 
 switch ($action) {
-    case "groups_get":
-        groups_get();
-        break;
-
-    case "group_set":
-        group_set($_POST);
-        break;
-
-    case "perms_get":
-        perms_get();
-        break;
-
-    case "perm_set":
-        perm_set($_POST);
-        break;
 
     case "pages_get":
         pages_get();

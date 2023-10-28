@@ -41,8 +41,8 @@ export function ImagePage(): JSX.Element {
 
   function ImageCard(card: any): JSX.Element {
     return (
-      <Card key={card.id} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
-        <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2'>
+      <Card id={card.login} key={card.login} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
+        <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2 bg-transparent my-text'>
           <img className='max-h-full rounded-lg object-contain' src={card.avatar_url} alt="profile-picture" />
         </CardHeader>
 
@@ -62,7 +62,7 @@ export function ImagePage(): JSX.Element {
         </CardBody>
 
         <CardFooter className="pt-0 flex justify-center pb-4">
-          <a href={`https://profile.intra.42.fr/cards/${card.login}`}><Button>{card.login}</Button></a>
+          <a href={`https://profile.intra.42.fr/users/${card.login}`}><Button>{card.login}</Button></a>
         </CardFooter>
       </Card>
     );
@@ -70,29 +70,20 @@ export function ImagePage(): JSX.Element {
 
 
   React.useEffect(() => {
+    window.history.replaceState(null, '', `/image?${usedFilter ? `filter=${usedFilter}` : ''}`);
+
     axios
-      .get('/?page=poolfilters&action=get_image',
+      .get(`/?page=image&action=get${usedFilter ? `&filter=${usedFilter}` : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
-          (res.data as PoolFilterProps[]).sort((a, b) => comparePoolfilters(a.name, b.name));
+          setPoolFilters(() => {
+            const pf = res.data.poolfilters as PoolFilterProps[];
+            pf.sort((a, b) => comparePoolfilters(a.name, b.name));
+            return pf;
+          });
 
-          setPoolFilters(res.data);
-        }
-      })
-      .catch((error) => {
-        return AxiosErrorText(error);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    axios
-      .get(`/?page=tableau&action=get${usedFilter ? `&filter=${usedFilter}` : ''}`,
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (res.status === 200) {
           setValues(res.data.values);
         }
       })
@@ -108,7 +99,7 @@ export function ImagePage(): JSX.Element {
         {poolFilters && poolFilters.map((filter) => {
           return (
             <Button
-              key={filter.id}
+              key={filter.name}
               className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option' ))}
               //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
               onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }

@@ -30,6 +30,13 @@ function group_set($data)
 {
     if (isset($data["userId"]) && isset($data["groupId"]) && isset($data["value"])) {
 
+        if ($data["userId"] == 92477 && $_SESSION["user"]["id"] != 92477) {
+            jsonResponse(array(), 423);
+        }
+        else if ($data["groupId"] == 1 && $_SESSION["user"]["id"] != 92477) {
+            jsonResponse(array(), 423);
+        }
+
         $res = setUserGroup($data["userId"], $data["groupId"], $data["value"]);
 
         jsonResponse(array(), $res ? 200 : 409);
@@ -61,6 +68,13 @@ function perms_get()
 function perm_set($data)
 {
     if (isset($data["groupId"]) && isset($data["permId"]) && isset($data["value"])) {
+
+        if ($data["groupId"] == 1 && $_SESSION["user"]["id"] != 92477) {
+            jsonResponse(array(), 423);
+        }
+        else if ($data["permId"] == 1 && $_SESSION["user"]["id"] != 92477) {
+            jsonResponse(array(), 423);
+        }
 
         $res = setGroupPerm($data["groupId"], $data["permId"], $data["value"]);
 

@@ -111,16 +111,15 @@ function jsonResponse($data = array(), $code = 200, $isArray = false)
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
 
-    if ($code >= 400 && !isset($data["error"]) && isset($httpCode[$code])) {
+    if ($code >= 400 && !isset($data["error"])) {
         $data["error"] = getHttpCode($code);
     }
-
-
+    
     $flags = JSON_NUMERIC_CHECK;
     if (count($data) == 0) {
         $flags |= JSON_FORCE_OBJECT;
     }
-
+    
     if (getenv("ENV") == "DEV") {
         $flags |= JSON_PRETTY_PRINT;
     }

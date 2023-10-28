@@ -8,7 +8,7 @@ require_once("model/simples/cursus.php");
 
 function get_tableau_poolfilters()
 {
-    $poolfilters = getPoolFilters(has_permission("p_admin"));
+    $poolfilters = getPoolFilters(has_permission("p_view4"));
 
     
     if (has_permission("p_view4")) {
@@ -39,37 +39,37 @@ function get_tableau_poolfilters()
 }
 
 
-function get_tableau_projects()
-{
-    $projectFilters = array("infos", "42cursus", "common-core", "outer-core", "piscine-c");
+// function get_tableau_projects()
+// {
+//     $projectFilters = array("infos", "42cursus", "common-core", "outer-core", "piscine-c");
 
     
-    if (has_permission("p_view4")) {
-        foreach ($poolfilters as $filter) {
-            $newKey = substr($filter["name"], 0, 4);
+//     if (has_permission("p_view4")) {
+//         foreach ($poolfilters as $filter) {
+//             $newKey = substr($filter["name"], 0, 4);
     
-            if ($newKey == "None") {
-                continue;
-            }
+//             if ($newKey == "None") {
+//                 continue;
+//             }
 
-            if (!in_array($newKey, array_column($poolfilters, "name"))) {
-                array_push($poolfilters, array("name" => $newKey, "hidden" => true));
-            }
-        }
+//             if (!in_array($newKey, array_column($poolfilters, "name"))) {
+//                 array_push($poolfilters, array("name" => $newKey, "hidden" => true));
+//             }
+//         }
 
-        array_unshift($poolfilters, array("name" => "all", "hidden" => true));
-    }
-    if (has_permission("p_view3")) {
-        array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
-    }
-    if (has_permission("p_view2")) {
-        array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
-    }
-    array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
+//         array_unshift($poolfilters, array("name" => "all", "hidden" => true));
+//     }
+//     if (has_permission("p_view3")) {
+//         array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
+//     }
+//     if (has_permission("p_view2")) {
+//         array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
+//     }
+//     array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
 
 
-    return $poolfilters;
-}
+//     return $poolfilters;
+// }
 
 
 
@@ -102,7 +102,7 @@ function tableau_api($selectedFilter, $selectedProjects)
     $currentFilter = "2023.september";
 
     if ($selectedFilter == "cursus" && in_array($selectedProjects, array("42cursus", "common-core", "outer-core"))) {
-        need_permission("p_student");
+        need_permission("p_47student");
     }
     else if ($selectedFilter == "cursus" && in_array($selectedProjects, array("infos"))) {
         need_permission("p_view1");
