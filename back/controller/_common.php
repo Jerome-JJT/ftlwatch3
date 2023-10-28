@@ -183,3 +183,32 @@ function userIsAdmin()
     }
     return false;
 }
+
+function logtologstash()
+{
+    // array(
+    //     "connection" => "$connection",
+    //     "request_id" => "$request_id",
+    //     "request_length" => "$request_length",
+    //     "remote_addr" => "$remote_addr",
+    //     "time_iso8601" => "$time_iso8601",
+    //     "request_uri" => "$request_uri",
+    //     "args" => "$args",
+    //     "status" => "$status",
+    //     "body_bytes_sent" => "$body_bytes_sent",
+    //     "bytes_sent" => "$bytes_sent",
+    //     "http_referer" => "$http_referer",
+    //     "http_user_agent" => "$http_user_agent",
+    //     "http_host" => "$http_host",
+    //     "server_name" => "$server_name",
+    //     "request_time" => "$request_time",
+    //     "scheme" => "$scheme",
+    //     "request_method" => "$request_method", 
+    //     "server_protocol" => "$server_protocol",
+    //     "geoip_country_code" => "$geoip_country_code";
+    // );
+
+
+
+    echo($msg . " " . json_encode($data), $level);
+}
