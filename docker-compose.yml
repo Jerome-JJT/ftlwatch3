@@ -79,8 +79,8 @@ services:
 
       CALLBACK_URL: ${CALLBACK_URL}
 
-      API_UID: ${API_UID}
-      API_SECRET: ${API_SECRET}
+      API_UID: ${API_FRONT_UID}
+      API_SECRET: ${API_FRONT_SECRET}
   
     working_dir: /var/www/html
 
@@ -98,8 +98,8 @@ services:
     networks:
       - front
 
-    environment:
-      API_UID: ${API_UID}
+    # environment:
+      # API_UID: ${API_FRONT_UID}
 
     working_dir: /app
 
@@ -125,8 +125,8 @@ services:
       DATABASE_USER: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-      API_UID: ${API_UID}
-      API_SECRET: ${API_SECRET}
+      API_UID: ${API_BACK_UID}
+      API_SECRET: ${API_BACK_SECRET}
 
     working_dir: /app
 
