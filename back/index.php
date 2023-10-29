@@ -35,9 +35,6 @@ else {
 
 session_start();
 
-print_r($_SERVER);
-print_r($_REQUEST);
-
 
 if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SESSION['CREATED'] > 120 * 60))) {
     session_unset();
@@ -56,6 +53,11 @@ jsonlogger('PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());
 // print_r("end<br>");
 // print_r($_REQUEST);
 // print_r($_SERVER);
+
+
+// print_r($_REQUEST);
+// print_r($_REQUEST);
+
 
 try {
     $page = "";
