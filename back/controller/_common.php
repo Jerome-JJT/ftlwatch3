@@ -133,11 +133,12 @@ function logtologstash($status)
         "api_user_perms" => $perms,
         "php_session_id" => $sessionId,
         "time_iso8601" => $currentTime,
-        "status" => $status,
-
+        
         "remote_addr" => $_SERVER["REMOTE_ADDR"],
         "request_uri" => $_SERVER["REQUEST_URI"],
+        "uri" => $_SERVER["SCRIPT_NAME"],
         "args" => $_SERVER["QUERY_STRING"],
+        "status" => $status,
         "http_referer" => $_SERVER["HTTP_REFERER"],
         "http_user_agent" => $_SERVER["HTTP_USER_AGENT"],
         "http_host" => $_SERVER["HTTP_HOST"],
