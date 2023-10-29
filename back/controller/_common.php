@@ -120,11 +120,12 @@ function logtologstash($status)
     $perms = "";
     $sessionId = "";
     if (isset($_REQUEST["permissions"])) {
-        $perms = implode($_REQUEST["permissions"]);
+        $perms = implode(",", $_REQUEST["permissions"]);
         $sessionId = substr($_REQUEST["PHPSESSID"], 0, 12);
     } 
 
     $currentTime = date('c');
+
 
     $data = array(
         "api_user_id" => $userId,
@@ -134,16 +135,16 @@ function logtologstash($status)
         "time_iso8601" => $currentTime,
         "status" => $status,
 
-        "remote_addr" => $_REQUEST["REMOTE_ADDR"],
-        "request_uri" => $_REQUEST["REQUEST_URI"],
-        "args" => $_REQUEST["QUERY_STRING"],
+        "remote_addr" => $_SERVER["REMOTE_ADDR"],
+        "request_uri" => $_SERVER["REQUEST_URI"],
+        "args" => $_SERVER["QUERY_STRING"],
         "http_referer" => $_SERVER["HTTP_REFERER"],
         "http_user_agent" => $_SERVER["HTTP_USER_AGENT"],
         "http_host" => $_SERVER["HTTP_HOST"],
-        "server_name" => $_REQUEST["SERVER_NAME"],
-        "scheme" => $_REQUEST["REQUEST_SCHEME"],
-        "request_method" => $_REQUEST["REQUEST_METHOD"], 
-        "server_protocol" => $_REQUEST["SERVER_PROTOCOL"]
+        "server_name" => $_SERVER["SERVER_NAME"],
+        "scheme" => $_SERVER["REQUEST_SCHEME"],
+        "request_method" => $_SERVER["REQUEST_METHOD"], 
+        "server_protocol" => $_SERVER["SERVER_PROTOCOL"]
     );
 
 
@@ -154,7 +155,7 @@ function logtologstash($status)
     if ($socket === false) {
         mylogger("Failed to create socket", LOGGER_ERROR());
     } else {
-        $message = json_encode($message);
+        $message = json_encode($data);
         $result = socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
 
         if ($result === false) {

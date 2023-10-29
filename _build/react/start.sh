@@ -25,7 +25,7 @@ fi
 yarn install
 
 
-if [ "$BUILD_TYPE" = "Production" ];
+if [ "$BUILD_TYPE" = "PROD" ];
 then
     # For start in prod
     yarn global add serve

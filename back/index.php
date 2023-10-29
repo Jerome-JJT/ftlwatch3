@@ -4,7 +4,6 @@ require_once("controller/_common.php");
 require_once("controller/authorization.php");
 
 http_response_code(501); // Return 501 by default if no response is specified
-
 // header('Content-Type: application/json');
 // header('Access-Control-Allow-Origin: http://c1r14s2:8080');
 header('Access-Control-Allow-Credentials: true');
@@ -34,7 +33,6 @@ else {
 }
 
 session_start();
-
 
 if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SESSION['CREATED'] > 120 * 60))) {
     session_unset();
