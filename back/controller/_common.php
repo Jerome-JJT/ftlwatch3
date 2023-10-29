@@ -148,7 +148,7 @@ function logtologstash($status)
     );
 
 
-    $logstashHost = 'host.docker.internal';
+    $logstashHost = 'logstash';
     $logstashPort = 1026;
 
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);

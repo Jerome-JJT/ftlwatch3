@@ -64,9 +64,7 @@ services:
     networks:
       - back
       - front
-
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - logging_elk
 
     # ports:
     #   - "8888:80"
@@ -152,6 +150,9 @@ services:
 networks:
   front:
   back:
+  logging_elk:
+    name: logging_elk
+    external: true
 
 volumes:
   main_db:
