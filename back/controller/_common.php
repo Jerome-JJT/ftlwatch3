@@ -106,8 +106,72 @@ function getHttpCode($code)
     return ($httpCode[$code]);
 }
 
+
+function logtologstash($status)
+{
+    $userId = "";
+    $userLogin = "";
+    if (isset($_SESSION["user"])) {
+        $userId = $_SESSION["user"]["id"];
+        $userLogin = $_SESSION["user"]["login"];
+    } 
+
+
+    $perms = "";
+    $sessionId = "";
+    if (isset($_REQUEST["permissions"])) {
+        $perms = implode($_REQUEST["permissions"]);
+        $sessionId = substr($_REQUEST["PHPSESSID"], 0, 12);
+    } 
+
+    $currentTime = date('c');
+
+    $data = array(
+        "api_user_id" => $userId,
+        "api_user_login" => $userLogin,
+        "api_user_perms" => $perms,
+        "php_session_id" => $sessionId,
+        "time_iso8601" => $currentTime,
+        "status" => $status,
+
+        "remote_addr" => $_REQUEST["REMOTE_ADDR"],
+        "request_uri" => $_REQUEST["REQUEST_URI"],
+        "args" => $_REQUEST["QUERY_STRING"],
+        "http_referer" => $_SERVER["HTTP_REFERER"],
+        "http_user_agent" => $_SERVER["HTTP_USER_AGENT"],
+        "http_host" => $_SERVER["HTTP_HOST"],
+        "server_name" => $_REQUEST["SERVER_NAME"],
+        "scheme" => $_REQUEST["REQUEST_SCHEME"],
+        "request_method" => $_REQUEST["REQUEST_METHOD"], 
+        "server_protocol" => $_REQUEST["SERVER_PROTOCOL"]
+    );
+
+
+    $logstashHost = 'host.docker.internal';
+    $logstashPort = 1026;
+
+    $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    if ($socket === false) {
+        mylogger("Failed to create socket", LOGGER_ERROR());
+    } else {
+        $message = json_encode($message);
+        $result = socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
+
+        if ($result === false) {
+            mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
+        } 
+        // else {
+        //     echo "Log message sent to Logstash.";
+        // }
+
+        socket_close($socket);
+    }
+}
+
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {
+    logtologstash($code);
+    
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
 
@@ -184,31 +248,5 @@ function userIsAdmin()
     return false;
 }
 
-function logtologstash()
-{
-    // array(
-    //     "connection" => "$connection",
-    //     "request_id" => "$request_id",
-    //     "request_length" => "$request_length",
-    //     "remote_addr" => "$remote_addr",
-    //     "time_iso8601" => "$time_iso8601",
-    //     "request_uri" => "$request_uri",
-    //     "args" => "$args",
-    //     "status" => "$status",
-    //     "body_bytes_sent" => "$body_bytes_sent",
-    //     "bytes_sent" => "$bytes_sent",
-    //     "http_referer" => "$http_referer",
-    //     "http_user_agent" => "$http_user_agent",
-    //     "http_host" => "$http_host",
-    //     "server_name" => "$server_name",
-    //     "request_time" => "$request_time",
-    //     "scheme" => "$scheme",
-    //     "request_method" => "$request_method", 
-    //     "server_protocol" => "$server_protocol",
-    //     "geoip_country_code" => "$geoip_country_code";
-    // );
 
 
-
-    echo($msg . " " . json_encode($data), $level);
-}

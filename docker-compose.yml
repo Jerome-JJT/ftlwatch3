@@ -65,6 +65,9 @@ services:
       - back
       - front
 
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
     # ports:
     #   - "8888:80"
 
