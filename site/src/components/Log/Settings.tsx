@@ -19,7 +19,7 @@ export function SettingsPage(): JSX.Element {
 
   const [themeValue, setThemeValue] = React.useState(userInfos?.theme_id);
   const [themeColor, setThemeColor] = React.useState(userInfos?.theme_color);
-  const [terms, setTerms] = React.useState(userInfos?.terms);
+  const [terms, _setTerms] = React.useState(userInfos?.terms);
 
 
   React.useEffect(() => {
