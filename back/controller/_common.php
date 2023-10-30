@@ -127,7 +127,7 @@ function logtologstash($status)
     $currentTime = date('c');
 
 
-    $data = array(
+    $logs = array(
         "api_user_id" => $userId,
         "api_user_login" => $userLogin,
         "api_user_perms" => $perms,
@@ -148,6 +148,11 @@ function logtologstash($status)
         "server_protocol" => $_SERVER["SERVER_PROTOCOL"]
     );
 
+    $tmpdata = array();
+    foreach ($logs as $key => $value) {
+        $tmpdata[] = '"' . $key . '": "' . $value . '"';
+    }
+    $data = implode(", ", $tmpdata);
 
     $logstashHost = 'logstash';
     $logstashPort = 1026;
