@@ -13,13 +13,19 @@ services:
     environment:
       BUILD_TYPE: "PROD" 
 
-#   front:
-#     restart: "on-failure"
+  front:
+    build: 
+      dockerfile: Dockerfile-prod
+    # restart: "on-failure"
 
 #     environment:
 #       BUILD_TYPE: "Production" 
 
   nginx:
+    build: 
+      context: .
+      dockerfile: ./_build/nginx/Dockerfile-prod
+
     restart: "on-failure"
 
     ports:
