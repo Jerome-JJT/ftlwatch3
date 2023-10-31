@@ -109,7 +109,7 @@ function getHttpCode($code)
 
 function logtologstash($status)
 {
-    $userId = "";
+    $userId = "-1";
     $userLogin = "";
     if (isset($_SESSION["user"])) {
         $userId = $_SESSION["user"]["id"];
@@ -148,11 +148,11 @@ function logtologstash($status)
         "server_protocol" => $_SERVER["SERVER_PROTOCOL"]
     );
 
-    $tmpdata = array();
+    $data = array();
     foreach ($logs as $key => $value) {
-        $tmpdata[] = '"' . $key . '": "' . $value . '"';
+        $data[] = '"' . $key . '": "' . $value . '"';
     }
-    $data = implode(", ", $tmpdata);
+    $message = implode(", ", $data);
 
     $logstashHost = 'logstash';
     $logstashPort = 1026;
@@ -161,7 +161,6 @@ function logtologstash($status)
     if ($socket === false) {
         mylogger("Failed to create socket", LOGGER_ERROR());
     } else {
-        $message = json_encode($data);
         $result = socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
 
         if ($result === false) {
