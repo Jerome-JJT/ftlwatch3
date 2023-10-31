@@ -134,7 +134,7 @@ function logtologstash($status)
         "php_session_id" => $sessionId,
         "time_iso8601" => $currentTime,
         
-        "remote_addr" => $_SERVER["REMOTE_ADDR"],
+        "remote_addr" => $_SERVER["HTTP_X_REAL_IP"],
         "request_uri" => $_SERVER["REQUEST_URI"],
         "uri" => $_SERVER["SCRIPT_NAME"],
         "args" => $_SERVER["QUERY_STRING"],
