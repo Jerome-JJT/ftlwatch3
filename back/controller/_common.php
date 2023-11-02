@@ -134,7 +134,7 @@ function logtologstash($status)
         "php_session_id" => $sessionId,
         "time_iso8601" => $currentTime,
         
-        "remote_addr" => $_SERVER["HTTP_X_REAL_IP"],
+        "remote_addr" => isset($_SERVER["HTTP_X_REAL_IP"]) ? $_SERVER["HTTP_X_REAL_IP"] : $_SERVER["REMOTE_ADDR"],
         "request_uri" => $_SERVER["REQUEST_URI"],
         "uri" => $_SERVER["SCRIPT_NAME"],
         "args" => $_SERVER["QUERY_STRING"],
@@ -176,7 +176,7 @@ function logtologstash($status)
 
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {
-    logtologstash($code);
+    // logtologstash($code);
     
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
