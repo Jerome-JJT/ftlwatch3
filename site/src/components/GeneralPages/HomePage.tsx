@@ -1,5 +1,5 @@
 import AppLogo from '../../assets/logo_transparent_small.png';
-import { Button, Card, CardBody, CardFooter } from '@material-tailwind/react';
+import { Avatar, Button, Card, CardBody, CardFooter } from '@material-tailwind/react';
 import { useLogin } from 'Hooks/LoginProvider';
 import { commonTitle } from 'Utils/commonTitle';
 import React from 'react';
@@ -17,8 +17,11 @@ export default function HomePage(): JSX.Element {
       <div className='flex flex-col'>
         { userInfos?.citation && userInfos?.citation.length > 0 &&
 
-          <Card className="big-card mt-6 mb-0 max-w-[600px] shadow-none">
-            <CardBody className='py-2'>
+          <Card className="big-card mt-6 !mb-0 max-w-[600px] shadow-none">
+            <CardBody className='py-2 flex flex-row justify-center gap-6 items-center'>
+              { userInfos?.citation_avatar && userInfos?.citation_avatar.length > 0 &&
+                <Avatar src={userInfos?.citation_avatar} alt="citator" />
+              }
               <p className='text-center text-xl text-black dark:text-white tracking-wide font-extrabold'>
                 {userInfos.citation}
               </p>
