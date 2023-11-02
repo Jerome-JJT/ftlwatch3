@@ -33,8 +33,11 @@ function loginUser($login, $password, $checkPassword = true)
 //Get user informations for session storage, (username, join date, score)
 function getUserInfos($login)
 {
-  $query = "SELECT login_users.id, login_users.login, login_users.display_name, login_users.avatar_url,
-  themes.id AS theme_id, themes.image AS theme_image, login_user_profiles.color AS theme_color, login_user_profiles.terms
+  $query = "SELECT login_users.id, login_users.login, 
+  login_users.display_name, login_users.avatar_url,
+  themes.id AS theme_id, themes.image AS theme_image, 
+  login_user_profiles.color AS theme_color, login_user_profiles.terms,
+  login_user_profiles.citation AS citation, login_user_profiles.citation_avatar AS citation_avatar
   FROM login_users
   
   JOIN login_user_profiles ON login_user_profiles.id = login_users.id
@@ -60,7 +63,10 @@ function getUserInfos($login)
       "theme_id" => $result["theme_id"],
       "theme_image" => $result["theme_image"],
       "theme_color" => $result["theme_color"],
-      "terms" => $result["terms"]
+      "terms" => $result["terms"],
+
+      "citation" => $result["citation"],
+      "citation_avatar" => $result["citation_avatar"]
     );
   }
 

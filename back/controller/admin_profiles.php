@@ -47,7 +47,10 @@ function profile_set($data)
             isset($data["color"]) && 
             isset($data["github_link"]) && 
             isset($data["terms"]) &&
-            isset($data["can_change_theme"]) ) {
+            isset($data["can_change_theme"]) &&
+            isset($data["citation"]) &&
+            isset($data["citation_avatar"])
+        ) {
                 
             $res = setSettingsAdmin(
                 $data["user_id"], 
@@ -55,7 +58,9 @@ function profile_set($data)
                 $data["color"], 
                 $data["github_link"], 
                 $data["terms"],
-                $data["can_change_theme"]
+                $data["can_change_theme"],
+                $data["citation"],
+                $data["citation_avatar"]
             );
     
             jsonResponse(array(), $res ? 200 : 409);

@@ -17,6 +17,8 @@ export interface LoggedUser {
   theme_image: string
   theme_color: string
   terms: boolean
+  citation: string
+  citation_avatar: string
 }
 
 interface GetUserDataProps {

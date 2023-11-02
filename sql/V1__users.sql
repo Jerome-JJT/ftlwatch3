@@ -38,6 +38,9 @@ CREATE TABLE "login_user_profiles" (
     "ban_date" character varying,
     "css_click" integer NOT NULL DEFAULT 0,
 
+    "citation" character varying NOT NULL DEFAULT "",
+    "citation_avatar" character varying NOT NULL DEFAULT "",
+
     CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("id") REFERENCES "login_users"("id"),
     CONSTRAINT "THEME_ID" FOREIGN KEY("theme_id") REFERENCES "themes"("id"),
     CONSTRAINT "PK_LOGIN_USER_PROFILE_ID" PRIMARY KEY ("id")

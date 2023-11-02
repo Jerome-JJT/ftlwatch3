@@ -125,6 +125,17 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
           value={settings.github_link || ''}
           onChange={(e) => setSettings((prev: any) => {return { ...prev, github_link: e.target.value };})}
         />
+
+        <MyInput
+          label='Citation'
+          value={settings.citation || ''}
+          onChange={(e) => setSettings((prev: any) => {return { ...prev, citation: e.target.value };})}
+        />
+        <MyInput
+          label='Citation avatar'
+          value={settings.citation_avatar || ''}
+          onChange={(e) => setSettings((prev: any) => {return { ...prev, citation_avatar: e.target.value };})}
+        />
       </div>
 
       <Checkbox

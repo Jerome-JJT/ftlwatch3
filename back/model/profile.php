@@ -34,7 +34,8 @@ function setSettings($userId, $themeId, $themeColor, $terms) {
 }
 
 
-function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, $terms, $canChangeTheme) {
+function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, 
+$terms, $canChangeTheme, $citation, $citationAvatar) {
 
   $query = "UPDATE login_user_profiles SET 
   
@@ -42,7 +43,9 @@ function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, $terms, $
   color = COALESCE(:color, color),
   github_link = COALESCE(:github_link, github_link),
   terms = COALESCE(:terms, terms),
-  can_change_theme = COALESCE(:can_change_theme, can_change_theme)
+  can_change_theme = COALESCE(:can_change_theme, can_change_theme),
+  citation = COALESCE(:citation, citation),
+  citation_avatar = COALESCE(:citation_avatar, citation_avatar)
 
   WHERE id = :userId";
 
@@ -53,6 +56,8 @@ function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, $terms, $
     ":github_link" => $githubLink,
     ":terms" => $terms,
     ":can_change_theme" => $canChangeTheme,
+    ":citation" => $citation,
+    ":citation_avatar" => $citationAvatar,
   );
 
   require_once("model/dbConnector.php");
@@ -97,7 +102,9 @@ function getProfiles()
   login_user_profiles.ban_date,
   login_user_profiles.css_click,
   login_user_profiles.ads,
-  login_user_profiles.terms
+  login_user_profiles.terms,
+  login_user_profiles.citation,
+  login_user_profiles.citation_avatar
   
   FROM login_users
 
