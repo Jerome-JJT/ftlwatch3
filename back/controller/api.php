@@ -32,8 +32,15 @@ function getResource($token, $endpoint) {
     CURLOPT_SSL_VERIFYPEER => false,
     CURLOPT_RETURNTRANSFER => true
   ));
+  
   $response = curl_exec($curl);
+  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   curl_close($curl);
 
+  
+  if ($httpCode == 429) {
+    jsonResponse(array("details" => "apibackend"), 429);
+  }
+  
   return json_decode($response, true);
 }
