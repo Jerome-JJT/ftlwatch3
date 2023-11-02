@@ -85,7 +85,7 @@ export default function App(): JSX.Element {
   return (
     <Router>
       <div className="grow bg-gray-300 dark:bg-gray-800 bg-center bg-cover" style={{
-        backgroundImage: userInfos?.theme_image !== '' ? `url('${userInfos?.theme_image}')` : undefined,
+        backgroundImage: (userInfos?.theme_image && userInfos?.theme_image !== '') ? `url('${userInfos?.theme_image}')` : undefined,
         backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
       }}>
         <NavBar
