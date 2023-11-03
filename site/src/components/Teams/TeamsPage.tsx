@@ -101,9 +101,8 @@ export function TeamsPage(): JSX.Element {
                     <Avatar
                       size="sm"
                       variant="circular"
-                      alt={user.login}
                       src={user.avatar_url}
-                      className="border-2 border-white hover:z-10 bg-black"
+                      className="border-2 border-white hover:z-10 bg-[#008080]"
                     />
                   </a>
                 </Tooltip>
@@ -115,9 +114,8 @@ export function TeamsPage(): JSX.Element {
                   <Avatar
                     size="sm"
                     variant="circular"
-                    alt={user.login}
                     src={user.avatar_url}
-                    className="border-2 border-white hover:z-10 bg-black"
+                    className="border-2 border-white hover:z-10 bg-[#008080]"
                   />
                 </a>
               </Tooltip>

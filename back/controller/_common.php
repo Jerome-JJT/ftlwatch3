@@ -1,5 +1,10 @@
 <?php
 
+//https://gist.github.com/remy/5213884
+function map($x, $in_min, $in_max, $out_min, $out_max) {
+    return ($x - $in_min) * ($out_max - $out_min) / ($in_max - $in_min) + $out_min;
+  }
+
 function getHttpCode($code)
 {
 
@@ -155,7 +160,7 @@ function logtologstash($status)
     $message = implode(", ", $data);
 
     $logstashHost = 'logstash';
-    $logstashPort = 1026;
+    $logstashPort = 42112;
 
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {

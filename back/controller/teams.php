@@ -11,9 +11,7 @@ function get_group_projects()
     $teams = getGroupProjects(21);
 
 
-
     $tmp = array();
-
 
     foreach ($teams as $team) {
         if ($team['retry_common'] != null) {
@@ -107,6 +105,108 @@ function get_group_projects()
     //     ["label" => "Has Cursus 9", "field" => "has_cursus9", "sort" => true],
     //     ["label" => "Pool Filter", "field" => "poolfilter", "sort" => true]
     // ];
+
+
+    jsonResponse($res, 200);
+
+}
+
+
+
+
+
+function get_tinder()
+{
+    $res = array();
+
+    $userProjects = getUserProjects();
+    $userProjectScore = getProjectsCount();
+    $userExamScore = getExamCount();
+
+
+    $userDoneProjects = array();
+
+    foreach ($userProjects as $project) {
+        if ($project["is_locked"] >= 1) {
+
+            if (isset($userDoneProjects[$project["user_id"]])) {
+                array_push($userDoneProjects[$project["user_id"]]["projects"], $project["project_slug"]);
+            }
+            else {
+                $userDoneProjects[$project["user_id"]] = array(
+                    "user_id" => $project["user_id"],
+                    "login" => $project["login"],
+                    "avatar_url" => $project["avatar_url"],
+                    "projects" => array($project["project_slug"]), 
+                    "score" => 0
+                );;
+            }
+        }
+    }
+
+    foreach ($userProjectScore as $score) {
+        if (isset($userDoneProjects[$score["user_id"]])) {
+            $userDoneProjects[$score["user_id"]]["score"] += $score["validated"];
+        }
+    }
+    foreach ($userExamScore as $score) {
+        if (isset($userDoneProjects[$score["user_id"]])) {
+            $userDoneProjects[$score["user_id"]]["score"] += $score["validated"];
+        }
+    }
+
+
+    $filters = array(
+        "circle3" => array("projects" => array("42cursus-minishell"), "prev" => 7.5, "min" => 8.5, "max" => 10),
+        "circle4" => array("projects" => array("cub3d", "minirt"), "prev" => 7.5, "min" => 8.5, "max" => 10),
+        "circle5" => array("projects" => array("webserv", "ft_irc"), "prev" => 7.5, "min" => 8.5, "max" => 10),
+        "circle6" => array("projects" => array("ft_transcendence"), "prev" => 7.5, "min" => 8.5, "max" => 10),
+    );
+
+
+    $tmp = array();
+    foreach (array_keys($filters) as $filter_key) {
+        $tmp[$filter_key] = array();
+    }
+
+
+    foreach ($userDoneProjects as $user) {
+
+        foreach ($filters as $filter_key => $filter) {
+            $flag = false;
+            foreach ($filter["projects"] as $check) {
+                $flag |= in_array($check, $user["projects"]);
+            }
+
+            if ($flag) {
+                continue;
+            }
+
+            if ($user["score"] >= $filter["prev"]) {
+
+                $score = 50;
+                if ($user["score"] <= $filter["min"]) {
+                    $score = map($user["score"], $filter["prev"], $filter["min"], 50, 100);
+                }
+                else {
+                    $score = map($user["score"], $filter["min"], $filter["max"], 100, 200);
+                }
+
+                array_push($tmp[$filter_key], array(
+
+                    "user_id" => $user["user_id"],
+                    "login" => $user["login"],
+                    "avatar_url" => $user["avatar_url"],
+                    "score" => $score
+                ));
+            }
+        }
+    }
+
+    $res = array();
+
+    $res["filters"] = $filters;
+    $res["values"] = $tmp;
 
 
     jsonResponse($res, 200);
