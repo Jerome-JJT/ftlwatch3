@@ -34,14 +34,19 @@ def location_callback(location):
         good_start_date = location['begin_at'][:10]
         good_end_date = location['end_at'][:10]
 
+        begin_at = parser.parse(location["begin_at"])
+        end_at = parser.parse(location["end_at"])
+
+        good_length = (end_at.replace(tzinfo=None) - begin_at.replace(tzinfo=None)).total_seconds()
+
         piscine_concern = f"{good_start_date[:4]}-10-01"
         good_is_piscine = piscine_concern < good_start_date
 
         if (good_start_date == good_end_date):
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "length", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(length)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -49,13 +54,13 @@ def location_callback(location):
                 "begin_at": location["begin_at"],
                 "end_at": location["end_at"],
                 "date": good_start_date,
+                "length": good_length,
                 "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
             })
         else:
-            begin_at = parser.parse(location["begin_at"])
-            end_at = parser.parse(location["end_at"])
+            
 
             date1 = begin_at.date()
             date2 = end_at.date()
@@ -63,11 +68,14 @@ def location_callback(location):
             midnight_start = datetime.datetime(date1.year, date1.month, date1.day, 0, 0, 0)
             midnight_end = datetime.datetime(date2.year, date2.month, date2.day, 0, 0, 0)
 
+            first_length = (begin_at.replace(tzinfo=None) - midnight_start.replace(tzinfo=None)).total_seconds()
+            second_length = (midnight_end.replace(tzinfo=None) - end_at.replace(tzinfo=None)).total_seconds()
+
 
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "length", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(length)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -75,15 +83,16 @@ def location_callback(location):
                 "begin_at": location["begin_at"],
                 "end_at": midnight_start,
                 "date": good_start_date,
+                "length": first_length,
                 "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
             })
 
             executeQueryAction("""INSERT INTO locations (
-                "id", "begin_at", "end_at", "date", "is_piscine", "host", "user_id"
+                "id", "begin_at", "end_at", "date", "length", "is_piscine", "host", "user_id"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(is_piscine)s, %(host)s, %(user_id)s
+                %(id)s, %(begin_at)s, %(end_at)s, %(date)s, %(length)s, %(is_piscine)s, %(host)s, %(user_id)s
             )
             ON CONFLICT DO NOTHING
             """, {
@@ -91,6 +100,7 @@ def location_callback(location):
                 "begin_at": midnight_end,
                 "end_at": location["end_at"],
                 "date": good_end_date,
+                "length": second_length,
                 "is_piscine": good_is_piscine,
                 "host": location["host"],
                 "user_id": location["user"]["id"],
