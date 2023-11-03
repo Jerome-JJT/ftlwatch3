@@ -14,7 +14,7 @@ export default function NotFoundPage(): JSX.Element {
   return (
 
     <div className='flex justify-center'>
-      <Card className="mt-6 max-w-[600px] dark:bg-gray-600">
+      <Card className="big-card mt-6 max-w-[600px] dark:bg-gray-600">
 
         <CardBody className=''>
           <div className='flex flex-row justify-center items-center gap-4'>

@@ -27,7 +27,7 @@ export default function NavBar({
     <header className="top-0 z-50 w-full">
       <nav
         className={classNames(
-          'z-50 px-2 py-2.5 shadow-lg sm:px-4 bg-white/80 dark:bg-gray-700/80'
+          'z-50 px-2 py-2.5 shadow-lg sm:px-4 bg-[#006060]'
         )}
       >
         <div className="mx-auto flex flex-wrap items-center justify-between">

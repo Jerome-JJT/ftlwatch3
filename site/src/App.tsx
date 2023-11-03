@@ -39,6 +39,7 @@ import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
 import { SettingsPage } from 'Log/Settings';
 import NotFoundPage from 'GeneralPages/NotFoundPage';
 import { UsersProfilesPage } from 'AdminPages/UsersProfiles';
+import { TinderPage } from 'Teams/TinderPage';
 // import Place from './components/Place/Place';
 
 
@@ -84,7 +85,7 @@ export default function App(): JSX.Element {
 
   return (
     <Router>
-      <div className="grow bg-gray-300 dark:bg-gray-800 bg-center bg-cover" style={{
+      <div className="grow bg-[#008080] bg-center bg-cover" style={{
         backgroundImage: (userInfos?.theme_image && userInfos?.theme_image !== '') ? `url('${userInfos?.theme_image}')` : undefined,
         backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
       }}>
@@ -122,6 +123,7 @@ export default function App(): JSX.Element {
             <Route path="/tableau" element={<TableauPage />} />
             <Route path="/image" element={<ImagePage />} />
             <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/tinder" element={<TinderPage />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
             <Route path="/admin/groups" element={<UserGroupsPage />} />

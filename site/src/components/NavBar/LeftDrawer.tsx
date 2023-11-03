@@ -39,7 +39,7 @@ export default function LeftDrawer({
       return ([
 
         <ListItem key={`${id}`}
-          className='hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
+          className='hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900 '
           onClick={() => {
             (elem.list && elem.list.length > 0)
               ? changeSub(id)
