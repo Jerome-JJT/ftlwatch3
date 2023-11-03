@@ -1,9 +1,9 @@
 
 
 
-DROP VIEW IF EXISTS v_user_permissions;
+DROP VIEW IF EXISTS v_login_user_permissions;
 
-CREATE VIEW v_user_permissions AS (
+CREATE VIEW v_login_user_permissions AS (
 SELECT 
 permissions.id AS permission_id, 
 permissions.name AS permission_name, 
@@ -54,16 +54,44 @@ SELECT
 
 
 
+-- DROP VIEW IF EXISTS v_users_projects;
+
+-- CREATE VIEW v_users_projects AS (
+--   SELECT 
+--     teams.id AS team_id, 
+--     teams.name AS team_name, 
+--     team_user.id AS team_user_id, 
+--     teams.retry_common,
+--     projects.id AS project_id, 
+--     projects.name AS project_name,
+--     projects.slug AS project_slug,
+--     projects.main_cursus,
+--     teams.is_validated, 
+--     teams.is_locked, 
+--     teams.status, 
+--     teams.final_mark,
+--     date_part('epoch', teams.updated_at) AS team_updated_at
+
+--   FROM teams
+--   JOIN team_user ON teams.id = team_user.team_id
+--   JOIN users ON users.id = team_user.user_id
+--   left JOIN projects ON projects.id = teams.project_id
+  
+--   WHERE users.hidden = FALSE
+-- );
+
+
+
 
 INSERT INTO "themes" ("id", "name", "image") VALUES
   (1, 'Default', ''),
   (7, 'Colors', ''),
   (20, 'Ducks', '/static/logo_gray.png'),
   (21, 'Animals', '/static/animals.png'),
-  (22, 'Cursed', '/static/teletubbies.png'),
-  (30, 'Processes', '/static/processes.png'),
-  (31, 'Cores', '/static/cores.png'),
-  (32, 'Threads', '/static/threads.png'),
+  (22, 'Cursed', '/static/teletubbies.jpg'),
+  (30, 'Processes', '/static/processes.jpg'),
+  (31, 'Cores', '/static/cores.jpg'),
+  (32, 'Threads', '/static/threads.jpg'),
   (42, 'Alex', '/static/alex.jpg')
 
   ON CONFLICT(id) DO NOTHING
@@ -221,7 +249,9 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (250, 'Images cursus', 1, NULL, 'filter=cursus', 2, 10),
   (255, 'Images current month', 2, NULL, 'filter=currentmonth', 2, 6),
-  (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 7)
+  (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 7),
+
+  (300, 'Teams', 10, 'teams', NULL, NULL, 10)
 
 
   ON CONFLICT(id) DO UPDATE

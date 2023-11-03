@@ -11,7 +11,7 @@ need_permission("p_47student");
 
 switch ($action) {
     case "get_teams":
-        get_team_projects();
+        get_group_projects();
         break;
 
 }

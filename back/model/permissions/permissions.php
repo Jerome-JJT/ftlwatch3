@@ -4,7 +4,7 @@
 
 function getUserPermissions($user_id) {
   $query = "SELECT permission_id, permission_name, permission_slug 
-    FROM v_user_permissions
+    FROM v_login_user_permissions
 
     WHERE login_user_id = :user_id
   ";
@@ -33,9 +33,9 @@ function getUserPages($userId)
   
   FROM v_page_menus 
 
-  JOIN v_user_permissions ON v_user_permissions.permission_id = v_page_menus.permission_id
+  JOIN v_login_user_permissions ON v_login_user_permissions.permission_id = v_page_menus.permission_id
 
-  WHERE v_user_permissions.login_user_id = :user_id
+  WHERE v_login_user_permissions.login_user_id = :user_id
   ";
   // WHERE users_groups.user_id = :user_id
 

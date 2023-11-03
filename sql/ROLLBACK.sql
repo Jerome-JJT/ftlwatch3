@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS "poolfilters";
 DROP TABLE IF EXISTS "locations";
 
 
-DROP VIEW IF EXISTS "v_user_permissions";
+DROP VIEW IF EXISTS "v_login_user_permissions";
 DROP VIEW IF EXISTS "v_page_menus";
 
 DROP TABLE IF EXISTS "login_groups_login_users";

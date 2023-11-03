@@ -4,11 +4,11 @@ require_once("model/teams.php");
 
 
 
-function get_team_projects()
+function get_group_projects()
 {
     $res = array();
 
-    $teams = getTeamProjects(21);
+    $teams = getGroupProjects(21);
 
 
 
