@@ -165,7 +165,8 @@ function logtologstash($status)
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {
         mylogger("Failed to create socket", LOGGER_ERROR());
-    } else {
+    } 
+    else {
         $result = socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
 
         if ($result === false) {

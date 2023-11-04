@@ -9,6 +9,7 @@ import requests
 import rich
 import environ
 import math
+import threading
 
 env = environ.Env()
 environ.Env.read_env()
@@ -76,7 +77,8 @@ def get_headers(force_refresh = False):
 
 
     return {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json"
     }
     
 
@@ -97,6 +99,19 @@ def raw(req, for_test = False):
 
     while (fails < maxfails):
         res = requests.get(url, headers=auth)
+
+        x = threading.Thread(target=logtologstash, args=({
+            "endpoint": url.replace("https://api.intra.42.fr", ""),
+            "attempts": maxfails,
+            "status": res.status_code,
+            "method": res.request.method,
+            "date": datetime.datetime.now().isoformat(),
+            "applicationName": res.headers.get('X-Application-Name') if res.headers.get('X-Application-Name') != None else '-',
+            "hourlyLimit": res.headers.get('X-Hourly-RateLimit-Remaining') if res.headers.get('X-Hourly-RateLimit-Remaining') != None else -1,
+            "elapsed": res.elapsed.total_seconds(),
+            "runtime": res.headers.get('X-Runtime') if res.headers.get('X-Runtime') != None else -1
+        },))
+        x.start()
 
         if (res.status_code == 200):
             return res

@@ -23,6 +23,7 @@ fi
 
 # Download node_modules
 yarn install
+(cd node_modules/react-gauge-chart && npm i lodash.isequal)
 
 
 if [ "$BUILD_TYPE" = "PROD" ];
