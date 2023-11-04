@@ -160,7 +160,7 @@ function logtologstash($status)
     $message = implode(", ", $data);
 
     $logstashHost = 'logstash';
-    $logstashPort = 42112;
+    $logstashPort = 1026;
 
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {

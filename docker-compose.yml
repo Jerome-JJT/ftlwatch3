@@ -64,7 +64,7 @@ services:
     networks:
       - back
       - front
-      - logging_elk
+      - logging_logstash
 
     # ports:
     #   - "8888:80"
@@ -116,6 +116,7 @@ services:
 
     networks:
       - back
+      - logging_logstash
 
     environment:
       DATABASE_CONNECT: 'pgsql'
@@ -150,8 +151,8 @@ services:
 networks:
   front:
   back:
-  logging_elk:
-    name: logging_elk
+  logging_logstash:
+    name: logging_logstash
     external: true
 
 volumes:
