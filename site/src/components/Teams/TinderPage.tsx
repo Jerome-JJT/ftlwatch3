@@ -1,26 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
-  Avatar,
-  Badge,
   Button,
   Card,
   CardBody,
-  CardFooter,
-  Checkbox,
-  Popover,
-  PopoverContent,
-  PopoverHandler,
-  Tooltip,
-  Typography,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
-import { AiFillStar } from 'react-icons/ai';
-import { longDate, shortDate } from 'Utils/dateUtils';
 import { commonTitle } from 'Utils/commonTitle';
-
+import Separator from 'Common/Separator';
+import classNames from 'classnames';
+import GaugeChart from 'react-gauge-chart';
 
 
 
@@ -29,48 +20,68 @@ export function TinderPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+  const [filters, setFilters] = React.useState<any[] | undefined>(undefined);
+
+  const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {document.title = commonTitle('Tinder');}, []);
 
   function TinderCard(card: any): JSX.Element {
 
-    const users = Object.values(card.users);
-    users.sort((a: any, _b: any) => {
-      return a.id === card.leader_id ? 1 : 0;
-    });
-
-
     return (
-      <Card className="flex min-w-80 w-80 max-w-80 h-52 border-black border-2">
+      <Card id={`${card.circle}-${card.user_id}`} className="flex w-60 border-black border-2">
 
-        <CardBody className="flex flex-row grow justify-evenly text-center align-center p-2">
+        <CardBody className="flex flex-col grow justify-evenly text-center align-center p-2">
 
-          <div className='flex flex-col justify-evenly'>
-            <p color="blue-gray">
-            </p>
-            <p color="blue-gray">
-            </p>
-          </div>
+          <p color="blue-gray">
+            {filters && filters[card.circle].projects.join('/') || 'none'}
+          </p>
 
-          <div className='flex flex-col justify-evenly'>
-            <div className="flex items-center">
+          <div className='flex flex-row justify-between items-center'>
+            <div>
+              <p color="blue-gray">
+                <a href={`https://profile.intra.42.fr/users/${card.login}`}>{card.login}</a>
+              </p>
+              <img className='max-h-20 rounded-lg object-contain' src={card.avatar_url} alt="profile-picture" />
             </div>
 
-            <p color="blue-gray">
-              Mark :
-            </p>
+            <GaugeChart id={`gauge-chart-${card.circle}-${card.user_id}`}
+              className=''
+              style={{ width: '150px' }}
+              marginInPercent={0.01}
+              nrOfLevels={10}
+              colors={['#FF6000', '#00B0B0']}
+              animate={false}
+              percent={card.score/200}
+              formatTextValue={(value: number) => `${value*2}%`}
+            />
 
           </div>
         </CardBody>
-
-        <CardFooter className="flex items-center bg-black/20 justify-between p-3 pb-1">
-          <div className="flex items-center -space-x-3">
-          </div>
-          <Typography className="font-normal">fasfasfasf</Typography>
-        </CardFooter>
       </Card>
     );
   }
+
+  const subOptions = useMemo(() => (
+    <>
+      <div className='flex flex-wrap gap-2 justify-evenly'>
+
+        {filters && Object.entries(filters).map((filtertab) => {
+          return (
+            <Button
+              key={filtertab[0]}
+              className={classNames(filtertab[0] === currentFilter ? 'selected-option' : 'available-option' )}
+              onClick={() => { setCurrentFilter((prev) => prev !== filtertab[0] ? filtertab[0] : undefined); } }
+            >
+              {filtertab[1].projects.join('/')}
+            </Button>
+          );
+        })}
+      </div>
+      <Separator></Separator>
+    </>
+
+  ), [currentFilter, filters]);
 
   React.useEffect(() => {
     axios
@@ -79,7 +90,7 @@ export function TinderPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          setValues(res.data.filters);
+          setFilters(res.data.filters);
           setValues(res.data.values);
         }
       })
@@ -88,37 +99,36 @@ export function TinderPage(): JSX.Element {
       });
   }, [addNotif]);
 
-  // const subOptions = useMemo(() => (
-  //   <>
-  //     <div className='flex flex-wrap gap-2 justify-evenly'>
 
-  //       {poolFilters && poolFilters.map((filter) => {
-  //         return (
-  //           <Button
-  //             key={filter.id}
-  //             className={classNames(filter.name === usedFilter ? 'bg-blue-900' : (filter.hidden ? 'bg-blue-200' : 'bg-blue-700' ))}
-  //             //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-  //             onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }
-  //           >
-  //             {filter.name}
-  //           </Button>
-  //         );
-  //       })}
-  //     </div>
-  //     <Separator></Separator>
-  //   </>
+  const displayValues = useMemo(() => {
 
-  // ), [poolFilters, usedFilter]);
+    if (values === undefined) {
+      return [];
+    }
+
+    return Object.entries(values).flatMap((filtertab) => {
+
+      if (currentFilter !== undefined && filtertab[0] !== currentFilter) {
+        return [];
+      }
+
+      return filtertab[1]
+        .sort((a: any, b: any) => a.score < b.score)
+        .map((arg: any) => { return { ...arg, circle: filtertab[0] };});
+    });
+
+  }, [currentFilter, values]);
+
 
   //
   return (
     <div className='my-content'>
       {(values) &&
         <SuperCards
-          values={values}
+          values={displayValues || []}
           customCard={TinderCard}
 
-          // subOptions={subOptions}
+          subOptions={subOptions}
 
           tableTitle='Tinder'
           options={[10, 25, 50, 100]}

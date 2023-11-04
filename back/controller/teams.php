@@ -157,10 +157,10 @@ function get_tinder()
 
 
     $filters = array(
-        "circle3" => array("projects" => array("42cursus-minishell"), "prev" => 7.5, "min" => 8.5, "max" => 10),
-        "circle4" => array("projects" => array("cub3d", "minirt"), "prev" => 7.5, "min" => 8.5, "max" => 10),
-        "circle5" => array("projects" => array("webserv", "ft_irc"), "prev" => 7.5, "min" => 8.5, "max" => 10),
-        "circle6" => array("projects" => array("ft_transcendence"), "prev" => 7.5, "min" => 8.5, "max" => 10),
+        "circle3" => array("projects" => array("42cursus-minishell"), "prev" => 6, "min" => 7.5, "max" => 9),
+        "circle4" => array("projects" => array("cub3d", "minirt"), "prev" => 8.5, "min" => 10, "max" => 16.5),
+        "circle5" => array("projects" => array("webserv", "ft_irc"), "prev" => 16, "min" => 17.5, "max" => 24),
+        "circle6" => array("projects" => array("ft_transcendence"), "prev" => 23.5, "min" => 25, "max" => 25.5),
     );
 
 

@@ -251,7 +251,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (255, 'Images current month', 2, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 7),
 
-  (300, 'Teams', 10, 'teams', NULL, NULL, 10)
+  (300, 'Teams', 10, 'teams', NULL, NULL, 10),
+  (305, 'Tinder', 10, 'tinder', NULL, NULL, 10)
 
 
   ON CONFLICT(id) DO UPDATE
