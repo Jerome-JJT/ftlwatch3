@@ -32,7 +32,7 @@ def mylogger(log, level = 0):
 
 def logtologstash(logs):
   HOST = 'logstash'
-  PORT = 1027
+  PORT = 42113
 
   try:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
