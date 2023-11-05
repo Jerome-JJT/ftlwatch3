@@ -208,7 +208,9 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (1, 'Tableaux', 20, 'tableau'),
   (2, 'Images', 21, 'image'),
   (3, 'Admin', 5, NULL),
-  (4, 'Basics', 3, NULL)
+  (4, 'Basics', 3, NULL),
+  (5, 'Projects', 3, NULL),
+  (6, 'Locations', 3, NULL)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -218,15 +220,15 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
 ;
 
 INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id", "permission_id") VALUES
-  (5, 'Achievements', 5, 'achievements', NULL, 4, 4),
-  (10, 'Campus', 10, 'campus', NULL, 4, 4),
-  (15, 'Coalitions', 15, 'coalitions', NULL, 4, 4),
-  (20, 'Cursus', 20, 'cursus', NULL, 4, 4),
-  (25, 'Groups', 25, 'groups', NULL, 4, 4),
-  (30, 'Projects', 30, 'projects', NULL, 4, 4),
-  (35, 'Products', 35, 'products', NULL, 4, 4),
-  (40, 'Rules', 40, 'rules', NULL, 4, 4),
-  (45, 'Titles', 45, 'titles', NULL, 4, 4),
+  (5, 'Achievements', 5, 'basics/achievements', NULL, 4, 4),
+  (10, 'Campus', 10, 'basics/campus', NULL, 4, 4),
+  (15, 'Coalitions', 15, 'basics/coalitions', NULL, 4, 4),
+  (20, 'Cursus', 20, 'basics/cursus', NULL, 4, 4),
+  (25, 'Groups', 25, 'basics/groups', NULL, 4, 4),
+  (30, 'Projects', 30, 'basics/projects', NULL, 4, 4),
+  (35, 'Products', 35, 'basics/products', NULL, 4, 4),
+  (40, 'Rules', 40, 'basics/rules', NULL, 4, 4),
+  (45, 'Titles', 45, 'basics/titles', NULL, 4, 4),
 
   (90, 'About', 30, 'about', NULL, NULL, NULL),
 
@@ -251,8 +253,11 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (255, 'Images current month', 2, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 7),
 
-  (300, 'Teams', 10, 'teams', NULL, NULL, 10),
-  (305, 'Tinder', 10, 'tinder', NULL, NULL, 10)
+  (300, 'Teams', 10, 'projects/teams', NULL, 5, 10),
+  (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
+
+  (350, 'Users computers', 10, 'locations/userscomputers', NULL, 6, 10),
+  (355, 'Users totals', 10, 'locations/userstotal', NULL, 6, 10)
 
 
   ON CONFLICT(id) DO UPDATE
@@ -264,4 +269,50 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   "submenu_id" = EXCLUDED.submenu_id,
   "permission_id" = EXCLUDED.permission_id;
 ;
+
+
+
+
+CREATE TABLE IF NOT EXISTS vp_loves (
+    "id" character varying NOT NULL, 
+
+    "user1_id" integer NOT NULL, 
+    "user2_id" integer NOT NULL, 
+
+    "date" character varying NOT NULL, 
+
+    "dist" bigint NOT NULL, 
+    "length" bigint NOT NULL, 
+
+    "is_piscine" boolean NOT NULL, 
+
+    CONSTRAINT "PK_LOVES_ID" PRIMARY KEY ("id")
+);
+
+
+CREATE TABLE IF NOT EXISTS vp_peaks (
+    "id" character varying NOT NULL, 
+
+    "begin_at" TIMESTAMP NOT NULL, 
+
+    "ccount" integer NOT NULL,
+    "date" character varying NOT NULL,
+
+    "is_piscine" boolean NOT NULL, 
+
+    CONSTRAINT "PK_PEAKS_ID" PRIMARY KEY ("id")
+);
+
+
+DROP VIEW IF EXISTS v_users_computers;
+CREATE VIEW v_users_computers AS (
+    SELECT
+        user_id,
+        host,
+        SUM(length) AS total_length,
+        ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY SUM(length) DESC) AS rank
+    FROM locations
+    GROUP BY user_id, host
+);
+
 

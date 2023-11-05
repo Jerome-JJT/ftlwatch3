@@ -40,6 +40,8 @@ import { SettingsPage } from 'Log/Settings';
 import NotFoundPage from 'GeneralPages/NotFoundPage';
 import { UsersProfilesPage } from 'AdminPages/UsersProfiles';
 import { TinderPage } from 'Teams/TinderPage';
+import { UsersComputersPage } from 'LocationsPages/UsersComputersPage';
+import { UsersTotalPage } from 'LocationsPages/UsersTotalPage';
 // import Place from './components/Place/Place';
 
 
@@ -109,21 +111,24 @@ export default function App(): JSX.Element {
             <Route path="/logout" element={<Logout />} />
             <Route path="/settings" element={<SettingsPage />} />
 
-            <Route path="/achievements" element={<AchievementsPage />} />
-            <Route path="/campus" element={<CampusPage />} />
-            <Route path="/coalitions" element={<CoalitionsPage />} />
-            <Route path="/cursus" element={<CursusPage />} />
-            <Route path="/groups" element={<GroupsPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/titles" element={<TitlesPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/rules" element={<RulesPage />} />
+            <Route path="/basics/achievements" element={<AchievementsPage />} />
+            <Route path="/basics/campus" element={<CampusPage />} />
+            <Route path="/basics/coalitions" element={<CoalitionsPage />} />
+            <Route path="/basics/cursus" element={<CursusPage />} />
+            <Route path="/basics/groups" element={<GroupsPage />} />
+            <Route path="/basics/products" element={<ProductsPage />} />
+            <Route path="/basics/titles" element={<TitlesPage />} />
+            <Route path="/basics/projects" element={<ProjectsPage />} />
+            <Route path="/basics/rules" element={<RulesPage />} />
 
 
             <Route path="/tableau" element={<TableauPage />} />
             <Route path="/image" element={<ImagePage />} />
-            <Route path="/teams" element={<TeamsPage />} />
-            <Route path="/tinder" element={<TinderPage />} />
+            <Route path="/projects/teams" element={<TeamsPage />} />
+            <Route path="/projects/tinder" element={<TinderPage />} />
+
+            <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
+            <Route path="/locations/userstotal" element={<UsersTotalPage />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
             <Route path="/admin/groups" element={<UserGroupsPage />} />

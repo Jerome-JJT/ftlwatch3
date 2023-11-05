@@ -9,7 +9,7 @@ export default function NotFoundPage(): JSX.Element {
 
   const { isLogged } = useLogin();
 
-  React.useEffect(() => {document.title = commonTitle('Home');}, []);
+  React.useEffect(() => {document.title = commonTitle('Not Found');}, []);
 
   return (
 

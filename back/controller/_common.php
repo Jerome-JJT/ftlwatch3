@@ -162,21 +162,43 @@ function logtologstash($status)
     $logstashHost = 'logstash';
     $logstashPort = 42112;
 
-    $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-    if ($socket === false) {
-        mylogger("Failed to create socket", LOGGER_ERROR());
-    } 
-    else {
-        $result = socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
-
-        if ($result === false) {
-            mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
+    try {
+        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        if ($socket === false) {
+            mylogger("Failed to create socket", LOGGER_ERROR());
         } 
-        // else {
-        //     echo "Log message sent to Logstash.";
-        // }
+        else {
+            $connect_timeval = array(
+                "sec"=>0,
+                "usec" => 500000
+            );
+            socket_set_option(
+                $socket,
+                SOL_SOCKET,
+                SO_SNDTIMEO,
+                $connect_timeval
+            );
+            socket_set_option(
+                $socket,
+                SOL_SOCKET,
+                SO_RCVTIMEO,
+                $connect_timeval
+            );
 
-        socket_close($socket);
+            $result = @socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
+    
+            if ($result === false) {
+                mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
+            } 
+            // else {
+            //     echo "Log message sent to Logstash.";
+            // }
+    
+            socket_close($socket);
+        }
+    }
+    catch (Exception $e) {
+        mylogger("Exception in logtologstash", LOGGER_ERROR());
     }
 }
 

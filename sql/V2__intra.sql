@@ -183,6 +183,8 @@ CREATE TABLE "locations" (
     "end_at" TIMESTAMP NOT NULL, 
     "date" character varying NOT NULL, 
     "length" bigint NOT NULL, 
+    "sun_length" bigint NOT NULL, 
+    "moon_length" bigint NOT NULL, 
     "is_piscine" boolean NOT NULL, 
 
     "host" character varying NOT NULL, 

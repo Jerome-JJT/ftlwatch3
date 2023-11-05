@@ -97,6 +97,10 @@ try {
             require_once("routes/teams.php");
             break;
 
+        case "locations":
+            require_once("routes/locations.php");
+            break;
+
 
         // default:
             // print_r($_SERVER);

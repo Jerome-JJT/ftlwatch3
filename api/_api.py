@@ -98,7 +98,15 @@ def raw(req, for_test = False):
     maxfails = 10 if not for_test else 2
 
     while (fails < maxfails):
-        res = requests.get(url, headers=auth)
+        res = []
+        try:
+            with timeout(30):
+                res = requests.get(url, headers=auth)
+        except:
+            mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
+            fails += 1
+            time.sleep(5)
+            continue
 
         x = threading.Thread(target=logtologstash, args=({
             "endpoint": url.replace("https://api.intra.42.fr", ""),

@@ -30,6 +30,7 @@ interface SuperTableProps {
   tableDesc?: string | undefined;
 
   options?: number[];
+  indexColumn?: boolean;
   hasOptionAll?: boolean;
   reloadFunction?: (() => void) | undefined;
 }
@@ -44,6 +45,7 @@ export function SuperTable({
   tableDesc = undefined,
 
   options = [10, 30, 50, 100],
+  indexColumn = false,
   hasOptionAll = true,
 
   reloadFunction = undefined,
@@ -87,8 +89,8 @@ export function SuperTable({
   };
 
   const customSort = useCallback((a: any, b: any): number => {
-    const aValue = a[sortColumn];
-    const bValue = b[sortColumn];
+    const aValue = a[`_${sortColumn}`] !== undefined ? a[`_${sortColumn}`] : a[sortColumn];
+    const bValue = b[`_${sortColumn}`] !== undefined ? b[`_${sortColumn}`] : b[sortColumn];
 
     if (typeof aValue !== 'undefined' && typeof bValue !== 'undefined') {
       if (typeof aValue === 'number' && typeof bValue === 'number') {
@@ -256,6 +258,20 @@ export function SuperTable({
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
               <tr className="bg-blue-gray-50">
+                { indexColumn &&
+                <th
+                  key='index'
+                  className="border-b border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors"
+                >
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="flex items-center text-center gap-2 font-normal leading-none opacity-70"
+                  >
+                    Index
+                  </Typography>
+                </th>
+                }
                 {columns.map((value) => value.visible !== false && (
                   <th
                     key={value.field}
@@ -291,6 +307,15 @@ export function SuperTable({
                     className='border-b border-gray-300
                     odd:bg-white even:bg-blue-50  hover:bg-blue-gray-100
                     dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'>
+                    { indexColumn &&
+                      <td key={`${createKey(value, index)}-index`}
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
+                        <div className="h-full flex justify-center items-center">
+                          {index + 1}
+                        </div>
+                      </td>
+                    }
+
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${createKey(value, index)}-${col.field}`}
