@@ -35,7 +35,7 @@ def logtologstash(logs):
   PORT = 42113
 
   try:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
   except socket.error as msg:
     mylogger("Failed to create socket", LOGGER_ERROR)
