@@ -160,7 +160,7 @@ function logtologstash($status)
     $message = implode(", ", $data);
 
     $logstashHost = 'logstash';
-    $logstashPort = 1026;
+    $logstashPort = 42112;
 
     $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     if ($socket === false) {
@@ -182,7 +182,7 @@ function logtologstash($status)
 
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {
-    // logtologstash($code);
+    logtologstash($code);
     
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
