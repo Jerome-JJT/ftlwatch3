@@ -93,6 +93,8 @@ rundb:
 			${DOCKER} exec postgres psql --host=postgres --dbname=test_db --username=user -W
 runnginx:
 			${DOCKER} exec nginx bash
+runrabbit:
+			${DOCKER} exec rabbit bash
 
 
 

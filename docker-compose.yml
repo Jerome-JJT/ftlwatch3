@@ -26,6 +26,24 @@ services:
     entrypoint: "bash"
     # entrypoint: "bash /flyway/sql/_myflyway.sh migrate"
 
+  rabbit:
+    build: ./_build/rabbit
+    hostname: rabbit
+
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
+
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}
+
+    networks:
+      - back
+
+    ports:
+      - "9999:15672"
+
+
   db:
     image: postgres:14.2
 
@@ -118,6 +136,9 @@ services:
       - back
       - logging_logstash
 
+    env_file:
+     - .env
+
     environment:
       DATABASE_CONNECT: 'pgsql'
       DATABASE_HOST: 'db'
@@ -127,6 +148,9 @@ services:
       DATABASE_USER: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
+      RABBIT_USER: ${RABBIT_USER}
+      RABBIT_PASS: ${RABBIT_PASS}
+      
       API_UID: ${API_BACK_UID}
       API_SECRET: ${API_BACK_SECRET}
 
@@ -157,5 +181,6 @@ networks:
 
 volumes:
   main_db:
+  rabbit_data:
 
 

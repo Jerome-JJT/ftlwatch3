@@ -157,7 +157,10 @@ def raw(req, for_test = False):
     raise Exception(f"Raw api failed {maxfails} times") 
 
 
-def callapi(req, multiple = False, callback = None, callback_limit = True):
+def callapi(req, multiple = False, callback = None, callback_limit = True, nultiple=0):
+
+    if (multiple == True):
+        nultiple = 1
 
     start_time = time.time()
 
@@ -165,11 +168,14 @@ def callapi(req, multiple = False, callback = None, callback_limit = True):
     rawres = raw(page)
     res = rawres.json()
 
-    if (type(res) == type([]) and callback != None):
+    if (type(res) == type([]) and callback != None and nultiple <= 1):
         for i in res:
             cb_res = callback(i)
             if (callback_limit == True and cb_res == False):
                 return False
+        res = []
+
+    if (nultiple >= 2):
         res = []
 
     perpage = rawres.headers.get("X-Per-Page")
@@ -178,9 +184,9 @@ def callapi(req, multiple = False, callback = None, callback_limit = True):
         mylogger(f"So fast", LOGGER_DEBUG)
         time.sleep(0.5)
 
-    if (type(res) == type([]) and multiple == True and perpage != None and tot != None):
+    if (type(res) == type([]) and (multiple == True or nultiple >= 1) and perpage != None and tot != None):
 
-        for i in range(2, math.ceil(int(tot)/int(perpage)) + 1):
+        for i in range(max(nultiple, 2), math.ceil(int(tot)/int(perpage)) + 1):
 
             if ("?" in req):
                 page = f"{req}&page[number]={i}"

@@ -1,8 +1,11 @@
 requests
 django-environ
+schedule
 
 psycopg2
 
+pika
+click
 
 oauthlib
 plotly
