@@ -27,9 +27,7 @@ def api_consumer(ch, method, properties, body):
     try:
         content = json.loads(body)
 
-
         resource = content["resource"]
-
 
         if (resource == "achievements"):
             import_achievements()

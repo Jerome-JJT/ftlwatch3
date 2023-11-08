@@ -23,7 +23,6 @@ def bot_consumer(ch, method, properties, body):
     try:
         content = json.loads(body)
 
-
         # discord_channel = content["channel"]
         discord_channel = method.routing_key.split('.')[0]
 
@@ -33,7 +32,6 @@ def bot_consumer(ch, method, properties, body):
             if key.startswith("BOT_WEBHOOK_"):
                 webhook_chan = key.replace("BOT_WEBHOOK_", "").lower()
 
-                print('search', webhook_chan, discord_channel)
                 if webhook_chan == discord_channel:
                     webhook_url = env(key)
 
@@ -41,13 +39,9 @@ def bot_consumer(ch, method, properties, body):
             raise Exception(f'{discord_channel} channel webhook not found')
 
 
-        username = "FlamingDuck"
-        avatar_url = "https://42lwatch.ch/static/logo_gray.png" 
-
-        
         payload = {
-            "username": username,
-            "avatar_url": avatar_url,
+            "username": "BlazingDuck",
+            "avatar_url": "https://dev.42lwatch.ch/static/logo_gray.png", 
             "embeds": [],
         }
 
@@ -56,19 +50,17 @@ def bot_consumer(ch, method, properties, body):
                 "title": content["title"],
                 "color": 32896, 
             }
-            
             if (content.get("description") != None):
-                embed["description"]: content.get("description")
+                embed["description"] = content.get("description")
             if (content.get("url") != None):
-                embed["url"]: content.get("url")
-
+                embed["url"] = content.get("url")
             if (content.get("thumbnail") != None):
-                embed["thumbnail"]: {
+                embed["thumbnail"] = {
                     "url": content.get("thumbnail")
                 }
 
             if (content.get("image") != None):
-                embed["image"]: {
+                embed["image"] = {
                     "url": content.get("image")
                 }
 
@@ -76,14 +68,21 @@ def bot_consumer(ch, method, properties, body):
                 embed["fields"] = []
                 for name, value in content.get("fields").items():
                     embed["fields"].append({"name": name, "value": value})
-            
 
+
+            if (content.get("footer_text") != None or content.get("footer_icon") != None):
+                embed["footer"] = {}
+                if (content.get("footer_text")):
+                    embed["footer"]["text"] = content.get("footer_text")
+                if (content.get("footer_icon")):
+                    embed["footer"]["icon_url"] = content.get("footer_icon")
+
+            print(embed)
             payload["embeds"].append(embed)
 
         else:
             payload["content"] = content["content"]
 
-        
 
         headers = {
             'Content-Type': 'application/json'
