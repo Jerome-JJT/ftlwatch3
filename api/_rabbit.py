@@ -4,7 +4,7 @@ import click
 from _utils import *
 
 from consumer_api import api_consumer
-from consumer_bot import bot_consumer
+from consumer_webhook import webhook_consumer
 
 env = environ.Env()
 environ.Env.read_env()
@@ -43,7 +43,7 @@ def main(server = False):
         channel.basic_consume(queue='slow_update_queue', auto_ack=False, on_message_callback=api_consumer)
         channel.basic_consume(queue='fast_update_queue', auto_ack=False, on_message_callback=api_consumer)
         
-        channel.basic_consume(queue='server_message_queue', auto_ack=False, on_message_callback=bot_consumer)
+        channel.basic_consume(queue='server_message_queue', auto_ack=False, on_message_callback=webhook_consumer)
 
         channel.start_consuming()
 
