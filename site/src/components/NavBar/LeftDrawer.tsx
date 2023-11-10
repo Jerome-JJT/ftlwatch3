@@ -94,7 +94,7 @@ export default function LeftDrawer({
     <Drawer
       open={openedMenu === 'leftdrawer'}
       onClose={() => { setOpenedMenu(''); }}
-      className="p-4 dark:text-white dark:bg-gray-600"
+      className="p-4 dark:text-white dark:bg-gray-600 overflow-y-scroll"
     >
       <div className="mb-2 flex items-center justify-between p-4">
         <p className='text-xl font-bold'>

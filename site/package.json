@@ -13,6 +13,7 @@
     "@material-tailwind/react": "^2.1.2",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
+    "d3": "^7.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.4.1",
@@ -21,9 +22,11 @@
     "styled-components": "^6.0.8"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.2",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/react-gauge-chart": "^0.4.3",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-react": "^4.0.3",

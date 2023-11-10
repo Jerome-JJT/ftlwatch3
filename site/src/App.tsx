@@ -42,6 +42,8 @@ import { UsersProfilesPage } from 'AdminPages/UsersProfiles';
 import { TinderPage } from 'Teams/TinderPage';
 import { UsersComputersPage } from 'LocationsPages/UsersComputersPage';
 import { UsersTotalPage } from 'LocationsPages/UsersTotalPage';
+import { ComputersTotalPage } from 'LocationsPages/ComputersTotalPage';
+import { PeaksDaysPage } from 'LocationsPages/PeaksDaysPage';
 // import Place from './components/Place/Place';
 
 
@@ -87,7 +89,7 @@ export default function App(): JSX.Element {
 
   return (
     <Router>
-      <div className="grow bg-[#008080] bg-center bg-cover" style={{
+      <div className="flex flex-col grow bg-[#008080] bg-center bg-cover" style={{
         backgroundImage: (userInfos?.theme_image && userInfos?.theme_image !== '') ? `url('${userInfos?.theme_image}')` : undefined,
         backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
       }}>
@@ -129,6 +131,8 @@ export default function App(): JSX.Element {
 
             <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />
+            <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
+            <Route path="/locations/peaks" element={<PeaksDaysPage />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
             <Route path="/admin/groups" element={<UserGroupsPage />} />

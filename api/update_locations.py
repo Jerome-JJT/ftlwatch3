@@ -6,6 +6,7 @@ from _dbConnector import *
 from _api import *
 from dateutil import parser
 import datetime
+import click
 
 from astral import LocationInfo
 from astral.sun import sun
@@ -170,7 +171,12 @@ def location_callback(location):
     return (current_limit > 0)
 
 
-def import_locations(update_all = False):
+
+@click.command()
+@click.option("--update-all", "-a", type=bool, help="update all")
+@click.option("--start-at", "-s", type=int, help="start at")
+
+def import_locations(update_all = False, start_at = 1):
     global local_locations
 
     local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")
@@ -180,12 +186,12 @@ def import_locations(update_all = False):
         update_all = True
 
     if (update_all):
-        callapi("/v2/campus/47/locations?sort=id", True, location_callback, False)
+        callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False)
     else:
-        callapi(f"/v2/campus/47/locations?sort=-id", True, location_callback, True)
+        callapi(f"/v2/campus/47/locations?sort=-updated_at", nultiple=1, callback=location_callback, callback_limit=True)
 
 
 
 
 if __name__ == "__main__":
-    import_locations(True)
+    import_locations()

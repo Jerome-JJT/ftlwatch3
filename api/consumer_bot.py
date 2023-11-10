@@ -8,14 +8,12 @@ import requests
 import json
 import pika
 import environ
+from _utils import create_discord_payload
 
 env = environ.Env()
 environ.Env.read_env()
 
-# any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
-# all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
-
-def bot_consumer(ch, method, properties, body):
+async def bot_consumer(bot, ch, method, properties, body):
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
@@ -24,74 +22,23 @@ def bot_consumer(ch, method, properties, body):
         content = json.loads(body)
 
         # discord_channel = content["channel"]
-        discord_channel = method.routing_key.split('.')[0]
+        # discord_channel = method.routing_key.split('.')[0]
 
-        webhook_url = None
+        private_chanid = env("BOT_PRIVATE_CHANID")
 
-        for key in env.ENVIRON:
-            if key.startswith("BOT_WEBHOOK_"):
-                webhook_chan = key.replace("BOT_WEBHOOK_", "").lower()
+        if (private_chanid == None):
+            raise Exception('chanid not found')
 
-                if webhook_chan == discord_channel:
-                    webhook_url = env(key)
-
-        if (webhook_url == None):
-            raise Exception(f'{discord_channel} channel webhook not found')
+        discord_channel = bot.get_channel(int(1025065637497798726))
 
 
-        payload = {
-            "username": "BlazingDuck",
-            "avatar_url": "https://dev.42lwatch.ch/static/logo_gray.png", 
-            "embeds": [],
-        }
+        payload = create_discord_payload(content)
 
-        if (content.get('message_type') == 'embed'):
-            embed = {
-                "title": content["title"],
-                "color": 32896, 
-            }
-            if (content.get("description") != None):
-                embed["description"] = content.get("description")
-            if (content.get("url") != None):
-                embed["url"] = content.get("url")
-            if (content.get("thumbnail") != None):
-                embed["thumbnail"] = {
-                    "url": content.get("thumbnail")
-                }
-
-            if (content.get("image") != None):
-                embed["image"] = {
-                    "url": content.get("image")
-                }
-
-            if (content.get("fields") != None):
-                embed["fields"] = []
-                for name, value in content.get("fields").items():
-                    embed["fields"].append({"name": name, "value": value})
-
-
-            if (content.get("footer_text") != None or content.get("footer_icon") != None):
-                embed["footer"] = {}
-                if (content.get("footer_text")):
-                    embed["footer"]["text"] = content.get("footer_text")
-                if (content.get("footer_icon")):
-                    embed["footer"]["icon_url"] = content.get("footer_icon")
-
-            print(embed)
-            payload["embeds"].append(embed)
+        if (payload.get("content") != None):
+            await discord_channel.send(payload.get("content"))
 
         else:
-            payload["content"] = content["content"]
-
-
-        headers = {
-            'Content-Type': 'application/json'
-        }
-
-        response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
-
-        if response.status_code != 204:
-            raise Exception(f'Channel {discord_channel}, status {response.status_code}, Response: {response.text}')
+            await discord_channel.send(embed=payload.get("embeds")[0])
 
         mylogger(f"Consume bot {method.routing_key}, {discord_channel}", LOGGER_INFO)
         ch.basic_ack(delivery_tag = method.delivery_tag)

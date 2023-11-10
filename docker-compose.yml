@@ -77,6 +77,7 @@ services:
       - db
 
     volumes:
+      - ./secure_static:/secure_static
       - ./back:/var/www/html
 
     networks:
@@ -130,6 +131,7 @@ services:
     tty: true        # docker run -t
 
     volumes:
+      - ./secure_static:/secure_static
       - ./api:/app
 
     networks:

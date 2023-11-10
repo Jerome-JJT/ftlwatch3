@@ -9,6 +9,14 @@ from _api import *
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
+existing_projects = []
+
+# def project_notification(project):
+#     global existing_projects
+
+#     # if (project["id"] in existing_projects):
+#     #     update
+#     # else:
 
 
 
@@ -162,6 +170,36 @@ def project_callback(project):
         import_project_rule(rules['project_sessions_rules'], project['id'])
 
 
+    good = {
+        "id": project["id"], 
+        "name": project["name"],
+        "slug": project["slug"],
+        "difficulty": project["difficulty"],
+        "is_exam": project["exam"],
+        "main_cursus": good_cursus,
+        "project_type_id": good_project_type,
+        "has_lausanne": good_has_lausanne,
+
+        "session_id": good_session["id"] if good_session else None,
+        "session_is_solo": good_session["solo"] if good_session else None,
+        "session_estimate_time": good_session["estimate_time"] if good_session else None,
+        "session_duration_days": good_session["duration_days"] if good_session else None,
+        "session_terminating_after": good_session["terminating_after"] if good_session else None,
+        "session_description": good_session["description"] if good_session else None,
+        "session_has_moulinette": has_moulinette,
+        "session_correction_number": good_correction,
+        "session_scale_duration": good_scale_duration,
+
+        "rule_min": good_rule_min,
+        "rule_max": good_rule_max,
+        "rule_retry_delay": good_rule_retry_delay,
+
+        "created_at": project["created_at"],
+        "updated_at": project["updated_at"],
+    }
+
+    project_notification(project)
+
     executeQueryAction("""INSERT INTO projects (
         "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", 
 
@@ -198,40 +236,41 @@ def project_callback(project):
         rule_retry_delay = COALESCE(projects.rule_retry_delay, EXCLUDED.rule_retry_delay),
         updated_at = EXCLUDED.updated_at
     """, {
-        "id": project["id"], 
-        "name": project["name"],
-        "slug": project["slug"],
-        "difficulty": project["difficulty"],
-        "is_exam": project["exam"],
-        "main_cursus": good_cursus,
-        "project_type_id": good_project_type,
-        "has_lausanne": good_has_lausanne,
+        "id": good["id"], 
+        "name": good["name"],
+        "slug": good["slug"],
+        "difficulty": good["difficulty"],
+        "is_exam": good["exam"],
+        "main_cursus": good["main_cursus"],
+        "project_type_id": good["project_type_id"],
+        "has_lausanne": good["has_lausanne"],
 
-        "session_id": good_session["id"] if good_session else None,
-        "session_is_solo": good_session["solo"] if good_session else None,
-        "session_estimate_time": good_session["estimate_time"] if good_session else None,
-        "session_duration_days": good_session["duration_days"] if good_session else None,
-        "session_terminating_after": good_session["terminating_after"] if good_session else None,
-        "session_description": good_session["description"] if good_session else None,
-        "session_has_moulinette": has_moulinette,
-        "session_correction_number": good_correction,
-        "session_scale_duration": good_scale_duration,
+        "session_id": good["session_id"],
+        "session_is_solo": good["session_is_solo"],
+        "session_estimate_time": good["session_estimate_time"],
+        "session_duration_days": good["session_duration_days"],
+        "session_terminating_after": good["session_terminating_after"],
+        "session_description": good["session_description"],
+        "session_has_moulinette": good["session_has_moulinette"],
+        "session_correction_number": good["session_correction_number"],
+        "session_scale_duration": good["session_scale_duration"],
 
-        "rule_min": good_rule_min,
-        "rule_max": good_rule_max,
-        "rule_retry_delay": good_rule_retry_delay,
+        "rule_min": good["rule_min"],
+        "rule_max": good["rule_max"],
+        "rule_retry_delay": good["rule_retry_delay"],
 
-        "created_at": project["created_at"],
-        "updated_at": project["updated_at"],
+        "created_at": good["created_at"],
+        "updated_at": good["updated_at"],
     })
 
 
 def import_projects(update_all = False):
+    global existing_projects
 
-    local_projects = executeQuerySelect("SELECT id FROM projects")
-    local_projects = {one["id"]: one for one in local_projects} 
+    existing_projects = executeQuerySelect("SELECT id FROM projects")
+    existing_projects = {one["id"]: one for one in existing_projects} 
 
-    if (len(local_projects) == 0):
+    if (len(existing_projects) == 0):
         update_all = True
 
     projects = []

@@ -18,6 +18,10 @@ switch ($action) {
         get_users_totals();
         break;
 
+    case "get_computers_totals":
+        get_computers_totals();
+        break;
+
 }
 
 exit();

@@ -39,7 +39,6 @@ function get_users_computers()
 
 function get_users_totals()
 {
-
     $res = array();
 
     $tmp = getUsersTotals();
@@ -86,7 +85,46 @@ function get_users_totals()
     ];
 
     jsonResponse($res, 200);
+}
 
+
+function get_computers_totals()
+{
+    $res = array();
+
+    $tmp = getComputersTotals();
+
+    $tmp = array_map(function ($value) {
+        $total = max($value["total"], 0.1);
+        $value["total"] = round($total / 3600, 2);
+        $value["total_piscine"] = round($value["total_piscine"] / 3600, 2);
+
+        $value["entries"] = $value["entries"];
+        $value["average"] = round($value["average"] / 3600, 2);
+
+        $value["_total_sun"] = round(($value["total_sun"] / $total) * 100, 2);
+        $value["total_sun"] = $value["_total_sun"]." %";
+        $value["_total_moon"] = round(($value["total_moon"] / $total) * 100, 2);
+        $value["total_moon"] = $value["_total_moon"]." %";
+
+        return $value;
+    }, $tmp);
+
+    $res["values"] = $tmp;
+
+    $res["columns"] = [
+        ["label" => "Host", "field" => "host"],
+        ["label" => "Total hours", "field" => "total"],
+        ["label" => "Total piscine hours", "field" => "total_piscine"],
+
+        ["label" => "Total entries", "field" => "entries"],
+        ["label" => "Average hours by log", "field" => "average"],
+
+        ["label" => "Total sun", "field" => "total_sun"],
+        ["label" => "Total moon", "field" => "total_moon"],
+    ];
+
+    jsonResponse($res, 200);
 }
 
 

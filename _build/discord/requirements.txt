@@ -8,17 +8,11 @@ threaded
 rich
 ipython
 
-websockets
-websocket-client
-rel
-
 py-cord
 astral
 
 PyGithub==1.56
 
-gql[all]
-gqlactioncable
 
 numpy
 scipy

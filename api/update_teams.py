@@ -4,6 +4,7 @@
 from _utils import *
 from _dbConnector import *
 from _api import *
+import click
 
 
 
@@ -46,7 +47,6 @@ def import_team_user(team):
     for toremove in team_users:
         mylogger(f"Remove team_user {toremove}", LOGGER_INFO)
 
-
         executeQueryAction("""DELETE FROM team_user WHERE id = %(id)s
         """, {
             "id": toremove
@@ -56,10 +56,6 @@ def import_team_user(team):
 
 def import_team_scale(team):
     for scale in team["scale_teams"]:
-        try:
-            team_users.remove(scale["id"])
-        except:
-            pass
         mylogger(f"Import team_scale {scale['id']}", LOGGER_INFO)
 
         executeQueryAction("""INSERT INTO team_scale (
@@ -93,7 +89,7 @@ def import_team_scale(team):
 
 
 def team_callback(team):
-    global team_teams
+    global local_teams
     global limit_checker
     global current_limit
 
@@ -151,7 +147,11 @@ def team_callback(team):
     return (current_limit > 0)
 
 
-def import_teams(update_all = False):
+@click.command()
+@click.option("--update-all", "-a", type=bool, help="update all")
+@click.option("--start-at", "-s", type=int, help="start at")
+
+def import_teams(update_all = False, start_at = 1):
     global local_teams
 
     local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 1000")
@@ -161,16 +161,10 @@ def import_teams(update_all = False):
         update_all = True
 
     if (update_all):
-        callapi("/v2/teams?filter[primary_campus]=47&sort=id", True, team_callback, False)
+        callapi("/v2/teams?filter[primary_campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False)
     else:
-        callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", True, team_callback, True)
-        # callapi(f"/v2/teams?filter[primary_campus]=47&range[id]=1960372,1960392", False, team_callback, True)
+        callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
 
-
-
-        
-
-            
 
 if __name__ == "__main__":
-    import_teams(True)
+    import_teams()

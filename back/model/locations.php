@@ -47,3 +47,26 @@ function getUsersTotals()
 }
 
 
+function getComputersTotals()
+{
+  $query = "SELECT locations.host,
+    SUM(locations.length) AS total,
+    COUNT(locations.length) AS entries,
+    AVG(locations.length) AS average,
+    SUM(CASE WHEN is_piscine = TRUE THEN length ELSE 0 END) AS total_piscine,
+    SUM(locations.sun_length) AS total_sun,
+    SUM(locations.moon_length) AS total_moon
+    FROM locations
+    WHERE locations.length < 100000
+    GROUP BY locations.host
+    ORDER BY total DESC
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
+
