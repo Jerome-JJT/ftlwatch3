@@ -1,5 +1,8 @@
 <?php
 
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
 //https://gist.github.com/remy/5213884
 function map($x, $in_min, $in_max, $out_min, $out_max) {
     return ($x - $in_min) * ($out_max - $out_min) / ($in_max - $in_min) + $out_min;
@@ -169,7 +172,7 @@ function logtologstash($status)
         } 
         else {
             $connect_timeval = array(
-                "sec"=>0,
+                "sec" => 0,
                 "usec" => 500000
             );
             socket_set_option(
@@ -201,6 +204,22 @@ function logtologstash($status)
         mylogger("Exception in logtologstash", LOGGER_ERROR());
     }
 }
+
+
+
+function sentToRabbit($routing_key, $body) {
+
+    $connection = new AMQPStreamConnection('rabbit', 5672, getenv("RABBIT_USER"), getenv("RABBIT_PASS"));
+    
+    $channel = $connection->channel();
+    
+    $msg = new AMQPMessage(json_encode($body));
+    $channel->basic_publish($msg, 'main', $routing_key);
+    
+    $channel->close();
+    $connection->close();
+}
+
 
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {

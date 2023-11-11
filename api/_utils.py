@@ -48,7 +48,7 @@ def logtologstash(logs):
     sock.connect((HOST, PORT))
 
   except socket.error as msg:
-    mylogger("Failed to connect socket {msg}", LOGGER_ERROR)
+    mylogger(f"Failed to connect socket {msg}", LOGGER_ERROR)
     return
 
   data = []

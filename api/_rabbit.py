@@ -40,10 +40,10 @@ def main(server = False):
         channel.basic_qos(prefetch_count=1)
 
 
-        channel.basic_consume(queue='slow_update_queue', auto_ack=False, on_message_callback=api_consumer)
-        channel.basic_consume(queue='fast_update_queue', auto_ack=False, on_message_callback=api_consumer)
+        channel.basic_consume(queue='slow.update.queue', auto_ack=False, on_message_callback=api_consumer)
+        channel.basic_consume(queue='fast.update.queue', auto_ack=False, on_message_callback=api_consumer)
         
-        channel.basic_consume(queue='server_message_queue', auto_ack=False, on_message_callback=webhook_consumer)
+        channel.basic_consume(queue='server.message.queue', auto_ack=False, on_message_callback=webhook_consumer)
 
         channel.start_consuming()
 

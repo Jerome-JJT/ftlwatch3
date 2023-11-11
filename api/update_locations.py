@@ -173,10 +173,10 @@ def location_callback(location):
 
 
 @click.command()
-@click.option("--update-all", "-a", type=bool, help="update all")
-@click.option("--start-at", "-s", type=int, help="start at")
+@click.option("--update-all", "-a", type=bool, default=False help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
 
-def import_locations(update_all = False, start_at = 1):
+def import_locations(update_all, start_at):
     global local_locations
 
     local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")

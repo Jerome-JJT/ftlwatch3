@@ -25,6 +25,11 @@ testenv:
 		@echo $(hostname)
 		@echo ${DOCKER}
 
+setup:		migrate
+			${DOCKER} exec back composer install
+			docker network create logging_logstash
+
+
 start:
 			${DOCKER} up -d --build
 

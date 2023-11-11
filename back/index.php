@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__.'/vendor/autoload.php';
 require_once("controller/_common.php");
 require_once("controller/authorization.php");
 
@@ -42,6 +43,7 @@ if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SES
 load_permissions();
 
 jsonlogger('PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());
+
 
 // print_r($_SERVER);
 
@@ -99,6 +101,10 @@ try {
 
         case "locations":
             require_once("routes/locations.php");
+            break;
+
+        case "update":
+            require_once("routes/update.php");
             break;
 
 

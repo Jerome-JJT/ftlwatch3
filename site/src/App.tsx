@@ -44,6 +44,7 @@ import { UsersComputersPage } from 'LocationsPages/UsersComputersPage';
 import { UsersTotalPage } from 'LocationsPages/UsersTotalPage';
 import { ComputersTotalPage } from 'LocationsPages/ComputersTotalPage';
 import { PeaksDaysPage } from 'LocationsPages/PeaksDaysPage';
+import { UpdaterPage } from 'AdminPages/Updater';
 // import Place from './components/Place/Place';
 
 
@@ -143,6 +144,8 @@ export default function App(): JSX.Element {
 
             <Route path="/admin/users" element={<UsersVisibilityPage />} />
             <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
+
+            <Route path="/admin/updater" element={<UpdaterPage />} />
 
 
             {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}

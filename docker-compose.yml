@@ -99,6 +99,9 @@ services:
 
       CALLBACK_URL: ${CALLBACK_URL}
 
+      RABBIT_USER: ${RABBIT_USER}
+      RABBIT_PASS: ${RABBIT_PASS}
+
       API_UID: ${API_FRONT_UID}
       API_SECRET: ${API_FRONT_SECRET}
   

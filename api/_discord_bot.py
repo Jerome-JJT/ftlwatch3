@@ -392,7 +392,7 @@ async def consume_messages():
     channel = connection.channel()
 
     channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='private_message_queue', auto_ack=False, on_message_callback=tmpt)
+    channel.basic_consume(queue='private.message.queue', auto_ack=False, on_message_callback=tmpt)
 
     channel.start_consuming()
 

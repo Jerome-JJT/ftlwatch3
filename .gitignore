@@ -20,3 +20,5 @@ __pycache__/
 *.py[cod]
 
 .vscode
+
+back/vendor
