@@ -1,14 +1,14 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 import requests
 import json
+import time
 import pika
 import environ
-from _utils import create_discord_payload
+from _utils_discord import create_discord_payload
 
 
 env = environ.Env()
@@ -18,6 +18,8 @@ environ.Env.read_env()
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
 def webhook_consumer(ch, method, properties, body):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
@@ -52,7 +54,8 @@ def webhook_consumer(ch, method, properties, body):
         if response.status_code != 204:
             raise Exception(f'Channel {discord_channel}, status {response.status_code}, Response: {response.text}')
 
-        mylogger(f"Consume webhook {method.routing_key}, {discord_channel}", LOGGER_INFO)
+        mylogger(f"Consume webhook {method.routing_key}, chan {discord_channel}", LOGGER_INFO, rabbit=False)
+        time.sleep(1)
         ch.basic_ack(delivery_tag = method.delivery_tag)
 
 

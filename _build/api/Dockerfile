@@ -9,3 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN echo "alias ll='ls -lah'" > /root/.bashrc
 
+COPY ./start.sh /
+
+CMD ["bash", "/start.sh"]

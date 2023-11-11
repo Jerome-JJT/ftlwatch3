@@ -165,6 +165,8 @@ export function SuperCards({
 
           <div>
             <Switch
+              className='bg-black'
+              color='red'
               checked={doIncludeAll}
               onChange={handleToggleIncludeAll}
               label={

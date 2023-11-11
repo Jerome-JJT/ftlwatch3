@@ -74,6 +74,7 @@ export function TableauPage(): JSX.Element {
           const displayValues = res.data.values.map((user: any) => {
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field === 'login') {
+                user[`_${col.field}`] = user[col.field];
                 user[col.field] = <a
                   href={`https://profile.intra.42.fr/users/${user.login}`}
                 >{user.login}</a>;

@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 
@@ -21,6 +20,8 @@ existing_projects = []
 
 
 def import_project_rule(rules, project_id):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     project_rules = executeQuerySelect("SELECT id FROM project_rules WHERE project_id = %(project_id)s",
     {
         "project_id": project_id

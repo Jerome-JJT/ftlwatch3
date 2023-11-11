@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 import json
@@ -20,6 +19,7 @@ from update_users import import_users
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
 def api_consumer(ch, method, properties, body):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)

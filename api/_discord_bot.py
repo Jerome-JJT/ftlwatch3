@@ -7,6 +7,7 @@ import time
 import json
 
 from _api import *
+from _utils_discord import *
 
 import discord
 from discord.errors import PrivilegedIntentsRequired

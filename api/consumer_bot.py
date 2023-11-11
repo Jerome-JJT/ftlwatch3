@@ -1,19 +1,19 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 import requests
 import json
 import pika
 import environ
-from _utils import create_discord_payload
+from _utils_discord import create_discord_payload
 
 env = environ.Env()
 environ.Env.read_env()
 
 async def bot_consumer(bot, ch, method, properties, body):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)

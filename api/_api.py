@@ -14,7 +14,8 @@ import threading
 env = environ.Env()
 environ.Env.read_env()
 
-from _utils import *
+from _utils_timeout import *
+from _utils_logstash import *
 
 
 token = ""
@@ -34,6 +35,7 @@ def test_token(token):
     return check.status_code == 200
 
 def get_headers(force_refresh = False):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     global token
     global tokencachefile
 
@@ -83,6 +85,8 @@ def get_headers(force_refresh = False):
     
 
 def raw(req, for_test = False):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    
     auth = get_headers()
 
     url = f"https://api.intra.42.fr{req}"
@@ -102,7 +106,7 @@ def raw(req, for_test = False):
         try:
             with timeout(30):
                 res = requests.get(url, headers=auth)
-        except:
+        except TimeoutError:
             mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
             fails += 1
             time.sleep(5)
@@ -158,6 +162,8 @@ def raw(req, for_test = False):
 
 
 def callapi(req, multiple = False, callback = None, callback_limit = True, nultiple=0):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
 
     if (multiple == True):
         nultiple = 1

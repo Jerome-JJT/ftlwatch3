@@ -3,6 +3,7 @@ django-environ
 schedule
 
 psycopg2
+watchdog
 
 pika
 click

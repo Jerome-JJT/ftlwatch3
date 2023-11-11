@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 import click
@@ -16,6 +15,8 @@ limit_checker = 300
 
 
 def import_team_user(team):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     team_users = executeQuerySelect("SELECT id FROM team_user WHERE team_id = %(team_id)s",
     {
         "team_id": team["id"]
@@ -55,6 +56,8 @@ def import_team_user(team):
 
 
 def import_team_scale(team):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     for scale in team["scale_teams"]:
         mylogger(f"Import team_scale {scale['id']}", LOGGER_INFO)
 
@@ -89,6 +92,8 @@ def import_team_scale(team):
 
 
 def team_callback(team):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     global local_teams
     global limit_checker
     global current_limit

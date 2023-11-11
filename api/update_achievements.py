@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 
@@ -10,6 +9,7 @@ from _api import *
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
 def achievement_callback(achievement):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     mylogger(f"Import achievement {achievement['id']} {achievement['name']}", LOGGER_INFO)
 

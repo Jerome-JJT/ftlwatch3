@@ -286,6 +286,10 @@ function mylogger($log, $level)
     $myfile = fopen("/var/log/apache2/mylogger.log", "a");
     fwrite($myfile, $lvltotxt . " " . $log . "\n");
     fclose($myfile);
+
+    if ($level >= LOGGER_WARNING()) {
+        sentToRabbit('errors.server.message.queue', array('content' => $lvltotxt . " " . $log));
+    }
 }
 
 function jsonlogger($msg, $data, $level)

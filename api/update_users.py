@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 import datetime
@@ -12,6 +11,8 @@ from dateutil import parser
 poolfilters = []
 
 def import_title_user(user):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     titles_user = executeQuerySelect("SELECT id FROM titles_users WHERE user_id = %(user_id)s",
     {
         "user_id": user["id"]
@@ -175,6 +176,8 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
 
 
 def user_callback(user, cursus21_ids, local_users):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     global poolfilters
 
     mylogger(f"Import user {user['id']} {user['login']}", LOGGER_INFO)

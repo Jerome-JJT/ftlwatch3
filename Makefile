@@ -25,9 +25,12 @@ testenv:
 		@echo $(hostname)
 		@echo ${DOCKER}
 
-setup:		migrate
-			${DOCKER} exec back composer install
+presetup:
 			docker network create logging_logstash
+setup:		
+			${DOCKER} exec back composer install
+			${DOCKER} exec rabbit bash /setup.sh
+			$(MAKE) migrate
 
 
 start:

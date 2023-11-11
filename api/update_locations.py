@@ -1,7 +1,5 @@
 
 
-
-from _utils import *
 from _dbConnector import *
 from _api import *
 from dateutil import parser
@@ -64,6 +62,8 @@ def sun_values(date, sit1):
 
     
 def location_callback(location):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     global local_locations
     global current_limit
     global limit_checker
@@ -173,7 +173,7 @@ def location_callback(location):
 
 
 @click.command()
-@click.option("--update-all", "-a", type=bool, default=False help="update all")
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
 @click.option("--start-at", "-s", type=int, default=1, help="start at")
 
 def import_locations(update_all, start_at):

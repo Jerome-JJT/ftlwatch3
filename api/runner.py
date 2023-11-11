@@ -1,21 +1,10 @@
 import time
 import schedule
 import threading
-
-from update_achievements import import_achievements
-from update_campus import import_campus
-from update_coalitions import import_coalitions
-from update_cursus import import_cursus
-from update_groups import import_groups
-from update_locations import import_locations
-from update_products import import_products
-from update_projects import import_projects
-from update_teams import import_teams
-from update_titles import import_titles
-from update_users import import_users
+from _rabbit import send_to_rabbit
 
 scheduler_update = schedule.Scheduler()
-scheduler_live = schedule.Scheduler()
+# scheduler_live = schedule.Scheduler()
 
 
 def scheduler_watcher(scheduled):
@@ -42,25 +31,26 @@ def scheduler_watcher(scheduled):
 # schedule.every().minute.at(":17").do(job)
 
 
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_achievements)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_coalitions)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_cursus)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_groups)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_products)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_projects)
-scheduler_update.every().day.at("02:00", "Europe/Zurich").do(update_titles)
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'achievements'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'campus'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coalitions'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'cursus'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'groups'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'products'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'projects'}))
+scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'titles'}))
 
-scheduler_update.every().day.at("10:30", "Europe/Zurich").do(update_users)
+scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users'}))
 
-scheduler_live.every().minutes.do(update_locations, update_all=False)
-scheduler_live.every().minutes.do(update_teams, update_all=False)
+scheduler_update.every().minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'locations'}))
+scheduler_update.every().minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'teams'}))
 
 thread_update = threading.Thread(target=scheduler_watcher, args=(scheduler_update,))
-thread_live = threading.Thread(target=scheduler_watcher, args=(scheduler_live,))
+# thread_live = threading.Thread(target=scheduler_watcher, args=(scheduler_live,))
 
 thread_update.start()
-thread_live.start()
+# thread_live.start()
 
 thread_update.join()
-thread_live.join()
+# thread_live.join()
 

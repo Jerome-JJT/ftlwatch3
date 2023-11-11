@@ -1,7 +1,6 @@
 
 
 
-from _utils import *
 from _dbConnector import *
 from _api import *
 # from dateutil.parser import parse
@@ -17,6 +16,8 @@ limit_checker = 300
 
 
 def process_locations(update_all = False):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     global local_locations
 
     days_done = []
