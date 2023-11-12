@@ -53,7 +53,7 @@ export function TinderPage(): JSX.Element {
               colors={['#FF6000', '#00B0B0']}
               animate={false}
               percent={card.score/200}
-              formatTextValue={(value: number) => `${value*2}%`}
+              formatTextValue={(value: string) => `${parseInt(value)*2}%`}
             />
 
           </div>

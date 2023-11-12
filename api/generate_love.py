@@ -101,7 +101,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
     if (len(sizes) == 0):
         print("Stop: No size")
-        exit()
+        return 
 
     sizes.sort()
 
