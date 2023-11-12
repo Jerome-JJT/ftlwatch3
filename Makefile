@@ -30,7 +30,7 @@ presetup:
 setup:		
 			${DOCKER} exec back composer install
 			$(MAKE) migrate
-			sleep 5
+			sleep 60
 			${DOCKER} exec rabbit bash /setup.sh
 
 
