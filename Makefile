@@ -29,8 +29,9 @@ presetup:
 			docker network create logging_logstash
 setup:		
 			${DOCKER} exec back composer install
-			${DOCKER} exec rabbit bash /setup.sh
 			$(MAKE) migrate
+			sleep 5
+			${DOCKER} exec rabbit bash /setup.sh
 
 
 start:
