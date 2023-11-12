@@ -44,6 +44,9 @@ load_permissions();
 
 jsonlogger('SECURE PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());
 
+$allowed = ["peaks_days", "love_piscine_2d", "love_all_2d", "love_recent_2d", "love_piscine_3d", "love_all_3d", "love_recent_3d"];
+
+
 try {
     $page = "";
     if (isset($_GET["page"])) {
@@ -51,14 +54,12 @@ try {
     }
 
     mylogger("REQUEST TO secure static " . $page, LOGGER_DEBUG());
-    switch ($page) {
 
-        case "test":
-			if (!@readfile("/secure_static/test.html")) {
-                jsonResponse(array(), 404);   
-            }
-            die;
-            break;
+    if (in_array($page, $allowed)) {
+        if (!@readfile("/secure_static/".$page.".html")) {
+            jsonResponse(array(), 404);   
+        }
+        die;
     }
 
     jsonResponse(array(), 404);
