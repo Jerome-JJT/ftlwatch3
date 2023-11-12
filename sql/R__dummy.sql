@@ -210,7 +210,8 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (3, 'Admin', 5, NULL),
   (4, 'Basics', 3, NULL),
   (5, 'Projects', 3, NULL),
-  (6, 'Locations', 3, NULL)
+  (6, 'Locations', 3, NULL),
+  (7, 'Love', 3, NULL)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -229,6 +230,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (35, 'Products', 35, 'basics/products', NULL, 4, 4),
   (40, 'Rules', 40, 'basics/rules', NULL, 4, 4),
   (45, 'Titles', 45, 'basics/titles', NULL, 4, 4),
+
+  (60, 'Events', 45, 'basics/events', NULL, 4, 3),
 
   (90, 'About', 30, 'about', NULL, NULL, NULL),
 
@@ -257,7 +260,17 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
 
   (350, 'Users computers', 10, 'locations/userscomputers', NULL, 6, 10),
-  (355, 'Users totals', 10, 'locations/userstotal', NULL, 6, 10)
+  (355, 'Users totals', 10, 'locations/userstotal', NULL, 6, 10),
+  (360, 'Computers totals', 10, 'locations/computerstotal', NULL, 6, 10),
+  (365, 'Connections', 10, 'locations/peaks', NULL, 6, 10),
+
+  (370, 'Love piscine 2d', 10, 'locations/love', 'graph=love_piscine_2d', 7, 10),
+  (375, 'Love all 2d', 10, 'locations/love', 'graph=love_all_2d', 7, 10),
+  (380, 'Love recent 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
+
+  (385, 'Love piscine 3d', 10, 'locations/love', 'graph=love_piscine_3d', 7, 10),
+  (390, 'Love all 3d', 10, 'locations/love', 'graph=love_all_3d', 7, 10),
+  (395, 'Love recent 3d', 10, 'locations/love', 'graph=love_recent_3d', 7, 10)
 
 
   ON CONFLICT(id) DO UPDATE
@@ -293,9 +306,10 @@ CREATE TABLE IF NOT EXISTS vp_loves (
 CREATE TABLE IF NOT EXISTS vp_peaks (
     "id" character varying NOT NULL, 
 
-    "begin_at" TIMESTAMP NOT NULL, 
+    "peak_at" TIMESTAMP NOT NULL, 
 
-    "ccount" integer NOT NULL,
+    "total" integer NOT NULL,
+    "total_same" integer NOT NULL,
     "date" character varying NOT NULL,
 
     "is_piscine" boolean NOT NULL, 

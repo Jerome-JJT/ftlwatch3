@@ -10,7 +10,7 @@ export function PeaksDaysPage(): JSX.Element {
   return (
     <Card className="big-card grow mt-4 !mb-2 mx-2">
 
-      <iframe className='grow' src="/secure_static/test"></iframe>
+      <iframe className='grow' src="/secure_static/peaks_days"></iframe>
 
     </Card>
 

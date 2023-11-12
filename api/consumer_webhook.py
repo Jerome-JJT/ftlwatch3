@@ -62,9 +62,10 @@ def webhook_consumer(ch, method, properties, body):
 
 
         except Exception as e:
-            mylogger(f"Reject webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
+            if ("errors" not in method.routing_key):
+                mylogger(f"Reject webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
 
-            if (e.get('retry_after') != None):
+            if ('429' in str(e)):
                 mylogger(f"Retry {i} webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_INFO)
                 time.sleep(1)
                 continue

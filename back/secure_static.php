@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__.'/vendor/autoload.php';
 require_once("controller/_common.php");
 require_once("controller/authorization.php");
 
@@ -53,7 +54,9 @@ try {
     switch ($page) {
 
         case "test":
-			readfile("/secure_static/test.html");
+			if (!@readfile("/secure_static/test.html")) {
+                jsonResponse(array(), 404);   
+            }
             die;
             break;
     }

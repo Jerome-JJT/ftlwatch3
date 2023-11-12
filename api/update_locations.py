@@ -188,7 +188,7 @@ def import_locations(update_all, start_at):
     if (update_all):
         callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False)
     else:
-        callapi(f"/v2/campus/47/locations?sort=-updated_at", nultiple=1, callback=location_callback, callback_limit=True)
+        callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True)
 
 
 

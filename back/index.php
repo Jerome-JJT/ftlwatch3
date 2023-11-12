@@ -107,28 +107,9 @@ try {
             require_once("routes/update.php");
             break;
 
-
-        // default:
-            // print_r($_SERVER);
-            // print_r("<br><br>");
-            // print_r($_REQUEST);
-        // print_r($_SERVER);
-
-
-        // case "generateGame":
-        //   require_once("controler/gameGeneration.php");
-        //   generateGame($_POST);
-        //   break;
-
-        // case "searchGame":
-        //   require_once("controler/gameGeneration.php");
-        //   searchGame($_POST);
-        //   break;
-
-        // case "upload":
-        //   require_once("controler/uploading.php");
-        //   uploadTrack($_POST, $_FILES);
-        //   break;
+        case "events":
+            require_once("routes/events.php");
+            break;
     }
 
     jsonResponse(array(), 510);

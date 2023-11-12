@@ -5,18 +5,15 @@ import json
 import datetime
 
 from _dbConnector import *
-
+from _utils_map import *
 
 import math
 import gravis as gv
 import networkx as nx
 
 
-
-
-
     
-def main(graph_type = ""):
+def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date='2099-99-99', is_piscine=None, dist=90, nbrank=6):
     
     graph_generator = []
     if (graph_type == "multi"):
@@ -29,7 +26,7 @@ def main(graph_type = ""):
     raw_links = executeQuerySelect("""
         SELECT * FROM (
 
-            SELECT user1_id, users.login AS user1_login, user2_id,
+            SELECT user1_id, u1.login AS user1_login, u2.login AS user2_login, user2_id,
                 SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
             FROM (
                 SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
@@ -37,23 +34,27 @@ def main(graph_type = ""):
                 SELECT user1_id AS user2_id, user2_id AS user1_id, date, dist, length, is_piscine FROM vp_loves
             ) sub_uall
 
-            JOIN users ON users.id = sub_uall.user1_id
+            JOIN users u1 ON u1.id = sub_uall.user1_id
+            JOIN users u2 ON u2.id = sub_uall.user2_id
             
             WHERE date between %(min_date)s AND %(max_date)s
             AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
             AND dist < %(dist)s
+            AND u1.hidden = False AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.blackhole > NOW() OR u1.grade = 'Member')
+            AND u2.hidden = False AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.blackhole > NOW() OR u2.grade = 'Member')
 
-            GROUP BY user1_id, user1_login, user2_id
+
+            GROUP BY user1_id, user1_login, user2_id, user2_login
         ) uall
 
         WHERE ranked <= %(rank)s
 
     """, {
-        "min_date": '2000-00-00',
-        "max_date": '2099-99-99',
-        "is_piscine": None,
-        "dist": 90,
-        "rank": 10,
+        "min_date": min_date,
+        "max_date": max_date,
+        "is_piscine": is_piscine,
+        "dist": dist,
+        "rank": nbrank,
     })
 
     raw_nodes = executeQuerySelect("""
@@ -68,12 +69,13 @@ def main(graph_type = ""):
         WHERE date between %(min_date)s AND %(max_date)s
         AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
         AND dist < %(dist)s
+        AND hidden = False AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (blackhole > NOW() OR grade = 'Member')
         GROUP BY user_id, user_login, user_image
     """, {
-        "min_date": '2000-00-00',
-        "max_date": '2099-99-99',
-        "is_piscine": None,
-        "dist": 90,
+        "min_date": min_date,
+        "max_date": max_date,
+        "is_piscine": is_piscine,
+        "dist": dist,
     })
 
 
@@ -93,7 +95,7 @@ def main(graph_type = ""):
             random.seed(pseudoseed)
             color = '#%02X%02X%02X' % (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-            nodes[rnode["user_id"]] = {'login': rnode["user_login"], 'size': max(1, math.sqrt(rnode["length"]) / 10000), 'color': color, 'image': rnode["user_image"]}
+            nodes[rnode["user_id"]] = {'login': rnode["user_login"], 'size': max(1, rnode["length"]), 'color': color, 'image': rnode["user_image"]}
 
             sizes.append(rnode["length"])
 
@@ -110,13 +112,16 @@ def main(graph_type = ""):
 
     for rlinks in raw_links:
 
-        if (rlinks["length"] > max_length):
-            max_length = rlinks["length"]
+        if (math.sqrt(rlinks["length"]) > max_length):
+            max_length = math.sqrt(rlinks["length"])
 
     length_ratio = 10 / max_length
 
 
-    for key, node in nodes.items():
+    for node in nodes.values():
+
+        if (node['size'] <= 0):
+            continue
         
         try:
             img = gv.convert.image_to_data_url(node['image'], 'svg')
@@ -131,18 +136,22 @@ def main(graph_type = ""):
             shape = 'rectangle'
         
 
+        truesize = int(mathmap(math.sqrt(node['size']), math.sqrt(sizes[0]), math.sqrt(sizes[-1]), 10, 60))
+
         if img != '':
-            graph_generator.add_node(key, size=max(10, int(float(node['size']) / 2.4)), shape=shape, image=img)
+            graph_generator.add_node(node['login'], size=truesize, shape=shape, image=img)
         else:
-            graph_generator.add_node(key, size=max(10, int(float(node['size']) / 2.4)), shape=shape)
+            graph_generator.add_node(node['login'], size=truesize, shape=shape)
 
 
 
     for link in raw_links:
-        if (link["user1_id"] in nodes.keys()):
+        truelength = mathmap(math.sqrt(link["length"]), 0, max_length, 0.0, 10.0)
 
-            graph_generator.add_edge(link["user1_id"], link["user2_id"], 
-                                 size=max(1, int(link["length"] * length_ratio)), 
+        if (link["user1_login"] != link["user2_login"] and (truelength > 0.6 or link['ranked'] <= 3)):
+
+            graph_generator.add_edge(link["user1_login"], link["user2_login"], 
+                                 size=max(1, int(round(truelength, 0))), 
                                  color=nodes[link["user1_id"]]['color'])
 
 
@@ -165,28 +174,22 @@ def main(graph_type = ""):
                 )
 
 
-
-
-
-    # print(f'res_html/export_{dataset}_{graph}_{withmin}_{vers}.html')
-    with open(f'/secure_static/test.html', 'w') as f:
+    with open(f'/secure_static/{output_name}.html', 'w') as f:
         f.write(fig.to_html_standalone())
 
 
 
 
+if __name__ == "__main__":
 
+    target_date = datetime.datetime(datetime.datetime.now().year, 10, 1)
+    target_date = target_date.strftime("%Y-%m-%d")
 
+    generate_love(output_name='love_piscine_2d', is_piscine=True)
+    generate_love(output_name='love_all_2d')
+    generate_love(output_name='love_recent_2d', is_piscine=False, min_date=target_date)
 
-main()
-# love_graph_mfunction(dataset="all", graph="simple", withmin="no", images=images)
-# love_graph_mfunction(dataset="all", graph="multi", withmin="no", images=images)
-# love_graph_mfunction(dataset="recent", graph="simple", withmin="yes", images=images)
-# love_graph_mfunction(dataset="recent", graph="multi", withmin="yes", images=images)
-# love_graph_mfunction(dataset="all", graph="simple", withmin="yes", images=images)
+    generate_love(graph_type="3d", output_name='love_piscine_3d', is_piscine=True)
+    generate_love(graph_type="3d", output_name='love_all_3d')
+    generate_love(graph_type="3d", output_name='love_recent_3d', is_piscine=False, min_date=target_date)
 
-# love_graph_mfunction(dataset="all", graph="simple", withmin="no", vers="3d", images=images)
-# love_graph_mfunction(dataset="all", graph="multi", withmin="no", vers="3d", images=images)
-# love_graph_mfunction(dataset="recent", graph="simple", withmin="yes", vers="3d", images=images)
-# love_graph_mfunction(dataset="recent", graph="multi", withmin="yes", vers="3d", images=images)
-# love_graph_mfunction(dataset="all", graph="simple", withmin="yes", vers="3d", images=images)

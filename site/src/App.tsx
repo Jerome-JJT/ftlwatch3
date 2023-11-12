@@ -45,6 +45,8 @@ import { UsersTotalPage } from 'LocationsPages/UsersTotalPage';
 import { ComputersTotalPage } from 'LocationsPages/ComputersTotalPage';
 import { PeaksDaysPage } from 'LocationsPages/PeaksDaysPage';
 import { UpdaterPage } from 'AdminPages/Updater';
+import { EventPage } from 'Events/EventsPage';
+import { LoveGraphPage } from 'LocationsPages/LoveGraphPage';
 // import Place from './components/Place/Place';
 
 
@@ -127,6 +129,7 @@ export default function App(): JSX.Element {
 
             <Route path="/tableau" element={<TableauPage />} />
             <Route path="/image" element={<ImagePage />} />
+            <Route path="/events" element={<EventPage />} />
             <Route path="/projects/teams" element={<TeamsPage />} />
             <Route path="/projects/tinder" element={<TinderPage />} />
 
@@ -134,6 +137,7 @@ export default function App(): JSX.Element {
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />
             <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
             <Route path="/locations/peaks" element={<PeaksDaysPage />} />
+            <Route path="/locations/love" element={<LoveGraphPage />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
             <Route path="/admin/groups" element={<UserGroupsPage />} />

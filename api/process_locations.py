@@ -27,19 +27,18 @@ def process_locations(update_all = False):
 
     days = executeQuerySelect("select DISTINCT date from locations")
     days = [one["date"] for one in filter(lambda d: d["date"] not in days_done, days)] 
+    days.sort()
 
     all_hosts = host_locations()
 
-    # days = ['2021-07-04']
-
-    for day in days:
+    for day in days[:-2]:
         locates = executeQuerySelect("select id, begin_at, end_at, is_piscine, host, user_id from locations WHERE date = %(date)s", {
             "date": day
         })
 
-        day_peaks = None
-        day_peaks_piscine = None
-        
+        day_peaks =         {"total": 0, "total_same": 0, "peak_at": day}
+        day_peaks_piscine = {"total": 0, "total_same": 0, "peak_at": day}
+
         for i, sit1 in enumerate(locates):
 
             if (sit1["host"] not in all_hosts.keys()):
@@ -48,10 +47,9 @@ def process_locations(update_all = False):
             print(day, f"{i}/{len(locates)}")
             
             peaks = [sit1["user_id"]]
+            same_peaks = [sit1["user_id"]]
 
             for sit2 in locates:
-                if (sit2["id"] <= sit1["id"]):
-                    continue
 
                 if (sit2["host"] not in all_hosts.keys()):
                     continue
@@ -59,14 +57,20 @@ def process_locations(update_all = False):
                 if (sit2["user_id"] not in peaks and sit1["is_piscine"] == sit2["is_piscine"]):
                     peaks.append(sit2["user_id"])
 
+                if (sit2["user_id"] not in same_peaks and sit1["is_piscine"] == sit2["is_piscine"] and 
+                    (sit1["begin_at"] >= sit2["begin_at"] and sit1["begin_at"] <= sit2["end_at"])):
+                    same_peaks.append(sit2["user_id"])
+
+                if (sit2["id"] <= sit1["id"]):
+                    continue
+
+
                 host1 = all_hosts[sit1["host"]]
                 host2 = all_hosts[sit2["host"]]
-
 
                 dist = math.sqrt(math.pow(host1["x"] - host2["x"], 2) + math.pow(host1["y"] - host2["y"], 2))
                 if (dist > 90):
                     continue
-
 
                 length = 0
 
@@ -113,42 +117,54 @@ def process_locations(update_all = False):
                     "date": day,
                     "dist": dist,
                     "length": length,
-                    "is_piscine": sit1["is_piscine"] or sit2["is_piscine"]
+                    "is_piscine": sit1["is_piscine"] and sit2["is_piscine"]
                 })
 
-            if sit1["is_piscine"] == False and (day_peaks == None or day_peaks["number"] < len(peaks)):
-                day_peaks = {"number": len(peaks), "begin_at": sit1["begin_at"]}
+            if sit1["is_piscine"] == False and day_peaks["total"] < len(peaks):
+                day_peaks["total"] = len(peaks)
 
-            if sit1["is_piscine"] == True and (day_peaks_piscine == None or day_peaks_piscine["number"] < len(peaks)):
-                day_peaks_piscine = {"number": len(peaks), "begin_at": sit1["begin_at"]}
+            if sit1["is_piscine"] == False and day_peaks["total_same"] < len(same_peaks):
+                day_peaks["total_same"] = len(same_peaks)
+                day_peaks["peak_at"] = sit1["begin_at"]
+
+
+
+            if sit1["is_piscine"] == True and day_peaks_piscine["total"] < len(peaks):
+                day_peaks_piscine["total"] = len(peaks)
+
+            if sit1["is_piscine"] == True and day_peaks_piscine["total_same"] < len(same_peaks):
+                day_peaks_piscine["total_same"] = len(same_peaks)
+                day_peaks_piscine["peak_at"] = sit1["begin_at"]
 
         
 
-        if (day_peaks != None):
+        if (day_peaks["total"] > 0):
             executeQueryAction("""INSERT INTO vp_peaks (
-                "id", "begin_at", "ccount", "date", "is_piscine"
+                "id", "peak_at", "total", "total_same", "date", "is_piscine"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(ccount)s, %(date)s, %(is_piscine)s
+                %(id)s, %(peak_at)s, %(total)s, %(total_same)s, %(date)s, %(is_piscine)s
             )
             ON CONFLICT DO NOTHING
             """, {
                 "id": f"0_{day}", 
-                "begin_at": day_peaks["begin_at"],
-                "ccount": day_peaks["number"],
+                "peak_at": day_peaks["peak_at"],
+                "total": day_peaks["total"],
+                "total_same": day_peaks["total_same"],
                 "date": day,
                 "is_piscine": False
             })
-        elif(day_peaks_piscine != None):
+        if (day_peaks_piscine["total"] > 0):
             executeQueryAction("""INSERT INTO vp_peaks (
-                "id", "begin_at", "ccount", "date", "is_piscine"
+                "id", "peak_at", "total", "total_same", "date", "is_piscine"
                 ) VALUES (
-                %(id)s, %(begin_at)s, %(ccount)s, %(date)s, %(is_piscine)s
+                %(id)s, %(peak_at)s, %(total)s, %(total_same)s, %(date)s, %(is_piscine)s
             )
             ON CONFLICT DO NOTHING
             """, {
                 "id": f"1_{day}", 
-                "begin_at": day_peaks_piscine["begin_at"],
-                "ccount": day_peaks_piscine["number"],
+                "peak_at": day_peaks_piscine["peak_at"],
+                "total": day_peaks_piscine["total"],
+                "total_same": day_peaks_piscine["total_same"],
                 "date": day,
                 "is_piscine": True
             })

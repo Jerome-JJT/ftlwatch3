@@ -152,7 +152,7 @@ def raw(req, for_test = False):
             return []
 
         else:
-            mylogger(f"Api http error: {res.status_code} {res.reason}", LOGGER_WARNING)
+            mylogger(f"Api http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)
 
         fails += 1
         time.sleep(1)

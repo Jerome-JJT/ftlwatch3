@@ -93,6 +93,8 @@ def import_rule(rules):
 
 
 def project_callback(project):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
     mylogger(f"Import project {project['id']} {project['slug']}", LOGGER_INFO)
 
     good_cursus = None
@@ -199,7 +201,7 @@ def project_callback(project):
         "updated_at": project["updated_at"],
     }
 
-    project_notification(project)
+    # project_notification(project)
 
     executeQueryAction("""INSERT INTO projects (
         "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", 
@@ -241,7 +243,7 @@ def project_callback(project):
         "name": good["name"],
         "slug": good["slug"],
         "difficulty": good["difficulty"],
-        "is_exam": good["exam"],
+        "is_exam": good["is_exam"],
         "main_cursus": good["main_cursus"],
         "project_type_id": good["project_type_id"],
         "has_lausanne": good["has_lausanne"],

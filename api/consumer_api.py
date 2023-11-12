@@ -4,6 +4,7 @@
 from _dbConnector import *
 from _api import *
 import json
+import datetime
 
 from update_achievements import import_achievements
 from update_campus import import_campus
@@ -14,6 +15,7 @@ from update_products import import_products
 from update_projects import import_projects
 from update_titles import import_titles
 from update_users import import_users
+from generate_love import generate_love
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -55,6 +57,20 @@ def api_consumer(ch, method, properties, body):
 
         elif (resource == "users"):
             import_users()
+
+        elif (resource == "generate_love"):
+            import_users()
+            target_date = datetime.datetime(datetime.datetime.now().year, 10, 1)
+            target_date = target_date.strftime("%Y-%m-%d")
+
+            generate_love(output_name='love_piscine_2d', is_piscine=True)
+            generate_love(output_name='love_all_2d')
+            generate_love(output_name='love_recent_2d', is_piscine=False, min_date=target_date)
+
+            generate_love(graph_type="3d", output_name='love_piscine_3d', is_piscine=True)
+            generate_love(graph_type="3d", output_name='love_all_3d')
+            generate_love(graph_type="3d", output_name='love_recent_3d', is_piscine=False, min_date=target_date)
+
 
         else:
             raise Exception(f'{resource} resource not found')

@@ -147,7 +147,7 @@ function logtologstash($status)
         "uri" => $_SERVER["SCRIPT_NAME"],
         "args" => $_SERVER["QUERY_STRING"],
         "status" => $status,
-        "http_referer" => $_SERVER["HTTP_REFERER"],
+        "http_referer" => isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : '',
         "http_user_agent" => $_SERVER["HTTP_USER_AGENT"],
         "http_host" => $_SERVER["HTTP_HOST"],
         "server_name" => $_SERVER["SERVER_NAME"],

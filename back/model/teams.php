@@ -106,7 +106,6 @@ function getExamCount()
       COUNT(CASE WHEN is_validated THEN 1 END) AS is_validated,
       COUNT(projects.id) AS tries
       
-
       FROM teams
       JOIN team_user ON teams.id = team_user.team_id
       JOIN users ON users.id = team_user.user_id
