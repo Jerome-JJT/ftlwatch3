@@ -241,6 +241,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (120, 'Pages', 20, 'admin/pages', NULL, 3, 1),
   (125, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 1),
   (126, 'Profiles', 20, 'admin/profiles', NULL, 3, 1),
+  (127, 'Updater', 20, 'admin/updater', NULL, 3, 1),
 
   (150, 'Users visibility', 20, 'admin/users', NULL, 3, 1),
   (152, 'Projects visibility', 20, 'admin/projects', NULL, 3, 1),
