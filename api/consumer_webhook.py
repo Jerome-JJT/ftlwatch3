@@ -24,56 +24,64 @@ def webhook_consumer(ch, method, properties, body):
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
 
-    try:
-        content = json.loads(body)
+    for i in range(4):
+        try:
+            content = json.loads(body)
 
-        # discord_channel = content["channel"]
-        discord_channel = method.routing_key.split('.')[0]
+            # discord_channel = content["channel"]
+            discord_channel = method.routing_key.split('.')[0]
 
-        webhook_url = None
+            webhook_url = None
 
-        for key in env.ENVIRON:
-            if key.startswith("BOT_WEBHOOK_"):
-                webhook_chan = key.replace("BOT_WEBHOOK_", "").lower()
+            for key in env.ENVIRON:
+                if key.startswith("BOT_WEBHOOK_"):
+                    webhook_chan = key.replace("BOT_WEBHOOK_", "").lower()
 
-                if webhook_chan == discord_channel:
-                    webhook_url = env(key)
+                    if webhook_chan == discord_channel:
+                        webhook_url = env(key)
 
-        if (webhook_url == None):
-            raise Exception(f'{discord_channel} channel webhook not found')
-
-
-        payload = create_discord_payload(content)
-
-        headers = {
-            'Content-Type': 'application/json'
-        }
-
-        response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
-
-        if response.status_code != 204:
-            raise Exception(f'Channel {discord_channel}, status {response.status_code}, Response: {response.text}')
-
-        mylogger(f"Consume webhook {method.routing_key}, chan {discord_channel}", LOGGER_INFO, rabbit=False)
-        time.sleep(1)
-        ch.basic_ack(delivery_tag = method.delivery_tag)
+            if (webhook_url == None):
+                raise Exception(f'{discord_channel} channel webhook not found')
 
 
-    except Exception as e:
-        mylogger(f"Reject webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
+            payload = create_discord_payload(content)
 
-        new_properties = pika.BasicProperties(
-            headers={'x-rejection-reason': f"Reject bot {method.routing_key}, type {type(e)}, reason {e}"}
-        )
+            headers = {
+                'Content-Type': 'application/json'
+            }
 
-        ch.basic_publish(
-            exchange='',
-            routing_key='message_dlq',
-            properties=new_properties,
-            body=body
-        )
+            response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
 
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+            if response.status_code != 204:
+                raise Exception(f'Channel {discord_channel}, status {response.status_code}, Response: {response.text}')
+
+            mylogger(f"Consume webhook {method.routing_key}, chan {discord_channel}", LOGGER_INFO, rabbit=False)
+            time.sleep(1.2)
+            ch.basic_ack(delivery_tag = method.delivery_tag)
+            break
+
+
+        except Exception as e:
+            mylogger(f"Reject webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
+
+            if (e.get('retry_after') != None):
+                mylogger(f"Retry {i} webhook {method.routing_key}, type {type(e)}, reason {e}", LOGGER_INFO)
+                time.sleep(1)
+                continue
+
+            new_properties = pika.BasicProperties(
+                headers={'x-rejection-reason': f"Reject bot {method.routing_key}, type {type(e)}, reason {e}"}
+            )
+
+            ch.basic_publish(
+                exchange='',
+                routing_key='message_dlq',
+                properties=new_properties,
+                body=body
+            )
+
+            ch.basic_ack(delivery_tag = method.delivery_tag)
+            # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+            break
 
     return True

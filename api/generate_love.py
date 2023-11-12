@@ -27,21 +27,27 @@ def main(graph_type = ""):
 
 
     raw_links = executeQuerySelect("""
-        SELECT user1_id, users.login AS user1_login, user2_id,
-            SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS rank
-        FROM (
-            SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
-            UNION 
-            SELECT user1_id AS user2_id, user2_id AS user1_id, date, dist, length, is_piscine FROM vp_loves
+        SELECT * FROM (
+
+            SELECT user1_id, users.login AS user1_login, user2_id,
+                SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
+            FROM (
+                SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
+                UNION 
+                SELECT user1_id AS user2_id, user2_id AS user1_id, date, dist, length, is_piscine FROM vp_loves
+            ) sub_uall
+
+            JOIN users ON users.id = sub_uall.user1_id
+            
+            WHERE date between %(min_date)s AND %(max_date)s
+            AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
+            AND dist < %(dist)s
+
+            GROUP BY user1_id, user1_login, user2_id
         ) uall
 
-        JOIN users ON users.id = uall.user1_id
-        
-        WHERE date between %(min_date)s AND %(max_date)s
-        AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
-        AND dist < %(dist)s
-        AND uall.rank <= %(rank)s
-        GROUP BY user1_id, user1_login, user2_id
+        WHERE ranked <= %(rank)s
+
     """, {
         "min_date": '2000-00-00',
         "max_date": '2099-99-99',
@@ -62,7 +68,7 @@ def main(graph_type = ""):
         WHERE date between %(min_date)s AND %(max_date)s
         AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
         AND dist < %(dist)s
-        GROUP BY user_id
+        GROUP BY user_id, user_login, user_image
     """, {
         "min_date": '2000-00-00',
         "max_date": '2099-99-99',
@@ -87,9 +93,13 @@ def main(graph_type = ""):
             random.seed(pseudoseed)
             color = '#%02X%02X%02X' % (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-            nodes[rnode["user_id"]] = {'login': rnode["user_login"], 'size': rnode["length"], 'color': color, 'image': rnode["user_image"]}
+            nodes[rnode["user_id"]] = {'login': rnode["user_login"], 'size': max(1, math.sqrt(rnode["length"]) / 10000), 'color': color, 'image': rnode["user_image"]}
 
             sizes.append(rnode["length"])
+
+    if (len(sizes) == 0):
+        print("Stop: No size")
+        exit()
 
     sizes.sort()
 
@@ -106,9 +116,12 @@ def main(graph_type = ""):
     length_ratio = 10 / max_length
 
 
-    for key, node in nodes.values():
+    for key, node in nodes.items():
         
-        img = gv.convert.image_to_data_url(node['image'], 'svg')
+        try:
+            img = gv.convert.image_to_data_url(node['image'], 'svg')
+        except:
+            img = ''
 
         shape = 'circle'
 
@@ -119,9 +132,9 @@ def main(graph_type = ""):
         
 
         if img != '':
-            graph_generator.add_node(key, size=max(10, int(node['size'] / 2.4)), shape=shape, image=img)
+            graph_generator.add_node(key, size=max(10, int(float(node['size']) / 2.4)), shape=shape, image=img)
         else:
-            graph_generator.add_node(key, size=max(10, int(node['size'] / 2.4)), shape=shape)
+            graph_generator.add_node(key, size=max(10, int(float(node['size']) / 2.4)), shape=shape)
 
 
 

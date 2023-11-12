@@ -53,7 +53,7 @@ try {
     switch ($page) {
 
         case "test":
-            include("/secure_static/test.html");
+			readfile("/secure_static/test.html");
             die;
             break;
     }
