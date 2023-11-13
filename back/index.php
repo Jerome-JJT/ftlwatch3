@@ -38,6 +38,7 @@ session_start();
 if (isset($_SESSION['user']) && (!isset($_SESSION['CREATED']) || (time() - $_SESSION['CREATED'] > 120 * 60))) {
     session_unset();
     session_destroy();
+    jsonResponse(array(), 401);
 }
 
 load_permissions();
