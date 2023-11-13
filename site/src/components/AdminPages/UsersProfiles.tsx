@@ -105,7 +105,7 @@ export function UsersProfilesPage(): JSX.Element {
           values={values}
           tableTitle='User profiles'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
       <Dialog className='dark:bg-gray-600' open={focusedProfile !== undefined} handler={() => setFocusedProfile(undefined)}>

@@ -57,7 +57,7 @@ export function UsersTotalPage(): JSX.Element {
           tableTitle='Users total'
           indexColumn={true}
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

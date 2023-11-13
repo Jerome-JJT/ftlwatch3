@@ -206,7 +206,7 @@ export function TableauPage(): JSX.Element {
 
             tableTitle='Tableau'
             options={[10, 25, 50, 100]}
-            reloadFunction={() => { setValues([]); }}
+            // reloadFunction={() => { setValues([]); }}
           />
         </StyledTableau>
       }

@@ -103,7 +103,7 @@ export function EventPage(): JSX.Element {
 
           tableTitle='Events'
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
       <Dialog open={focusEvent !== undefined} handler={() => setFocusEvent(undefined)}>

@@ -126,7 +126,7 @@ export function ImagePage(): JSX.Element {
 
           tableTitle='Images'
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

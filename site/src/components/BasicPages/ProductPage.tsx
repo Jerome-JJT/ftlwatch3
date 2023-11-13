@@ -102,7 +102,7 @@ export function ProductsPage(): JSX.Element {
 
           tableTitle='Products'
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>

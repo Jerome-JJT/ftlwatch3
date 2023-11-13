@@ -78,7 +78,7 @@ export function PoolfilterVisibilityPage(): JSX.Element {
           values={values}
           tableTitle='Poolfilters'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

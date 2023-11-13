@@ -80,7 +80,7 @@ export function UserGroupsPage(): JSX.Element {
           values={values}
           tableTitle='User groups'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

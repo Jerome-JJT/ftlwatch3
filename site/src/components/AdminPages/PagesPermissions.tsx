@@ -112,7 +112,7 @@ export function PagesPermissionsPage(): JSX.Element {
           values={values}
           tableTitle='Pages'
           options={[10, 20, 30]}
-          // reloadFunction={() => { setValues([]) }}
+          // // reloadFunction={() => { setValues([]) }}
         />
       }
     </div>

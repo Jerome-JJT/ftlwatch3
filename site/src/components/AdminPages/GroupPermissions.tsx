@@ -79,7 +79,7 @@ export function GroupPermissionsPage(): JSX.Element {
           values={values}
           tableTitle='Permissions'
           options={[10, 20, 30]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

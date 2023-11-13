@@ -132,7 +132,7 @@ export function TinderPage(): JSX.Element {
 
           tableTitle='Tinder'
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>

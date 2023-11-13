@@ -63,7 +63,7 @@ export function CampusPage(): JSX.Element {
 
           tableTitle='Campus'
           options={[10, 25, 50, 100]}
-          reloadFunction={() => { setValues([]); }}
+          // reloadFunction={() => { setValues([]); }}
         />
       }
     </div>
