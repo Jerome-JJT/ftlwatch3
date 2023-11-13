@@ -7,6 +7,9 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Dialog,
+  DialogBody,
+  DialogHeader,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
@@ -15,6 +18,7 @@ import Separator from 'Common/Separator';
 import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { commonTitle } from 'Utils/commonTitle';
+import { AiOutlineClose } from 'react-icons/ai';
 
 
 class PoolFilterProps {
@@ -35,34 +39,42 @@ export function ImagePage(): JSX.Element {
   const [usedFilter, setUsedFilter] = React.useState<string | undefined>(defaultFilter !== null ? defaultFilter : 'cursus');
   const [poolFilters, setPoolFilters] = React.useState<PoolFilterProps[] | undefined>(undefined);
 
+  const [focusCard, setFocusCard] = React.useState<any | undefined>(undefined);
+
   React.useEffect(() => {document.title = commonTitle('Image page');}, []);
 
 
 
   function ImageCard(card: any): JSX.Element {
     return (
-      <Card id={card.login} key={card.login} className="flex min-w-48 w-48 max-w-48 h-80 border-black border-2">
-        <CardHeader floated={false} className='flex h-48 min-h-48 justify-center shadow-none mx-2 mt-2 bg-transparent my-text'>
-          <img className='max-h-full rounded-lg object-contain' src={card.avatar_url} alt="profile-picture" />
+      <Card id={card.login} key={card.login} className="flex w-32 h-56 md:min-w-48 md:w-48 md:max-w-48 md:h-80 border-black border-2">
+        <CardHeader floated={false} className='flex justify-center shadow-none mx-2 mt-2 bg-transparent my-text'>
+          <img className='max-h-full rounded-lg object-contain border-2 border-transparent cursor-pointer hover:border-black'
+            src={card.avatar_url}
+            alt="profile-picture"
+            onClick={() => setFocusCard(card)}
+          />
         </CardHeader>
 
         <CardBody className="flex grow justify-evenly flex-col text-center align-center p-2">
 
           <div>
-            <p color="blue-gray" className="mb-1">
+            <p className="mb-1 text-xs md:text-base">
               {card.first_name} {card.last_name}
             </p>
           </div>
 
           <div>
-            <p color="blue-gray" className="mb-1">
+            <p className="mb-1 text-xs md:text-base">
               {card.poolfilter}
             </p>
           </div>
         </CardBody>
 
-        <CardFooter className="pt-0 flex justify-center pb-4">
-          <a href={`https://profile.intra.42.fr/users/${card.login}`}><Button>{card.login}</Button></a>
+        <CardFooter className="pt-0 flex justify-center pb-1 md:pb-4">
+          <a href={`https://profile.intra.42.fr/users/${card.login}`}>
+            <Button className='px-4 py-2 md:px-6 md:py-3'>{card.login}</Button>
+          </a>
         </CardFooter>
       </Card>
     );
@@ -129,6 +141,16 @@ export function ImagePage(): JSX.Element {
           // reloadFunction={() => { setValues([]); }}
         />
       }
+      <Dialog open={focusCard !== undefined} handler={() => setFocusCard(undefined)}>
+        <div className="flex items-center justify-between p-2 pr-4">
+          <DialogHeader>{focusCard?.login || ''}</DialogHeader>
+          <AiOutlineClose onClick={() => setFocusCard(undefined)}
+            className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
+        </div>
+        <DialogBody className='flex justify-center' divider>
+          <img className='max-h-[400px]' src={focusCard?.avatar_url}/>
+        </DialogBody>
+      </Dialog>
     </div>
   );
 }
