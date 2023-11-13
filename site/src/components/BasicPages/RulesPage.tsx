@@ -60,7 +60,7 @@ export function RulesPage(): JSX.Element {
 
 
           tableTitle='Rules'
-          options={[10, 25, 50, 100]}
+          options={[100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

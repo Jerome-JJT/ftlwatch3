@@ -60,7 +60,7 @@ export function CursusPage(): JSX.Element {
 
 
           tableTitle='Cursus'
-          options={[10, 25, 50, 100]}
+          options={[100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

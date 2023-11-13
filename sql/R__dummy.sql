@@ -225,13 +225,13 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (10, 'Campus', 10, 'basics/campus', NULL, 4, 4),
   (15, 'Coalitions', 15, 'basics/coalitions', NULL, 4, 4),
   (20, 'Cursus', 20, 'basics/cursus', NULL, 4, 4),
-  (25, 'Groups', 25, 'basics/groups', NULL, 4, 4),
+  (25, 'Groups', 25, 'basics/groups', NULL, 4, 8),
   (30, 'Projects', 30, 'basics/projects', NULL, 4, 4),
   (35, 'Products', 35, 'basics/products', NULL, 4, 4),
-  (40, 'Rules', 40, 'basics/rules', NULL, 4, 4),
+  (40, 'Rules', 40, 'basics/rules', NULL, 4, 8),
   (45, 'Titles', 45, 'basics/titles', NULL, 4, 4),
 
-  (60, 'Events', 45, 'basics/events', NULL, 4, 3),
+  (60, 'Events', 45, 'events', NULL, 4, 3),
 
   (90, 'About', 30, 'about', NULL, NULL, NULL),
 
