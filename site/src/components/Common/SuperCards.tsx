@@ -211,13 +211,14 @@ export function SuperCards({
         <Button
           variant="outlined"
           size="sm"
+          className='px-1 md:px-4'
           onClick={() => { setCurrentPage(currentPage - 1); }}
           disabled={currentPage === 1}
         >
           Previous
         </Button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center md:gap-2">
 
           {!pageNumbers.includes(1) && (
             <>
@@ -234,6 +235,7 @@ export function SuperCards({
                   key='p2'
                   variant='text'
                   size="sm"
+                  className='hidden md:block'
                 >
                   ...
                 </IconButton>
@@ -259,6 +261,7 @@ export function SuperCards({
                   key='p3'
                   variant='text'
                   size="sm"
+                  className='hidden md:block'
                 >
                   ...
                 </IconButton>
@@ -277,6 +280,7 @@ export function SuperCards({
         <Button
           variant="outlined"
           size="sm"
+          className='px-1 md:px-4'
           onClick={() => { setCurrentPage(currentPage + 1); }}
           disabled={currentPage === totalPages}
         >

@@ -180,6 +180,9 @@ export function SuperTable({
 
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
+  const headerClasses = 'border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 py-4 max-w-4 transition-colors';
+  const headerPClasses = 'w-10 grow items-center gap-2 font-normal leading-none opacity-70 truncate';
+
   return (
     <Card className="big-card super-big-card !text-xs md:!text-base">
       <CardHeader floated={false} shadow={false} className="super-big-header">
@@ -263,28 +266,24 @@ export function SuperTable({
                 { indexColumn &&
                 <th
                   key='index'
-                  className="border-b border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors"
+                  className={classNames(headerClasses)}
                 >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="flex items-center text-center gap-2 font-normal leading-none opacity-70"
-                  >
+                  <div className='flex flex-row justify-center text-sm h-4'>
+                    <p className={headerPClasses}>
                     Index
-                  </Typography>
+                    </p>
+                  </div>
+
                 </th>
                 }
                 {columns.map((value) => value.visible !== false && (
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 py-4 max-w-4 transition-colors hover:bg-blue-gray-200"
+                    className={classNames('cursor-pointer hover:bg-blue-gray-200', headerClasses)}
                   >
                     <div className='flex flex-row justify-center text-sm h-4'>
-
-                      <p
-                        className="w-10 grow items-center gap-2 font-normal leading-none opacity-70 truncate"
-                      >
+                      <p className={headerPClasses}>
                         {value.label.toString()}
                         {' '}
                       </p>
