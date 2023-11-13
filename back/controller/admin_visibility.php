@@ -38,7 +38,7 @@ function poolfilter_set($data)
 
 function users_get()
 {
-    $tmp = getUsersShort();
+    $tmp = getUsersShort(true);
 
     $res = array();
 

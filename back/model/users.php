@@ -1,6 +1,6 @@
 <?php
 
-function getUsersShort()
+function getUsersShort($hidden)
 {
   $query = "SELECT 
   users.id,
@@ -20,7 +20,7 @@ function getUsersShort()
   ORDER BY login
   ";
 
-  $data = array();
+  $data = array(":hidden" => $hidden ? "TRUE" : "FALSE");
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);

@@ -235,13 +235,12 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (90, 'About', 30, 'about', NULL, NULL, NULL),
 
-  (100, 'Admin', 20, 'admin/admin', NULL, 3, 1),
+  (100, 'Updater', 20, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 20, 'admin/groups', NULL, 3, 9),
   (115, 'Permissions', 20, 'admin/permissions', NULL, 3, 9),
   (120, 'Pages', 20, 'admin/pages', NULL, 3, 1),
   (125, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 1),
   (126, 'Profiles', 20, 'admin/profiles', NULL, 3, 1),
-  (127, 'Updater', 20, 'admin/updater', NULL, 3, 1),
 
   (150, 'Users visibility', 20, 'admin/users', NULL, 3, 1),
   (152, 'Projects visibility', 20, 'admin/projects', NULL, 3, 1),
