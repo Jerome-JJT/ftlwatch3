@@ -42,10 +42,9 @@ export function CoalitionsPage(): JSX.Element {
 
 
   function CoalitionCard(card: any): JSX.Element {
-    console.log(card);
     return (
       <Card key={card.id}
-        className="flex w-80 h-80 big-card border-black border-2 overflow-hidden"
+        className="flex w-48 md:w-80 h-80 big-card !mb-0 border-black border-2 overflow-hidden"
         style={{ backgroundColor: card.color ? card.color.toString().replace(';', '') : '#FFFFFF' }}>
 
         <CardHeader floated={false}
@@ -65,14 +64,14 @@ export function CoalitionsPage(): JSX.Element {
 
           </div>
 
-          <div className="flex flex-col grow p-2 justify-evenly text-black">
-            <p color="blue-gray" className="mb-1">
+          <div className="flex flex-col grow p-2 justify-evenly truncate">
+            <p className="mb-1 text-black" title={card.name}>
               {card.name}
             </p>
-            <p color="blue-gray" className="mb-1">
+            <p className="mb-1 text-black" title={card.slug}>
               {card.slug}
             </p>
-            <p color="blue-gray" className="mb-1">
+            <p className="mb-1 text-black" title={`${card.campus_name} - ${card.cursus_name}`}>
               {card.campus_name} - {card.cursus_name}
             </p>
           </div>

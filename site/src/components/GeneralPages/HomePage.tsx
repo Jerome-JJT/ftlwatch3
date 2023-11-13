@@ -17,7 +17,7 @@ export default function HomePage(): JSX.Element {
       <div className='flex flex-col'>
         { userInfos?.citation && userInfos?.citation.length > 0 &&
 
-          <Card className="big-card mt-6 !mb-0 max-w-[600px] shadow-none">
+          <Card className="big-card mx-2 mt-6 !mb-0 max-w-[600px] shadow-none">
             <CardBody className='py-2 flex flex-row justify-center gap-6 items-center'>
               { userInfos?.citation_avatar && userInfos?.citation_avatar.length > 0 &&
                 <Avatar src={userInfos?.citation_avatar} alt="citator" />
@@ -29,7 +29,7 @@ export default function HomePage(): JSX.Element {
           </Card>
         }
 
-        <Card className="big-card mt-6 max-w-[600px] shadow-none">
+        <Card className="big-card mx-2 mt-6 max-w-[600px] shadow-none">
           <CardBody className=''>
             <div className='flex flex-row justify-center items-center gap-4'>
               <img src={AppLogo}

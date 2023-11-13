@@ -196,7 +196,7 @@ export function SuperCards({
         }
       </CardHeader>
 
-      <CardBody className='flex gap-2 flex-wrap justify-center my-cards'>
+      <CardBody className='super-big-body flex gap-x-2 gap-y-4 md:gap-y-10 flex-wrap justify-around my-cards'>
 
         { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
 

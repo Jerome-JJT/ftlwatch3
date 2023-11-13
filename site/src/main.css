@@ -121,7 +121,7 @@ input[type='checkbox'] {
 }
 
 .my-content {
-  @apply mx-8 mt-2
+  @apply flex flex-col mx-1 md:mx-8 mt-2 pb-6
 }
 
 
@@ -159,8 +159,13 @@ input[type='checkbox'] {
   @apply flex flex-row w-full md:w-72 gap-2;
 }
 
+.super-big-body {
+  @apply !p-1 md:!p-6 grow;
+}
+
 .super-big-footer {
-  @apply flex items-center justify-between border-t p-4 rounded-b-xl;
+  @apply !px-1 md:!p-4;
+  @apply flex items-center justify-between border-t rounded-b-xl;
   @apply border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600;
   @apply bg-white/40;
   @apply bg-transparent;

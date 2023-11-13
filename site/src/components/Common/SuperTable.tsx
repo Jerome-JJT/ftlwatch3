@@ -181,7 +181,7 @@ export function SuperTable({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   return (
-    <Card className="big-card super-big-card">
+    <Card className="big-card super-big-card !text-xs md:!text-base">
       <CardHeader floated={false} shadow={false} className="super-big-header">
         <div className="super-big-header-content">
           <div>
@@ -255,7 +255,7 @@ export function SuperTable({
         }
       </CardHeader>
 
-      <CardBody>
+      <CardBody className='super-big-body'>
         <div className="mt-4 overflow-auto border-black border-2 h-800 resize-y">
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
@@ -278,21 +278,22 @@ export function SuperTable({
                   <th
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
-                    className="cursor-pointer border-b border-blue-gray-100 dark:bg-blue-gray-500 p-4 max-w-4 transition-colors hover:bg-blue-gray-200"
+                    className="cursor-pointer border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 py-4 max-w-4 transition-colors hover:bg-blue-gray-200"
                   >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="flex items-center text-center gap-2 font-normal leading-none opacity-70"
-                    >
-                      {value.label.toString()}
-                      {' '}
+                    <div className='flex flex-row justify-center text-sm h-4'>
+
+                      <p
+                        className="w-10 grow items-center gap-2 font-normal leading-none opacity-70 truncate"
+                      >
+                        {value.label.toString()}
+                        {' '}
+                      </p>
                       {sortColumn === value.field
                         ? (sortDirection === 'asc'
                           ? <AiOutlineCaretUp/>
                           : <AiOutlineCaretDown/>)
                         : <AiOutlineCaretLeft />}
-                    </Typography>
+                    </div>
                   </th>
                 ))}
               </tr>
