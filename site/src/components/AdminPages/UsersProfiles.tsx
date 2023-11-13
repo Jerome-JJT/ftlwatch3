@@ -103,7 +103,7 @@ export function UsersProfilesPage(): JSX.Element {
         <SuperTable
           columns={columns}
           values={values}
-          tableTitle='Poolfilters'
+          tableTitle='User profiles'
           options={[10, 20, 30]}
           reloadFunction={() => { setValues([]); }}
         />
