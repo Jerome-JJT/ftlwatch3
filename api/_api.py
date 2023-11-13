@@ -112,6 +112,12 @@ def raw(req, for_test = False):
             time.sleep(5)
             continue
 
+        except IndexError as e:
+            mylogger(f"Unexpected index error {type(e)} {e} on {url}, fail {fails}", LOGGER_ERROR)
+            fails += 1
+            time.sleep(5)
+            continue
+
         x = threading.Thread(target=logtologstash, args=({
             "endpoint": url.replace("https://api.intra.42.fr", ""),
             "attempts": maxfails,
