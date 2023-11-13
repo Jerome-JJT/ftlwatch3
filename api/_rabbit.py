@@ -40,8 +40,8 @@ from consumer_api import api_consumer
 from consumer_webhook import webhook_consumer
 
 @click.command()
-@click.option("--server", type=bool, help="server mode")
-def main(server = False):
+@click.option("--server", type=bool, default=False, help="server mode")
+def main(server=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     if (server):

@@ -146,7 +146,7 @@ def event_callback(event):
 @click.option("--update-all", "-a", type=bool, default=False, help="update all")
 @click.option("--start-at", "-s", type=int, default=1, help="start at")
 
-def import_events(update_all, start_at):
+def import_events(update_all=False, start_at=1):
     global local_events
 
     local_events = executeQuerySelect("SELECT id FROM events ORDER BY id DESC LIMIT 1000")

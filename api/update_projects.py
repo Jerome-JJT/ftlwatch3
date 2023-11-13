@@ -112,7 +112,7 @@ def project_callback(project):
         good_cursus = project['cursus'][0]['id']
 
     if (good_cursus == 21):
-        good_project_type = 2 # Outer core
+        good_project_type = 3 # Outer core
 
     good_has_lausanne = False
     for campus in project['campus']:

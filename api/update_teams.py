@@ -153,10 +153,10 @@ def team_callback(team):
 
 
 @click.command()
-@click.option("--update-all", "-a", type=bool, help="update all")
-@click.option("--start-at", "-s", type=int, help="start at")
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
 
-def import_teams(update_all = False, start_at = 1):
+def import_teams(update_all=False, start_at=1):
     global local_teams
 
     local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 1000")
