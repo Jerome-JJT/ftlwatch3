@@ -1,16 +1,18 @@
 <?php
 
 require_once("controller/poolfilters.php");
-require_once("controller/me.php");
 
 $action = "";
 if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+
+need_permission("p_47student");
+
 switch ($action) {
-    case "get":
-        get($_POST);
+    case "get_tableau":
+        get_tableau();
         break;
 
 }

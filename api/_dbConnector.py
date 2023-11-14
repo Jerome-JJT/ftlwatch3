@@ -1,7 +1,6 @@
 import psycopg2
 import psycopg2.extras
 import environ
-from _utils import *
 
 env = environ.Env()
 environ.Env.read_env()
@@ -9,6 +8,8 @@ environ.Env.read_env()
 
 
 def executeQuerySelect(query, data = {}):
+  from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
   try:
     conn = openDBConnection()
     cur = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
@@ -29,6 +30,8 @@ def executeQuerySelect(query, data = {}):
 
 
 def executeQueryAction(query, data = {}, repeat = False):
+  from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
   try:
     conn = openDBConnection()
     cur = conn.cursor()
@@ -53,6 +56,8 @@ def executeQueryAction(query, data = {}, repeat = False):
 
 
 def openDBConnection():
+  from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
 
   try:
     conn = psycopg2.connect(

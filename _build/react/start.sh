@@ -23,9 +23,10 @@ fi
 
 # Download node_modules
 yarn install
+(cd node_modules/react-gauge-chart && npm i lodash.isequal)
 
 
-if [ "$BUILD_TYPE" = "Production" ];
+if [ "$BUILD_TYPE" = "PROD" ];
 then
     # For start in prod
     yarn global add serve

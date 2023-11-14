@@ -26,6 +26,24 @@ services:
     entrypoint: "bash"
     # entrypoint: "bash /flyway/sql/_myflyway.sh migrate"
 
+  rabbit:
+    build: ./_build/rabbit
+    hostname: rabbit
+
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
+
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}
+
+    networks:
+      - back
+
+    ports:
+      - "9999:15672"
+
+
   db:
     image: postgres:14.2
 
@@ -49,9 +67,6 @@ services:
     # volumes:
     #   - ./adminer:/var/www/html
 
-    ports:
-      - "8081:8080"
-
     networks:
       - back
 
@@ -62,14 +77,16 @@ services:
       - db
 
     volumes:
+      - ./secure_static:/secure_static
       - ./back:/var/www/html
 
     networks:
       - back
       - front
+      - logging_logstash
 
-    ports:
-      - "8888:80"
+    # ports:
+    #   - "8888:80"
 
     environment:
       DATABASE_CONNECT: 'pgsql'
@@ -80,10 +97,13 @@ services:
       DATABASE_USER: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-      FRONT_PREFIX: ${FRONT_PREFIX}
+      CALLBACK_URL: ${CALLBACK_URL}
 
-      API_UID: ${API_UID}
-      API_SECRET: ${API_SECRET}
+      RABBIT_USER: ${RABBIT_USER}
+      RABBIT_PASS: ${RABBIT_PASS}
+
+      API_UID: ${API_FRONT_UID}
+      API_SECRET: ${API_FRONT_SECRET}
   
     working_dir: /var/www/html
 
@@ -91,8 +111,8 @@ services:
   front:
     build: ./_build/react
 
-    ports:
-     - "8080:5173"
+    # ports:
+    #  - "8080:5173"
     #  - "8443:443"
 
     volumes:
@@ -101,9 +121,8 @@ services:
     networks:
       - front
 
-    environment:
-      API_UID: ${API_UID}
-      VITE_API_PREFIX: ${API_PREFIX}
+    # environment:
+      # API_UID: ${API_FRONT_UID}
 
     working_dir: /app
 
@@ -115,10 +134,15 @@ services:
     tty: true        # docker run -t
 
     volumes:
+      - ./secure_static:/secure_static
       - ./api:/app
 
     networks:
       - back
+      - logging_logstash
+
+    env_file:
+     - .env
 
     environment:
       DATABASE_CONNECT: 'pgsql'
@@ -129,17 +153,39 @@ services:
       DATABASE_USER: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-      API_UID: ${API_UID}
-      API_SECRET: ${API_SECRET}
+      RABBIT_USER: ${RABBIT_USER}
+      RABBIT_PASS: ${RABBIT_PASS}
+      
+      API_UID: ${API_BACK_UID}
+      API_SECRET: ${API_BACK_SECRET}
 
     working_dir: /app
+
+
+  nginx:
+    build: ./_build/nginx
+
+    depends_on:
+      - front
+      - back
+
+    volumes:
+      - ./static:/var/www/static
+
+    networks:
+      - front
+      - back
 
 
 networks:
   front:
   back:
+  logging_logstash:
+    name: logging_logstash
+    external: true
 
 volumes:
   main_db:
+  rabbit_data:
 
 

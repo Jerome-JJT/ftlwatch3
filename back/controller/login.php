@@ -1,21 +1,21 @@
 <?php
 require_once("controller/_common.php");
 require_once("model/account.php");
-require_once("model/permissions.php");
+require_once("model/permissions/permissions.php");
+require_once("model/permissions/user_groups.php");
 
 function login_way($login)
 {
     $userInfos = getUserInfos($login);
-
+    
     // TODO get rights and groups
-
+    
     if (!isset($userInfos["error"])) {
         jsonlogger("SET USER", $userInfos, LOGGER_DEBUG());
 
-
-
         $_SESSION["user"] = $userInfos;
         $_SESSION["pages"] = getUserPages($userInfos["id"]);
+        $_SESSION['CREATED'] = time();
     } else {
         mylogger("GET USER INFOS ERROR" . $userInfos["error"], LOGGER_ERROR());
 
@@ -26,7 +26,6 @@ function login_way($login)
 
 function login($post)
 {
-
     if (isset($post["login"]) && isset($post["password"])) {
 
         $isLogin = loginUser($post["login"], $post["password"], true);
@@ -34,10 +33,10 @@ function login($post)
         if ($isLogin) {
             login_way($post["login"]);
         }
+        jsonResponse(array(), 400);
 
-        // print_r("value");
-        // print_r($isLogin);
-    } else {
+    }
+    else {
         jsonResponse(array(), 400);
     }
 }
@@ -46,7 +45,7 @@ function loginapi_authorize()
 {
 
     $authorization_redirect_url = "https://api.intra.42.fr/oauth/authorize?response_type=code";
-    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("FRONT_PREFIX") . "/loginapi" . "&scope=public";
+    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("CALLBACK_URL") . "&scope=public";
 
     header("Location: " . $authorization_redirect_url);
     exit();
@@ -67,6 +66,9 @@ function loginapi_callback($post)
         $raw = json_decode($response);
 
         if (isset($raw->error)) {
+            if ($raw->error == "invalid_client") {
+                mylogger('API key probably expired', LOGGER_ERROR());
+            }
             jsonResponse(array("error" => $raw->error), 406);
         }
 
@@ -77,6 +79,8 @@ function loginapi_callback($post)
         if (isset($meInfos->status) && $meInfos->status == 401) {
             jsonResponse(array("error" => $meInfos->error), 401);
         }
+
+        // jsonlogger('Response', $meInfos, LOGGER_DEBUG());
 
 
         if (!loginUser($meInfos["login"], null, false)) {
@@ -108,22 +112,52 @@ function storeUser($res, $exists = 0)
         $good_avatar_url = $res["image"]["link"];
     }
 
-    $good_number = -1;
-    if (isset($res['coalition_id'])) {
-        $good_number = $res['coalition_id'];
+    if ($exists == 0) {
+        createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url);
+    } else {
+        updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url);
     }
 
-    if ($exists == 0) {
-        createAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
-    } else {
-        updateAccount($res["id"], $res["login"], $good_firstname, $res["last_name"], $good_displayname, $good_avatar_url, $good_number);
+    $singleGroup = upsertUserGroup($res["id"], $res["login"]);
+    if ($singleGroup != -1) {
+
+        $perms = array();
+
+        if (in_array(47, array_column($res['campus'], 'id'))) {
+
+            array_push($perms, 'g_logged');
+
+            if (in_array(21, array_column($res['cursus_users'], 'cursus_id')) && in_array(47, array_column($res['campus'], 'id'))) {
+                array_push($perms, 'g_47student');
+            }
+            
+            if (in_array('BDE', array_column($res['groups'], 'name'))) {
+                array_push($perms, 'g_bde');
+            }
+
+            $achievements = array_column($res['achievements'], 'id');
+            if (in_array(103, $achievements) || 
+                in_array(104, $achievements) || 
+                in_array(105, $achievements) || 
+                in_array(106, $achievements) || 
+                in_array(1219, array_column($res['titles'], 'id'))) {
+
+                array_push($perms, 'g_tutor');
+            }
+            
+            if (in_array($res['id'], array(92477))) {
+                array_push($perms, 'g_admin', 'g_event', 'g_perm', 'g_stalk1', 'g_stalk2', 'g_stalk3', 'g_stalk4');
+            }
+        }
+
+
+        setUserGroupBySlugs($res["id"], $perms);
     }
 }
 
 
 function logout()
 {
-
     $_SESSION = array();
     session_destroy();
     jsonResponse(array(), 204);

@@ -1,5 +1,13 @@
 <?php
 
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+//https://gist.github.com/remy/5213884
+function map($x, $in_min, $in_max, $out_min, $out_max) {
+    return ($x - $in_min) * ($out_max - $out_min) / ($in_max - $in_min) + $out_min;
+  }
+
 function getHttpCode($code)
 {
 
@@ -106,21 +114,129 @@ function getHttpCode($code)
     return ($httpCode[$code]);
 }
 
+
+function logtologstash($status)
+{
+    $userId = "-1";
+    $userLogin = "";
+    if (isset($_SESSION["user"])) {
+        $userId = $_SESSION["user"]["id"];
+        $userLogin = $_SESSION["user"]["login"];
+    } 
+
+
+    $perms = "";
+    $sessionId = "";
+    if (isset($_REQUEST["permissions"])) {
+        $perms = implode(",", $_REQUEST["permissions"]);
+        $sessionId = substr($_REQUEST["PHPSESSID"], 0, 12);
+    } 
+
+    $currentTime = date('c');
+
+
+    $logs = array(
+        "api_user_id" => $userId,
+        "api_user_login" => $userLogin,
+        "api_user_perms" => $perms,
+        "php_session_id" => $sessionId,
+        "time_iso8601" => $currentTime,
+        
+        "remote_addr" => isset($_SERVER["HTTP_X_REAL_IP"]) ? $_SERVER["HTTP_X_REAL_IP"] : $_SERVER["REMOTE_ADDR"],
+        "request_uri" => $_SERVER["REQUEST_URI"],
+        "uri" => $_SERVER["SCRIPT_NAME"],
+        "args" => $_SERVER["QUERY_STRING"],
+        "status" => $status,
+        "http_referer" => isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : '',
+        "http_user_agent" => $_SERVER["HTTP_USER_AGENT"],
+        "http_host" => $_SERVER["HTTP_HOST"],
+        "server_name" => $_SERVER["SERVER_NAME"],
+        "scheme" => $_SERVER["REQUEST_SCHEME"],
+        "request_method" => $_SERVER["REQUEST_METHOD"], 
+        "server_protocol" => $_SERVER["SERVER_PROTOCOL"]
+    );
+
+    $data = array();
+    foreach ($logs as $key => $value) {
+        $data[] = '"' . $key . '": "' . $value . '"';
+    }
+    $message = implode(", ", $data);
+
+    $logstashHost = 'logstash';
+    $logstashPort = 42112;
+
+    try {
+        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        if ($socket === false) {
+            mylogger("Failed to create socket", LOGGER_ERROR());
+        } 
+        else {
+            $connect_timeval = array(
+                "sec" => 0,
+                "usec" => 500000
+            );
+            socket_set_option(
+                $socket,
+                SOL_SOCKET,
+                SO_SNDTIMEO,
+                $connect_timeval
+            );
+            socket_set_option(
+                $socket,
+                SOL_SOCKET,
+                SO_RCVTIMEO,
+                $connect_timeval
+            );
+
+            $result = @socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
+    
+            if ($result === false) {
+                mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
+            } 
+            // else {
+            //     echo "Log message sent to Logstash.";
+            // }
+    
+            socket_close($socket);
+        }
+    }
+    catch (Exception $e) {
+        mylogger("Exception in logtologstash", LOGGER_ERROR());
+    }
+}
+
+
+
+function sentToRabbit($routing_key, $body) {
+
+    $connection = new AMQPStreamConnection('rabbit', 5672, getenv("RABBIT_USER"), getenv("RABBIT_PASS"));
+    
+    $channel = $connection->channel();
+    
+    $msg = new AMQPMessage(json_encode($body));
+    $channel->basic_publish($msg, 'main', $routing_key);
+    
+    $channel->close();
+    $connection->close();
+}
+
+
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {
+    logtologstash($code);
+    
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
 
-    if ($code >= 400 && !isset($data["error"]) && isset($httpCode[$code])) {
+    if ($code >= 400 && !isset($data["error"])) {
         $data["error"] = getHttpCode($code);
     }
-
-
+    
     $flags = JSON_NUMERIC_CHECK;
     if (count($data) == 0) {
         $flags |= JSON_FORCE_OBJECT;
     }
-
+    
     if (getenv("ENV") == "DEV") {
         $flags |= JSON_PRETTY_PRINT;
     }
@@ -133,22 +249,22 @@ function LOGGER_DEBUG()
 {
     return 0;
 }
-;
+
 function LOGGER_INFO()
 {
     return 1;
 }
-;
+
 function LOGGER_WARNING()
 {
     return 2;
 }
-;
+
 function LOGGER_ERROR()
 {
     return 3;
 }
-;
+
 
 function mylogger($log, $level)
 {
@@ -170,9 +286,24 @@ function mylogger($log, $level)
     $myfile = fopen("/var/log/apache2/mylogger.log", "a");
     fwrite($myfile, $lvltotxt . " " . $log . "\n");
     fclose($myfile);
+
+    if ($level >= LOGGER_WARNING()) {
+        sentToRabbit('errors.server.message.queue', array('content' => $lvltotxt . " " . $log));
+    }
 }
 
 function jsonlogger($msg, $data, $level)
 {
     mylogger($msg . " " . json_encode($data), $level);
 }
+
+function userIsAdmin()
+{
+    if (isset($_SESSION["user"]) && isset($_SESSION["user"]["id"]) && in_array($_SESSION["user"]["id"], array("92477"))) {
+        return true;
+    }
+    return false;
+}
+
+
+

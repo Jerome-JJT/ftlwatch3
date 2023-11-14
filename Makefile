@@ -6,20 +6,37 @@ COMPOSE_DEV		= -f ./docker-compose.yml -f ./docker-compose.dev.yml
 COMPOSE_PROD	= -f ./docker-compose.yml -f ./docker-compose.override.yml
 
 #Dev
-DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}
+DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
 
-#Prod
-# DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+ifeq ($(shell hostname), 42lwatch3)
+	ifeq ($(shell pwd), /var/www/ftlwatch3)
+		#Prod
+		DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+	endif
+endif
+
 
 all:		start
 
 build:
 			${DOCKER} build
 
+testenv:
+		@echo $(hostname)
+		@echo ${DOCKER}
+
+presetup:
+			docker network create logging_logstash
+setup:		
+			${DOCKER} exec back composer install
+			$(MAKE) migrate
+			sleep 60
+			${DOCKER} exec rabbit bash /setup.sh
 
 
 start:
 			${DOCKER} up -d --build
+
 
 ps:
 			${DOCKER} ps -a
@@ -33,21 +50,25 @@ logsfront:
 			${DOCKER} logs front
 logsback:
 			${DOCKER} exec back tail -n30 /var/log/apache2/mylogger.log
-logsback2:
-			${DOCKER} logs back
+logsapi:
+			${DOCKER} logs api
 logspostg:
 			${DOCKER} logs db
 logsf:
 			${DOCKER} logs flyway
+logsnginx:
+			${DOCKER} logs nginx
 
 flogsfront:
 			${DOCKER} logs -f front
 flogsback:
 			${DOCKER} exec back tail -f /var/log/apache2/mylogger.log
-flogsback2:
-			${DOCKER} logs -f back
+flogsapi:
+			${DOCKER} logs -f api
 flogspostg:
 			${DOCKER} logs -f db
+flogsnginx:
+			${DOCKER} logs -f nginx
 
 refront:
 			${DOCKER} restart front
@@ -60,6 +81,8 @@ info:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh info
 migrate:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh migrate
+repair:
+			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh repair
 revert:
 			${DOCKER} exec flyway bash /flyway/sql/_myflyway.sh undo
 
@@ -67,6 +90,8 @@ runf:
 			${DOCKER} exec flyway bash
 runapi:
 			${DOCKER} exec api bash
+api:
+			${DOCKER} exec api python -i _api.py
 runfront:
 			${DOCKER} exec front sh
 runback:
@@ -75,7 +100,10 @@ runpostg:
 			${DOCKER} exec postgres bash
 rundb:
 			${DOCKER} exec postgres psql --host=postgres --dbname=test_db --username=user -W
-
+runnginx:
+			${DOCKER} exec nginx bash
+runrabbit:
+			${DOCKER} exec rabbit bash
 
 
 

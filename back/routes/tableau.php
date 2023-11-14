@@ -13,21 +13,23 @@ if (isset($_GET["action"])) {
 //         break;
 // }
 
+require_once("controller/authorization.php");
 
+need_permission("p_47student");
 
 
 require_once("controller/tableau.php");
-$filter = "";
+$selectedFilter = "";
 $projects = "";
 
 if (isset($_GET["filter"])) {
-    $filter = $_GET["filter"];
+    $selectedFilter = $_GET["filter"];
 }
 
 if (isset($_GET["projects"])) {
     $projects = $_GET["projects"];
 }
 
-tableau_api($filter, $projects);
+tableau_api($selectedFilter, $projects);
 
 exit();

@@ -1,85 +1,86 @@
-import React from 'react';
-import LogoInconnu from '../../assets/img/inconnu.jpeg';
+import LogoInconnu from '../../assets/inconnu.jpeg';
 import { Link } from 'react-router-dom';
-import { type UseLoginDto } from '../Hooks/useLogin';
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
-import { AiFillSetting, AiOutlineLogin, AiOutlineLogout } from 'react-icons/ai';
+import { AiFillSetting, AiOutlineLogin, AiOutlineLogout, AiOutlineReload } from 'react-icons/ai';
 import classNames from 'classnames';
+import { useLogin } from 'Hooks/LoginProvider';
 
-interface ProfileButtonProps {
-  loginer: UseLoginDto
-}
-
-export default function ProfileButton ({
-  loginer
-}: ProfileButtonProps): JSX.Element {
-  const buttonColor = 'bg-[#CCCCCC]'
-  const textColor = 'text-black'
+export default function ProfileButton(): JSX.Element {
+  const buttonColor = 'bg-[#CCCCCC]';
+  const textColor = 'text-black';
+  const { isLogged, userInfos, getUserData } = useLogin();
 
   return (
     <Menu>
       <MenuHandler>
-        <Avatar
+        <Avatar tabIndex={-1}
           variant="circular"
-          alt={`${loginer.userInfos?.login ?? ''}`}
+          alt={`${userInfos?.login ?? ''}`}
           className="cursor-pointer"
-          src={(loginer.logged &&
-              loginer.userInfos &&
-              loginer.userInfos.avatar_url) ||
+          src={(isLogged &&
+              userInfos &&
+              userInfos.avatar_url) ||
             LogoInconnu
           }
         />
       </MenuHandler>
 
-      <MenuList>
-        {loginer.logged && loginer.userInfos && (
+      <MenuList className='dark:bg-gray-900'>
+        {isLogged && userInfos && (
           <>
-              <Typography variant="small" className="font-normal">
-                {loginer.userInfos.login || ''}
-              </Typography>
-              <Typography variant="small" className="font-normal">
-                {loginer.userInfos.display_name || ''}
-              </Typography>
+            <Typography tabIndex={0} variant="small" className="font-normal outline-none">
+              {userInfos.login || ''}
+            </Typography>
+            <Typography variant="small" className="font-normal">
+              {userInfos.display_name || ''}
+            </Typography>
             <hr className="my-2 border-blue-gray-50" />
           </>
         )}
 
-        {(loginer.logged && (
+        {(isLogged && (
 
           <>
-            <Link to={'/settings'}>
-            <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
-              <AiFillSetting className={classNames(textColor)} />
+            <div onClick={() => { getUserData({ reload: true }); }}>
+              <MenuItem className={classNames('flex items-center gap-2 mb-2', buttonColor)}>
+                <AiOutlineReload className={classNames(textColor)} />
+                <Typography variant="small" className={classNames('font-normal', textColor)}>
+                  Reload
+                </Typography>
+              </MenuItem>
+            </div>
 
-              <Typography variant="small" className={classNames('font-normal', textColor)}>
-                Settings
-              </Typography>
-            </MenuItem>
+            <Link to={'/settings'}>
+              <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
+                <AiFillSetting className={classNames(textColor)} />
+                <Typography variant="small" className={classNames('font-normal', textColor)}>
+                  Settings
+                </Typography>
+              </MenuItem>
             </Link>
 
             <hr className="my-2 border-blue-gray-50" />
 
-              <Link to={'/logout'}>
+            <Link to={'/logout'}>
               <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
                 <AiOutlineLogin className={classNames(textColor)} />
 
                 <Typography variant="small" className={classNames('font-normal', textColor)}>
-                  Logout
+                    Logout
                 </Typography>
               </MenuItem>
-              </Link>
+            </Link>
           </>
 
         )) || (
-          <a href={`${import.meta.env.VITE_API_PREFIX}/?page=login&action=authorizeapi`}>
+          <a href={'/api/?page=login&action=authorizeapi'}>
+            <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
+              <AiOutlineLogout className={classNames(textColor)} />
 
-          <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
-            <AiOutlineLogout className={classNames(textColor)} />
-
-            <Typography variant="small" className={classNames('font-normal', textColor)}>
-              Login api
-            </Typography>
-          </MenuItem>
+              <Typography variant="small" className={classNames('font-normal', textColor)}>
+                Login api
+              </Typography>
+            </MenuItem>
           </a>
         )}
 

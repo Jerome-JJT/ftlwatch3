@@ -5,9 +5,7 @@
 function code_exchange($code) {
   $header = array("Content-Type: application/x-www-form-urlencoded");
   $content = "client_id=".getenv("API_UID")."&client_secret=".getenv("API_SECRET");
-  $content .= "&grant_type=authorization_code&code=".$code."&redirect_uri=".getenv("FRONT_PREFIX")."/loginapi";
-
-  print_r($content);
+  $content .= "&grant_type=authorization_code&code=".$code."&redirect_uri=".getenv("CALLBACK_URL");
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
@@ -34,8 +32,15 @@ function getResource($token, $endpoint) {
     CURLOPT_SSL_VERIFYPEER => false,
     CURLOPT_RETURNTRANSFER => true
   ));
+  
   $response = curl_exec($curl);
+  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   curl_close($curl);
 
+  
+  if ($httpCode == 429) {
+    jsonResponse(array("details" => "apibackend"), 429);
+  }
+  
   return json_decode($response, true);
 }

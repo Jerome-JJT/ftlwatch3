@@ -2,24 +2,61 @@ CREATE TABLE "login_users" (
     "id" SERIAL NOT NULL, 
     "login" character varying NOT NULL, 
     "password" character varying, 
+
     "first_name" character varying NOT NULL DEFAULT '', 
     "last_name" character varying NOT NULL DEFAULT '', 
     "display_name" character varying NOT NULL DEFAULT '', 
     "avatar_url" character varying NOT NULL DEFAULT '',
-    "color" integer NOT NULL DEFAULT -1,
+
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "PK_LOGIN_USER_ID" PRIMARY KEY ("id")
 );
 
-CREATE TABLE "groups" (
+CREATE TABLE "themes" (
+    "id" SERIAL NOT NULL, 
+
+    "name" character varying NOT NULL, 
+    "image" character varying NOT NULL,
+    "corder" integer DEFAULT 99,
+
+    CONSTRAINT "PK_THEME_ID" PRIMARY KEY ("id")
+);
+
+
+CREATE TABLE "login_user_profiles" (
+    "id" SERIAL NOT NULL, 
+
+    "theme_id" integer NOT NULL DEFAULT 1,
+    "color" character varying DEFAULT '0xFFFFFF',
+    "can_change_theme" boolean NOT NULL DEFAULT TRUE,
+
+    "terms" boolean DEFAULT TRUE,
+    "ads" boolean DEFAULT TRUE,
+
+    "github_link" character varying,
+    "ban_date" character varying,
+    "css_click" integer NOT NULL DEFAULT 0,
+
+    "citation" character varying NOT NULL DEFAULT '',
+    "citation_avatar" character varying NOT NULL DEFAULT '',
+
+    CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("id") REFERENCES "login_users"("id"),
+    CONSTRAINT "THEME_ID" FOREIGN KEY("theme_id") REFERENCES "themes"("id"),
+    CONSTRAINT "PK_LOGIN_USER_PROFILE_ID" PRIMARY KEY ("id")
+);
+
+
+CREATE TABLE "login_groups" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
+    "slug" character varying, 
+    "corder" integer DEFAULT 99, 
     "owner_id" integer, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("owner_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_GROUP_ID" PRIMARY KEY ("id")
+    CONSTRAINT "PK_LOGIN_GROUP_ID" PRIMARY KEY ("id")
 );
 
 CREATE TABLE "submenus" (
@@ -27,7 +64,7 @@ CREATE TABLE "submenus" (
     "name" character varying NOT NULL, 
     "icon" character varying, 
 
-    "order" integer DEFAULT 30,
+    "corder" integer DEFAULT 30,
     "route" character varying, 
 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
@@ -36,31 +73,12 @@ CREATE TABLE "submenus" (
 );
 
 
-CREATE TABLE "pages" (
-    "id" SERIAL NOT NULL, 
-
-    "name" character varying NOT NULL,
-    "icon" character varying, 
-    "order" integer DEFAULT 30,
-
-    "route" character varying, 
-    "basefilter" character varying, 
-
-    -- "parent_id" integer,
-    -- "permission_id" integer, 
-    "submenu_id" integer,
-
-    "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
-    -- CONSTRAINT "PARENT_ID" FOREIGN KEY("parent_id") REFERENCES "pages"("id") ON DELETE CASCADE,
-    CONSTRAINT "SUBMENU_ID" FOREIGN KEY("submenu_id") REFERENCES "submenus"("id") ON DELETE CASCADE,
-    CONSTRAINT "PK_PAGE_ID" PRIMARY KEY ("id")
-);
-
 
 CREATE TABLE "permissions" (
     "id" SERIAL NOT NULL, 
     "name" character varying NOT NULL, 
+    "slug" character varying, 
+    "corder" integer DEFAULT 99, 
     "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
     "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
     -- CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE SET NULL,
@@ -68,31 +86,43 @@ CREATE TABLE "permissions" (
 );
 
 
--- CREATE TABLE "pages_permissions" (
---     "id" SERIAL NOT NULL, 
---     "page_id" integer NOT NULL, 
---     "permission_id" integer NOT NULL, 
---     CONSTRAINT "PAGE_ID" FOREIGN KEY("page_id") REFERENCES "pages"("id") ON DELETE CASCADE,
---     CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
---     CONSTRAINT "PK_PAGE_PERMISSION_ID" PRIMARY KEY ("id")
--- );
-
-
-CREATE TABLE "groups_permissions" (
+CREATE TABLE "pages" (
     "id" SERIAL NOT NULL, 
-    "group_id" integer NOT NULL, 
+
+    "name" character varying NOT NULL,
+    "icon" character varying, 
+    "corder" integer DEFAULT 30,
+
+    "route" character varying, 
+    "basefilter" character varying, 
+
+    "permission_id" integer, 
+    "submenu_id" integer,
+
+    "created_at" TIMESTAMP NOT NULL DEFAULT now(), 
+    "updated_at" TIMESTAMP NOT NULL DEFAULT now(), 
+    -- CONSTRAINT "PARENT_ID" FOREIGN KEY("parent_id") REFERENCES "pages"("id") ON DELETE CASCADE,
+    CONSTRAINT "SUBMENU_ID" FOREIGN KEY("submenu_id") REFERENCES "submenus"("id") ON DELETE CASCADE,
+    CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
+    CONSTRAINT "PK_PAGE_ID" PRIMARY KEY ("id")
+);
+
+
+CREATE TABLE "login_groups_permissions" (
+    "id" SERIAL NOT NULL, 
+    "login_group_id" integer NOT NULL, 
     "permission_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "LOGIN_GROUP_ID" FOREIGN KEY("login_group_id") REFERENCES "login_groups"("id") ON DELETE CASCADE,
     CONSTRAINT "PERMISSION_ID" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_PERMISSION_ID" PRIMARY KEY ("id")
 );
 
 
-CREATE TABLE "groups_login_users" (
+CREATE TABLE "login_groups_login_users" (
     "id" SERIAL NOT NULL, 
-    "group_id" integer NOT NULL, 
+    "login_group_id" integer NOT NULL, 
     "login_user_id" integer NOT NULL, 
-    CONSTRAINT "GROUP_ID" FOREIGN KEY("group_id") REFERENCES "groups"("id") ON DELETE CASCADE,
+    CONSTRAINT "LOGIN_GROUP_ID" FOREIGN KEY("login_group_id") REFERENCES "login_groups"("id") ON DELETE CASCADE,
     CONSTRAINT "LOGIN_USER_ID" FOREIGN KEY("login_user_id") REFERENCES "login_users"("id") ON DELETE CASCADE,
     CONSTRAINT "PK_GROUP_USER_ID" PRIMARY KEY ("id")
 );

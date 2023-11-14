@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +25,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -48,6 +50,10 @@ h1 {
   line-height: 1.1;
 }
 
+p {
+  font-family: 'Roboto';
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -59,9 +65,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -72,9 +80,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
@@ -83,4 +93,109 @@ button:focus-visible {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.mytest {
+  font-family: 'Roboto';
+  @apply font-medium
+}
+  
+.flip-horizontal { 
+  transform: scale(-1,1)
+}
+.flip-vertical { 
+  transform: scale(1,-1)
+}
+
+a {
+  @apply text-indigo-500 hover:text-indigo-400;
+  @apply text-indigo-900 hover:text-indigo-800;
+}
+
+p, .my-text {
+  @apply text-blue-gray-400 dark:text-gray-200;
+}
+
+input[type='checkbox'] { 
+  @apply border-black;
+}
+
+.my-content {
+  @apply mx-8 mt-2
+}
+
+
+.my-cards>div {
+  @apply bg-transparent;
+}
+
+
+.big-card {
+  @apply mb-8 dark:bg-gray-600 dark:shadow-gray-400 overflow-hidden rounded-xl;
+  @apply bg-white/80 dark:bg-gray-700/80;
+}
+.super-big-card {
+  @apply h-full w-full;
+}
+
+.super-big-header {
+  @apply rounded-none overflow-visible bg-transparent;
+}
+.super-big-header-content {
+  @apply mb-8 flex items-center justify-between gap-8;
+}
+
+.super-title {
+  @apply text-xl text-black font-semibold;
+}
+.super-description {
+  @apply mt-1 font-normal;
+}
+
+.super-settings-bar {
+  @apply flex flex-col items-center justify-between gap-4 md:flex-row mb-2;
+}
+.super-settings-bar>div {
+  @apply flex flex-row w-full md:w-72 gap-2;
+}
+
+.super-big-footer {
+  @apply flex items-center justify-between border-t p-4 rounded-b-xl;
+  @apply border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600;
+  @apply bg-white/40;
+  @apply bg-transparent;
+}
+
+
+.notif-question {
+  @apply border-pink-300 bg-pink-50 text-pink-300
+}
+
+.notif-info {
+  @apply border-blue-600 bg-blue-100 text-blue-600
+}
+
+.notif-success {
+  @apply border-green-600 bg-green-100 text-green-600
+}
+
+.notif-warning {
+  @apply border-amber-800 bg-amber-100 text-amber-800
+}
+
+.notif-error {
+  @apply border-red-600 bg-red-100 text-red-600
+}
+
+
+.selected-option {
+  @apply bg-blue-900
+}
+
+.hidden-option {
+  @apply bg-blue-200
+}
+
+.available-option {
+  @apply bg-blue-600
 }
