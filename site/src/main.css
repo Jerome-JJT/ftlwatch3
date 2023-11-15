@@ -121,7 +121,7 @@ input[type='checkbox'] {
 }
 
 .my-content {
-  @apply flex flex-col mx-1 md:mx-8 mt-2 pb-6
+  @apply flex flex-row mx-1 md:mx-8 mt-2 pb-6
 }
 
 
