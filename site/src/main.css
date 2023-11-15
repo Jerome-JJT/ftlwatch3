@@ -121,7 +121,7 @@ input[type='checkbox'] {
 }
 
 .my-content {
-  @apply flex flex-row mx-1 md:mx-8 mt-2 pb-6
+  @apply flex flex-row justify-center mx-1 md:mx-8 mt-2 pb-6
 }
 
 
@@ -131,7 +131,7 @@ input[type='checkbox'] {
 
 
 .big-card {
-  @apply mb-8 dark:bg-gray-600 dark:shadow-gray-400 overflow-hidden rounded-xl;
+  @apply mb-0 dark:bg-gray-600 dark:shadow-gray-400 overflow-hidden rounded-b-xl;
   @apply bg-white/80 dark:bg-gray-700/80;
 }
 .super-big-card {
