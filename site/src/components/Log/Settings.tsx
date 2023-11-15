@@ -58,7 +58,7 @@ export function SettingsPage(): JSX.Element {
   }, [addNotif, getUserData, themeColor, themeValue]);
 
   return (
-    <div className='my-content flex justify-center'>
+    <div className='flex flex-row justify-center mt-4'>
 
       <Card className='big-card px-8 py-4 max-w-screen-lg gap-4' shadow={false}>
 
