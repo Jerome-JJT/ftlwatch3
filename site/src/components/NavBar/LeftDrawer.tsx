@@ -23,18 +23,27 @@ export default function LeftDrawer({
 }: NavBarProps): JSX.Element {
   const { userPages } = useLogin();
 
-  const changeSub = (subId: number): void => {
-    if (subId === selectedSub) {
-      subId = -1;
-    }
 
-    setSelectedSub(subId);
-  };
-
-  const [selectedSub, setSelectedSub] = React.useState(-1);
+  const [selectedSubs, setSelectedSubs] = React.useState<number[]>([]);
   const navigate = useNavigate();
 
-  function createDrawer(): any {
+
+  const changeSub = React.useCallback((subId: number): void => {
+
+    if (selectedSubs.indexOf(subId) === -1) {
+      setSelectedSubs((prev) => {
+        return [...prev, subId];
+      });
+    }
+    else {
+      setSelectedSubs((prev) => {
+        return prev.filter((v) => v !== subId);
+      });
+    }
+  }, [selectedSubs]);
+
+  const createDrawer = React.useMemo((): any => {
+
     return userPages?.flatMap((elem, id) => {
       return ([
 
@@ -49,7 +58,7 @@ export default function LeftDrawer({
             {
               (
                 (
-                  (elem.list && elem.list.length > 0 && selectedSub === id) &&
+                  (elem.list && elem.list.length > 0 && selectedSubs.indexOf(id) === -1) &&
                   <AiFillCaretUp className='my-text' />
                 ) ||
 
@@ -67,7 +76,7 @@ export default function LeftDrawer({
 
         elem.list?.map((sub: any, subId: number) => {
           return (
-            selectedSub === id &&
+            (selectedSubs.indexOf(id) !== -1) &&
             <ListItem key={`${id}_${subId}`}
               className='ml-4 hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
               onClick={() => {
@@ -88,7 +97,7 @@ export default function LeftDrawer({
 
       ]);
     });
-  }
+  }, [changeSub, navigate, selectedSubs, userPages]);
 
   return (
     <Drawer
@@ -120,7 +129,7 @@ export default function LeftDrawer({
         </ListItem>
         <hr key={'sep_home'} className="my-2 border-blue-gray-200" />
 
-        {createDrawer()}
+        {createDrawer}
 
       </List>
     </Drawer>
