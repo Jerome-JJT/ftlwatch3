@@ -265,11 +265,15 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (365, 'Connections', 10, 'locations/peaks', NULL, 6, 10),
 
   (370, 'Love piscine 2d', 10, 'locations/love', 'graph=love_piscine_2d', 7, 10),
-  (375, 'Love all 2d', 10, 'locations/love', 'graph=love_all_2d', 7, 10),
+  (371, 'Love piscine blackhole 2d', 10, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
+  (372, 'Love cursus 2d', 10, 'locations/love', 'graph=love_cursus_2d', 7, 5),
+  (375, 'Love actual 2d', 10, 'locations/love', 'graph=love_actual_2d', 7, 10),
   (380, 'Love recent 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
 
   (385, 'Love piscine 3d', 10, 'locations/love', 'graph=love_piscine_3d', 7, 10),
-  (390, 'Love all 3d', 10, 'locations/love', 'graph=love_all_3d', 7, 10),
+  (386, 'Love cursus 3d', 10, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
+  (387, 'Love piscine blackhole 3d', 10, 'locations/love', 'graph=love_cursus_3d', 7, 5),
+  (390, 'Love actual 3d', 10, 'locations/love', 'graph=love_actual_3d', 7, 10),
   (395, 'Love recent 3d', 10, 'locations/love', 'graph=love_recent_3d', 7, 10)
 
 
