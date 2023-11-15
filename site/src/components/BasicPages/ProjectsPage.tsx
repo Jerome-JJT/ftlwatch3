@@ -53,7 +53,7 @@ export function ProjectsPage(): JSX.Element {
       <Card key={card.id}
         className="w-96 border-black border-2 overflow-hidden">
 
-        <CardHeader floated={false} className='text-center shadow-none text-xl m-0 mt-1'>
+        <CardHeader floated={false} className='text-center shadow-none text-xl m-0 mt-1 dark:bg-black/20'>
           <p>
             {card.name}
           </p>
