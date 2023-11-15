@@ -89,10 +89,20 @@ export function SuperTable({
   };
 
   const customSort = useCallback((a: any, b: any): number => {
-    const aValue = a[`_${sortColumn}`] !== undefined ? a[`_${sortColumn}`] : a[sortColumn];
-    const bValue = b[`_${sortColumn}`] !== undefined ? b[`_${sortColumn}`] : b[sortColumn];
+    let aValue = a[`_${sortColumn}`] !== undefined ? a[`_${sortColumn}`] : a[sortColumn];
+    let bValue = b[`_${sortColumn}`] !== undefined ? b[`_${sortColumn}`] : b[sortColumn];
 
-    if (typeof aValue !== 'undefined' && typeof bValue !== 'undefined') {
+
+
+    if (typeof aValue !== 'undefined' || typeof bValue !== 'undefined') {
+
+      if (typeof aValue === 'undefined' || aValue === null) {
+        aValue = '';
+      }
+      if (typeof bValue === 'undefined' || bValue === null) {
+        bValue = '';
+      }
+
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return aValue - bValue;
       }
@@ -180,8 +190,8 @@ export function SuperTable({
 
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
-  const headerClasses = 'border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 py-4 max-w-4 transition-colors';
-  const headerPClasses = 'w-10 grow items-center gap-2 font-normal leading-none opacity-70 truncate';
+  const headerClasses = 'w-10 md:w-24 md:max-w-24 border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 md:px-3 py-4 max-w-4 transition-colors';
+  const headerPClasses = ' grow items-center gap-2 font-normal leading-none opacity-70 truncate';
 
   return (
     <Card className="big-card super-big-card !text-xs md:!text-base">
@@ -251,7 +261,6 @@ export function SuperTable({
             <AccordionHeader className='py-2 my-text' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
 
             <AccordionBody>
-
               {subOptions}
             </AccordionBody>
           </Accordion>
@@ -281,11 +290,11 @@ export function SuperTable({
                     key={value.field}
                     onClick={() => { handleSort(value.field); }}
                     className={classNames('cursor-pointer hover:bg-blue-gray-200', headerClasses)}
+                    title={value.label.toString()}
                   >
-                    <div className='flex flex-row justify-center text-sm h-4'>
+                    <div className='flex flex-row justify-center text-sm h-4 gap-x-2'>
                       <p className={headerPClasses}>
                         {value.label.toString()}
-                        {' '}
                       </p>
                       {sortColumn === value.field
                         ? (sortDirection === 'asc'
@@ -322,7 +331,7 @@ export function SuperTable({
 
                       <td key={`${createKey(value, index)}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
-                        <div className="h-full flex justify-center items-center">
+                        <div className="h-full flex justify-center items-center ">
                           {
                             value[col.field] === undefined ? 'undefined' : (
                               value[col.field] === null ? 'null' : (
