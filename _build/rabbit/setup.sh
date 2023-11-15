@@ -18,8 +18,8 @@ $RABBITCMD declare queue name=fast.update.queue durable=true arguments='{"x-cons
 $RABBITCMD declare queue name=server.message.queue durable=true arguments='{"consumer-timeout": 60000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "message.dlq"}'
 $RABBITCMD declare queue name=private.message.queue durable=true arguments='{"consumer-timeout": 60000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "message.dlq"}'
 
-$RABBITCMD declare binding source="main" destination_type="queue" destination="slow.update.queue" routing_key="slow.update.queue"
-$RABBITCMD declare binding source="main" destination_type="queue" destination="fast.update.queue" routing_key="fast.update.queue"
+# $RABBITCMD declare binding source="main" destination_type="queue" destination="slow.update.queue" routing_key="slow.update.queue"
+# $RABBITCMD declare binding source="main" destination_type="queue" destination="fast.update.queue" routing_key="fast.update.queue"
 
 $RABBITCMD declare binding source="main" destination_type="queue" destination="server.message.queue" routing_key="*.server.message.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="*.private.message.queue"
