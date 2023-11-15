@@ -55,7 +55,7 @@ export function ProjectsPage(): JSX.Element {
 
         <CardHeader floated={false} className='text-center shadow-none text-xl m-0 mt-1 dark:bg-black/20'>
           <p>
-            {card.name}
+            <a href={`https://projects.intra.42.fr/projects/${card.slug}`}>{card.name}</a>
           </p>
         </CardHeader>
 
