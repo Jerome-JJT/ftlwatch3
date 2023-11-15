@@ -48,6 +48,7 @@ export function UserGroupsPage(): JSX.Element {
 
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field !== 'id' && col.field !== 'login') {
+                userWithGroups[`_${col.field}`] = userWithGroups[col.field];
                 userWithGroups[col.field] = <Checkbox
                   id={`${userWithGroups.id}-${col.field}`}
                   defaultChecked={userWithGroups[col.field]}

@@ -47,6 +47,7 @@ export function GroupPermissionsPage(): JSX.Element {
           const displayValues = res.data.values.map((groupWithPerms: any) => {
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field !== 'id' && col.field !== 'name') {
+                groupWithPerms[`_${col.field}`] = groupWithPerms[col.field];
                 groupWithPerms[col.field] = <Checkbox
                   id={`${groupWithPerms.id}-${col.field}`}
                   defaultChecked={groupWithPerms[col.field]}

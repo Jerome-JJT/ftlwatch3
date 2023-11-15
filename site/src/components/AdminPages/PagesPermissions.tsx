@@ -66,6 +66,7 @@ export function PagesPermissionsPage(): JSX.Element {
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field === 'corder') {
                 const corderId = `corder-${page.id}`;
+                page[`_${col.field}`] = page[col.field];
                 page[col.field] =
                     <div className="relative flex w-full max-w-[24rem]">
                       <Input id={corderId} label='corder' type='text' defaultValue={page[col.field]}/>
