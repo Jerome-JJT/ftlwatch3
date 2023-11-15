@@ -64,7 +64,7 @@ export function ProjectsPage(): JSX.Element {
           <div className='blue-gray grid grid-cols-2 gap-1 place-content-start'>
 
             <p>Cursus</p>
-            <div>{card.main_cursus}</div>
+            <p>{card.main_cursus}</p>
 
             {(card.difficulty !== undefined && card.difficulty !== null) && <>
               <p>Difficulty</p>
