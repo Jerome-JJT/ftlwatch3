@@ -163,6 +163,8 @@ export function SuperCards({
             </div>
           }
 
+          <p>{filteredCards.length} items</p>
+
           <div>
             <Switch
               className='bg-black'

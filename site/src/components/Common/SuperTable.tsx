@@ -235,6 +235,9 @@ export function SuperTable({
             </div>
           }
 
+          <p>{filteredUsers.length} items</p>
+
+
           <div>
             <Switch
               className='bg-black'
