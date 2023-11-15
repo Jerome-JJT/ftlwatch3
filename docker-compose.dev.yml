@@ -16,6 +16,9 @@ services:
     networks:
       - back
 
+  rabbit:
+    ports:
+      - "9999:15672"
 
   back:
     restart: "no"

@@ -40,9 +40,6 @@ services:
     networks:
       - back
 
-    ports:
-      - "9999:15672"
-
 
   db:
     image: postgres:14.2

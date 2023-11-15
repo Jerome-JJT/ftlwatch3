@@ -6,6 +6,9 @@ services:
   db:
     restart: "on-failure"
 
+  rabbit:
+    ports:
+      - "9998:15672"
 
   back:
     restart: "on-failure"
