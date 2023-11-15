@@ -137,7 +137,7 @@ function tableau_api($selectedFilter, $selectedProjects)
 
 
     if ($selectedProjects === "infos") {
-        $users = getUsers(has_permission("p_admin"), $selectedFilter);
+        $users = getUsers(has_permission("p_view4"), $selectedFilter);
 
         $res["values"] = $users;
     
@@ -175,7 +175,7 @@ function tableau_api($selectedFilter, $selectedProjects)
     }
     else {
 
-        $teams = getUserProjects(has_permission("p_admin"), $selectedFilter, $selectedProjects);
+        $teams = getUserProjects(has_permission("p_view4"), $selectedFilter, $selectedProjects);
         
         
         $cols = array();

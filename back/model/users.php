@@ -16,11 +16,16 @@ function getUsersShort($hidden)
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
 
-  WHERE (users.hidden = false OR users.hidden = :hidden)
+  WHERE (:show_hidden = TRUE OR (
+    users.hidden = FALSE
+    AND users.login NOT LIKE '3b3-%'
+    AND users.has_cursus21 = True
+    AND (users.blackhole > NOW() OR users.grade = 'Member')
+  ))
   ORDER BY login
   ";
 
-  $data = array(":hidden" => $hidden ? "TRUE" : "FALSE");
+  $data = array(":show_hidden" => $hidden ? "TRUE" : "FALSE");
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
@@ -66,12 +71,17 @@ function getUsers($hidden, $poolfilter = '')
   LEFT JOIN coalitions cursus21_coalition ON cursus21_coalition.id = users.cursus21_coalition_id 
   LEFT JOIN coalitions cursus9_coalition ON cursus9_coalition.id = users.cursus9_coalition_id 
 
-  WHERE (users.hidden = false OR users.hidden = :hidden)
+
+  WHERE (users.hidden = FALSE OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
-    OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
+    OR (:poolfilter = 'cursus' AND (
+      users.has_cursus21 = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
+    ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
-    )
+  )
   ORDER BY login
   ";
 
@@ -102,9 +112,13 @@ function getUserImages($hidden, $poolfilter = '')
   WHERE (users.hidden = false OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
-    OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
+    OR (:poolfilter = 'cursus' AND (
+      users.has_cursus21 = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+       AND users.login NOT LIKE '3b3-%'
+    ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
-    )
+  )
   ORDER BY login
   ";
 
@@ -160,9 +174,12 @@ function getUserProjects($hidden, $poolfilter, $projects)
   WHERE (users.hidden = FALSE OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
-    OR (:poolfilter = 'cursus' AND users.has_cursus21 = TRUE)
-    OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
-    )
+    OR (:poolfilter = 'cursus' AND (
+      users.has_cursus21 = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
+    ))
+  )
   AND (projects.has_lausanne IS NULL OR projects.has_lausanne <> FALSE)
   AND (
        (projects.id IS NULL)
