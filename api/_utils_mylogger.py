@@ -6,6 +6,8 @@ LOGGER_INFO = 1
 LOGGER_WARNING = 2
 LOGGER_ERROR = 3
 
+LOGGER_ALERT = 10
+
 
 def mylogger(log, level = 0, rabbit = True):
 
@@ -19,6 +21,8 @@ def mylogger(log, level = 0, rabbit = True):
     lvltotxt = "WARNING"
   elif (level == 3):
     lvltotxt = "ERROR"
+  elif (level == 10):
+    lvltotxt = "ALERT"
   else:
     lvltotxt = "UNKNOWN"
 

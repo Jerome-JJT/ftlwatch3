@@ -265,6 +265,11 @@ function LOGGER_ERROR()
     return 3;
 }
 
+function LOGGER_ALERT()
+{
+    return 10;
+}
+
 
 function mylogger($log, $level)
 {
@@ -279,6 +284,8 @@ function mylogger($log, $level)
         $lvltotxt = "WARNING";
     } else if ($level == 3) {
         $lvltotxt = "ERROR";
+    } else if ($level == 10) {
+        $lvltotxt = "ALERT";
     } else {
         $lvltotxt = "UNKNOWN";
     }
