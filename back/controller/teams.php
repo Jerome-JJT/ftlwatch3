@@ -191,6 +191,9 @@ function get_tinder()
                 else {
                     $score = map($user["score"], $filter["min"], $filter["max"], 100, 200);
                 }
+                if ($score > 200) {
+                    continue;
+                }
 
                 array_push($tmp[$filter_key], array(
 

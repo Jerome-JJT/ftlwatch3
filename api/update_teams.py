@@ -166,9 +166,9 @@ def import_teams(update_all=False, start_at=1):
         update_all = True
 
     if (update_all):
-        callapi("/v2/teams?filter[primary_campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False)
+        callapi("/v2/teams?filter[campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False)
     else:
-        callapi(f"/v2/teams?filter[primary_campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
+        callapi(f"/v2/teams?filter[campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
 
 
 if __name__ == "__main__":

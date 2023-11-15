@@ -43,7 +43,7 @@ export function TeamsPage(): JSX.Element {
     return (
       <Card key={card.retry_common} className="flex min-w-80 w-80 max-w-80 h-52 border-black border-2">
 
-        <CardBody className="flex flex-row grow justify-evenly text-center align-center p-2">
+        <CardBody className="flex flex-row grow justify-evenly text-center align-center gap-2 p-2">
 
           <div className='flex flex-col justify-evenly'>
             <p color="blue-gray">
