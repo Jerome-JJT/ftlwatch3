@@ -205,13 +205,13 @@ INSERT INTO "project_types" ("id", "name") VALUES
 
 
 INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
-  (1, 'Tableaux', 20, 'tableau'),
-  (2, 'Images', 21, 'image'),
-  (3, 'Admin', 5, NULL),
-  (4, 'Basics', 3, NULL),
-  (5, 'Projects', 3, NULL),
-  (6, 'Locations', 3, NULL),
-  (7, 'Love', 3, NULL)
+  (1, 'Tableaux', 30, 'tableau'),
+  (2, 'Images', 40, 'image'),
+  (3, 'Admin', 10, NULL),
+  (4, 'Basics', 20, NULL),
+  (5, 'Projects', 50, NULL),
+  (6, 'Locations', 60, NULL),
+  (7, 'Love', 70, NULL)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -221,60 +221,60 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
 ;
 
 INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id", "permission_id") VALUES
-  (5, 'Achievements', 5, 'basics/achievements', NULL, 4, 4),
-  (10, 'Campus', 10, 'basics/campus', NULL, 4, 4),
-  (15, 'Coalitions', 15, 'basics/coalitions', NULL, 4, 4),
-  (20, 'Cursus', 20, 'basics/cursus', NULL, 4, 4),
-  (25, 'Groups', 25, 'basics/groups', NULL, 4, 8),
-  (30, 'Projects', 30, 'basics/projects', NULL, 4, 4),
-  (35, 'Products', 35, 'basics/products', NULL, 4, 4),
-  (40, 'Rules', 40, 'basics/rules', NULL, 4, 8),
-  (45, 'Titles', 45, 'basics/titles', NULL, 4, 4),
+  (5, 'Achievements', 10, 'basics/achievements', NULL, 4, 4),
+  (10, 'Campus', 20, 'basics/campus', NULL, 4, 4),
+  (15, 'Coalitions', 30, 'basics/coalitions', NULL, 4, 4),
+  (20, 'Cursus', 40, 'basics/cursus', NULL, 4, 4),
+  (25, 'Groups', 50, 'basics/groups', NULL, 4, 8),
+  (30, 'Projects', 60, 'basics/projects', NULL, 4, 4),
+  (35, 'Products', 70, 'basics/products', NULL, 4, 4),
+  (40, 'Rules', 80, 'basics/rules', NULL, 4, 8),
+  (45, 'Titles', 90, 'basics/titles', NULL, 4, 4),
 
   (60, 'Events', 45, 'events', NULL, 4, 3),
 
   (90, 'About', 30, 'about', NULL, NULL, NULL),
 
-  (100, 'Updater', 20, 'admin/updater', NULL, 3, 1),
-  (110, 'Login groups', 20, 'admin/groups', NULL, 3, 9),
+  (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
+  (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
   (115, 'Permissions', 20, 'admin/permissions', NULL, 3, 9),
-  (120, 'Pages', 20, 'admin/pages', NULL, 3, 1),
-  (125, 'Poolfilters', 20, 'admin/poolfilters', NULL, 3, 1),
-  (126, 'Profiles', 20, 'admin/profiles', NULL, 3, 1),
+  (120, 'Pages', 60, 'admin/pages', NULL, 3, 1),
+  (125, 'Poolfilters', 70, 'admin/poolfilters', NULL, 3, 1),
+  (126, 'Profiles', 30, 'admin/profiles', NULL, 3, 1),
 
-  (150, 'Users visibility', 20, 'admin/users', NULL, 3, 1),
-  (152, 'Projects visibility', 20, 'admin/projects', NULL, 3, 1),
+  (150, 'Users visibility', 40, 'admin/users', NULL, 3, 1),
+  (152, 'Projects visibility', 50, 'admin/projects', NULL, 3, 1),
 
-  (200, 'Tableau infos', 1, NULL, 'filter=cursus&infos', 1, 5),
-  (205, 'Tableau cursus common core', 2, NULL, 'filter=cursus&projects=common-core', 1, 10),
-  (210, 'Tableau cursus outer core', 4, NULL, 'filter=cursus&projects=outer-core', 1, 10),
+  (200, 'Tableau infos', 10, NULL, 'filter=cursus&infos', 1, 5),
+  (205, 'Tableau cursus common core', 22, NULL, 'filter=cursus&projects=common-core', 1, 10),
+  (210, 'Tableau cursus outer core', 30, NULL, 'filter=cursus&projects=outer-core', 1, 10),
 
-  (215, 'Tableau current month', 2, NULL, 'filter=currentmonth&projects=c-piscine', 1, 6),
-  (220, 'Tableau current year', 3, NULL, 'filter=currentyear&projects=c-piscine', 1, 7),
+  (215, 'Tableau current month', 40, NULL, 'filter=currentmonth&projects=c-piscine', 1, 6),
+  (220, 'Tableau current year', 50, NULL, 'filter=currentyear&projects=c-piscine', 1, 7),
 
-  (250, 'Images cursus', 1, NULL, 'filter=cursus', 2, 10),
-  (255, 'Images current month', 2, NULL, 'filter=currentmonth', 2, 6),
-  (260, 'Images current year', 3, NULL, 'filter=currentyear', 2, 7),
+  (250, 'Images cursus', 10, NULL, 'filter=cursus', 2, 10),
+  (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
+  (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
-  (300, 'Teams', 10, 'projects/teams', NULL, 5, 10),
+  (300, 'Teams', 5, 'projects/teams', NULL, 5, 10),
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
 
-  (350, 'Users computers', 10, 'locations/userscomputers', NULL, 6, 10),
-  (355, 'Users totals', 10, 'locations/userstotal', NULL, 6, 10),
+  (350, 'Users computers', 40, 'locations/userscomputers', NULL, 6, 10),
+  (355, 'Users totals', 30, 'locations/userstotal', NULL, 6, 10),
   (360, 'Computers totals', 10, 'locations/computerstotal', NULL, 6, 10),
-  (365, 'Connections', 10, 'locations/peaks', NULL, 6, 10),
+  (365, 'Connections', 20, 'locations/peaks', NULL, 6, 10),
 
-  (370, 'Love piscine 2d', 10, 'locations/love', 'graph=love_piscine_2d', 7, 10),
-  (371, 'Love piscine blackhole 2d', 10, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
-  (372, 'Love cursus 2d', 10, 'locations/love', 'graph=love_cursus_2d', 7, 5),
-  (375, 'Love actual 2d', 10, 'locations/love', 'graph=love_actual_2d', 7, 10),
+  (370, 'Love piscine 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
+  (371, 'Love piscine blackhole 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
+  (372, 'Love cursus 2d', 25, 'locations/love', 'graph=love_cursus_2d', 7, 5),
+  (375, 'Love actual 2d', 15, 'locations/love', 'graph=love_actual_2d', 7, 10),
   (380, 'Love recent 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
 
-  (385, 'Love piscine 3d', 10, 'locations/love', 'graph=love_piscine_3d', 7, 10),
-  (386, 'Love cursus 3d', 10, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
-  (387, 'Love piscine blackhole 3d', 10, 'locations/love', 'graph=love_cursus_3d', 7, 5),
-  (390, 'Love actual 3d', 10, 'locations/love', 'graph=love_actual_3d', 7, 10),
-  (395, 'Love recent 3d', 10, 'locations/love', 'graph=love_recent_3d', 7, 10)
+  (385, 'Love piscine 3d', 60, 'locations/love', 'graph=love_piscine_3d', 7, 10),
+  (386, 'Love cursus 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
+  (387, 'Love piscine blackhole 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
+  (390, 'Love actual 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
+  (395, 'Love recent 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10)
 
 
   ON CONFLICT(id) DO UPDATE
