@@ -11,7 +11,7 @@ import plotly.express as px
 
 
     
-def main(output_name='', min_date='2000-00-00', max_date='2099-99-99'):
+def generate_peaks(output_name='', min_date='2000-00-00', max_date='2099-99-99'):
 
     peaks = executeQuerySelect("""
         SELECT id, total, total_same, is_piscine, date, peak_at FROM vp_peaks
@@ -68,5 +68,8 @@ def main(output_name='', min_date='2000-00-00', max_date='2099-99-99'):
     fig.write_html(f'/secure_static/{output_name}.html')
 
 
+def gen_peaks():
+    generate_peaks(output_name='peaks_days')
+
 if __name__ == "__main__":
-    main(output_name='peaks_days')
+    gen_peaks()

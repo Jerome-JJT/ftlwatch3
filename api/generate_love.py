@@ -267,9 +267,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
     
 
 
-
-
-if __name__ == "__main__":
+def gen_loves():
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     try:
@@ -291,4 +289,8 @@ if __name__ == "__main__":
         
     except Exception as e:
         mylogger(f"Generate love error, {type(e)}, {e}", LOGGER_ERROR)
+
+
+if __name__ == "__main__":
+    gen_loves()
 

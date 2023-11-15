@@ -16,7 +16,14 @@ from update_products import import_products
 from update_projects import import_projects
 from update_titles import import_titles
 from update_users import import_users
-from generate_love import generate_love
+
+
+from update_events import import_events
+from update_locations import import_locations
+from process_locations import process_locations
+from update_teams import import_teams
+from generate_love import gen_loves
+from generate_peaks import gen_peaks
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -79,18 +86,24 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "users"):
             import_users()
 
+
+        elif (resource == "events"):
+            import_events()
+
+
+        elif (resource == "locations"):
+            import_locations()
+            process_locations()
+
+        elif (resource == "teams"):
+            import_teams()
+
+
         elif (resource == "generate_love"):
-            import_users()
-            target_date = datetime.datetime(datetime.datetime.now().year, 10, 1)
-            target_date = target_date.strftime("%Y-%m-%d")
+            gen_loves()
 
-            generate_love(output_name='love_piscine_2d', is_piscine=True)
-            generate_love(output_name='love_all_2d')
-            generate_love(output_name='love_recent_2d', is_piscine=False, min_date=target_date)
-
-            generate_love(graph_type="3d", output_name='love_piscine_3d', is_piscine=True)
-            generate_love(graph_type="3d", output_name='love_all_3d')
-            generate_love(graph_type="3d", output_name='love_recent_3d', is_piscine=False, min_date=target_date)
+        elif (resource == "generate_peaks"):
+            gen_peaks()
 
 
         else:
