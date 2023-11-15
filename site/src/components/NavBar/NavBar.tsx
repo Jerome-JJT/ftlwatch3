@@ -24,7 +24,7 @@ export default function NavBar({
 
 
   return (
-    <header className="top-0 z-50 w-full">
+    <header className="top-0 z-50 w-full sticky">
       <nav
         className={classNames(
           'z-50 px-2 py-2.5 shadow-lg sm:px-4 bg-[#006060]'
