@@ -47,7 +47,7 @@ export function TeamsPage(): JSX.Element {
 
           <div className='flex flex-col justify-evenly'>
             <p color="blue-gray">
-              {card.team_name}
+              <a href={`https://projects.intra.42.fr/projects/${card.project_slug}/projects_users/${card.projects_user_id}`}>{card.team_name}</a>
             </p>
             <p color="blue-gray">
               {card.project_name}

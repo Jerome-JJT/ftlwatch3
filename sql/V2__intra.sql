@@ -154,6 +154,7 @@ CREATE TABLE "team_user" (
     "team_id" integer NOT NULL,
     "user_id" integer NOT NULL,
     "is_leader" boolean NOT NULL,
+    "projects_user_id" integer NOT NULL,
     CONSTRAINT "PK_TEAM_USER_ID" PRIMARY KEY ("id")
 );
 

@@ -4,9 +4,10 @@ function getGroupProjects($cursus = '')
 {
   $query = "SELECT 
       te.team_id, te.team_name, te.retry_common,
-      te.project_name, 
+      te.project_name, te.project_slug, 
       users.id AS user_id, users.login, users.avatar_url,
       team_user.is_leader AS user_is_leader,
+      team_user.projects_user_id AS projects_user_id,
       te.is_validated, te.is_locked, te.status, te.final_mark,
       te.team_updated_at
 
@@ -16,9 +17,9 @@ function getGroupProjects($cursus = '')
     
       SELECT 
         teams.id AS team_id, teams.name AS team_name, teams.retry_common,
-        projects.id AS project_id, projects.name AS project_name,
+        projects.id AS project_id, projects.name AS project_name, projects.slug AS project_slug,
         teams.is_validated, teams.is_locked, teams.status, teams.final_mark,
-        date_part('epoch', teams.updated_at)  AS team_updated_at
+        date_part('epoch', teams.updated_at) AS team_updated_at
 
       FROM teams
       JOIN team_user ON teams.id = team_user.team_id

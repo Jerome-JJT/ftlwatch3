@@ -20,6 +20,7 @@ function get_group_projects()
 
                 if ($tmp[$team['retry_common']]['leader_id'] == -1 && $team['user_is_leader']) {
                     $tmp[$team['retry_common']]['leader_id']  = $team['user_id'];
+                    $tmp[$team['retry_common']]['projects_user_id']  = $team['projects_user_id'];
                 }
                 $tmp[$team['retry_common']]['is_validated'] |= $team['is_validated'];
                 $tmp[$team['retry_common']]['final_mark'] = max($tmp[$team['retry_common']]['final_mark'], $team['final_mark']);
@@ -56,9 +57,11 @@ function get_group_projects()
                 $tmp[$team['retry_common']] = array(
                     "retry_common" => $team['retry_common'],
                     "project_name" => $team['project_name'],
+                    "project_slug" => $team['project_slug'],
                     "team_name" => $team['team_name'],
 
                     "leader_id" => $team['user_is_leader'] ? $team['user_id'] : -1,
+                    "projects_user_id" => $team['user_is_leader'] ? $team['projects_user_id'] : -1,
                     "is_validated" => $team['is_validated'],
                     "final_mark" => $team['final_mark'],
                     "current_team_id" => $team['team_id'],

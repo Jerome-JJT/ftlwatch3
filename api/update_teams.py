@@ -33,16 +33,17 @@ def import_team_user(team):
 
 
         executeQueryAction("""INSERT INTO team_user (
-            "id", "team_id", "user_id", "is_leader"
+            "id", "team_id", "user_id", "is_leader", "projects_user_id"
         ) VALUES (
-            %(id)s, %(team_id)s, %(user_id)s, %(is_leader)s
+            %(id)s, %(team_id)s, %(user_id)s, %(is_leader)s, %(projects_user_id)s
         )
         ON CONFLICT DO NOTHING
         """, {
             "id": good_id,
             "team_id": team["id"],
             "user_id": user["id"],
-            "is_leader": user["leader"]
+            "is_leader": user["leader"],
+            "projects_user_id": user["projects_user_id"]
         })
 
     for toremove in team_users:
