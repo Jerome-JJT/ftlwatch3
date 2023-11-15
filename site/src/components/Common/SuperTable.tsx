@@ -268,7 +268,7 @@ export function SuperTable({
       </CardHeader>
 
       <CardBody className='super-big-body'>
-        <div className="mt-4 overflow-auto border-black border-2 h-800 resize-y">
+        <div className="mt-4 overflow-auto border-black border-2 h-[800px] resize-y">
           <table className="w-full min-w-max table-auto text-left">
             <thead className='sticky top-0'>
               <tr className="bg-blue-gray-50">
@@ -308,19 +308,16 @@ export function SuperTable({
             </thead>
             <tbody>
               {displayedUsers.length > 0 && displayedUsers.map((value, index) => {
-                const isLast = index === values.length - 1;
-                const classes = isLast
-                  ? 'p-4'
-                  : 'p-4';
+                // const isLast = index === values.length - 1;
 
                 return (
                   <tr key={createKey(value, index)}
                     className='border-b border-gray-300
-                    odd:bg-white even:bg-blue-50  hover:bg-blue-gray-100
+                    odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
                     dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'>
                     { indexColumn &&
                       <td key={`${createKey(value, index)}-index`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
                         <div className="h-full flex justify-center items-center">
                           {index + 1}
                         </div>
@@ -330,8 +327,8 @@ export function SuperTable({
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${createKey(value, index)}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell', classes)}>
-                        <div className="h-full flex justify-center items-center ">
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
+                        <div className="h-full flex justify-center items-center">
                           {
                             value[col.field] === undefined ? 'undefined' : (
                               value[col.field] === null ? 'null' : (
