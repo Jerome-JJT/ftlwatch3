@@ -56,6 +56,8 @@ export function UsersVisibilityPage(): JSX.Element {
               }
               else if (col.field === 'hidden') {
 
+                user[`_${col.field}`] = user[col.field].toString();
+
                 user[col.field] = <Checkbox
                   id={`${user.id}-${col.field}`}
                   defaultChecked={user[col.field]}
