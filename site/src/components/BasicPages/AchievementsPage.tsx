@@ -91,7 +91,7 @@ export function AchievementsPage(): JSX.Element {
           values={values}
           customCard={AchievementCard}
 
-          tableTitle='Achievements'
+          tableTitle='All possible achievements'
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
