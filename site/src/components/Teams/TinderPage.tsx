@@ -31,12 +31,13 @@ export function TinderPage(): JSX.Element {
     return (
       <Card id={`${card.circle}-${card.user_id}`} className="flex w-60 border-black border-2">
 
-        <CardBody className="flex flex-col grow justify-evenly text-center align-center p-2">
+        <CardBody className="flex flex-col grow text-center align-center p-2">
 
           <p color="blue-gray">
             {filters && filters[card.circle].projects.join('/') || 'none'}
           </p>
 
+          <div className='grow'></div>
           <div className='flex flex-row justify-between items-center'>
             <div>
               <p color="blue-gray">
@@ -55,6 +56,7 @@ export function TinderPage(): JSX.Element {
               percent={card.score/200}
               formatTextValue={(value: string) => `${parseInt(value)*2}%`}
             />
+            <div className='grow'></div>
 
           </div>
         </CardBody>
