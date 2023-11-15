@@ -51,17 +51,25 @@ function get_users_totals()
         $value["entries"] = $value["entries"];
         $value["average"] = round($value["average"] / 3600, 2);
 
-        $value["_total_sun"] = round(($value["total_sun"] / $total) * 100, 2);
-        $value["total_sun"] = $value["_total_sun"]." %";
-        $value["_total_moon"] = round(($value["total_moon"] / $total) * 100, 2);
-        $value["total_moon"] = $value["_total_moon"]." %";
+        $value["_percent_sun"] = round(($value["total_sun"] / $total) * 100, 2);
+        $value["percent_sun"] = $value["_percent_sun"]." %";
+        
+        $value["_percent_moon"] = round(($value["total_moon"] / $total) * 100, 2);
+        $value["percent_moon"] = $value["_percent_moon"]." %";
 
-        $value["_total_c1"] = round(($value["total_c1"] / $total) * 100, 2);
-        $value["total_c1"] = $value["_total_c1"]." %";
-        $value["_total_c2"] = round(($value["total_c2"] / $total) * 100, 2);
-        $value["total_c2"] = $value["_total_c2"]." %";
-        $value["_total_c3"] = round(($value["total_c3"] / $total) * 100, 2);
-        $value["total_c3"] = $value["_total_c3"]." %";
+        $value["_percent_c1"] = round(($value["total_c1"] / $total) * 100, 2);
+        $value["percent_c1"] = $value["_percent_c1"]." %";
+        $value["_percent_c2"] = round(($value["total_c2"] / $total) * 100, 2);
+        $value["percent_c2"] = $value["_percent_c2"]." %";
+        $value["_percent_c3"] = round(($value["total_c3"] / $total) * 100, 2);
+        $value["percent_c3"] = $value["_percent_c3"]." %";
+
+        $value["total_sun"] = round($value["total_sun"] / 3600, 2);
+        $value["total_moon"] = round($value["total_moon"] / 3600, 2);
+        $value["total_c1"] = round($value["total_c1"] / 3600, 2);
+        $value["total_c2"] = round($value["total_c2"] / 3600, 2);
+        $value["total_c3"] = round($value["total_c3"] / 3600, 2);
+
 
         return $value;
     }, $tmp);
@@ -76,12 +84,17 @@ function get_users_totals()
         ["label" => "Total entries", "field" => "entries"],
         ["label" => "Average hours by log", "field" => "average"],
 
-        ["label" => "Total sun", "field" => "total_sun"],
-        ["label" => "Total moon", "field" => "total_moon"],
+        ["label" => "Total sun hours", "field" => "total_sun"],
+        ["label" => "Percent sun", "field" => "percent_sun"],
+        ["label" => "Total moon hours", "field" => "total_moon"],
+        ["label" => "Percent moon", "field" => "percent_moon"],
 
-        ["label" => "Total Gotham", "field" => "total_c1"],
-        ["label" => "Total Asgard", "field" => "total_c2"],
-        ["label" => "Total SSD", "field" => "total_c3"],
+        ["label" => "Total Gotham hours", "field" => "total_c1"],
+        ["label" => "Percent Gotham", "field" => "percent_c1"],
+        ["label" => "Total Asgard hours", "field" => "total_c2"],
+        ["label" => "Percent Asgard", "field" => "percent_c2"],
+        ["label" => "Total SSD hours", "field" => "total_c3"],
+        ["label" => "Percent SSD", "field" => "percent_c3"],
     ];
 
     jsonResponse($res, 200);
