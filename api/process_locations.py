@@ -32,7 +32,10 @@ def process_locations(update_all = False):
     all_hosts = host_locations()
 
     for day in days[:-2]:
-        locates = executeQuerySelect("select id, begin_at, end_at, is_piscine, host, user_id from locations WHERE date = %(date)s", {
+        locates = executeQuerySelect("""SELECT locations.id, locations.begin_at, locations.end_at, locations.is_piscine, locations.host, locations.user_id 
+                                     FROM locations 
+                                     JOIN users ON users.id = locations.user_id 
+                                     WHERE date = %(date)s AND users.kind <> 'external'""", {
             "date": day
         })
 
