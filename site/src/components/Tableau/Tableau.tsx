@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Dialog, DialogBody } from '@material-tailwind/react';
 import Separator from 'Common/Separator';
@@ -48,13 +48,14 @@ export function TableauPage(): JSX.Element {
   React.useEffect(() => {document.title = commonTitle('Tableau');}, []);
 
   React.useEffect(() => {
-    window.history.replaceState(null, '', `/tableau?${usedFilter ? `filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`);
     axios
       .get(`/?page=tableau&action=get${usedFilter ? `&filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
+          window.history.replaceState(null, '', `/tableau?${usedFilter ? `filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`);
+
           setColumns((prev) =>
             (res.data.columns as ColumnProps[]).map((c) => ({
               ...c,

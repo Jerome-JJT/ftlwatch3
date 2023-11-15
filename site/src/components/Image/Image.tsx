@@ -82,7 +82,6 @@ export function ImagePage(): JSX.Element {
 
 
   React.useEffect(() => {
-    window.history.replaceState(null, '', `/image?${usedFilter ? `filter=${usedFilter}` : ''}`);
 
     axios
       .get(`/?page=image&action=get${usedFilter ? `&filter=${usedFilter}` : ''}`,
@@ -90,6 +89,8 @@ export function ImagePage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
+          window.history.replaceState(null, '', `/image?${usedFilter ? `filter=${usedFilter}` : ''}`);
+
           setPoolFilters(() => {
             const pf = res.data.poolfilters as PoolFilterProps[];
             pf.sort((a, b) => comparePoolfilters(a.name, b.name));
