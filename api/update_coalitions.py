@@ -46,7 +46,11 @@ def bloc_callback(bloc):
     return True
 
 def import_coalitions():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start coalitions worker", LOGGER_ALERT)
     callapi("/v2/blocs?sort=id", True, bloc_callback, False)
+    mylogger("End coalitions worker", LOGGER_ALERT)
 
 
 

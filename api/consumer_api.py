@@ -50,7 +50,7 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
     if (reject_first == True):
         custom_reject(ch, method, body)
-
+        return
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
 

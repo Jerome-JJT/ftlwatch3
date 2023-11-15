@@ -29,7 +29,11 @@ def group_callback(group):
     return True
 
 def import_groups():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start groups worker", LOGGER_ALERT)
     callapi("/v2/groups?sort=id", True, group_callback, False)
+    mylogger("End groups worker", LOGGER_ALERT)
 
 
 

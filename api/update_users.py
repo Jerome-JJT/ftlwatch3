@@ -255,7 +255,9 @@ def user_callback(user, cursus21_ids, local_users):
 
 def import_users():
     global poolfilters
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
+    mylogger("Start users worker", LOGGER_ALERT)
     local_users = executeQuerySelect("SELECT id FROM users")
     # local_users = {user["id"]: user for user in local_users} 
     local_users = [user["id"] for user in local_users] 
@@ -271,6 +273,9 @@ def import_users():
 
     for user in all_users:
         user_callback(user, cursus21_ids, local_users)
+
+    mylogger("End users worker", LOGGER_ALERT)
+    
 
 
 if __name__ == "__main__":

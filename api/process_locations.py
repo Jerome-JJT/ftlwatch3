@@ -16,9 +16,10 @@ limit_checker = 300
 
 
 def process_locations(update_all = False):
-    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR, LOGGER_ALERT
 
     global local_locations
+    mylogger("Start locations processor", LOGGER_ALERT)
 
     days_done = []
     if (update_all == False):
@@ -171,6 +172,9 @@ def process_locations(update_all = False):
                 "date": day,
                 "is_piscine": True
             })
+
+    mylogger("End locations processor", LOGGER_ALERT)
+    
 
 
 if __name__ == "__main__":

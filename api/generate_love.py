@@ -268,7 +268,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
 
 def gen_loves():
-    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR, LOGGER_ALERT
+    mylogger("Start love graph generator", LOGGER_ALERT)
 
     try:
 
@@ -287,6 +288,8 @@ def gen_loves():
         generate_love(graph_type="3d", output_name='love_actual_3d')
         generate_love(graph_type="3d", output_name='love_recent_3d', is_piscine=False, min_date=target_date)
         
+        mylogger("End love graph generator", LOGGER_ALERT)
+
     except Exception as e:
         mylogger(f"Generate love error, {type(e)}, {e}", LOGGER_ERROR)
 

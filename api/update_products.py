@@ -44,7 +44,12 @@ def product_callback(product):
     return True
 
 def import_products():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start products worker", LOGGER_ALERT)
     callapi("/v2/products?sort=id", True, product_callback, False)
+    mylogger("End products worker", LOGGER_ALERT)
+
 
 
 if __name__ == "__main__":

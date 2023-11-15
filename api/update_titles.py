@@ -29,8 +29,11 @@ def title_callback(title):
     return True
 
 def import_titles():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
+    mylogger("Start titles worker", LOGGER_ALERT)
     callapi("/v2/titles?sort=id", True, title_callback, False)
+    mylogger("End titles worker", LOGGER_ALERT)
 
 
 if __name__ == "__main__":

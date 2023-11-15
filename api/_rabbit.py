@@ -62,7 +62,7 @@ def reject_flag(flag):
 
 def rabbit_connection(queue, consumer_function):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
-    reject_first = [True]
+    reject_first = [False]
 
     while (1):
 

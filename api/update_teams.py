@@ -159,6 +159,7 @@ def team_callback(team):
 
 def import_teams(update_all=False, start_at=1):
     global local_teams
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
     local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 1000")
     local_teams = [one['id'] for one in local_teams] 
@@ -167,7 +168,10 @@ def import_teams(update_all=False, start_at=1):
         update_all = True
 
     if (update_all):
+        mylogger("Start teams full worker", LOGGER_ALERT)
         callapi("/v2/teams?filter[campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False)
+        mylogger("End teams full worker", LOGGER_ALERT)
+
     else:
         callapi(f"/v2/teams?filter[campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
 

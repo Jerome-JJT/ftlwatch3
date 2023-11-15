@@ -269,20 +269,21 @@ def project_callback(project):
 
 def import_projects(update_all = False):
     global existing_projects
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
+    mylogger("Start projects worker", LOGGER_ALERT)
     existing_projects = executeQuerySelect("SELECT id FROM projects")
     existing_projects = {one["id"]: one for one in existing_projects} 
 
     if (len(existing_projects) == 0):
         update_all = True
 
-    projects = []
-
     if (update_all):
-        projects = callapi("/v2/projects?sort=id", True, project_callback, False)
+        callapi("/v2/projects?sort=id", True, project_callback, False)
     else:
-        projects = callapi(f"/v2/projects?sort=-updated_at", False, project_callback, True)
+        callapi(f"/v2/projects?sort=-updated_at", False, project_callback, True)
 
+    mylogger("End projects worker", LOGGER_ALERT)
 
         
 

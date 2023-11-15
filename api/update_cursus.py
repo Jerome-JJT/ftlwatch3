@@ -33,7 +33,11 @@ def cursus_callback(cursus):
     return True
 
 def import_cursus():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start cursus worker", LOGGER_ALERT)
     callapi("/v2/cursus?sort=id", True, cursus_callback, False)
+    mylogger("End cursus worker", LOGGER_ALERT)
 
 
 if __name__ == "__main__":

@@ -40,7 +40,12 @@ def achievement_callback(achievement):
     return True
 
 def import_achievements():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start achievements worker", LOGGER_ALERT)
     callapi("/v2/achievements?sort=id", True, achievement_callback, False)
+    mylogger("End achievements worker", LOGGER_ALERT)
+
 
 
 

@@ -178,6 +178,7 @@ def location_callback(location):
 
 def import_locations(update_all=False, start_at=1):
     global local_locations
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
     local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")
     local_locations = [one["id"] for one in local_locations] 
@@ -186,7 +187,10 @@ def import_locations(update_all=False, start_at=1):
         update_all = True
 
     if (update_all):
+        mylogger("Start locations full worker", LOGGER_ALERT)
         callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False)
+        mylogger("End locations full worker", LOGGER_ALERT)
+
     else:
         callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True)
 

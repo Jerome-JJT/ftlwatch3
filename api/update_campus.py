@@ -44,7 +44,11 @@ def campus_callback(campus):
     return True
 
 def import_campus():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start campus worker", LOGGER_ALERT)
     callapi("/v2/campus?sort=id", True, campus_callback, False)
+    mylogger("End campus worker", LOGGER_ALERT)
 
 
 

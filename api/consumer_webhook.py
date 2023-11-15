@@ -39,6 +39,7 @@ def webhook_consumer(ch, method, properties, body, reject_first=False):
 
     if (reject_first == True):
         custom_reject(ch, method, body, reason="Reject first")
+        return
 
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)

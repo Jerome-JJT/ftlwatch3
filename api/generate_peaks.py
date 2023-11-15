@@ -69,7 +69,12 @@ def generate_peaks(output_name='', min_date='2000-00-00', max_date='2099-99-99')
 
 
 def gen_peaks():
+    from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    mylogger("Start peaks graph generator", LOGGER_ALERT)
     generate_peaks(output_name='peaks_days')
+    mylogger("End peaks graph generator", LOGGER_ALERT)
+
 
 if __name__ == "__main__":
     gen_peaks()

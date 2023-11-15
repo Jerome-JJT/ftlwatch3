@@ -148,7 +148,10 @@ def event_callback(event):
 
 def import_events(update_all=False, start_at=1):
     global local_events
+    from _utils_mylogger import mylogger, LOGGER_ALERT
 
+    mylogger("Start events worker", LOGGER_ALERT)
+    
     local_events = executeQuerySelect("SELECT id FROM events ORDER BY id DESC LIMIT 1000")
     local_events = [one['id'] for one in local_events] 
 
@@ -159,6 +162,8 @@ def import_events(update_all=False, start_at=1):
         callapi("/v2/campus/47/events?sort=id", nultiple=start_at, callback=event_callback, callback_limit=False)
     else:
         callapi(f"/v2/campus/47/events?sort=-id", nultiple=1, callback=event_callback, callback_limit=True)
+    
+    mylogger("End events worker", LOGGER_ALERT)
 
 
 if __name__ == "__main__":
