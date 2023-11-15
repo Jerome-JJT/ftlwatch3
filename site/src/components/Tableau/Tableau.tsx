@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import { SuperTable } from 'Common/SuperTable';
 import { useNotification } from 'Notifications/NotificationsProvider';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Dialog, DialogBody } from '@material-tailwind/react';
 import Separator from 'Common/Separator';
