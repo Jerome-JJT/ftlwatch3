@@ -32,6 +32,8 @@ setup:
 			$(MAKE) migrate
 			sleep 60
 			${DOCKER} exec rabbit bash /setup.sh
+makerabbit:
+			${DOCKER} exec rabbit bash /setup.sh
 
 
 start:

@@ -5,6 +5,7 @@ from _dbConnector import *
 from _api import *
 import json
 import datetime
+import pika
 
 from update_achievements import import_achievements
 from update_campus import import_campus
@@ -20,8 +21,28 @@ from generate_love import generate_love
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
-def api_consumer(ch, method, properties, body):
+
+def custom_reject(ch, method, body, reason=""):
+    new_properties = pika.BasicProperties(
+        headers={'x-rejection-reason': f"Reject update {method.routing_key}, reason : {reason}"}
+    )
+
+    ch.basic_publish(
+        exchange='',
+        routing_key='update.dlq',
+        properties=new_properties,
+        body=body
+    )
+
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+    # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+
+
+def api_consumer(ch, method, properties, body, reject_first=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
+    if (reject_first == True):
+        custom_reject(ch, method, body)
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
     # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
@@ -81,6 +102,6 @@ def api_consumer(ch, method, properties, body):
 
     except Exception as e:
         mylogger(f"Reject api {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
-        ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+        custom_reject(ch, method, body, reason=f"type {type(e)}, exception {e}")
 
     return True

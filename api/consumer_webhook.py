@@ -17,8 +17,28 @@ environ.Env.read_env()
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
-def webhook_consumer(ch, method, properties, body):
+
+def custom_reject(ch, method, body, reason=""):
+    new_properties = pika.BasicProperties(
+        headers={'x-rejection-reason': f"Reject bot {method.routing_key}, reason : {reason}"}
+    )
+
+    ch.basic_publish(
+        exchange='',
+        routing_key='message.dlq',
+        properties=new_properties,
+        body=body
+    )
+
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+    # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+
+
+def webhook_consumer(ch, method, properties, body, reject_first=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+
+    if (reject_first == True):
+        custom_reject(ch, method, body, reason="Reject first")
 
 
     # ch.basic_ack(delivery_tag = method.delivery_tag)
@@ -70,19 +90,7 @@ def webhook_consumer(ch, method, properties, body):
                 time.sleep(1)
                 continue
 
-            new_properties = pika.BasicProperties(
-                headers={'x-rejection-reason': f"Reject bot {method.routing_key}, type {type(e)}, reason {e}"}
-            )
-
-            ch.basic_publish(
-                exchange='',
-                routing_key='message_dlq',
-                properties=new_properties,
-                body=body
-            )
-
-            ch.basic_ack(delivery_tag = method.delivery_tag)
-            # ch.basic_reject(delivery_tag = method.delivery_tag, requeue=False)
+            custom_reject(ch, method, body, reason=f"type {type(e)}, exception {e}")
             break
 
     return True
