@@ -48,6 +48,7 @@ import { UpdaterPage } from 'AdminPages/Updater';
 import { EventPage } from 'Events/EventsPage';
 import { LoveGraphPage } from 'LocationsPages/LoveGraphPage';
 import AboutPage from 'GeneralPages/AboutPage';
+import { PointsPage } from 'BasicPages/PointsPage';
 // import Place from './components/Place/Place';
 
 
@@ -125,6 +126,7 @@ export default function App(): JSX.Element {
             <Route path="/basics/groups" element={<GroupsPage />} />
             <Route path="/basics/products" element={<ProductsPage />} />
             <Route path="/basics/titles" element={<TitlesPage />} />
+            <Route path="/basics/points" element={<PointsPage />} />
             <Route path="/basics/projects" element={<ProjectsPage />} />
             <Route path="/basics/rules" element={<RulesPage />} />
 
