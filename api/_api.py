@@ -103,20 +103,24 @@ def raw(req, for_test = False):
 
     while (fails < maxfails):
         res = []
-        try:
-            with timeout(30):
-                res = requests.get(url, headers=auth)
-        except TimeoutError:
-            mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
-            fails += 1
-            time.sleep(5)
-            continue
+        if (threading.current_thread() is threading.main_thread()):
+            try:
+                with timeout(30):
+                    res = requests.get(url, headers=auth)
+            except TimeoutError:
+                mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
+                fails += 1
+                time.sleep(5)
+                continue
 
-        except IndexError as e:
-            mylogger(f"Unexpected index error {type(e)} {e} on {url}, fail {fails}", LOGGER_ERROR)
-            fails += 1
-            time.sleep(5)
-            continue
+            except IndexError as e:
+                mylogger(f"Unexpected index error {type(e)} {e} on {url}, fail {fails}", LOGGER_ERROR)
+                fails += 1
+                time.sleep(5)
+                continue
+        else:
+            res = requests.get(url, headers=auth)
+
 
         x = threading.Thread(target=logtologstash, args=({
             "endpoint": url.replace("https://api.intra.42.fr", ""),
