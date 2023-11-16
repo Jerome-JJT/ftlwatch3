@@ -273,7 +273,7 @@ export function SuperTable({
       <CardBody className='super-big-body'>
         <div className="mt-4 overflow-auto border-black border-2 h-[800px] resize-y">
           <table className="w-full min-w-max table-auto text-left">
-            <thead className='sticky top-0'>
+            <thead className='sticky top-0 z-10'>
               <tr className="bg-blue-gray-50">
                 { indexColumn &&
                 <th
