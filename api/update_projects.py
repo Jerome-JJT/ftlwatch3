@@ -162,7 +162,7 @@ def project_callback(project):
 
         for rule in rules['project_sessions_rules']:
 
-            if (rule['rule']['slug'] == 'retriable-in-day'):
+            if (rule['rule']['slug'] == 'retriable-in-days'):
                 good_rule_retry_delay = rule['params'][0]['value']
 
             elif (rule['rule']['slug'] == 'group_validation-group-size-between-n-and-m'):
