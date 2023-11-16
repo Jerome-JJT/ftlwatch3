@@ -274,7 +274,14 @@ def import_users():
     for user in all_users:
         user_callback(user, cursus21_ids, local_users)
 
-    mylogger("End users worker", LOGGER_ALERT)
+    infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
+                                     sum(correction_point) AS sumpoints, 
+                                     avg(correction_point) AS avgpoints, 
+                                     avg(wallet) AS avgwallets
+                                     FROM users
+                                     WHERE (blackhole > NOW() OR grade = 'Member') AND hidden = FALSE""")[0]
+
+    mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     
 
 
