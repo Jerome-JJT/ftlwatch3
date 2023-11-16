@@ -5,8 +5,8 @@ WORKDIR /app
 COPY site .
 
 RUN yarn install
+RUN (cd node_modules/react-gauge-chart && npm i lodash.isequal)
 RUN yarn build
-
 
 
 FROM nginx
