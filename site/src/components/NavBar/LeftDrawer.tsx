@@ -52,7 +52,9 @@ export default function LeftDrawer({
           onClick={() => {
             (elem.list && elem.list.length > 0)
               ? changeSub(id)
-              : (elem.basefilter ? navigate(`${elem.route}?${elem.basefilter}`) : navigate(`${elem.route}`));
+
+              : (elem.route.startsWith('http') ? window.location = elem.route :
+                (elem.basefilter ? navigate(`${elem.route}?${elem.basefilter}`) : navigate(`${elem.route}`)));
           }}>
           <ListItemPrefix>
             {
@@ -80,7 +82,8 @@ export default function LeftDrawer({
             <ListItem key={`${id}_${subId}`}
               className='ml-4 hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
               onClick={() => {
-                sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
+                sub.route.startsWith('http') ? window.location = sub.route :
+                  sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
               }}>
 
               <ListItemPrefix>
