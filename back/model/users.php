@@ -55,6 +55,7 @@ function getUsers($hidden, $poolfilter = '')
   users.has_cursus9,
   cursus21_coalition.name AS cursus21_coalition,
   cursus9_coalition.name AS cursus9_coalition,
+  COALESCE(cursus21_coalition.color, cursus9_coalition.color) AS _line_color,
   
   users.blackhole,
   users.grade,
@@ -158,7 +159,8 @@ function getUserProjects($hidden, $poolfilter, $projects)
   projects.id AS project_id,
   projects.slug AS project_slug,
   projects.main_cursus,
-  MAX(teams.final_mark) AS final_mark
+  MAX(teams.final_mark) AS final_mark,
+  COALESCE(cursus21_coalition.color, cursus9_coalition.color) AS _line_color
   
   FROM users
 
@@ -168,6 +170,8 @@ function getUserProjects($hidden, $poolfilter, $projects)
   LEFT JOIN cursus ON cursus.id = projects.main_cursus
   LEFT JOIN project_types ON project_types.id = projects.project_type_id
 
+  LEFT JOIN coalitions cursus21_coalition ON cursus21_coalition.id = users.cursus21_coalition_id 
+  LEFT JOIN coalitions cursus9_coalition ON cursus9_coalition.id = users.cursus9_coalition_id 
 
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
 
@@ -187,7 +191,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
     OR (:projects = project_types.name)
     )
 
-  GROUP BY users.id, projects.id
+  GROUP BY users.id, projects.id, cursus21_coalition.color, cursus9_coalition.color
   ORDER BY projects.corder, projects.slug
   ";
 

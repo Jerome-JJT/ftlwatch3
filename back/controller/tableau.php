@@ -192,6 +192,7 @@ function tableau_api($selectedFilter, $selectedProjects)
                     'last_name' => $team['last_name'],
                     'display_name' => $team['display_name'],
                     'avatar_url' => $team['avatar_url'],
+                    '_line_color' => $team['_line_color'],
                 );
             }
 

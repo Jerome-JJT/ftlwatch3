@@ -12,16 +12,16 @@ import { SuperCards } from 'Common/SuperCards';
 function hashCode(str: string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   return hash;
 }
 
 function intToRGB(i: number) {
-    const c = (i & 0x00FFFFFF)
-        .toString(16)
-        .toUpperCase();
-    return "00000".substring(0, 6 - c.length) + c;
+  const c = (i & 0x00FFFFFF)
+    .toString(16)
+    .toUpperCase();
+  return '00000'.substring(0, 6 - c.length) + c;
 }
 
 
@@ -38,7 +38,7 @@ export function UpdaterPage(): JSX.Element {
     const color = intToRGB(colorSeed);
 
     return (
-      <Button style={{backgroundColor: `#${color}`}} onClick={() => { onUpdate(data.id) }}>
+      <Button style={{ backgroundColor: `#${color}` }} onClick={() => { onUpdate(data.id); }}>
         {data.name}
       </Button>
     );
@@ -46,7 +46,7 @@ export function UpdaterPage(): JSX.Element {
 
   const onUpdate = useCallback((updateId: string): Promise<boolean> => {
     return axios
-      .post(`/?page=update&action=update`, `target=${updateId}`, { withCredentials: true }
+      .post('/?page=update&action=update', `target=${updateId}`, { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {

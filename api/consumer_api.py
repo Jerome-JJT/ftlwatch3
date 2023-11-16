@@ -17,6 +17,8 @@ from update_projects import import_projects
 from update_titles import import_titles
 from update_users import import_users
 
+from update_users_coals import import_coals_users
+
 
 from update_events import import_events
 from update_locations import import_locations
@@ -90,6 +92,8 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "events"):
             import_events()
 
+        elif (resource == "coals_users"):
+            import_coals_users()
 
         elif (resource == "locations"):
             import_locations()

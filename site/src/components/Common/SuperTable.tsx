@@ -191,7 +191,7 @@ export function SuperTable({
   const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
 
   const headerClasses = 'w-10 md:w-24 md:max-w-24 border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 md:px-3 py-4 max-w-4 transition-colors';
-  const headerPClasses = ' grow items-center gap-2 font-normal leading-none opacity-70 truncate';
+  const headerPClasses = 'grow items-center gap-2 font-normal leading-none opacity-70 truncate text-black';
 
   return (
     <Card className="big-card super-big-card !text-xs md:!text-base">
@@ -280,7 +280,7 @@ export function SuperTable({
                   key='index'
                   className={classNames(headerClasses)}
                 >
-                  <div className='flex flex-row justify-center text-sm h-4'>
+                  <div className='flex flex-row justify-center text-sm h-4 text-black'>
                     <p className={headerPClasses}>
                     Index
                     </p>
@@ -295,7 +295,7 @@ export function SuperTable({
                     className={classNames('cursor-pointer hover:bg-blue-gray-200', headerClasses)}
                     title={value.label.toString()}
                   >
-                    <div className='flex flex-row justify-center text-sm h-4 gap-x-2'>
+                    <div className='flex flex-row justify-center text-sm h-4 gap-x-2 text-black'>
                       <p className={headerPClasses}>
                         {value.label.toString()}
                       </p>
@@ -317,11 +317,12 @@ export function SuperTable({
                   <tr key={createKey(value, index)}
                     className='border-b border-gray-300
                     odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
-                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'>
+                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'
+                    style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : 'inherit' }}>
                     { indexColumn &&
                       <td key={`${createKey(value, index)}-index`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
-                        <div className="h-full flex justify-center items-center">
+                        <div className="h-full flex justify-center items-center text-black">
                           {index + 1}
                         </div>
                       </td>
@@ -331,7 +332,7 @@ export function SuperTable({
 
                       <td key={`${createKey(value, index)}-${col.field}`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
-                        <div className="h-full flex justify-center items-center">
+                        <div className="h-full flex justify-center items-center text-black">
                           {
                             value[col.field] === undefined ? 'undefined' : (
                               value[col.field] === null ? 'null' : (
