@@ -3,33 +3,43 @@ version: '3.8'
 
 services:
 
+  flyway:
+    restart: "always"
+
   db:
-    restart: "on-failure"
+    restart: "always"
 
   rabbit:
+    restart: "always"
+
     ports:
       - "9998:15672"
 
+  adminer:
+    restart: "always"
+
   back:
-    restart: "on-failure"
+    restart: "always"
 
     environment:
       BUILD_TYPE: "PROD" 
 
   front:
+    restart: "always"
     build: 
       dockerfile: Dockerfile-prod
-    # restart: "on-failure"
 
 #     environment:
 #       BUILD_TYPE: "Production" 
+  api:
+    restart: "always"
 
   nginx:
     build: 
       context: .
       dockerfile: ./_build/nginx/Dockerfile-prod
 
-    restart: "on-failure"
+    restart: "always"
 
     ports:
       - "8081:80"
