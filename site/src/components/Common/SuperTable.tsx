@@ -318,7 +318,7 @@ export function SuperTable({
                     className='border-b border-gray-300
                     odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
                     dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'
-                    style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : 'inherit' }}>
+                    style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : undefined }}>
                     { indexColumn &&
                       <td key={`${createKey(value, index)}-index`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
