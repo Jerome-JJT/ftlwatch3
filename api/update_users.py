@@ -275,9 +275,9 @@ def import_users():
         user_callback(user, cursus21_ids, local_users)
 
     infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
-                                     sum(correction_point) AS sumpoints, 
-                                     avg(correction_point) AS avgpoints, 
-                                     avg(wallet) AS avgwallets
+                                     SUM(correction_point) AS sumpoints, 
+                                     AVG(correction_point) AS avgpoints, 
+                                     AVG(wallet) AS avgwallets
                                      FROM users
                                      WHERE (blackhole > NOW() OR grade = 'Member') AND hidden = FALSE""")[0]
 
