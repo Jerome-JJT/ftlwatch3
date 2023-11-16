@@ -16,6 +16,7 @@ $updates = array(
 
 
     array('id' => 'generate_coals_users', 'name' => 'Update users coals', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'coals_users')); }),
+    array('id' => 'generate_users_points', 'name' => 'Update users points', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users_points')); }),
     
     array('id' => 'generate_locations', 'name' => 'Run locations', 'updater' => function () { sentToRabbit('fast.update.queue', array('resource' => 'locations')); }),
     array('id' => 'generate_teams', 'name' => 'Run teams', 'updater' => function () { sentToRabbit('fast.update.queue', array('resource' => 'teams')); }),

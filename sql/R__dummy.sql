@@ -233,6 +233,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (45, 'Titles', 90, 'basics/titles', NULL, 4, 4),
 
   (60, 'Events', 45, 'events', NULL, 4, 3),
+  (65, 'Points', 55, 'basics/points', NULL, 4, 4),
 
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
