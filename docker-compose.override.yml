@@ -25,7 +25,7 @@ services:
       BUILD_TYPE: "PROD" 
 
   front:
-    restart: "always"
+    restart: "no"
     build: 
       dockerfile: Dockerfile-prod
 
