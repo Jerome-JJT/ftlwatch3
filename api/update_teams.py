@@ -99,7 +99,7 @@ def team_callback(team):
     global limit_checker
     global current_limit
 
-    mylogger(f"Import team {team['id']} {team['name']} / limit_checker = {limit_checker}", LOGGER_INFO)
+    mylogger(f"Import team {team['id']} {team['name']} / current_limit = {current_limit}", LOGGER_INFO)
 
     team_user_ids = list(map(lambda x: x['id'], team['users']))
     team_user_ids.sort()
