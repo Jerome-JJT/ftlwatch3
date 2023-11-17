@@ -47,7 +47,7 @@ export function PointsPage(): JSX.Element {
           values={values}
 
 
-          tableTitle='Page'
+          tableTitle='Points'
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

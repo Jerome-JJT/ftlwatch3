@@ -13,6 +13,8 @@ function getPoints()
   FROM users
   LEFT JOIN points_transactions ON points_transactions.user_id = users.id
 
+  WHERE users.hidden = FALSE
+
   GROUP BY user_id, login
   ORDER BY sum_given DESC";
   $data = array();

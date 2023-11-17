@@ -158,7 +158,7 @@ def import_teams(update_all=False, start_at=1):
     global local_teams
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 4000")
+    local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC")
     local_teams = [one['id'] for one in local_teams] 
 
     if (len(local_teams) == 0):
