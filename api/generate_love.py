@@ -246,6 +246,11 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                         graph_height=1000, 
                         many_body_force_strength=-360, 
                         edge_curvature=0.2,
+
+                        links_force_distance=100.0,
+                        links_force_strength=0.3,
+                        collision_force_radius=1000.0,
+                        collision_force_strength=1.0,
                         zoom_factor=0.5
                     )
     
@@ -282,7 +287,7 @@ def gen_loves():
         generate_love(output_name='love_actual_2d')
         generate_love(output_name='love_recent_2d', is_piscine=False, min_date=target_date)
 
-        generate_love(graph_type="3d", output_name='love_piscine_blackhole_3d', is_piscine=True, takes=['T', 'S', 'B', 'N'], take_blackhole=True)
+        generate_love(graph_type="3d", output_name='love_piscine_blackhole_3d', is_piscine=True, takes=['T', 'S', 'B', 'N'], nbrank=3)
         generate_love(graph_type="3d", output_name='love_piscine_3d', is_piscine=True)
         generate_love(graph_type="3d", output_name='love_cursus_3d', takes=['T', 'S', 'B'])
         generate_love(graph_type="3d", output_name='love_actual_3d')
