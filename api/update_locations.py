@@ -172,9 +172,6 @@ def location_callback(location):
 
 
 
-@click.command()
-@click.option("--update-all", "-a", type=bool, default=False, help="update all")
-@click.option("--start-at", "-s", type=int, default=1, help="start at")
 
 def import_locations(update_all=False, start_at=1):
     global local_locations
@@ -196,6 +193,12 @@ def import_locations(update_all=False, start_at=1):
 
 
 
+@click.command()
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
+
+def starter(update_all=False, start_at=1):
+    import_locations(update_all, start_at)
 
 if __name__ == "__main__":
-    import_locations()
+    starter()

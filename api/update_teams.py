@@ -153,9 +153,6 @@ def team_callback(team):
     return (current_limit > 0)
 
 
-@click.command()
-@click.option("--update-all", "-a", type=bool, default=False, help="update all")
-@click.option("--start-at", "-s", type=int, default=1, help="start at")
 
 def import_teams(update_all=False, start_at=1):
     global local_teams
@@ -176,5 +173,13 @@ def import_teams(update_all=False, start_at=1):
         callapi(f"/v2/teams?filter[campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
 
 
+@click.command()
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
+
+def starter(update_all=False, start_at=1):
+    import_teams(update_all, start_at)
+
+
 if __name__ == "__main__":
-    import_teams()
+    starter()

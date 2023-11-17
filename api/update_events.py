@@ -142,10 +142,6 @@ def event_callback(event):
     return (current_limit > 0)
 
 
-@click.command()
-@click.option("--update-all", "-a", type=bool, default=False, help="update all")
-@click.option("--start-at", "-s", type=int, default=1, help="start at")
-
 def import_events(update_all=False, start_at=1):
     global local_events
     from _utils_mylogger import mylogger, LOGGER_ALERT
@@ -166,5 +162,13 @@ def import_events(update_all=False, start_at=1):
     mylogger("End events worker", LOGGER_ALERT)
 
 
+
+@click.command()
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
+
+def starter(update_all=False, start_at=1):
+    import_events(update_all, start_at)
+
 if __name__ == "__main__":
-    import_events()
+    starter()

@@ -46,10 +46,6 @@ def user_points_callback(transac, user_id, login):
     return (current_limit > 0)
 
 
-@click.command()
-@click.option("--update-all", "-a", type=bool, default=False, help="update all")
-@click.option("--start-at", "-s", type=int, default=1, help="start at")
-
 def import_points(update_all=False, start_at=1):
     global local_points
     from _utils_mylogger import mylogger, LOGGER_ALERT
@@ -74,11 +70,17 @@ def import_points(update_all=False, start_at=1):
         else:
             callapi(f"/v2/users/{check['login']}/correction_point_historics?sort=-id", nultiple=1, callback=lambda x: user_points_callback(x, check['id'], check['login']), callback_limit=True)
 
+        time.sleep(0.4)
 
     mylogger("End users points worker", LOGGER_ALERT)
 
 
+@click.command()
+@click.option("--update-all", "-a", type=bool, default=False, help="update all")
+@click.option("--start-at", "-s", type=int, default=1, help="start at")
 
+def starter(update_all=False, start_at=1):
+    import_points(update_all, start_at)
 
 if __name__ == "__main__":
-    import_points()
+    starter()

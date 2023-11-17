@@ -108,11 +108,16 @@ def main(server=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     if (server):
+
+        print("Waiting 5 seconds for rabbit")
+        time.sleep(5)
+        print("Starting rabbit consumers")
         
         threads = []
         for i in working:
             threads.append(threading.Thread(target=rabbit_connection, args=(i["queue"],i["function"],)))
             threads[-1].start()
+            time.sleep(0.5)
 
         for thread in threads:
             thread.join()
