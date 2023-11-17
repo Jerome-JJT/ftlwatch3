@@ -46,7 +46,7 @@ ps:
 logs:
 			${DOCKER} logs
 flogs:
-			${DOCKER} logs --tail 40 -t
+			${DOCKER} logs --tail 40 -ft
 
 logsfront:
 			${DOCKER} logs front
@@ -62,15 +62,15 @@ logsnginx:
 			${DOCKER} logs nginx
 
 flogsfront:
-			${DOCKER} logs --tail 40 -t front
+			${DOCKER} logs --tail 40 -ft front
 flogsback:
 			${DOCKER} exec back tail -fn20 /var/log/apache2/mylogger.log
 flogsapi:
-			${DOCKER} logs --tail 40 -t api
+			${DOCKER} logs --tail 40 -ft api
 flogspostg:
-			${DOCKER} logs --tail 40 -t db
+			${DOCKER} logs --tail 40 -ft db
 flogsnginx:
-			${DOCKER} logs --tail 40 -t nginx
+			${DOCKER} logs --tail 40 -ft nginx
 
 refront:
 			${DOCKER} restart front

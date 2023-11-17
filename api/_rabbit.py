@@ -106,11 +106,11 @@ working = [
 
 
 @click.command()
-@click.option("--server", type=bool, default=False, help="server mode")
-def main(server=False):
+@click.option("--serv", type=bool, default=False, help="server mode")
+def main(serv=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
-    if (server):
+    if (serv):
         
         threads = []
         for i in working:
