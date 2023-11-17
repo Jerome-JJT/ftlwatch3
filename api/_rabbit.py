@@ -1,10 +1,9 @@
 import environ
 import pika
-import click
 import json
 import threading
 import time
-
+import sys
 
 
 env = environ.Env()
@@ -105,12 +104,10 @@ working = [
 
 
 
-@click.command()
-@click.option("--serv", type=bool, default=False, help="server mode")
-def main(serv=False):
+def main(server=False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
-    if (serv):
+    if (server):
         
         threads = []
         for i in working:
@@ -121,7 +118,7 @@ def main(serv=False):
             thread.join()
 
 if __name__ == '__main__':
-    main()
+    main(True if len(sys.argv) >= 3 and sys.argv[1:3] == ['-server', '1'] else False)
     
 
     
