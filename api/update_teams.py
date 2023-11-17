@@ -99,7 +99,7 @@ def team_callback(team):
     global limit_checker
     global current_limit
 
-    mylogger(f"Import team {team['id']} {team['name']}", LOGGER_INFO)
+    mylogger(f"Import team {team['id']} {team['name']} / limit_checker = {limit_checker}", LOGGER_INFO)
 
     team_user_ids = list(map(lambda x: x['id'], team['users']))
     team_user_ids.sort()
@@ -158,7 +158,7 @@ def import_teams(update_all=False, start_at=1):
     global local_teams
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 1000")
+    local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC LIMIT 4000")
     local_teams = [one['id'] for one in local_teams] 
 
     if (len(local_teams) == 0):
