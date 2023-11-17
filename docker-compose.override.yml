@@ -5,18 +5,26 @@ services:
 
   flyway:
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
   db:
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
   rabbit:
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
     ports:
       - "9998:15672"
 
   adminer:
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
   back:
     restart: "always"
@@ -26,6 +34,9 @@ services:
 
   front:
     restart: "no"
+    environment:
+      BUILD_TYPE: "PROD" 
+
     build: 
       dockerfile: Dockerfile-prod
 
@@ -33,6 +44,8 @@ services:
 #       BUILD_TYPE: "Production" 
   api:
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
   nginx:
     build: 
@@ -40,6 +53,8 @@ services:
       dockerfile: ./_build/nginx/Dockerfile-prod
 
     restart: "always"
+    environment:
+      BUILD_TYPE: "PROD" 
 
     ports:
       - "8081:80"

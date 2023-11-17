@@ -2,6 +2,10 @@ import time
 import schedule
 import threading
 from _rabbit import send_to_rabbit
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 scheduler_update = schedule.Scheduler()
 # scheduler_live = schedule.Scheduler()
@@ -48,8 +52,9 @@ scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rab
 scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_love'}))
 scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_peaks'}))
 
-scheduler_update.every().minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'locations'}))
-scheduler_update.every().minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'teams'}))
+if (env("BUILD_TYPE") == "PROD"):
+    scheduler_update.every(10).minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'locations'}))
+    scheduler_update.every().minutes.do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'teams'}))
 
 thread_update = threading.Thread(target=scheduler_watcher, args=(scheduler_update,))
 # thread_live = threading.Thread(target=scheduler_watcher, args=(scheduler_live,))

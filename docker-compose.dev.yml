@@ -4,9 +4,13 @@ services:
 
   db:
     restart: "no"
+    environment:
+      BUILD_TYPE: "DEV" 
 
   adminer:
     restart: "no"
+    environment:
+      BUILD_TYPE: "DEV"
 
     # environment:
     #   ADMINER_DEFAULT_SYSTEM: pgsql
@@ -17,24 +21,37 @@ services:
       - back
 
   rabbit:
+    environment:
+      BUILD_TYPE: "DEV" 
+
     ports:
       - "9999:15672"
 
   back:
+    environment:
+      BUILD_TYPE: "DEV" 
+      ENV: 'DEV'
+
     restart: "no"
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
 
-    environment:
-      ENV: 'DEV'
-
     # volumes:
     #   - ./api:/app
 
+  api:
+    restart: "no"
+    environment:
+      BUILD_TYPE: "DEV" 
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
 
   front:
     restart: "no"
+    environment:
+      BUILD_TYPE: "DEV" 
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
@@ -48,6 +65,8 @@ services:
 
   nginx:
     restart: "no"
+    environment:
+      BUILD_TYPE: "DEV" 
 
     stdin_open:  true # docker run -i
     tty: true        # docker run -t
