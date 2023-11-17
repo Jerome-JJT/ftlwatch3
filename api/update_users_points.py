@@ -20,7 +20,7 @@ def user_points_callback(transac, user_id, login):
     if (transac['id'] not in local_points):
         current_limit = limit_checker
 
-        mylogger(f"Import point for {user_id} {login}, {transac['sum']} {transac['reason']}", LOGGER_INFO)
+        mylogger(f"Import point for {user_id} {login}, {transac['sum']} {transac['reason']} / current_limit = {current_limit}", LOGGER_INFO)
 
         good = {
             "id": transac['id'],

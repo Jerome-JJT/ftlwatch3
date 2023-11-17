@@ -74,7 +74,7 @@ def location_callback(location):
         if (location['begin_at'] == None or location['end_at'] == None):
             return True
 
-        mylogger(f"Import location {location['id']} {location['host']}", LOGGER_INFO)
+        mylogger(f"Import location {location['id']} {location['host']} / current_limit = {current_limit}", LOGGER_INFO)
 
         good_start_date = location['begin_at'][:10]
         good_end_date = location['end_at'][:10]

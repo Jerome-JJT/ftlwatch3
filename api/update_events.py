@@ -73,7 +73,7 @@ def event_callback(event):
     global limit_checker
     global current_limit
 
-    mylogger(f"Import event {event['id']} {event['name']}", LOGGER_INFO)
+    mylogger(f"Import event {event['id']} {event['name']} / current_limit = {current_limit}", LOGGER_INFO)
 
     # print(event)
     good = {
