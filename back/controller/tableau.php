@@ -171,6 +171,7 @@ function tableau_api($selectedFilter, $selectedProjects)
             ["label" => "Coalition 9", "field" => "cursus9_coalition", "visible" => false],
 
             ["label" => "Blackhole", "field" => "blackhole"],
+            ["label" => "Days", "field" => "blackhole_diff"],
         ];
     }
     else {
