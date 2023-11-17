@@ -212,6 +212,7 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (5, 'Projects', 50, NULL),
   (6, 'Locations', 60, NULL),
   (7, 'Love', 70, NULL)
+  
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -232,8 +233,11 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (45, 'Titles', 90, 'basics/titles', NULL, 4, 4),
 
   (60, 'Events', 45, 'events', NULL, 4, 3),
+  (65, 'Points', 55, 'basics/points', NULL, 4, 4),
 
-  (90, 'About', 30, 'about', NULL, NULL, NULL),
+  (90, 'About', 95, 'about', NULL, NULL, 10),
+  (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
+  (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, NULL, 10),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
