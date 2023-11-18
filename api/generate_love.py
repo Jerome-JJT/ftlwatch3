@@ -249,8 +249,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
                         links_force_distance=100.0,
                         links_force_strength=0.3,
-                        collision_force_radius=1000.0,
-                        collision_force_strength=1.0,
+                        # collision_force_radius=1000.0,
+                        # collision_force_strength=1.0,
                         zoom_factor=0.5
                     )
     
