@@ -18,6 +18,46 @@ function getProjects()
   return $projects;
 }
 
+function getProject($id)
+{
+  $query = "SELECT projects.id, projects.name, projects.slug, 
+  projects.difficulty, projects.is_exam, projects.main_cursus, projects.has_lausanne, 
+  projects.session_is_solo, projects.session_estimate_time, projects.session_duration_days, projects.session_terminating_after,
+  projects.session_description, projects.session_has_moulinette, projects.session_correction_number, projects.session_scale_duration, 
+  projects.rule_min, projects.rule_max, projects.rule_retry_delay
+  FROM projects
+  WHERE id = :id
+  ";
+
+  $data = array(":id" => $id);
+
+  require_once("model/dbConnector.php");
+  $project = executeQuerySelect($query, $data);
+
+  if (count($project) == 1) {
+    return $project[0];
+  }
+
+  return null;
+}
+
+function getProjectRules($id)
+{
+  $query = "SELECT rules.id, rules.name, rules.kind, rules.description, rules.slug
+  FROM rules
+  JOIN project_rules ON project_rules.rule_id = rules.id
+  WHERE project_rules.project_id = :id
+  ORDER BY id
+  ";
+
+  $data = array(":id" => $id);
+
+  require_once("model/dbConnector.php");
+  $project_rules = executeQuerySelect($query, $data);
+
+  return $project_rules;
+}
+
 function getProjectsVisibility()
 {
   $query = "SELECT projects.id, projects.name, projects.slug, 

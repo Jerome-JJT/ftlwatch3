@@ -97,6 +97,10 @@ export function ProjectsPage(): JSX.Element {
               </p>
             </>
             }
+
+            <div className='col-span-2'>
+              <button className='col-span-2 text-xs'>Details</button>
+            </div>
           </div>
 
           <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>

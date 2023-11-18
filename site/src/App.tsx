@@ -49,6 +49,7 @@ import { EventPage } from 'Events/EventsPage';
 import { LoveGraphPage } from 'LocationsPages/LoveGraphPage';
 import AboutPage from 'GeneralPages/AboutPage';
 import { PointsPage } from 'BasicPages/PointsPage';
+import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 // import Place from './components/Place/Place';
 
 
@@ -128,6 +129,7 @@ export default function App(): JSX.Element {
             <Route path="/basics/titles" element={<TitlesPage />} />
             <Route path="/basics/points" element={<PointsPage />} />
             <Route path="/basics/projects" element={<ProjectsPage />} />
+            <Route path="/basics/projects/:id" element={<SingleProjectPage />} />
             <Route path="/basics/rules" element={<RulesPage />} />
 
 

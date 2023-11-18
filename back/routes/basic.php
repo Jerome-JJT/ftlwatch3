@@ -49,6 +49,9 @@ switch ($action) {
     case "get_projects":
         get_projects();
         break;
+    case "get_project":
+        get_single_project(isset($_GET["id"]) ? $_GET["id"] : -1);
+        break;
         
     case "get_rules":
         get_rules();
