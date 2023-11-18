@@ -100,6 +100,7 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
         elif (resource == "locations"):
             import_locations()
+        elif (resource == "process_locations"):
             process_locations()
 
         elif (resource == "teams"):
