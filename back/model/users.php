@@ -74,12 +74,12 @@ function getUsers($hidden, $poolfilter = '')
   LEFT JOIN coalitions cursus9_coalition ON cursus9_coalition.id = users.cursus9_coalition_id 
 
 
-  WHERE (users.hidden = FALSE OR users.hidden = :hidden)
+  WHERE (users.hidden = FALSE)
   AND (
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
-      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND (users.blackhole > NOW() OR users.grade = 'Member' OR :hidden = TRUE)
       AND users.login NOT LIKE '3b3-%'
     ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
