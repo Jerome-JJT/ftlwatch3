@@ -84,7 +84,7 @@ export function SingleProjectPage(): JSX.Element {
               </>
               }
 
-              {values.cooldown && <>
+              {values.rule_retry_delay && <>
                 <p>Cooldown</p>
                 <p>
                   {values.rule_retry_delay} jours
