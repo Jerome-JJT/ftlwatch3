@@ -49,9 +49,9 @@ export function UpdaterPage(): JSX.Element {
       .post('/?page=update&action=update', `target=${updateId}`, { withCredentials: true }
       )
       .then((res) => {
-        if (res.status === 200) {
-          // localStorage.setItem('token', res.data.access_token);
-        } //
+        if (res.status === 204) {
+          addNotif('Update sent', 'success');
+        }
         return true;
       })
       .catch((error) => {

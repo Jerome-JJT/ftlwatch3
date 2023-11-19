@@ -50,7 +50,7 @@ if (env("BUILD_TYPE") == "PROD"):
 
     scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users'}))
 
-    scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_love'}))
+    scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_locations'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_love'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_peaks'}))
 
