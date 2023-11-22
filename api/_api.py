@@ -84,16 +84,17 @@ def get_headers(force_refresh = False):
     }
     
 
-def mocked_requests_get(data, status):
+def mocked_requests_get(data, status, headers = {}):
     class MockResponse:
-        def __init__(self, json_data, status_code):
+        def __init__(self, json_data, status_code, headers):
             self.json_data = json_data
             self.status_code = status_code
+            self.headers = headers
 
         def json(self):
             return self.json_data
 
-    return MockResponse(data, status)
+    return MockResponse(data, status, headers)
 
 def raw(req, for_test = False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
