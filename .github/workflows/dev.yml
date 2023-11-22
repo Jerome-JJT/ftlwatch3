@@ -52,4 +52,5 @@ jobs:
             git pull
             make
             make setup
+            make msgdev
 
