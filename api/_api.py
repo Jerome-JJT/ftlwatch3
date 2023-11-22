@@ -158,7 +158,7 @@ def raw(req, for_test = False):
                 time.sleep(300)
 
         elif (res.status_code == 404):
-            mylogger(f"API NOT FOUND", LOGGER_ERROR)
+            mylogger(f"API NOT FOUND {url}", LOGGER_ERROR)
             return []
 
         else:
