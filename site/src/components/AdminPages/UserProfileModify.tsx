@@ -92,7 +92,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
           </Button>
         </div>
 
-        <Checkbox
+        <Checkbox crossOrigin={undefined}
           labelProps={{ className: 'my-text' }}
           checked={settings.can_change_theme}
           onChange={() => setSettings((prev: any) => {return { ...prev, can_change_theme: !prev.can_change_theme };})}
@@ -138,7 +138,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
         />
       </div>
 
-      <Checkbox
+      <Checkbox crossOrigin={undefined}
         labelProps={{ className: 'my-text' }}
         checked={settings.terms}
         onChange={() => setSettings((prev: any) => {return { ...prev, terms: !prev.terms };})}

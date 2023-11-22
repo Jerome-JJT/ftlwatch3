@@ -166,7 +166,7 @@ export function SuperCards({
           <p>{filteredCards.length} items</p>
 
           <div>
-            <Switch
+            <Switch crossOrigin={undefined}
               className='bg-black'
               color='red'
               checked={doIncludeAll}

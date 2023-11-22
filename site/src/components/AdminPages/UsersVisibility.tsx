@@ -58,7 +58,7 @@ export function UsersVisibilityPage(): JSX.Element {
 
                 user[`_${col.field}`] = user[col.field].toString();
 
-                user[col.field] = <Checkbox
+                user[col.field] = <Checkbox crossOrigin={undefined}
                   id={`${user.id}-${col.field}`}
                   defaultChecked={user[col.field]}
                   onClick={async (e: any) => {

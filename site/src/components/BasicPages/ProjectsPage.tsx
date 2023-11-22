@@ -105,16 +105,16 @@ export function ProjectsPage(): JSX.Element {
 
           <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
             <p>Exam</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.is_exam} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.is_exam} readOnly disabled /></div>
 
             <p>Solo</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.session_is_solo} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.session_is_solo} readOnly disabled /></div>
 
             <p>Moulinette</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.session_has_moulinette} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.session_has_moulinette} readOnly disabled /></div>
 
             <p>Lausanne</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.has_lausanne} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.has_lausanne} readOnly disabled /></div>
 
             {card.session_correction_number && <>
               <p>Correction</p>

@@ -56,7 +56,7 @@ export function TeamsPage(): JSX.Element {
 
           <div className='flex flex-col justify-evenly'>
             <div className="flex items-center">
-              <p color="blue-gray">{card.current_status}</p> <Checkbox checked={card.is_validated} readOnly disabled></Checkbox>
+              <p color="blue-gray">{card.current_status}</p> <Checkbox crossOrigin={undefined} checked={card.is_validated} readOnly disabled></Checkbox>
             </div>
 
             <p color="blue-gray">

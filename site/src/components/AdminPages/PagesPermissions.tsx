@@ -69,7 +69,7 @@ export function PagesPermissionsPage(): JSX.Element {
                 page[`_${col.field}`] = page[col.field];
                 page[col.field] =
                     <div className="relative flex w-full max-w-[24rem]">
-                      <Input id={corderId} label='corder' type='text' defaultValue={page[col.field]}/>
+                      <Input crossOrigin={undefined} id={corderId} label='corder' type='text' defaultValue={page[col.field]}/>
                       <Button
                         size="sm"
                         className="!absolute right-1 top-1 rounded"

@@ -58,7 +58,7 @@ export function AchievementsPage(): JSX.Element {
             </p>
 
             <div color="blue-gray" className="flex items-center">
-              <p>Visible</p> <Checkbox checked={card.has_lausanne} readOnly disabled></Checkbox>
+              <p>Visible</p> <Checkbox crossOrigin={undefined} checked={card.has_lausanne} readOnly disabled></Checkbox>
             </div>
 
           </div>

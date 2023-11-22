@@ -49,10 +49,10 @@ export function EventPage(): JSX.Element {
           <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
 
             <p>Cursus 21</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.has_cursus21} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.has_cursus21} readOnly disabled /></div>
 
             <p>Cursus 9</p>
-            <div><Checkbox containerProps={{ className: 'p-0' }} checked={card.has_cursus9} readOnly disabled /></div>
+            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.has_cursus9} readOnly disabled /></div>
 
 
           </div>

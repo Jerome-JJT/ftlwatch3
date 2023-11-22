@@ -48,7 +48,7 @@ export function GroupPermissionsPage(): JSX.Element {
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field !== 'id' && col.field !== 'name') {
                 groupWithPerms[`_${col.field}`] = groupWithPerms[col.field];
-                groupWithPerms[col.field] = <Checkbox
+                groupWithPerms[col.field] = <Checkbox crossOrigin={undefined}
                   id={`${groupWithPerms.id}-${col.field}`}
                   defaultChecked={groupWithPerms[col.field]}
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
