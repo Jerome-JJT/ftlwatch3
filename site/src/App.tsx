@@ -50,6 +50,7 @@ import { LoveGraphPage } from 'LocationsPages/LoveGraphPage';
 import AboutPage from 'GeneralPages/AboutPage';
 import { PointsPage } from 'BasicPages/PointsPage';
 import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
+import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
 // import Place from './components/Place/Place';
 
 
@@ -144,6 +145,8 @@ export default function App(): JSX.Element {
             <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
             <Route path="/locations/peaks" element={<PeaksDaysPage />} />
             <Route path="/locations/love" element={<LoveGraphPage />} />
+
+            <Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
 
             {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
             <Route path="/admin/groups" element={<UserGroupsPage />} />

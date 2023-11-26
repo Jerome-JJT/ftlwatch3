@@ -260,6 +260,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
+  (295, 'Projects list', 2, 'basics/projects', NULL, 5, 4),
   (300, 'Teams', 5, 'projects/teams', NULL, 5, 10),
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
 
@@ -267,6 +268,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (355, 'Users totals', 30, 'locations/userstotal', NULL, 6, 10),
   (360, 'Computers totals', 10, 'locations/computerstotal', NULL, 6, 10),
   (365, 'Connections', 20, 'locations/peaks', NULL, 6, 10),
+  (370, 'Personal computers', 20, 'locations/personalcomputers', NULL, 6, 4),
 
   (370, 'Love piscine 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
   (371, 'Love piscine blackhole 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
