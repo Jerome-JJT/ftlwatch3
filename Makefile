@@ -36,6 +36,11 @@ makerabbit:
 			${DOCKER} exec rabbit bash /setup.sh
 
 
+msgdev:
+			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy dev done'})"
+msgprod:
+			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy prod done'})"
+
 start:
 			${DOCKER} up -d --build
 

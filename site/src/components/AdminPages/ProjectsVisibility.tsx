@@ -89,7 +89,7 @@ export function ProjectsVisibilityPage(): JSX.Element {
                 const corderId = `corder-${project.id}`;
                 project[col.field] =
                     <div className="relative flex w-full max-w-[24rem]">
-                      <Input id={corderId} label='corder' type='text' defaultValue={project[col.field]}/>
+                      <Input crossOrigin={undefined} id={corderId} label='corder' type='text' defaultValue={project[col.field]}/>
                       <Button
                         size="sm"
                         className="!absolute right-1 top-1 rounded"
@@ -102,7 +102,7 @@ export function ProjectsVisibilityPage(): JSX.Element {
 
               else if (col.field === 'hidden') {
 
-                project[col.field] = <Checkbox
+                project[col.field] = <Checkbox crossOrigin={undefined}
                   id={`${project.id}-${col.field}`}
                   defaultChecked={project[col.field]}
                   onClick={async (e: any) => {

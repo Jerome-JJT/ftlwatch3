@@ -239,7 +239,7 @@ export function SuperTable({
 
 
           <div>
-            <Switch
+            <Switch crossOrigin={undefined}
               className='bg-black'
               color='red'
               checked={doIncludeAll}

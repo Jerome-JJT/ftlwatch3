@@ -84,6 +84,18 @@ def get_headers(force_refresh = False):
     }
     
 
+def mocked_requests_get(data, status, headers = {}):
+    class MockResponse:
+        def __init__(self, json_data, status_code, headers):
+            self.json_data = json_data
+            self.status_code = status_code
+            self.headers = headers
+
+        def json(self):
+            return self.json_data
+
+    return MockResponse(data, status, headers)
+
 def raw(req, for_test = False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
@@ -158,8 +170,8 @@ def raw(req, for_test = False):
                 time.sleep(300)
 
         elif (res.status_code == 404):
-            mylogger(f"API NOT FOUND", LOGGER_ERROR)
-            return []
+            mylogger(f"API NOT FOUND {url}", LOGGER_ERROR)
+            return mocked_requests_get([], 200)
 
         else:
             mylogger(f"Api http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)

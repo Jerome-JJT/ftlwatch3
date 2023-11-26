@@ -100,7 +100,7 @@ export function SettingsPage(): JSX.Element {
           </div>
         </div>
 
-        <Checkbox
+        <Checkbox crossOrigin={undefined}
           checked={terms}
           readOnly
           label={

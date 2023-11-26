@@ -13,7 +13,7 @@ function getPoints()
   FROM users
   LEFT JOIN points_transactions ON points_transactions.user_id = users.id
 
-  WHERE users.hidden = FALSE
+  WHERE users.hidden = FALSE AND login NOT LIKE '3b3-%'
 
   GROUP BY user_id, login
   ORDER BY sum_given DESC";

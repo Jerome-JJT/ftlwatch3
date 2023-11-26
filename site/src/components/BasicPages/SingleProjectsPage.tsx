@@ -84,7 +84,7 @@ export function SingleProjectPage(): JSX.Element {
               </>
               }
 
-              {values.cooldown && <>
+              {values.rule_retry_delay && <>
                 <p>Cooldown</p>
                 <p>
                   {values.rule_retry_delay} jours
@@ -95,16 +95,16 @@ export function SingleProjectPage(): JSX.Element {
 
             <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
               <p>Exam</p>
-              <div><Checkbox containerProps={{ className: 'p-0' }} checked={values.is_exam} readOnly disabled /></div>
+              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.is_exam} readOnly disabled /></div>
 
               <p>Solo</p>
-              <div><Checkbox containerProps={{ className: 'p-0' }} checked={values.session_is_solo} readOnly disabled /></div>
+              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.session_is_solo} readOnly disabled /></div>
 
               <p>Moulinette</p>
-              <div><Checkbox containerProps={{ className: 'p-0' }} checked={values.session_has_moulinette} readOnly disabled /></div>
+              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.session_has_moulinette} readOnly disabled /></div>
 
               <p>Lausanne</p>
-              <div><Checkbox containerProps={{ className: 'p-0' }} checked={values.has_lausanne} readOnly disabled /></div>
+              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.has_lausanne} readOnly disabled /></div>
 
               {values.session_correction_number && <>
                 <p>Correction</p>

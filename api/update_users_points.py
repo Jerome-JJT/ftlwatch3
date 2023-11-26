@@ -50,7 +50,7 @@ def import_points(update_all=False, start_at=1):
     global local_points
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    to_check = executeQuerySelect("""SELECT id, login FROM users WHERE kind = 'student' AND (blackhole > NOW() OR grade = 'Member') ORDER BY id""")
+    to_check = executeQuerySelect("""SELECT id, login FROM users WHERE kind = 'student' AND login NOT LIKE '3b3-%%' AND (blackhole > NOW() OR grade = 'Member') ORDER BY id""")
 
     mylogger("Start users points worker", LOGGER_ALERT)
 

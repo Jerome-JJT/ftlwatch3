@@ -64,6 +64,9 @@ export function LoginProvider({ children }: { children: ReactNode }): JSX.Elemen
           if (announce) {
             addNotif(`Welcome ${res.data.user.login}!`, 'success');
           }
+          else if (reload) {
+            addNotif('Reload done', 'info');
+          }
         }
       })
       .catch((error) => {

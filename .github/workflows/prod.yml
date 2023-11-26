@@ -25,4 +25,5 @@ jobs:
             git pull
             make
             make setup
+            make msgprod
 

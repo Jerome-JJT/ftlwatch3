@@ -47,7 +47,7 @@ export function PoolfilterVisibilityPage(): JSX.Element {
             res.data.columns.forEach((col: ColumnProps) => {
               if (col.field === 'hidden') {
 
-                poolfilter[col.field] = <Checkbox
+                poolfilter[col.field] = <Checkbox crossOrigin={undefined}
                   id={`${poolfilter.id}-${col.field}`}
                   defaultChecked={poolfilter[col.field]}
                   onClick={async (e: any) => {

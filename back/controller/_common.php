@@ -221,9 +221,35 @@ function sentToRabbit($routing_key, $body) {
 }
 
 
+function logtrafic($status)
+{
+    $userId = "-1";
+    $userLogin = "";
+    if (isset($_SESSION["user"])) {
+        $userId = $_SESSION["user"]["id"];
+        $userLogin = $_SESSION["user"]["login"];
+    } 
+
+
+    // $perms = "";
+    // $sessionId = "";
+    // if (isset($_REQUEST["permissions"])) {
+    //     $perms = implode(",", $_REQUEST["permissions"]);
+    //     $sessionId = substr($_REQUEST["PHPSESSID"], 0, 12);
+    // } 
+
+    // $currentTime = date('c');
+
+    $message = "$userId $userLogin $status ".$_SERVER['REQUEST_METHOD']." ".$_SERVER['HTTP_HOST']." ".$_SERVER['REQUEST_URI'];
+
+    sentToRabbit('trafic.server.message.queue', array("content" => $message));
+}
+
+
 function jsonResponse($data = array(), $code = 200, $isArray = false)
 {
     logtologstash($code);
+    logtrafic($code);
     
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');

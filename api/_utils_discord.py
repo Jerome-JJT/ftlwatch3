@@ -4,7 +4,7 @@
 def create_discord_payload(content = {}):
     payload = {
         "username": "BlazingDuck",
-        "avatar_url": "https://dev.42lwatch.ch/static/logo_gray.png", 
+        "avatar_url": "https://42lwatch.ch/static/logo_gray.png", 
         "embeds": [],
     }
 
