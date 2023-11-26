@@ -11,7 +11,6 @@ require_once("controller/basic/products.php");
 require_once("controller/basic/projects.php");
 require_once("controller/basic/rules.php");
 require_once("controller/basic/titles.php");
-require_once("controller/basic/points.php");
 
 $action = "";
 if (isset($_GET["action"])) {
@@ -59,10 +58,6 @@ switch ($action) {
 
     case "get_titles":
         get_titles();
-        break;
-
-    case "get_points":
-        get_points();
         break;
 
 }

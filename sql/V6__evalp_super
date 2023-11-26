@@ -1,0 +1,3 @@
+ALTER TABLE "points_transactions"
+"is_piscine" boolean NOT NULL,
+"scale_team_id" integer;
