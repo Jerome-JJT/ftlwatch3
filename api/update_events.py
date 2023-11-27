@@ -18,7 +18,7 @@ def import_event_user(event):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     api_event_users = callapi(f"/v2/events/{event['id']}/events_users", nultiple=1)
-    api_event_users_ids = list(map(lambda x: x['user']['id'], api_event_users))
+    api_event_users_ids = {one['id']: one['user']['id'] for one in api_event_users}
 
     db_event_users = executeQuerySelect("SELECT id FROM team_user WHERE team_id = %(event_id)s",
     {
@@ -29,7 +29,7 @@ def import_event_user(event):
 
     changed = False
 
-    for good_id in api_event_users_ids:
+    for good_id in api_event_users_ids.keys():
 
         try:
             db_event_users_ids.remove(good_id)
@@ -48,7 +48,7 @@ def import_event_user(event):
         """, {
             "id": good_id,
             "event_id": event["id"],
-            "user_id": good_id
+            "user_id": api_event_users_ids[good_id]
         })
 
     for toremove in db_event_users_ids:
