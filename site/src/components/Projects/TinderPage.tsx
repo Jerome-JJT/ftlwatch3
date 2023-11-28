@@ -87,7 +87,7 @@ export function TinderPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=teams&action=get_tinder',
+      .get('/?page=projects&action=get_tinder',
         { withCredentials: true }
       )
       .then((res) => {

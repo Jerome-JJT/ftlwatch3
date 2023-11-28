@@ -23,3 +23,7 @@ CREATE TABLE "subjects" (
     "inserted_at" TIMESTAMP NOT NULL DEFAULT NOW(), 
     CONSTRAINT "PK_SUBJECT_ID" PRIMARY KEY ("id")
 );
+
+ALTER TABLE "projects"
+ADD "parent_id" integer
+;

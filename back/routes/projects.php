@@ -1,6 +1,6 @@
 <?php
 
-require_once("controller/teams.php");
+require_once("controller/projects.php");
 
 $action = "";
 if (isset($_GET["action"])) {
@@ -16,6 +16,13 @@ switch ($action) {
 
     case "get_tinder":
         get_tinder();
+        break;
+
+    case "get_subjects":
+        get_subjects();
+        break;
+    case "get_subject":
+        get_subject(isset($_GET["id"]) ? $_GET["id"] : -1);
         break;
 
 }

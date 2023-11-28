@@ -66,7 +66,7 @@ def subject_callback(id, url, head, content):
 
 
 
-def import_subjects(update_all=False, start_at=1):
+def import_subjects(update_all=False, start_at=1500):
     global local_hashes
     global local_subjects
 
@@ -140,9 +140,9 @@ def import_subjects(update_all=False, start_at=1):
 
 @click.command()
 @click.option("--update-all", "-a", type=bool, default=False, help="update all")
-@click.option("--start-at", "-s", type=int, default=1, help="start at")
+@click.option("--start-at", "-s", type=int, default=1500, help="start at")
 
-def starter(update_all=False, start_at=1):
+def starter(update_all=False, start_at=1500):
     import_subjects(update_all, start_at)
 
 
