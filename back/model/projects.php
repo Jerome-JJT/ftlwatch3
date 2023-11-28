@@ -147,7 +147,7 @@ function getSubjectsHeads()
   $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, 
     projects.slug AS project_slug, 
     subjects.id AS subject_id, 
-    subjects.url AS subject_url
+    subjects.url AS subject_url,
     subjects.inserted_at AS subject_date
     FROM subjects
     
