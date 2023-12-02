@@ -22,6 +22,10 @@ switch ($action) {
         get_computers_totals();
         break;
 
+    case "get_personal_computers":
+        get_personal_computers($_SESSION['user']['id']);
+        break;
+
 }
 
 exit();

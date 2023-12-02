@@ -24,6 +24,7 @@ function getUsersTotals()
   $query = "SELECT users.login, 
     SUM(locations.length) AS total,
     COUNT(locations.length) AS entries,
+    COUNT(DISTINCT locations.host) AS nb_hosts,
     AVG(locations.length) AS average,
     SUM(CASE WHEN is_piscine = TRUE THEN length ELSE 0 END) AS total_piscine,
     SUM(locations.sun_length) AS total_sun,
@@ -63,6 +64,28 @@ function getComputersTotals()
   ";
 
   $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
+
+
+function getPersonalComputers($userId)
+{
+  $query = "SELECT locations.host,
+  SUM(locations.length) AS total,
+  SUM(CASE WHEN is_piscine = TRUE THEN length ELSE 0 END) AS total_piscine
+  FROM locations
+
+  WHERE locations.length < 100000 AND user_id = :user_id
+
+  GROUP BY locations.host
+  ORDER BY total DESC
+  ";
+
+  $data = array("user_id" => $userId);
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
