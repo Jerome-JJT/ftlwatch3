@@ -8,6 +8,8 @@ watchdog
 pika
 click
 
+pypdf2
+
 oauthlib
 plotly
 pandas

@@ -120,6 +120,10 @@ def project_callback(project):
         if (campus['id'] == 47):
             good_has_lausanne = True
 
+    good_parent_id = None
+    if (project['parent'] != None):
+        good_parent_id = project['parent']['id']
+
 
     good_session = None
     backup_session = None
@@ -162,6 +166,10 @@ def project_callback(project):
 
         for rule in rules['project_sessions_rules']:
 
+            print(rule)
+            print()
+            print()
+
             if (rule['rule']['slug'] == 'retriable-in-days'):
                 good_rule_retry_delay = rule['params'][0]['value']
 
@@ -173,6 +181,9 @@ def project_callback(project):
         import_project_rule(rules['project_sessions_rules'], project['id'])
 
 
+    print(good_rule_retry_delay, 'retriable-in-daysretriable-in-daysretriable-in-daysretriable-in-days')
+
+
     good = {
         "id": project["id"], 
         "name": project["name"],
@@ -182,6 +193,8 @@ def project_callback(project):
         "main_cursus": good_cursus,
         "project_type_id": good_project_type,
         "has_lausanne": good_has_lausanne,
+
+        "parent_id": good_parent_id,
 
         "session_id": good_session["id"] if good_session else None,
         "session_is_solo": good_session["solo"] if good_session else None,
@@ -204,7 +217,7 @@ def project_callback(project):
     # project_notification(project)
 
     executeQueryAction("""INSERT INTO projects (
-        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", 
+        "id", "name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", "parent_id", 
 
         "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
         "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
@@ -215,7 +228,7 @@ def project_callback(project):
         
         ) VALUES (
 
-        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, %(project_type_id)s, %(has_lausanne)s, 
+        %(id)s, %(name)s, %(slug)s, %(difficulty)s, %(is_exam)s, %(main_cursus)s, %(project_type_id)s, %(has_lausanne)s, %(parent_id)s, 
         %(session_id)s, %(session_is_solo)s, %(session_estimate_time)s, %(session_duration_days)s, %(session_duration_days)s,
         %(session_description)s, %(session_has_moulinette)s, %(session_correction_number)s, %(session_scale_duration)s, 
         %(rule_min)s, %(rule_max)s, %(rule_retry_delay)s, 
@@ -225,6 +238,7 @@ def project_callback(project):
     DO UPDATE SET
         main_cursus = COALESCE(projects.main_cursus, EXCLUDED.main_cursus),
         has_lausanne = COALESCE(projects.has_lausanne, EXCLUDED.has_lausanne),
+        parent_id = COALESCE(projects.parent_id, EXCLUDED.parent_id),
         session_id = COALESCE(projects.session_id, EXCLUDED.session_id),
         session_is_solo = COALESCE(projects.session_is_solo, EXCLUDED.session_is_solo),
         session_estimate_time = COALESCE(projects.session_estimate_time, EXCLUDED.session_estimate_time),
@@ -247,6 +261,7 @@ def project_callback(project):
         "main_cursus": good["main_cursus"],
         "project_type_id": good["project_type_id"],
         "has_lausanne": good["has_lausanne"],
+        "parent_id": good["parent_id"],
 
         "session_id": good["session_id"],
         "session_is_solo": good["session_is_solo"],

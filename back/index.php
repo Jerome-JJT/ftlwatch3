@@ -96,8 +96,8 @@ try {
             require_once("routes/poolfilters.php");
             break;
 
-        case "teams":
-            require_once("routes/teams.php");
+        case "projects":
+            require_once("routes/projects.php");
             break;
 
         case "locations":

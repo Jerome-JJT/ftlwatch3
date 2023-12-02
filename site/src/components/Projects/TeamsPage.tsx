@@ -130,7 +130,7 @@ export function TeamsPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=teams&action=get_teams',
+      .get('/?page=projects&action=get_teams',
         { withCredentials: true }
       )
       .then((res) => {

@@ -1,6 +1,6 @@
 <?php
 require_once("controller/_common.php");
-require_once("model/teams.php");
+require_once("model/projects.php");
 
 
 
@@ -89,34 +89,10 @@ function get_group_projects()
         }
     }
 
-
     $res["values"] = array_values($tmp);
 
-    // $res["columns"] = [
-    //     ["label" => "ID", "field" => "id", "sort" => true, "fixed" => true, "width" => 70],
-    //     ["label" => "Image", "field" => "avatar_url", "sort" => true, "fixed" => true, "width" => 150],
-    //     ["label" => "Login", "field" => "login", "sort" => true, "fixed" => true, "width" => 100],
-    //     ["label" => "First Name", "field" => "first_name", "sort" => true],
-    //     ["label" => "Last Name", "field" => "last_name", "sort" => true],
-    //     ["label" => "Display Name", "field" => "display_name", "sort" => true],
-    //     ["label" => "Grade", "field" => "grade", "sort" => true],
-    //     ["label" => "Level", "field" => "level", "sort" => true],
-    //     ["label" => "Kind", "field" => "kind", "sort" => true],
-    //     ["label" => "Staff", "field" => "is_staff", "sort" => true],
-    //     ["label" => "Nbcursus", "field" => "nbcursus", "sort" => true],
-    //     ["label" => "Has Cursus 21", "field" => "has_cursus21", "sort" => true],
-    //     ["label" => "Has Cursus 9", "field" => "has_cursus9", "sort" => true],
-    //     ["label" => "Pool Filter", "field" => "poolfilter", "sort" => true]
-    // ];
-
-
     jsonResponse($res, 200);
-
 }
-
-
-
-
 
 function get_tinder()
 {
@@ -219,4 +195,49 @@ function get_tinder()
 
 }
 
+
+
+function get_subjects($filter = "all")
+{
+    $tmp = array();
+    $res = array();
+
+    $subjects = getSubjectsHeads();
+
+    foreach ($subjects as $subject) {
+
+        if ($filter == "matched" && $subject['project_slug'] == null) {
+            continue;
+        }
+        else if ($filter == "unmatched" && $subject['project_slug'] != null) {
+            continue;
+        }
+
+        if (!isset($tmp[$subject['id']])) {
+            $tmp[$subject['id']] = array(
+                'id' => $subject['id'],
+                'title' => $subject['title'],
+                'project_slug' => $subject['project_slug'],
+                'subjects' => array(),
+            );
+        }
+
+        array_push($tmp[$subject['id']]['subjects'], array(
+            'id' => $subject['subject_id'],
+            'url' => $subject['subject_url'],
+            'date' => $subject['subject_date'],
+        ));
+    }
+
+    $res["columns"] = array(
+        array("label" => "Id", "field" => "id"),
+        array("label" => "Title", "field" => "title"),
+        array("label" => "Project", "field" => "project_slug"),
+        array("label" => "Details", "field" => "details"),
+    );
+
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
+}
 
