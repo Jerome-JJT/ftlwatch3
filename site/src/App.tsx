@@ -51,6 +51,7 @@ import AboutPage from 'GeneralPages/AboutPage';
 import { PointsPage } from 'BasicPages/PointsPage';
 import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 import { SubjectsPage } from 'Projects/SubjectsPage';
+import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
 // import Place from './components/Place/Place';
 
 
@@ -140,6 +141,7 @@ export default function App(): JSX.Element {
             <Route path="/projects/teams" element={<TeamsPage />} />
             <Route path="/projects/tinder" element={<TinderPage />} />
             <Route path="/projects/subjects" element={<SubjectsPage />} />
+            <Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
 
             <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />

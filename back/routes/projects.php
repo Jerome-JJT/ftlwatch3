@@ -19,7 +19,10 @@ switch ($action) {
         break;
 
     case "get_subjects":
-        get_subjects();
+        get_subjects("all");
+        break;
+    case "get_unmatched_subjects":
+        get_subjects("unmatched");
         break;
     case "get_subject":
         get_subject(isset($_GET["id"]) ? $_GET["id"] : -1);

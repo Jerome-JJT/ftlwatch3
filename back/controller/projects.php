@@ -197,7 +197,7 @@ function get_tinder()
 
 
 
-function get_subjects()
+function get_subjects($filter = "all")
 {
     $tmp = array();
     $res = array();
@@ -205,6 +205,14 @@ function get_subjects()
     $subjects = getSubjectsHeads();
 
     foreach ($subjects as $subject) {
+
+        if ($filter == "matched" && $subject['project_slug'] == null) {
+            continue;
+        }
+        else if ($filter == "unmatched" && $subject['project_slug'] != null) {
+            continue;
+        }
+
         if (!isset($tmp[$subject['id']])) {
             $tmp[$subject['id']] = array(
                 'id' => $subject['id'],
@@ -232,3 +240,4 @@ function get_subjects()
 
     jsonResponse($res, 200);
 }
+

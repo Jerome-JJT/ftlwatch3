@@ -81,6 +81,7 @@ def process_pdf(update_all = True):
     for subject_header in subject_headers:
 
         # mylogger(f"Look {subject_header['id']}", LOGGER_DEBUG)
+        flag = False
 
         for search in matcher.keys():
 
@@ -91,6 +92,7 @@ def process_pdf(update_all = True):
             if search in subject_header['title'] and local_projects.get(matcher[search]) != None:
 
                 mylogger(f"Match {subject_header['id']} {search} {local_projects.get(matcher[search])}", LOGGER_INFO)
+                flag = True
 
                 executeQueryAction("""UPDATE subject_hashmaps 
                                 SET project_id = %(project_id)s 
@@ -100,6 +102,14 @@ def process_pdf(update_all = True):
                 })
 
                 break
+
+            if (flag == False):
+                executeQueryAction("""UPDATE subject_hashmaps 
+                                SET project_id = NULL
+                                WHERE id = %(id)s""", {
+                    "project_id": local_projects.get(matcher[search]),
+                    "id": subject_header['id'],
+                })
 
 
     mylogger("End pdf processor", LOGGER_ALERT)
