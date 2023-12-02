@@ -75,7 +75,7 @@ export function UnmatchedSubjectsPage(): JSX.Element {
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
 
-        {focusSubject?.subjects && <DialogBody className='grid grid-cols-3 auto-cols-max gap-y-2 justify-center mb-2' divider>
+        {focusSubject?.subjects && <DialogBody className='grid grid-cols-3 auto-cols-max gap-y-2 justify-center mb-2 max-h-[600px] overflow-y-scroll' divider>
           {
             focusSubject?.subjects.map((link: {id: string, url: string, date: string}) =>
               <React.Fragment key={link.id}>
