@@ -133,13 +133,10 @@ export function ProjectsPage(): JSX.Element {
             </>
             }
 
-            {card.session_terminating_after && <>
-              <p>Auto close</p>
-              <p>
-                {card.session_terminating_after} jours
-              </p>
-            </>
-            }
+            <p>Auto close</p>
+            <p>
+              {card.session_terminating_after ? card.session_terminating_after : '∞'} jours
+            </p>
 
           </div>
 
