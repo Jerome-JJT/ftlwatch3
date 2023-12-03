@@ -144,7 +144,8 @@ function getExamCount()
 
 function getSubjectsHeads()
 {
-  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, 
+  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
+    projects.slug AS project_slug, 
     projects.slug AS project_slug, 
     subjects.id AS subject_id, 
     subjects.url AS subject_url,
@@ -167,7 +168,7 @@ function getSubjectsHeads()
 
 function getProjectSubjects($id)
 {
-  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, 
+  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
     projects.slug AS project_slug, 
     subjects.id AS subject_id, 
     subjects.url AS subject_url,

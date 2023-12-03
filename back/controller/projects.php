@@ -217,6 +217,7 @@ function get_subjects($filter = "all")
             $tmp[$subject['id']] = array(
                 'id' => $subject['id'],
                 'title' => $subject['title'],
+                'title_hash' => $subject['title_hash'],
                 'project_slug' => $subject['project_slug'],
                 'subjects' => array(),
             );
@@ -232,6 +233,7 @@ function get_subjects($filter = "all")
     $res["columns"] = array(
         array("label" => "Id", "field" => "id"),
         array("label" => "Title", "field" => "title"),
+        array("label" => "Title hash", "field" => "title_hash"),
         array("label" => "Project", "field" => "project_slug"),
         array("label" => "Details", "field" => "details"),
     );

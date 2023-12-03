@@ -39,7 +39,7 @@ export function UnmatchedSubjectsPage(): JSX.Element {
               }
               else if (col.field === 'title') {
                 subject[`_${col.field}`] = subject[col.field];
-                subject[col.field] = <textarea cols={25} rows={5} readOnly defaultValue={subject['title']}/>;
+                subject[col.field] = <textarea cols={25} rows={5} className="my-text" readOnly defaultValue={subject['title']}/>;
 
               }
             });

@@ -34,6 +34,7 @@ function get_single_project($id)
                 $tmp[$subject['id']] = array(
                     'id' => $subject['id'],
                     'title' => $subject['title'],
+                    'title_hash' => $subject['title_hash'],
                     'project_slug' => $subject['project_slug'],
                     'subjects' => array(),
                 );
