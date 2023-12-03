@@ -114,7 +114,7 @@ export function EventPage(): JSX.Element {
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
 
-        <DialogBody className='grid grid-cols-4 auto-cols-max gap-6 justify-center mb-2' divider>
+        <DialogBody className='text-black grid grid-cols-4 auto-cols-max gap-6 justify-center mb-2' divider>
           {
             focusEvent?.users.map((user: string) => <><p>{user}</p></>)
           }
