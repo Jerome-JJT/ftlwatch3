@@ -162,7 +162,10 @@ export function SingleProjectPage(): JSX.Element {
 
                 { values.subjects.map((subject: any) => {
                   return <tr key={subject.id}>
-                    <td className='p-2 border border-white'>{subject.id}<br/>{subject.title_hash}</td>
+                    <td className='p-2 border border-white'>
+                      {subject.id}<br/>
+                      <p className='truncate'>{subject.title_hash}</p>
+                    </td>
                     <td className='p-2 border border-white'>
                       <textarea cols={25} rows={5} defaultValue={subject.title} />
                     </td>
