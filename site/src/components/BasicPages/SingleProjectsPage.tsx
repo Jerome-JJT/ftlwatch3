@@ -164,7 +164,7 @@ export function SingleProjectPage(): JSX.Element {
                   return <tr key={subject.id}>
                     <td className='p-2 border border-white'>
                       {subject.id}<br/>
-                      <p className='truncate'>{subject.title_hash}</p>
+                      <p title={subject.title_hash} className='truncate max-w-[100px]'>{subject.title_hash}</p>
                     </td>
                     <td className='p-2 border border-white'>
                       <textarea cols={25} rows={5} defaultValue={subject.title} />
