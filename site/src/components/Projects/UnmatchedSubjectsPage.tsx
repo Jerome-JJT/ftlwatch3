@@ -42,7 +42,7 @@ export function UnmatchedSubjectsPage(): JSX.Element {
                 subject[col.field] = <textarea cols={25} rows={5} className="my-text" readOnly defaultValue={subject['title']}/>;
               }
               else if (col.field === 'title_hash') {
-                subject[col.field] = <p title={subject[col.field]} className="truncate max-w-[100px]">{subject[col.field]}</p>;
+                subject[col.field] = <p title={subject[col.field]} className="text-black truncate max-w-[100px]">{subject[col.field]}</p>;
               }
             });
 
