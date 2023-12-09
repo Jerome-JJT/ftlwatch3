@@ -6,7 +6,7 @@ require_once("model/simples/cursus.php");
 
 
 
-function get_tableau_poolfilters()
+function get_tableau_poolfilters($selectedProjects)
 {
     $poolfilters = getPoolFilters(has_permission("p_view4"));
 
@@ -39,64 +39,43 @@ function get_tableau_poolfilters()
 }
 
 
-// function get_tableau_projects()
-// {
-//     $projectFilters = array("infos", "42cursus", "common-core", "outer-core", "piscine-c");
-
-    
-//     if (has_permission("p_view4")) {
-//         foreach ($poolfilters as $filter) {
-//             $newKey = substr($filter["name"], 0, 4);
-    
-//             if ($newKey == "None") {
-//                 continue;
-//             }
-
-//             if (!in_array($newKey, array_column($poolfilters, "name"))) {
-//                 array_push($poolfilters, array("name" => $newKey, "hidden" => true));
-//             }
-//         }
-
-//         array_unshift($poolfilters, array("name" => "all", "hidden" => true));
-//     }
-//     if (has_permission("p_view3")) {
-//         array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
-//     }
-//     if (has_permission("p_view2")) {
-//         array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
-//     }
-//     array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
-
-
-//     return $poolfilters;
-// }
-
-
-
-function tableau_api($selectedFilter, $selectedProjects)
-{
-
-    $filters = get_tableau_poolfilters();
-    $validFilters = array_map(function ($filter) { return $filter["name"]; }, $filters);
+function tableau_api($selectedFilter, $selectedProjects) {
+    if ($selectedProjects == "") {
+        $selectedProjects = "common-core";
+    }
 
     $projectFilters = array("infos", "common-core", "internship", "outer-core", "c-piscine");
+
+    if (has_permission("p_view1")) {
+        array_push($projectFilters, "infos");
+    }
+    if (has_permission("p_view2") || has_permission("p_view3") || has_permission("p_view4")) {
+        array_push($projectFilters, "c-piscine");
+    }
+    if (has_permission("p_view4")) {
+        array_push($projectFilters, "internship");
+    }
+
     $cursus = getCursus();
     $validProjectFilters = array_merge($projectFilters, array_map(function ($cursu) { return $cursu["slug"]; }, $cursus));
+
+    if (!in_array($selectedProjects, $validProjectFilters)) {
+        jsonResponse(array("error" => "Unknown or forbidden project filter"), 404);
+    }
+
+
 
     if ($selectedFilter == "") {
         $selectedFilter = "cursus";
     }
-    if ($selectedProjects == "") {
-        $selectedProjects = "42cursus";
-    }
+
+
+    $validFilters = get_tableau_poolfilters($selectedProjects);
 
     if (!in_array($selectedFilter, $validFilters)) {
-        jsonResponse(array("error" => "Unknown pool filter"), 404);
+        jsonResponse(array("error" => "Unknown or forbidden pool filter"), 404);
     }
 
-    else if (!in_array($selectedProjects, $validProjectFilters)) {
-        jsonResponse(array("error" => "Unknown project filter"), 404);
-    }
 
     //TODO static in DB
     $currentFilter = "2023.september";
@@ -137,7 +116,7 @@ function tableau_api($selectedFilter, $selectedProjects)
 
 
     if ($selectedProjects === "infos") {
-        $users = getUsers(has_permission("p_view4"), $selectedFilter);
+        $users = getUsers($selectedProjects == "all", $selectedFilter);
 
         $res["values"] = $users;
     
@@ -176,7 +155,7 @@ function tableau_api($selectedFilter, $selectedProjects)
     }
     else {
 
-        $teams = getUserProjects(has_permission("p_view4"), $selectedFilter, $selectedProjects);
+        $teams = getUserProjects($selectedProjects == "all", $selectedFilter, $selectedProjects);
         
         
         $cols = array();

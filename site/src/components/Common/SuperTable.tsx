@@ -331,7 +331,8 @@ export function SuperTable({
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${createKey(value, index)}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}
+                        style={{ backgroundColor: value[`_${col.field}_color`] ? `${value[`_${col.field}_color`]}` : undefined }}>
                         <div className="h-full flex justify-center items-center text-black">
                           {
                             value[col.field] === undefined ? 'undefined' : (
