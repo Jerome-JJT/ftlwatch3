@@ -31,7 +31,7 @@ export function EventPage(): JSX.Element {
 
   function EventCard(card: any): JSX.Element {
     return (
-      <Card id={card.login} key={card.login} className="flex min-w-96 w-96 max-w-96 border-black border-2">
+      <Card id={card.id} key={card.id} className="flex min-w-96 w-96 max-w-96 border-black border-2">
         <CardHeader floated={false} title={card.name} className='flex justify-center shadow-none mx-2 mt-2 bg-black/10 my-text truncate'>
           {card.name}
         </CardHeader>
@@ -116,7 +116,7 @@ export function EventPage(): JSX.Element {
 
         <DialogBody className='grid grid-cols-4 auto-cols-max gap-6 justify-center mb-2' divider>
           {
-            focusEvent?.users.map((user: string) => <><p>{user}</p></>)
+            focusEvent?.users.map((user: string) => <p key={user} className='text-black'>{user}</p>)
           }
         </DialogBody>
       </Dialog>

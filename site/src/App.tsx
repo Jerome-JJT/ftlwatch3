@@ -32,14 +32,14 @@ import { ProductsPage } from 'BasicPages/ProductPage';
 import { CursusPage } from 'BasicPages/CursusPage';
 import { GroupsPage } from 'BasicPages/GroupsPage';
 import { AchievementsPage } from 'BasicPages/AchievementsPage';
-import { TeamsPage } from 'Teams/TeamsPage';
+import { TeamsPage } from 'Projects/TeamsPage';
 import { RulesPage } from 'BasicPages/RulesPage';
 import { ProjectsPage } from 'BasicPages/ProjectsPage';
 import { ProjectsVisibilityPage } from 'AdminPages/ProjectsVisibility';
 import { SettingsPage } from 'Log/Settings';
 import NotFoundPage from 'GeneralPages/NotFoundPage';
 import { UsersProfilesPage } from 'AdminPages/UsersProfiles';
-import { TinderPage } from 'Teams/TinderPage';
+import { TinderPage } from 'Projects/TinderPage';
 import { UsersComputersPage } from 'LocationsPages/UsersComputersPage';
 import { UsersTotalPage } from 'LocationsPages/UsersTotalPage';
 import { ComputersTotalPage } from 'LocationsPages/ComputersTotalPage';
@@ -51,6 +51,8 @@ import AboutPage from 'GeneralPages/AboutPage';
 import { PointsPage } from 'BasicPages/PointsPage';
 import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
+import { SubjectsPage } from 'Projects/SubjectsPage';
+import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
 // import Place from './components/Place/Place';
 
 
@@ -139,6 +141,8 @@ export default function App(): JSX.Element {
             <Route path="/events" element={<EventPage />} />
             <Route path="/projects/teams" element={<TeamsPage />} />
             <Route path="/projects/tinder" element={<TinderPage />} />
+            <Route path="/projects/subjects" element={<SubjectsPage />} />
+            <Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
 
             <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />

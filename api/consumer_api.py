@@ -20,6 +20,9 @@ from update_users import import_users
 from update_users_coals import import_coals_users
 from update_users_points import import_points
 
+from update_pdf import import_subjects
+from process_pdf import process_pdf
+
 from update_events import import_events
 from update_locations import import_locations
 from process_locations import process_locations
@@ -97,6 +100,12 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
         elif (resource == "users_points"):
             import_points()
+
+        elif (resource == "update_pdf"):
+            import_subjects()
+        elif (resource == "process_pdf"):
+            process_pdf(True)
+
 
         elif (resource == "locations"):
             import_locations()

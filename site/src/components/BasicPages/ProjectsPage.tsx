@@ -14,6 +14,7 @@ import { SuperCards } from 'Common/SuperCards';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
 import { commonTitle } from 'Utils/commonTitle';
+import { Link } from 'react-router-dom';
 
 class CursusProps {
   id: string = '';
@@ -98,9 +99,9 @@ export function ProjectsPage(): JSX.Element {
             </>
             }
 
-            <div className='col-span-2'>
+            <Link to={`/basics/projects/${card.id}`} className='col-span-2'>
               <button className='col-span-2 text-xs'>Details</button>
-            </div>
+            </Link>
           </div>
 
           <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
@@ -132,13 +133,10 @@ export function ProjectsPage(): JSX.Element {
             </>
             }
 
-            {card.session_terminating_after && <>
-              <p>Auto close</p>
-              <p>
-                {card.session_terminating_after} jours
-              </p>
-            </>
-            }
+            <p>Auto close</p>
+            <p>
+              {card.session_terminating_after ? card.session_terminating_after : '∞'} jours
+            </p>
 
           </div>
 

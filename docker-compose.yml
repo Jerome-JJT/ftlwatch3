@@ -132,6 +132,7 @@ services:
 
     volumes:
       - ./secure_static:/secure_static
+      - ./subjects_static:/subjects_static
       - ./api:/app
 
     networks:

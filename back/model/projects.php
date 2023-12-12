@@ -139,3 +139,56 @@ function getExamCount()
 
   return $result;
 }
+
+
+
+function getSubjectsHeads()
+{
+  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
+    projects.slug AS project_slug, 
+    projects.slug AS project_slug, 
+    subjects.id AS subject_id, 
+    subjects.url AS subject_url,
+    subjects.inserted_at AS subject_date
+    FROM subjects
+    
+    JOIN subject_hashmaps ON subject_hashmaps.id = subjects.subject_hashmap_id
+    LEFT JOIN projects ON projects.id = subject_hashmaps.project_id
+    
+    ORDER BY subjects.id ASC
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
+
+function getProjectSubjects($id)
+{
+  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
+    projects.slug AS project_slug, 
+    subjects.id AS subject_id, 
+    subjects.url AS subject_url,
+    subjects.inserted_at AS subject_date
+    FROM subjects
+    
+    JOIN subject_hashmaps ON subject_hashmaps.id = subjects.subject_hashmap_id
+    LEFT JOIN projects ON projects.id = subject_hashmaps.project_id
+
+    WHERE subject_hashmaps.project_id = :project_id 
+    OR projects.parent_id = :project_id
+    OR (SELECT parent_id FROM projects WHERE id = :project_id) = subject_hashmaps.project_id
+    
+    ORDER BY subjects.id ASC
+  ";
+
+  $data = array(":project_id" => $id);
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
