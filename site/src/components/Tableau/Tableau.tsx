@@ -89,6 +89,32 @@ export function TableauPage(): JSX.Element {
                   className='max-h-full max-w-[60px] rounded-lg border-2 border-transparent cursor-pointer hover:border-black'
                 />;
               }
+              else if (col.field === 'poolfilter') {
+
+                const pool_month = user[col.field];
+                let color = undefined;
+
+                if (pool_month === '2020.october') { color = 'firebrick';}
+                else if (pool_month === '2021.july') { color = 'lightcoral';}
+                else if (pool_month === '2021.august') { color = 'indianred';}
+                else if (pool_month === '2021.september') { color = 'crimson';}
+
+                else if (pool_month === '2022.june') { color = 'gold';}
+                else if (pool_month === '2022.july') { color = 'orange';}
+                else if (pool_month === '2022.september') { color = 'darkorange';}
+
+                else if (pool_month === '2023.june') { color = 'moccasin';}
+                else if (pool_month === '2023.july') { color = 'palegoldenrod';}
+                else if (pool_month === '2023.september') { color = 'peachpuff';}
+
+                else if (pool_month === '2024.june') { color = 'springgreen';}
+                else if (pool_month === '2024.july') { color = 'greenyellow';}
+                else if (pool_month === '2024.september') { color = 'chartreuse';}
+
+                if (color) {
+                  user[`_${col.field}_color`] = color;
+                }
+              }
             });
 
             return user;
@@ -104,6 +130,24 @@ export function TableauPage(): JSX.Element {
 
   const subOptions = useMemo(() => (
     <>
+      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
+
+        {projects && projects.map((project) => {
+          return (
+            <Button
+              key={project}
+              className={classNames(project === usedProjects ? 'selected-option' : 'available-option' )}
+
+              onClick={() => setUsedProjects(project) }
+            >
+              {project}
+            </Button>
+          );
+        })}
+      </div>
+
+      <Separator></Separator>
+
       <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
 
         {poolFilters && poolFilters.map((filter) => {
@@ -165,24 +209,6 @@ export function TableauPage(): JSX.Element {
               }
             >
               {column.label}
-            </Button>
-          );
-        })}
-      </div>
-
-      <Separator></Separator>
-
-      <div className='flex flex-wrap gap-2 justify-evenly max-h-80 overflow-y-auto'>
-
-        {projects && projects.map((project) => {
-          return (
-            <Button
-              key={project}
-              className={classNames(project === usedProjects ? 'selected-option' : 'available-option' )}
-
-              onClick={() => setUsedProjects(project) }
-            >
-              {project}
             </Button>
           );
         })}
