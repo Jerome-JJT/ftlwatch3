@@ -8,10 +8,11 @@ require_once("model/simples/cursus.php");
 
 function get_tableau_poolfilters($selectedProjects)
 {
-    $poolfilters = getPoolFilters(has_permission("p_view4"));
-
+    $poolfilters = array();
+    
     
     if (has_permission("p_view4")) {
+        $poolfilters = array_merge($poolfilters, getPoolFilters(has_permission("p_view4")));
         foreach ($poolfilters as $filter) {
             $newKey = substr($filter["name"], 0, 4);
     
@@ -26,7 +27,7 @@ function get_tableau_poolfilters($selectedProjects)
 
         array_unshift($poolfilters, array("name" => "all", "hidden" => true));
     }
-    if (has_permission("p_view3")) {
+    if (has_permission("p_view3") ) {
         array_unshift($poolfilters, array("name" => "currentyear", "hidden" => false));
     }
     if (has_permission("p_view2")) {
@@ -44,11 +45,12 @@ function tableau_api($selectedFilter, $selectedProjects) {
         $selectedProjects = "common-core";
     }
 
-    $projectFilters = array("infos", "common-core", "internship", "outer-core", "c-piscine");
-
-    if (has_permission("p_view1")) {
+    $projectFilters = array();
+    
+    if (has_permission("p_view1") || has_permission("p_view2") || has_permission("p_view3") || has_permission("p_view4")) {
         array_push($projectFilters, "infos");
     }
+    array_push($projectFilters, "common-core", "outer-core");
     if (has_permission("p_view2") || has_permission("p_view3") || has_permission("p_view4")) {
         array_push($projectFilters, "c-piscine");
     }
@@ -57,23 +59,23 @@ function tableau_api($selectedFilter, $selectedProjects) {
     }
 
     $cursus = getCursus();
-    $validProjectFilters = array_merge($projectFilters, array_map(function ($cursu) { return $cursu["slug"]; }, $cursus));
+    $projectFiltersSlug = array_merge($projectFilters, array_map(function ($cursu) { return $cursu["slug"]; }, $cursus));
 
-    if (!in_array($selectedProjects, $validProjectFilters)) {
-        jsonResponse(array("error" => "Unknown or forbidden project filter"), 404);
+
+    if (!in_array($selectedProjects, $projectFiltersSlug)) {
+        jsonResponse(array("error" => "Unknown or forbidden project filter"), 403);
     }
-
-
 
     if ($selectedFilter == "") {
         $selectedFilter = "cursus";
     }
 
+    $poolFilters = get_tableau_poolfilters($selectedProjects);
+    $poolFiltersSlugs = array_map(function ($filter) { return $filter["name"]; }, $poolFilters);
 
-    $validFilters = get_tableau_poolfilters($selectedProjects);
 
-    if (!in_array($selectedFilter, $validFilters)) {
-        jsonResponse(array("error" => "Unknown or forbidden pool filter"), 404);
+    if (!in_array($selectedFilter, $poolFiltersSlugs)) {
+        jsonResponse(array("error" => "Unknown or forbidden pool filter"), 403);
     }
 
 
@@ -110,7 +112,7 @@ function tableau_api($selectedFilter, $selectedProjects) {
 
     $res = array();
     
-    $res["poolfilters"] = $filters;
+    $res["poolfilters"] = $poolFilters;
     $res["projects"] = $projectFilters;
 
 
