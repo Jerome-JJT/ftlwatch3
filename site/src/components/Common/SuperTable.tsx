@@ -323,7 +323,7 @@ export function SuperTable({
                       <td key={`${createKey(value, index)}-index`}
                         className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
                         <div className="h-full flex justify-center items-center text-black">
-                          {index + 1}
+                          {(currentPage - 1) * usersPerPage + (index + 1)}
                         </div>
                       </td>
                     }
