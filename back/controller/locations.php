@@ -149,9 +149,8 @@ function get_personal_computers($user_id)
     $tmp = getPersonalComputers($user_id);
 
     $tmp = array_map(function ($value) {
-        $total = max($value["total"], 0.1);
-        $value["total"] = round($total / 3600, 2);
-        $value["total_piscine"] = round($value["total_piscine"] / 3600, 2);
+        $value["total"] = round(max($value["total"], 0.1) / 3600, 2);
+        $value["total_piscine"] = round(max($value["total_piscine"], 0.1) / 3600, 2);
 
         return $value;
     }, $tmp);
