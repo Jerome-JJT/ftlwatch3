@@ -142,11 +142,15 @@ function get_computers_totals()
 }
 
 
-function get_personal_computers($user_id)
+function get_personal_computers($user_id, $login)
 {
     $res = array();
 
-    $tmp = getPersonalComputers($user_id);
+    if ($login !== "") {
+        need_permission("p_view4");
+    }
+
+    $tmp = getPersonalComputers($login !== "" ? null : $user_id, $login !== "" ? $login : null);
 
     $tmp = array_map(function ($value) {
         $value["total"] = round(max($value["total"], 0.1) / 3600, 2);

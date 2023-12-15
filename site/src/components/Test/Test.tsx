@@ -20,9 +20,9 @@ export default function TestPage(): JSX.Element {
       <Button onClick={() => { addNotif('test', 'question', 0); }}>Question</Button>
 
 
-      <GothamMap />
-      <AsgardMap />
-      <SsdMap />
+      <GothamMap id='test' />
+      <AsgardMap id='test' />
+      <SsdMap id='test' />
 
     </div>
   );

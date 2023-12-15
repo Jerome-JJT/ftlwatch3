@@ -72,20 +72,25 @@ function getComputersTotals()
 }
 
 
-function getPersonalComputers($userId)
+function getPersonalComputers($userId, $userLogin)
 {
   $query = "SELECT locations.host,
   SUM(locations.length) AS total,
-  SUM(CASE WHEN is_piscine = TRUE THEN length ELSE 0 END) AS total_piscine
+  SUM(CASE WHEN is_piscine = TRUE THEN locations.length ELSE 0 END) AS total_piscine
   FROM locations
 
-  WHERE locations.length < 100000 AND user_id = :user_id
+  JOIN users ON users.id = locations.user_id
+
+  WHERE locations.length < 100000 AND (
+    (CAST(:user_id AS INTEGER) IS NOT NULL AND locations.user_id = :user_id)
+    OR (CAST(:user_login AS VARCHAR) IS NOT NULL AND users.login = :user_login)
+    )
 
   GROUP BY locations.host
   ORDER BY total DESC
   ";
 
-  $data = array("user_id" => $userId);
+  $data = array("user_id" => $userId, "user_login" => $userLogin);
 
   require_once("model/dbConnector.php");
   $result = executeQuerySelect($query, $data);
