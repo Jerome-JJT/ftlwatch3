@@ -34,7 +34,7 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         </>
         }
 
-        {project.cooldown && <>
+        {project.rule_retry_delay && <>
           <p>Cooldown</p>
           <p>
             {project.rule_retry_delay} jours
