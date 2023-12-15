@@ -7,7 +7,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Checkbox,
   Dialog,
   DialogBody,
   DialogHeader,
@@ -16,6 +15,7 @@ import { useNotification } from 'Notifications/NotificationsProvider';
 import { commonTitle } from 'Utils/commonTitle';
 import { useParams } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
+import ProjectDisplay from 'Common/ProjectDisplay';
 
 
 export function SingleProjectPage(): JSX.Element {
@@ -62,88 +62,16 @@ export function SingleProjectPage(): JSX.Element {
 
           <CardBody className="grid grid-cols-2 grow gap-4 text-center align-center p-2">
 
-            <div className='blue-gray grid grid-cols-2 gap-1 place-content-start'>
-
-              <p>Cursus</p>
-              <p>{values.main_cursus}</p>
-
-              {(values.difficulty !== undefined && values.difficulty !== null) && <>
-                <p>Difficulty</p>
-                <p>
-                  {values.difficulty}
-                </p>
-              </>
-              }
-
-              {(values.session_duration_days !== undefined && values.session_duration_days !== null) && <>
-                <p>Duration</p>
-                <p>
-                  {values.session_duration_days ? `${values.session_duration_days} days` : values.session_estimate_time }
-                </p>
-              </>
-              }
-
-              {values.session_scale_duration && <>
-                <p>Slot</p>
-                <p>
-                  {values.session_scale_duration / 60} minutes
-                </p>
-              </>
-              }
-
-              {values.rule_retry_delay && <>
-                <p>Cooldown</p>
-                <p>
-                  {values.rule_retry_delay} jours
-                </p>
-              </>
-              }
-            </div>
-
-            <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
-              <p>Exam</p>
-              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.is_exam} readOnly disabled /></div>
-
-              <p>Solo</p>
-              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.session_is_solo} readOnly disabled /></div>
-
-              <p>Moulinette</p>
-              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.session_has_moulinette} readOnly disabled /></div>
-
-              <p>Lausanne</p>
-              <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={values.has_lausanne} readOnly disabled /></div>
-
-              {values.session_correction_number && <>
-                <p>Correction</p>
-                <p>{values.session_correction_number}</p>
-              </>
-              }
-
-              {(values.rule_min || values.rule_max) && <>
-                <p>
-                  Min: {values.rule_min || '-'}
-                </p>
-                <p>
-                  Max: {values.rule_max || '-'}
-                </p>
-              </>
-              }
-
-              {values.session_terminating_after && <>
-                <p>Auto close</p>
-                <p>
-                  {values.session_terminating_after} jours
-                </p>
-              </>
-              }
-
-            </div>
+            <ProjectDisplay project={values} link={false} />
 
             <textarea className='col-span-2 w-full grow border p-2' readOnly defaultValue={values.session_description} />
 
 
             <table className='my-text w-full col-span-2'>
               <tbody>
+                {values.session_id &&
+                  <tr><td colSpan={5}>Session id: {values.session_id}</td></tr>
+                }
                 { values.rules.map((rule: any) => {
                   return <tr key={rule.id}>
                     <td className='p-2 border border-white'>{rule.id}</td>

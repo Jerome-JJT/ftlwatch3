@@ -19,7 +19,7 @@ function get_group_projects()
             if (isset($tmp[$team['retry_common']])) {
 
                 if ($tmp[$team['retry_common']]['leader_id'] == -1 && $team['user_is_leader']) {
-                    $tmp[$team['retry_common']]['leader_id']  = $team['user_id'];
+                    $tmp[$team['retry_common']]['leader_id'] = $team['user_id'];
                     $tmp[$team['retry_common']]['projects_user_id']  = $team['projects_user_id'];
                 }
                 $tmp[$team['retry_common']]['is_validated'] |= $team['is_validated'];
