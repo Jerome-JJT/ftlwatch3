@@ -15,10 +15,13 @@ import {
 } from '@material-tailwind/react';
 import SsdMap from 'Maps/SsdMap';
 import AsgardMap from 'Maps/AsgardMap';
+import { useSearchParams } from 'react-router-dom';
 
 
 export function PersonalComputerView(): JSX.Element {
   const { addNotif } = useNotification();
+  const [searchParams] = useSearchParams();
+  const searchLogin = searchParams.get('login');
 
   const [cursusValues, setCursusValues] = React.useState<MapPlace[] | undefined>(undefined);
   const [piscineValues, setPiscineValues] = React.useState<MapPlace[] | undefined>(undefined);
@@ -42,7 +45,7 @@ export function PersonalComputerView(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=locations&action=get_personal_computers',
+      .get(`/?page=locations&action=get_personal_computers${searchLogin ? `&login=${searchLogin}` : ''}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -83,7 +86,7 @@ export function PersonalComputerView(): JSX.Element {
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  }, [addNotif]);
+  }, [addNotif, searchLogin]);
 
 
   return (

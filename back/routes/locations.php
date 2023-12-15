@@ -7,6 +7,11 @@ if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+$login = "";
+if (isset($_GET["login"])) {
+    $login = $_GET["login"];
+}
+
 need_permission("p_47student");
 
 switch ($action) {
@@ -23,7 +28,7 @@ switch ($action) {
         break;
 
     case "get_personal_computers":
-        get_personal_computers($_SESSION['user']['id']);
+        get_personal_computers($_SESSION['user']['id'], $login);
         break;
 
 }
