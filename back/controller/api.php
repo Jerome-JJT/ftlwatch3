@@ -2,10 +2,16 @@
 
 
 
-function code_exchange($code) {
+function code_exchange($code, $next) {
+
+  $redirect_uri = getenv("CALLBACK_URL");
+  if (strlen($next) > 0) {
+      $redirect_uri .= "?next=" . $next;
+  }
+
   $header = array("Content-Type: application/x-www-form-urlencoded");
   $content = "client_id=".getenv("API_UID")."&client_secret=".getenv("API_SECRET");
-  $content .= "&grant_type=authorization_code&code=".$code."&redirect_uri=".getenv("CALLBACK_URL");
+  $content .= "&grant_type=authorization_code&code=".$code."&redirect_uri=".urlencode($redirect_uri);
 
   $curl = curl_init();
   curl_setopt_array($curl, array(

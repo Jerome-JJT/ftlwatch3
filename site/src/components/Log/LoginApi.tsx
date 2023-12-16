@@ -12,6 +12,7 @@ export default function LoginApi(): JSX.Element {
   const [pageMessage, setPageMessage] = React.useState('42 api loading');
 
   const code = searchParams.get('code');
+  const nextUrl = searchParams.get('next');
 
   React.useEffect(() => {document.title = commonTitle('Login api');}, []);
 
@@ -20,7 +21,7 @@ export default function LoginApi(): JSX.Element {
       if (code !== null) {
         axios
           .post('/?page=login&action=loginapi',
-            `code=${code}`, { withCredentials: true }
+            `code=${code}&next=${nextUrl || ''}`, { withCredentials: true }
           )
           .then((res) => {
             if (res.status === 200) {
@@ -28,8 +29,8 @@ export default function LoginApi(): JSX.Element {
 
               setPageMessage('Login successful, redirecting...');
               setTimeout(() => {
-                navigate('/');
-              }, 3000);
+                navigate((nextUrl && !nextUrl.includes('logout')) ? nextUrl : '/');
+              }, nextUrl ? 100 : 3000);
             } //
             else {
               if (!isLogged) {
@@ -49,7 +50,7 @@ export default function LoginApi(): JSX.Element {
         }
       }
     }
-  }, [code, getUserData, isLogged, navigate]);
+  }, [code, getUserData, isLogged, navigate, nextUrl]);
 
   return (
     <>
