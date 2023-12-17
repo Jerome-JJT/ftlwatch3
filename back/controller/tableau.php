@@ -6,7 +6,7 @@ require_once("model/simples/cursus.php");
 
 
 
-function get_tableau_poolfilters($selectedProjects)
+function get_tableau_poolfilters()
 {
     $poolfilters = array();
     
@@ -70,7 +70,7 @@ function tableau_api($selectedFilter, $selectedProjects) {
         $selectedFilter = "cursus";
     }
 
-    $poolFilters = get_tableau_poolfilters($selectedProjects);
+    $poolFilters = get_tableau_poolfilters();
     $poolFiltersSlugs = array_map(function ($filter) { return $filter["name"]; }, $poolFilters);
 
 
