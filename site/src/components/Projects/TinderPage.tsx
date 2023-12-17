@@ -116,7 +116,7 @@ export function TinderPage(): JSX.Element {
 
       return filtertab[1]
         .sort((a: any, b: any) => a.score < b.score)
-        .map((arg: any) => { return { ...arg, circle: filtertab[0], project: (filters && filters[filtertab[0] as any].projects.join('/') || 'none') };});
+        .map((arg: any) => { return { ...arg, circle: filtertab[0], projects: (filters && filters[filtertab[0] as any].projects.join('/') || 'none') };});
     });
 
   }, [currentFilter, filters, values]);
