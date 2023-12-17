@@ -123,6 +123,7 @@ def team_callback(team):
         project_id = EXCLUDED.project_id,
         retry_common = EXCLUDED.retry_common,
         status = EXCLUDED.status,
+        is_locked = EXCLUDED.is_locked,
         is_validated = EXCLUDED.is_validated,
         is_closed = EXCLUDED.is_closed,
         updated_at = EXCLUDED.updated_at
