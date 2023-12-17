@@ -52,7 +52,7 @@ function getUserProjects()
   $query = "SELECT 
       users.id AS user_id, users.login, users.avatar_url,
       projects.id AS project_id, projects.slug AS project_slug,
-      MAX(CASE WHEN is_locked THEN 1 END) AS is_locked
+      MAX(CASE WHEN is_locked THEN 1 ELSE 0 END) AS is_locked
 
     FROM teams
     JOIN team_user ON teams.id = team_user.team_id

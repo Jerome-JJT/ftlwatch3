@@ -34,7 +34,7 @@ export function TinderPage(): JSX.Element {
         <CardBody className="flex flex-col grow text-center align-center p-2">
 
           <p color="blue-gray">
-            {card.projects.join('/')}
+            {card.projects}
           </p>
 
           <div className='grow'></div>
