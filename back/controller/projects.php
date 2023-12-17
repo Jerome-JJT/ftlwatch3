@@ -130,7 +130,7 @@ function get_tinder()
     }
     foreach ($userExamScore as $score) {
         if (isset($userDoneProjects[$score["user_id"]])) {
-            $userDoneProjects[$score["user_id"]]["score"] += $score["validated"];
+            $userDoneProjects[$score["user_id"]]["score"] += $score["validated"] * 0.5;
         }
     }
 
