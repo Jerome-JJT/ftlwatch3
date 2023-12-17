@@ -34,7 +34,7 @@ export function TinderPage(): JSX.Element {
         <CardBody className="flex flex-col grow text-center align-center p-2">
 
           <p color="blue-gray">
-            {filters && filters[card.circle].projects.join('/') || 'none'}
+            {card.projects.join('/')}
           </p>
 
           <div className='grow'></div>
@@ -116,10 +116,10 @@ export function TinderPage(): JSX.Element {
 
       return filtertab[1]
         .sort((a: any, b: any) => a.score < b.score)
-        .map((arg: any) => { return { ...arg, circle: filtertab[0] };});
+        .map((arg: any) => { return { ...arg, circle: filtertab[0], project: (filters && filters[filtertab[0] as any].projects.join('/') || 'none') };});
     });
 
-  }, [currentFilter, values]);
+  }, [currentFilter, filters, values]);
 
 
   //
