@@ -3,15 +3,69 @@
 
 from _dbConnector import *
 from _api import *
-
+import datetime
+from dateutil import parser
+import pytz
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
+
+def achievement_notification(fetched):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    refer = executeQuerySelect("SELECT * FROM achievements WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://42lwatch.ch/basics/achievements',
+        'footer_text': datetime.datetime.now().astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+    if fetched["image"] != None:
+        embed["thumbnail"] = f'https://cdn.intra.42.fr/{fetched["image"].replace("/uploads/", "")}'
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created achievement {fetched["id"]}, {fetched["name"]}'
+        refer = None
+    else:
+        embed['title'] = f'Updated achievement {fetched["id"]}, {fetched["name"]}'
+        refer = refer[0]
+
+
+    check_fields = ["name", "description", "kind", "image", "has_lausanne", "title_id"]
+    
+    diffs = {}
+
+    for check in check_fields:
+        if (refer == None or refer[check] != fetched[check]):
+            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+
+    if (len(diffs.keys()) > 0):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified achievement {fetched['id']} {fetched['name']}", LOGGER_INFO)
+        send_to_rabbit('basics.server.message.queue', embed)
+
+        
 
 def achievement_callback(achievement):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     mylogger(f"Import achievement {achievement['id']} {achievement['name']}", LOGGER_INFO)
+
+    good = {
+        "id": achievement["id"],
+        "name": achievement["name"],
+        "description": achievement["description"],
+        "kind": achievement["kind"],
+        "image": achievement["image"],
+        "has_lausanne": "Lausanne" in achievement["campus"],
+        "title_id": achievement["title"]["id"] if achievement["title"] != None else None
+    }
+
+    achievement_notification(good)
 
     executeQueryAction("""INSERT INTO achievements (
         "id", "name", "description", "kind", "image", "has_lausanne", "title_id"
@@ -26,15 +80,7 @@ def achievement_callback(achievement):
         "image" = EXCLUDED.image,
         "has_lausanne" = EXCLUDED.has_lausanne,
         "title_id" = EXCLUDED.title_id
-    """, {
-        "id": achievement["id"],
-        "name": achievement["name"],
-        "description": achievement["description"],
-        "kind": achievement["kind"],
-        "image": achievement["image"],
-        "has_lausanne": "Lausanne" in achievement["campus"],
-        "title_id": achievement["title"]["id"] if achievement["title"] != None else None
-    })
+    """, good)
 
 
     return True

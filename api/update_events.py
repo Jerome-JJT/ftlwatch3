@@ -4,7 +4,8 @@
 from _dbConnector import *
 from _api import *
 import click
-
+from dateutil import parser
+import pytz
 
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -12,6 +13,51 @@ import click
 local_events = []
 current_limit = 10
 limit_checker = 10
+
+
+def event_notification(fetched):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    refer = executeQuerySelect("SELECT * FROM events WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://42lwatch.ch/basics/events',
+        'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created event {fetched["id"]}, {fetched["name"]}'
+        refer = None
+    else:
+        embed['title'] = f'Updated event {fetched["id"]}, {fetched["name"]}'
+        refer = refer[0]
+
+
+    check_fields = ["name", "description", "location", "kind", "max_people",
+                    "has_cursus21", "has_cursus9", "begin_at", "end_at"]
+    
+    diffs = {}
+
+    fetched = fetched.copy()
+
+    for check in check_fields:
+        if ("_at" in check):
+            fetched[check] = parser.parse(fetched[check])
+            fetched[check] = fetched[check].replace(tzinfo=None)
+
+        if (refer == None or refer[check] != fetched[check]):
+            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+
+    if (len(diffs.keys()) > 0):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified event {fetched['id']} {fetched['name']}", LOGGER_INFO)
+        send_to_rabbit('events.server.message.queue', embed)
+
 
 
 def import_event_user(event):
@@ -92,6 +138,7 @@ def event_callback(event):
         "updated_at": event["updated_at"],
     }
 
+    event_notification(good)
 
     executeQueryAction("""INSERT INTO events (
         "id", "name", "description", "location", "kind",
@@ -115,20 +162,7 @@ def event_callback(event):
         "end_at" = EXCLUDED.end_at,
         "created_at" = EXCLUDED.created_at,
         "updated_at" = EXCLUDED.updated_at
-    """, {
-        "id": good["id"],
-        "name": good["name"],
-        "description": good["description"],
-        "location": good["location"],
-        "kind": good["kind"],
-        "max_people": good["max_people"],
-        "has_cursus21": good["has_cursus21"],
-        "has_cursus9": good["has_cursus9"],
-        "begin_at": good["begin_at"],
-        "end_at": good["end_at"],
-        "created_at": good["created_at"],
-        "updated_at": good["updated_at"],
-    })
+    """, good)
 
     changed = False
     if (event['campus_ids'] == [47]):
@@ -157,7 +191,7 @@ def import_events(update_all=False, start_at=1):
     if (update_all):
         callapi("/v2/campus/47/events?sort=id", nultiple=start_at, callback=event_callback, callback_limit=False)
     else:
-        callapi(f"/v2/campus/47/events?sort=-id", nultiple=1, callback=event_callback, callback_limit=True)
+        callapi(f"/v2/campus/47/events?sort=-updated_at", nultiple=1, callback=event_callback, callback_limit=True)
     
     mylogger("End events worker", LOGGER_ALERT)
 

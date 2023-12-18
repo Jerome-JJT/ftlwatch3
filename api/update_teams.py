@@ -4,7 +4,9 @@
 from _dbConnector import *
 from _api import *
 import click
-
+import time
+from dateutil import parser
+import pytz
 
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -12,6 +14,117 @@ import click
 local_teams = []
 current_limit = 300
 limit_checker = 300
+
+
+
+def team_notification(fetched):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    mandatory_fields = ["name", "final_mark", "status", "_users"]
+    check_fields = ["name", "final_mark", "project_id", "retry_common", "status", "is_locked", "is_validated", "is_closed"]
+
+    refer = executeQuerySelect("SELECT * FROM teams WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+    refer_team_users = executeQuerySelect("""SELECT users.login FROM team_user 
+                                          LEFT JOIN users ON users.id = team_user.user_id WHERE team_id = %(team_id)s""",
+    {
+        "team_id": fetched["id"]
+    })
+
+    project = executeQuerySelect("SELECT projects.slug FROM projects WHERE id = %(id)s", {
+        "id": fetched["project_id"]
+    })
+    if (len(project) > 0):
+        project = project[0]["slug"]
+    else:
+        project = ""
+
+    leader = list(filter(lambda x: x["leader"], fetched["users"]))
+    if len(leader) > 0:
+        leader = leader[0]
+        leader_refer = executeQuerySelect("SELECT display_name, login, avatar_url FROM users WHERE id = %(id)s", {
+            "id": leader["id"]
+        })
+
+        if (len(leader_refer) > 0):
+            leader_refer = leader_refer[0]
+            leader["avatar_url"] = leader_refer["avatar_url"]
+        else:
+            leader["avatar_url"] = None
+
+    else:
+        leader = {"login": "empty", "avatar_url": None, "projects_user_id": 0}
+
+
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://projects.intra.42.fr/projects/{project}/projects_users/{leader["projects_user_id"]}',
+        'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+    if leader["avatar_url"] != None:
+        embed["thumbnail"] = f'{leader["avatar_url"]}'
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created team for {leader["login"]}, on {project}'
+        refer = None
+    else:
+        embed['title'] = f'Updated team for {leader["login"]}, on {project}'
+        refer = refer[0]
+
+    if (refer):
+        refer["_users"] = ", ".join(sorted(list(map(lambda x: x["login"], refer_team_users))))
+    fetched["_users"] = ", ".join(sorted(list(map(lambda x: x["login"], fetched["users"]))))
+    check_fields.append("_users")
+
+    
+    diffs = {}
+    diff_flag = False
+
+    for check in check_fields:
+        if (refer == None or refer[check] != fetched[check]):
+            diff_flag = True
+            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+        elif (check in mandatory_fields):
+            diffs[check] = f'`{fetched[check]}`'
+
+
+    for scale in fetched["scale_teams"]:
+
+        if (scale["comment"] != None or scale["feedback"] != None):
+
+            refer_scale = executeQuerySelect("SELECT id, comment, feedback FROM team_scale WHERE team_id = %(id)s", {
+                "id": scale["id"]
+            })
+
+            if (len(refer_scale) > 0):
+                refer_scale = refer_scale[0]
+
+                if (refer_scale['comment'] == None):
+                    diff_flag = True
+                    diffs[f'comment_{scale["id"]}'] = f'Comment: ```{scale["comment"]}```'
+                    diffs[f'final_mark_{scale["id"]}'] = f'Mark: `{scale["final_mark"]}`'
+                    diffs[f'corrector_{scale["id"]}'] = f'Corrector {scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}'
+
+                if (refer_scale['feedback'] == None):
+                    diff_flag = True
+                    diffs[f'feedback_{scale["id"]}'] = f'Comment: ```{scale["feedback"]}```'
+                    diffs[f'final_mark_{scale["id"]}'] = f'Mark: `{scale["final_mark"]}`'
+                    diffs[f'corrector_{scale["id"]}'] = f'Corrector {scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}'
+
+
+
+
+    if (len(diffs.keys()) > len(mandatory_fields)):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
+        send_to_rabbit('test.server.message.queue', embed)
+
+        time.sleep(3)
+
 
 
 def import_team_user(team):
@@ -62,6 +175,19 @@ def import_team_scale(team):
     for scale in team["scale_teams"]:
         mylogger(f"Import team_scale {scale['id']}", LOGGER_INFO)
 
+        good = {
+            "id": scale["id"],
+            "team_id": team["id"],
+            "comment": scale["comment"],
+            "feedback": scale["feedback"],
+            "final_mark": scale["final_mark"],
+            "begin_at": scale["begin_at"],
+            "filled_at": scale["filled_at"],
+            "corrector_id": scale["corrector"]["id"] if (scale["corrector"] != 'invisible') else None,
+            "created_at": scale["created_at"],
+            "updated_at": scale["updated_at"]
+        }
+
         executeQueryAction("""INSERT INTO team_scale (
             "id", "team_id", "comment", "feedback", "final_mark",
             "begin_at", "filled_at", "corrector_id", "created_at", "updated_at"
@@ -78,18 +204,7 @@ def import_team_scale(team):
             "filled_at" = EXCLUDED.filled_at,
             "corrector_id" = EXCLUDED.corrector_id,
             "updated_at" = EXCLUDED.updated_at
-        """, {
-            "id": scale["id"],
-            "team_id": team["id"],
-            "comment": scale["comment"],
-            "feedback": scale["feedback"],
-            "final_mark": scale["final_mark"],
-            "begin_at": scale["begin_at"],
-            "filled_at": scale["filled_at"],
-            "corrector_id": scale["corrector"]["id"] if (scale["corrector"] != 'invisible') else None,
-            "created_at": scale["created_at"],
-            "updated_at": scale["updated_at"]
-        })
+        """, good)
 
 
 def team_callback(team):
@@ -105,6 +220,26 @@ def team_callback(team):
     team_user_ids.sort()
     team_user_ids = list(map(lambda x: str(x), team_user_ids))
     good_retry_common = f"{team['project_id']}_{'_'.join(team_user_ids)}"
+
+
+    good = {
+        "id": team["id"], 
+        "name": team["name"],
+        "final_mark": team["final_mark"],
+        "project_id": team["project_id"],
+        "retry_common": good_retry_common,
+        "status": team["status"],
+
+        "is_locked": team["locked?"],
+        "is_validated": team["validated?"],
+        "is_closed": team["closed?"],
+
+        "created_at": team["created_at"],
+        "updated_at": team["updated_at"],
+    }
+
+    team_notification({**good, "users": team["users"], "scale_teams": team["scale_teams"]})
+
 
     executeQueryAction("""INSERT INTO teams (
         "id", "name", "final_mark", "project_id", "retry_common", "status", 
@@ -127,21 +262,7 @@ def team_callback(team):
         is_validated = EXCLUDED.is_validated,
         is_closed = EXCLUDED.is_closed,
         updated_at = EXCLUDED.updated_at
-    """, {
-        "id": team["id"], 
-        "name": team["name"],
-        "final_mark": team["final_mark"],
-        "project_id": team["project_id"],
-        "retry_common": good_retry_common,
-        "status": team["status"],
-
-        "is_locked": team["locked?"],
-        "is_validated": team["validated?"],
-        "is_closed": team["closed?"],
-
-        "created_at": team["created_at"],
-        "updated_at": team["updated_at"],
-    })
+    """, good)
 
     import_team_user(team)
     import_team_scale(team)
