@@ -65,6 +65,7 @@ export function SubjectsPage(): JSX.Element {
           values={values}
 
           tableTitle='Subjects'
+          tableDesc='List all existing subject grouped by header'
           options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

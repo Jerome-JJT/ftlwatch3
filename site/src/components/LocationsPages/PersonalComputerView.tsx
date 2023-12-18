@@ -104,6 +104,11 @@ export function PersonalComputerView(): JSX.Element {
             <Tab value='ssd_piscine'>SSD piscine</Tab>
           </TabsHeader>
 
+          <p className="super-description">
+            Show where you have been logged the most, green for most, red for least and transparent for not.
+            Filterable by pool or all time.
+          </p>
+
           <TabsBody>
             <TabPanel value='gotham_all'><GothamMap id='all' deco={cursusValues} defaultColor='rgba(0,0,0,0)' /></TabPanel>
             <TabPanel value='asgard_all'><AsgardMap id='all' deco={cursusValues} defaultColor='rgba(0,0,0,0)' /></TabPanel>

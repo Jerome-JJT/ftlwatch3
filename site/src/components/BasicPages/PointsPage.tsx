@@ -48,7 +48,8 @@ export function PointsPage(): JSX.Element {
 
 
           tableTitle='Points'
-          options={[10, 25, 50, 100]}
+          tableDesc='Stats about points given to pool and evaluations'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

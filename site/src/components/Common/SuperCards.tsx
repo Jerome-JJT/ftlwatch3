@@ -122,7 +122,7 @@ export function SuperCards({
   const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
 
   return (
-    <Card className="big-card super-big-card">
+    <Card className="big-card super-big-card !text-xs md:!text-base">
       <CardHeader floated={false} shadow={false} className="super-big-header">
         <div className="super-big-header-content">
           <div>
@@ -198,7 +198,7 @@ export function SuperCards({
         }
       </CardHeader>
 
-      <CardBody className='super-big-body flex gap-x-2 gap-y-4 md:gap-y-10 flex-wrap justify-around my-cards'>
+      <CardBody className='super-big-body flex gap-x-2 gap-y-4 md:gap-y-6 flex-wrap justify-around my-cards'>
 
         { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
 

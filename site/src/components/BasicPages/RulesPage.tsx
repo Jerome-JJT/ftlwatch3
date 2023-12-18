@@ -60,6 +60,7 @@ export function RulesPage(): JSX.Element {
 
 
           tableTitle='Rules'
+          tableDesc={'Project\'s rules'}
           options={[100]}
           // reloadFunction={() => { setValues([]); }}
         />

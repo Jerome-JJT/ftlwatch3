@@ -61,6 +61,7 @@ export function GroupsPage(): JSX.Element {
 
 
           tableTitle='Groups'
+          tableDesc='List of all groups from intra'
           options={[100]}
           // reloadFunction={() => { setValues([]); }}
         />

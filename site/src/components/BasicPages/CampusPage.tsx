@@ -62,6 +62,7 @@ export function CampusPage(): JSX.Element {
 
 
           tableTitle='Campus'
+          tableDesc='List of all existing campuses, user count includes pools'
           options={[100]}
           // reloadFunction={() => { setValues([]); }}
         />

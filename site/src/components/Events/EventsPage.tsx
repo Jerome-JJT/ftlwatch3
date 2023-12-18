@@ -102,7 +102,8 @@ export function EventPage(): JSX.Element {
           customCard={EventCard}
 
           tableTitle='Events'
-          options={[10, 25, 50, 100]}
+          tableDesc='Existing events and subscriptions'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

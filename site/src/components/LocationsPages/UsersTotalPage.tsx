@@ -120,6 +120,7 @@ export function UsersTotalPage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Users total'
+          tableDesc='Stats about where and how users connects'
           indexColumn={true}
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}

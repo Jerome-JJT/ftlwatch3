@@ -132,7 +132,8 @@ export function ProjectsPage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Projects'
-          options={[10, 25, 50, 100]}
+          tableDesc='All existing projects with cursus, inscription and corrections informations. Also past subjects available in details'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

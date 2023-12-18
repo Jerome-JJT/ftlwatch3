@@ -92,6 +92,7 @@ export function CoalitionsPage(): JSX.Element {
           // subOptions={subOptions}
 
           tableTitle='Coalitions'
+          tableDesc='List of coalitions from all campuses'
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
