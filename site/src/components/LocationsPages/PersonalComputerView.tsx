@@ -69,7 +69,7 @@ export function PersonalComputerView(): JSX.Element {
           const values1 = res.data.values.map((place: any) => {
             return {
               id:    place['host'],
-              color: perc2color(place['total'] ? (Math.log(place['total']) / max_all) * 100 : 0),
+              color: place['total'] ? perc2color((Math.log(place['total']) / max_all) * 100) : undefined,
             };
           });
           setCursusValues(values1);
@@ -77,7 +77,7 @@ export function PersonalComputerView(): JSX.Element {
           const values2 = res.data.values.map((place: any) => {
             return {
               id:    place['host'],
-              color: perc2color(place['total_piscine'] ? (Math.log(place['total_piscine']) / max_piscine) * 100 : 0),
+              color: place['total_piscine'] ? perc2color((Math.log(place['total_piscine']) / max_piscine) * 100) : undefined,
             };
           });
           setPiscineValues(values2);
