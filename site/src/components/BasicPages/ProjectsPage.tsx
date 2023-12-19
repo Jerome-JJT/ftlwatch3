@@ -25,7 +25,7 @@ export function ProjectsPage(): JSX.Element {
   const [values, setValues] = React.useState<any[]>([]);
 
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
-  const [selectedCursus, setSelectedCursus] = React.useState<CursusProps | undefined>(21);
+  const [selectedCursus, setSelectedCursus] = React.useState<number | undefined>(21);
 
   React.useEffect(() => {document.title = commonTitle('Project page');}, []);
 
