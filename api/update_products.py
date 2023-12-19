@@ -34,7 +34,7 @@ def product_notification(fetched):
         refer = refer[0]
 
 
-    check_fields = ["name", "slug", "description", "price", "image", "is_uniq", "one_time_purchase"]
+    check_fields = ["name", "slug", "description", "price", "image", "is_uniq", "one_time_purchase", "has_lausanne"]
     
     diffs = {}
 
@@ -68,7 +68,8 @@ def product_callback(product):
         "has_lausanne": product["id"] in lausanne_products
     }
 
-    product_notification(good)
+    if (good["has_lausanne"]):
+        product_notification(good)
 
     executeQueryAction("""INSERT INTO products (
         "id", "name", "slug", "description", 
@@ -86,7 +87,7 @@ def product_callback(product):
         "image" = EXCLUDED.image,
         "is_uniq" = EXCLUDED.is_uniq,
         "one_time_purchase" = EXCLUDED.one_time_purchase,
-        "has_lausanne" = EXCLUDED.has_lausanne,
+        "has_lausanne" = EXCLUDED.has_lausanne
     """, good)
 
     return True
@@ -95,8 +96,7 @@ def import_products():
     from _utils_mylogger import mylogger, LOGGER_ALERT
     global lausanne_products
 
-    lausanne_products = callapi("/v2/campus/47/products?sort=id", True)
-
+    lausanne_products = list(map(lambda x: x["id"], callapi("/v2/campus/47/products?sort=id", True)))
 
     mylogger("Start products worker", LOGGER_ALERT)
     callapi("/v2/products?sort=id", True, product_callback, False)
