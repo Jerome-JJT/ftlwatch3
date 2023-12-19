@@ -25,9 +25,9 @@ export function ProjectsPage(): JSX.Element {
   const [values, setValues] = React.useState<any[]>([]);
 
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
-  const [selectedCursus, setSelectedCursus] = React.useState<CursusProps | undefined>(undefined);
+  const [selectedCursus, setSelectedCursus] = React.useState<CursusProps | undefined>(21);
 
-  React.useEffect(() => {document.title = commonTitle('Rules page');}, []);
+  React.useEffect(() => {document.title = commonTitle('Project page');}, []);
 
   React.useEffect(() => {
     axios
@@ -132,7 +132,7 @@ export function ProjectsPage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Projects'
-          options={[10, 25, 50, 100]}
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }
