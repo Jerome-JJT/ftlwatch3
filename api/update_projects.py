@@ -22,7 +22,7 @@ def project_notification(fetched):
     embed = {
         'message_type': 'embed',
         'url': f'https://projects.intra.42.fr/projects/{fetched["slug"]}',
-        'description': f'https://42lwatch.ch/basics/projects/{fetched["slug"]}',
+        'description': f'https://42lwatch.ch/basics/projects/{fetched["id"]}',
         'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
     }
 
@@ -43,7 +43,7 @@ def project_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs

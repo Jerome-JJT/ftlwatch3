@@ -60,9 +60,9 @@ def user_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
             if (check == "is_active"):
-                diffs["blackhole"] = f'ref: `{refer["blackhole"] if refer != None else None}`, new: `{fetched["blackhole"]}`'
+                diffs["blackhole"] = f'ref: `{refer["blackhole"] if refer != None else " "}`, new: `{fetched["blackhole"]}`'
 
     if (refer_title_users_id != fetched_title_users_id):
         diffs["_title"] = f'ref: `{refer_title_users_id}`, new: `{fetched_title_users_id}`'

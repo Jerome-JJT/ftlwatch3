@@ -44,7 +44,7 @@ def point_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs
