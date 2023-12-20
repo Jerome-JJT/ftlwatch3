@@ -46,7 +46,7 @@ def product_notification(fetched):
         embed['fields'] = diffs
 
         mylogger(f"Nofified product {fetched['id']} {fetched['name']}", LOGGER_INFO)
-        send_to_rabbit('basics.server.message.queue', embed)
+        send_to_rabbit('shop.server.message.queue', embed)
 
         
 
