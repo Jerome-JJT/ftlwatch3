@@ -10,12 +10,38 @@ import urllib
 from urllib.request import Request, urlopen
 from PyPDF2 import PdfReader
 import hashlib
-
+from dateutil import parser
+import pytz
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 local_hashes = []
 local_subjects = []
+
+
+
+def subject_notification(fetched, flag):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'{fetched["url"]}',
+        'description': f'https://42lwatch.ch/basics/subjects',
+        'footer_text': datetime.datetime.now().astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    embed['title'] = f'Created subject {fetched["id"]}'
+
+
+    embed['fields'] = {
+        'head': f'```{fetched["head"]}```'
+    }
+
+    mylogger(f"Nofified subject {fetched['id']} {fetched['head']}", LOGGER_INFO)
+    send_to_rabbit('subjects_minor.server.message.queue', embed)
+    if (flag):
+        send_to_rabbit('subjects_major.server.message.queue', embed)
 
 
 def subject_callback(id, url, head, content):
@@ -27,8 +53,10 @@ def subject_callback(id, url, head, content):
     head_hash = hashlib.sha256(head.encode()).hexdigest()
     content_hash = hashlib.sha256(content.encode()).hexdigest()
 
+    flag = False
 
     if (head_hash not in local_hashes.keys()):
+        flag = True
         executeQueryAction("""INSERT INTO subject_hashmaps (
             "title", "title_hash"
             ) VALUES (
@@ -45,6 +73,12 @@ def subject_callback(id, url, head, content):
 
     
     hashset_id = local_hashes[head_hash]["id"]
+
+    subject_notification({
+        "id": id,
+        "url": url,
+        "head": head
+    }, flag)
 
 
     executeQueryAction("""INSERT INTO subjects (

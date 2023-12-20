@@ -5,10 +5,88 @@ from _dbConnector import *
 from _api import *
 import datetime
 from dateutil import parser
-
+import pytz
 
 
 poolfilters = []
+
+
+def user_notification(fetched):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    refer = executeQuerySelect("SELECT * FROM users WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+    refer_title_users = executeQuerySelect("""SELECT title_id FROM title_users WHERE user_id = %(user_id)s""",
+    {
+        "user_id": fetched["id"]
+    })
+    refer_title_users_id = [x["title_id"] for x in refer_title_users]
+    fetched_title_users_id = [x["id"] for x in fetched["title_users"]]
+    fetched_title_users = [x["id"] for x in fetched["title_users"]]
+    refer_title_users_id.sort()
+    fetched_title_users_id.sort()
+    refer_title_users_id = ", ".join(refer_title_users_id)
+    fetched_title_users_id = ", ".join(fetched_title_users_id)
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://profile.intra.42.fr/users/{fetched["login"]}',
+        'footer_text': datetime.datetime.now().astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+    if fetched["avatar_url"] != None:
+        embed["thumbnail"] = f'{fetched["avatar_url"]}'
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created user {fetched["id"]}, {fetched["login"]}'
+        refer = None
+    else:
+        embed['title'] = f'Updated user {fetched["id"]}, {fetched["login"]}'
+        refer = refer[0]
+
+
+    # check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
+    #                 "is_staff", "is_active", "is_alumni", "wallet", "correction_point", 
+    #                 "nbcursus", "has_cursus21", "has_cursus9", "cursus21_coalition_id", 
+    #                 "cursus9_coalition_id", "blackhole", "grade", "level", "is_bde", "is_tutor", 
+    #                 "poolfilter_id", "hidden"]
+
+    check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
+                    "is_staff", "is_active", "is_alumni", "wallet",
+                    "grade", "is_bde", "is_tutor"]
+    
+    diffs = {}
+
+    for check in check_fields:
+        if (refer == None or refer[check] != fetched[check]):
+            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
+            if (check == "is_active"):
+                diffs["blackhole"] = f'ref: `{refer["blackhole"] if refer != None else " "}`, new: `{fetched["blackhole"]}`'
+
+    if (refer_title_users_id != fetched_title_users_id):
+        diffs["_title"] = f'ref: `{refer_title_users_id}`, new: `{fetched_title_users_id}`'
+        diffs["_titles"] = f'```{refer_title_users}```'
+
+
+
+    if (len(diffs.keys()) > 0):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified for user {fetched['id']} {fetched['login']}", LOGGER_INFO)
+        if (refer == None): # created
+            send_to_rabbit('created.server.message.queue', embed)
+
+        if ("active" in diffs.keys()): # active
+            send_to_rabbit('activity.server.message.queue', embed)
+
+        if ("has_cursus21" in diffs.keys()): # cursus
+            send_to_rabbit('joincursus.server.message.queue', embed)
+
+        send_to_rabbit('users.server.message.queue', embed)
+        
+
+
 
 def import_title_user(user):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
@@ -89,6 +167,43 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     good_is_bde = len(list(filter(lambda x: x["name"] == "BDE", full_user["groups"]))) > 0
     good_is_tutor = len(list(filter(lambda x: x["name"] == "TUTOR", full_user["groups"]))) > 0
 
+    good = {
+        "id": full_user["id"],
+        "login": full_user["login"],
+        "first_name": good_firstname,
+        "last_name": full_user["last_name"],
+        "display_name": good_displayname,
+        "avatar_url": good_avatar_url,
+
+        "kind": full_user["kind"],
+        "is_staff": full_user["staff?"],
+        "is_active": full_user["active?"],
+        "is_alumni": full_user["alumni?"],
+        "wallet": full_user["wallet"],
+        "correction_point": full_user["correction_point"],
+
+        "nbcursus": good_nbcursus,
+        "has_cursus21": good_has_cursus21,
+        "has_cursus9": good_has_cursus9,
+
+        "cursus21_coalition_id": None,
+        "cursus9_coalition_id": None,
+
+        "blackhole": good_blackhole,
+
+        "grade": good_grade,
+        "level": good_level,
+        "is_bde": good_is_bde,
+        "is_tutor": good_is_tutor,
+
+        "poolfilter_id": good_poolfilter_id,
+
+        "hidden": False,
+        "created_at": full_user["created_at"],
+        "updated_at": full_user["updated_at"],
+    }
+
+    user_notification({**good, "titles_users": full_user["titles_users"]})
         
     executeQueryAction("""INSERT INTO users (
         "id", "login", "first_name", "last_name", "display_name", "avatar_url",
@@ -130,41 +245,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
         "poolfilter_id" = EXCLUDED.poolfilter_id,
         "created_at" = EXCLUDED.created_at,
         "updated_at" = EXCLUDED.updated_at
-    """, {
-        "id": full_user["id"],
-        "login": full_user["login"],
-        "first_name": good_firstname,
-        "last_name": full_user["last_name"],
-        "display_name": good_displayname,
-        "avatar_url": good_avatar_url,
-
-        "kind": full_user["kind"],
-        "is_staff": full_user["staff?"],
-        "is_active": full_user["active?"],
-        "is_alumni": full_user["alumni?"],
-        "wallet": full_user["wallet"],
-        "correction_point": full_user["correction_point"],
-
-        "nbcursus": good_nbcursus,
-        "has_cursus21": good_has_cursus21,
-        "has_cursus9": good_has_cursus9,
-
-        "cursus21_coalition_id": None,
-        "cursus9_coalition_id": None,
-
-        "blackhole": good_blackhole,
-
-        "grade": good_grade,
-        "level": good_level,
-        "is_bde": good_is_bde,
-        "is_tutor": good_is_tutor,
-
-        "poolfilter_id": good_poolfilter_id,
-
-        "hidden": False,
-        "created_at": full_user["created_at"],
-        "updated_at": full_user["updated_at"],
-    })
+    """, good)
 
 
     good_days = (parser.parse(good_blackhole).replace(tzinfo=None) - datetime.datetime.now().replace(tzinfo=None)).days if good_blackhole != None else -1
@@ -273,6 +354,8 @@ def import_users():
 
     for user in all_users:
         user_callback(user, cursus21_ids, local_users)
+        # import time
+        # time.sleep(5)
 
     infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
                                      SUM(correction_point) AS sumpoints, 
