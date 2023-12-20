@@ -15,10 +15,7 @@ import Separator from 'Common/Separator';
 import { commonTitle } from 'Utils/commonTitle';
 import ProjectDisplay from 'Common/ProjectDisplay';
 
-class CursusProps {
-  id: string = '';
-  name: string = '';
-}
+
 export function ProjectsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
