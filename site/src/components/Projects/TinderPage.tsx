@@ -133,6 +133,7 @@ export function TinderPage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Tinder'
+          tableDesc='To find peers to do group projects'
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

@@ -232,7 +232,8 @@ export function TableauPage(): JSX.Element {
             subOptions={subOptions}
 
             tableTitle='Tableau'
-            options={[10, 25, 50, 100]}
+            tableDesc='Regroup informations about students'
+            options={[25, 50, 100]}
             // reloadFunction={() => { setValues([]); }}
           />
         </StyledTableau>

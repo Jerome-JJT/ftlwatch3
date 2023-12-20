@@ -101,6 +101,7 @@ export function ProductsPage(): JSX.Element {
           customCard={ProductCard}
 
           tableTitle='Products'
+          tableDesc='Products from shops intra all around the world'
           options={[10, 25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

@@ -14,6 +14,9 @@ export function LoveGraphPage(): JSX.Element {
 
   return (
     <Card className="big-card grow mt-4 !mb-2 mx-2">
+      <p className="super-description">
+        Shows connections between peoples, based on people logged near you when you are logged and how much time you stays logged next to them.
+      </p>
 
       <iframe className='grow' src={`/secure_static/${graph}`}></iframe>
 

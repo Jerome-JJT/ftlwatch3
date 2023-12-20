@@ -176,7 +176,8 @@ export function TeamsPage(): JSX.Element {
           // subOptions={subOptions}
 
           tableTitle='Teams'
-          options={[10, 25, 50, 100]}
+          tableDesc={'Teams\'projects'}
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }
