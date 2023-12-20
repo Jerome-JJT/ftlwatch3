@@ -19,9 +19,9 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         }
 
         {(project.session_duration_days !== undefined && project.session_duration_days !== null) && <>
-          <p>Duration</p>
+          <p>Max time</p>
           <p>
-            {project.session_duration_days ? `${project.session_duration_days} days` : project.session_estimate_time }
+            {`${project.session_duration_days} days` }
           </p>
         </>
         }
@@ -63,7 +63,7 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={project.has_lausanne} readOnly disabled /></div>
 
         {project.session_correction_number && <>
-          <p>Correction</p>
+          <p>Correction nb</p>
           <p>{project.session_correction_number}</p>
         </>
         }
@@ -78,9 +78,9 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         </>
         }
 
-        <p>Auto close</p>
+        <p>Correction time</p>
         <p>
-          {project.session_terminating_after ? project.session_terminating_after : '∞'} jours
+          {project.session_terminating_after ? project.session_terminating_after : '∞'} days
         </p>
 
       </div>
