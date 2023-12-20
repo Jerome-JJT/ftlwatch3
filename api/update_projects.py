@@ -43,7 +43,7 @@ def project_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: {refer[check] if refer != None else None}, new: {fetched[check]}'
+            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs
@@ -211,19 +211,19 @@ def project_callback(project):
         if (local_rule.get('correction-quest1-or-quest2-validated') != None):
             tmp = local_rule.get('correction-quest1-or-quest2-validated')['params'][0]['value']
             tmp = ", ".join(list(filter(lambda x: x != "42-to-42cursus-transfert", tmp.split(" "))))
-            if (len(tmp > 0)):
+            if (len(tmp) > 0):
                 good_rule_correction.append(f'Quests: {tmp}')
 
         if (local_rule.get('correction-projects-registered') != None):
             tmp = local_rule.get('correction-projects-registered')['params'][0]['value']
             tmp = ", ".join(tmp.split(" "))
-            if (len(tmp > 0)):
+            if (len(tmp) > 0):
                 good_rule_correction.append(f'Registered: {tmp}')
 
         if (local_rule.get('correction-projects-validated') != None):
             tmp = local_rule.get('correction-projects-validated')['params'][0]['value']
             tmp = ", ".join(tmp.split(" "))
-            if (len(tmp > 0)):
+            if (len(tmp) > 0):
                 good_rule_correction.append(f'Validated: {tmp}')
 
         if (local_rule.get('correction-level-min') != None):
@@ -232,7 +232,7 @@ def project_callback(project):
                 if (i["param_id"] == 9):
                     tmp = i["value"]
 
-            if (len(tmp > 0)):
+            if (len(tmp) > 0):
                 good_rule_correction.append(f'Min level: {tmp}')
 
         good_rule_correction = " | ".join(good_rule_correction)
@@ -241,7 +241,7 @@ def project_callback(project):
         import_project_rule(rules['project_sessions_rules'], project['id'])
 
 
-
+    rich.print(good_session)
     good = {
         "id": project["id"], 
         "name": project["name"],
@@ -331,7 +331,7 @@ def import_projects(update_all = False, start_at=1):
     if (update_all):
         callapi("/v2/projects?sort=id", nultiple=start_at, callback=project_callback, callback_limit=False)
     else:
-        callapi(f"/v2/projects?sort=-updated_at", nultiple=1, callback=project_callback, callback_limit=True)
+        callapi(f"/v2/projects?sort=-updated_at&filter[id]=2326", nultiple=1, callback=project_callback, callback_limit=True)
 
     mylogger("End projects worker", LOGGER_ALERT)
 
