@@ -86,7 +86,7 @@ def team_notification(fetched):
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
             diff_flag = True
-            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None) else "None"}`, new: `{fetched[check]}`'
         elif (check in mandatory_fields):
             diffs[check] = f'`{fetched[check]}`'
 

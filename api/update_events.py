@@ -50,7 +50,7 @@ def event_notification(fetched):
             fetched[check] = fetched[check].replace(tzinfo=None)
 
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if refer != None else " "}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None) else "None"}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs
