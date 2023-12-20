@@ -4,7 +4,8 @@
 from _dbConnector import *
 from _api import *
 import click
-
+from dateutil import parser
+import pytz
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -12,6 +13,45 @@ import click
 local_teams = []
 current_limit = 50
 limit_checker = 50
+
+
+
+def point_notification(fetched):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    refer = executeQuerySelect("SELECT * FROM points_transactions WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://42lwatch.ch/basics/points',
+        'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created transaction for {fetched["login"]}'
+        refer = None
+    else:
+        embed['title'] = f'Updated transaction for {fetched["login"]}'
+        refer = refer[0]
+
+
+    check_fields = ["reason", "sum", "total"]
+    
+    diffs = {}
+
+    for check in check_fields:
+        if (refer == None or refer[check] != fetched[check]):
+            diffs[check] = f'ref: `{refer[check] if refer != None else None}`, new: `{fetched[check]}`'
+
+    if (len(diffs.keys()) > 0):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified transaction {fetched['id']} {fetched['login']}", LOGGER_INFO)
+        send_to_rabbit('points.server.message.queue', embed)
+
 
 def user_points_callback(transac, user_id, login):
     global local_points, current_limit, limit_checker
@@ -31,6 +71,11 @@ def user_points_callback(transac, user_id, login):
             "created_at": transac['created_at'],
             "updated_at": transac['updated_at'],
         }
+
+        std_transac = ["Defense plannification", "Refund during sales", 
+                       "Earning after defense", "Creation"]
+        if (good["reason"] not in std_transac):
+            point_notification({**good, "login": login})
 
         executeQueryAction("""INSERT INTO points_transactions (
                 "id", "user_id", "reason", "sum", "total", "created_at", "updated_at"

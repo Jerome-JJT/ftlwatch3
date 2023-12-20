@@ -37,7 +37,7 @@ def project_notification(fetched):
     check_fields = ["name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", "parent_id",
             "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
             "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
-            "rule_min", "rule_max", "rule_retry_delay"]
+            "rule_min", "rule_max", "rule_retry_delay", "rule_correction"]
     
     diffs = {}
 
@@ -199,8 +199,7 @@ def project_callback(project):
             except:
                 pass
 
-        local_rule = dict(map(lambda x: {x['rule']['slug']: x}, rules['project_sessions_rules']))
-
+        local_rule = {x['rule']['slug']: x for x in rules['project_sessions_rules'] }
 
         if (local_rule.get('retriable-in-days') != None):
             good_rule_retry_delay = local_rule.get('retriable-in-days')['params'][0]['value']
@@ -240,6 +239,7 @@ def project_callback(project):
 
         import_rule(rules['project_sessions_rules'])
         import_project_rule(rules['project_sessions_rules'], project['id'])
+
 
 
     good = {

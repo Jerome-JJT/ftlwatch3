@@ -33,7 +33,7 @@ def team_notification(fetched):
         "team_id": fetched["id"]
     })
 
-    project = executeQuerySelect("SELECT projects.slug FROM projects WHERE id = %(id)s", {
+    project = executeQuerySelect("SELECT slug FROM projects WHERE id = %(id)s", {
         "id": fetched["project_id"]
     })
     if (len(project) > 0):
@@ -61,7 +61,7 @@ def team_notification(fetched):
 
     embed = {
         'message_type': 'embed',
-        'url': f'https://projects.intra.42.fr/projects/{project}/projects_users/{leader["projects_user_id"]}',
+        'url': f'https://projects.intra.42.fr/projects/{fetched["project_id"]}/projects_users/{leader["projects_user_id"]}',
         'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
     }
     if leader["avatar_url"] != None:
@@ -90,40 +90,38 @@ def team_notification(fetched):
         elif (check in mandatory_fields):
             diffs[check] = f'`{fetched[check]}`'
 
-
-    for scale in fetched["scale_teams"]:
+    fetched["scale_teams"].sort(key=lambda x: x['id'])
+    for num, scale in enumerate(fetched["scale_teams"]):
 
         if (scale["comment"] != None or scale["feedback"] != None):
 
-            refer_scale = executeQuerySelect("SELECT id, comment, feedback FROM team_scale WHERE team_id = %(id)s", {
+            refer_scale = executeQuerySelect("SELECT id, comment, feedback FROM team_scale WHERE id = %(id)s", {
                 "id": scale["id"]
             })
 
             if (len(refer_scale) > 0):
                 refer_scale = refer_scale[0]
+            else:
+                refer_scale = None
 
-                if (refer_scale['comment'] == None):
-                    diff_flag = True
-                    diffs[f'comment_{scale["id"]}'] = f'Comment: ```{scale["comment"]}```'
-                    diffs[f'final_mark_{scale["id"]}'] = f'Mark: `{scale["final_mark"]}`'
-                    diffs[f'corrector_{scale["id"]}'] = f'Corrector {scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}'
+            if (scale["comment"] != None and (refer_scale == None or refer_scale['comment'] == None)):
+                diff_flag = True
+                diffs[f'comment_{num+1}'] = f'Comment: ```{scale["comment"]}```'
+                diffs[f'final_mark_{num+1}'] = f'Mark: `{scale["final_mark"]}`'
+                diffs[f'corrector_{num+1}'] = f'Corrector `{scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}`'
 
-                if (refer_scale['feedback'] == None):
-                    diff_flag = True
-                    diffs[f'feedback_{scale["id"]}'] = f'Comment: ```{scale["feedback"]}```'
-                    diffs[f'final_mark_{scale["id"]}'] = f'Mark: `{scale["final_mark"]}`'
-                    diffs[f'corrector_{scale["id"]}'] = f'Corrector {scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}'
-
-
+            if (scale["feedback"] != None and (refer_scale == None or refer_scale['feedback'] == None)):
+                diff_flag = True
+                diffs[f'feedback_{num+1}'] = f'Comment: ```{scale["feedback"]}```'
+                diffs[f'final_mark_{num+1}'] = f'Mark: `{scale["final_mark"]}`'
+                diffs[f'corrector_{num+1}'] = f'Corrector `{scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}`'
 
 
-    if (len(diffs.keys()) > len(mandatory_fields)):
+    if (diff_flag):
         embed['fields'] = diffs
 
         mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
-        send_to_rabbit('test.server.message.queue', embed)
-
-        time.sleep(3)
+        send_to_rabbit('teams.server.message.queue', embed)
 
 
 
