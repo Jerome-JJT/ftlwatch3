@@ -241,7 +241,6 @@ def project_callback(project):
         import_project_rule(rules['project_sessions_rules'], project['id'])
 
 
-    rich.print(good_session)
     good = {
         "id": project["id"], 
         "name": project["name"],
@@ -331,7 +330,7 @@ def import_projects(update_all = False, start_at=1):
     if (update_all):
         callapi("/v2/projects?sort=id", nultiple=start_at, callback=project_callback, callback_limit=False)
     else:
-        callapi(f"/v2/projects?sort=-updated_at&filter[id]=2326", nultiple=1, callback=project_callback, callback_limit=True)
+        callapi(f"/v2/projects?sort=-updated_at", nultiple=1, callback=project_callback, callback_limit=True)
 
     mylogger("End projects worker", LOGGER_ALERT)
 
