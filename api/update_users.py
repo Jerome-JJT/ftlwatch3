@@ -7,7 +7,8 @@ import datetime
 from dateutil import parser
 import pytz
 
-
+# any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
+# all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 poolfilters = []
 
 
@@ -53,7 +54,7 @@ def user_notification(fetched):
     #                 "poolfilter_id", "hidden"]
 
     check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
-                    "is_staff", "is_active", "is_alumni", "wallet",
+                    "is_staff", "blackhole", "has_cursus21", "is_active", "is_alumni", "wallet",
                     "grade", "is_bde", "is_tutor"]
     
     diffs = {}
@@ -83,7 +84,9 @@ def user_notification(fetched):
         if ("has_cursus21" in diffs.keys()): # cursus
             send_to_rabbit('joincursus.server.message.queue', embed)
 
-        send_to_rabbit('users.server.message.queue', embed)
+        if (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor"]) for e in diffs.keys()) 
+                or ("blackhole" in diffs.keys() and "is_active" not in diffs.keys())):
+            send_to_rabbit('users.server.message.queue', embed)
         
 
 

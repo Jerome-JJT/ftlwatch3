@@ -235,11 +235,11 @@ def project_callback(project):
             if (len(tmp) > 0):
                 good_rule_correction.append(f'Min level: {tmp}')
 
-        good_rule_correction = " | ".join(good_rule_correction)
 
         import_rule(rules['project_sessions_rules'])
         import_project_rule(rules['project_sessions_rules'], project['id'])
 
+    good_rule_correction = " | ".join(good_rule_correction)
 
     good = {
         "id": project["id"], 
