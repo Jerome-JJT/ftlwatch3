@@ -9,8 +9,8 @@ import click
 from astral import LocationInfo
 from astral.sun import sun
 
-current_limit = 300
-limit_checker = 300
+current_limit = 150
+limit_checker = 150
 
 
 city = LocationInfo("Switzerland", "Renens", "Europe/Zurich", 46.533, 6.591)
@@ -175,7 +175,13 @@ def location_callback(location):
 
 def import_locations(update_all=False, start_at=1, mode="slow"):
     global local_locations
+    global limit_checker
+    global current_limit
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 150
+    limit_checker = 150
+
 
     local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")
     local_locations = [one["id"] for one in local_locations] 

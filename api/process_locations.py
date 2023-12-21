@@ -9,16 +9,10 @@ import datetime
 from _hosts import host_locations
 
 
-local_locations = []
-
-current_limit = 150
-limit_checker = 150
-
 
 def process_locations(update_all = False):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR, LOGGER_ALERT
 
-    global local_locations
     mylogger("Start locations processor", LOGGER_ALERT)
 
     days_done = []

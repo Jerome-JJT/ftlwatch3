@@ -178,7 +178,12 @@ def event_callback(event):
 
 def import_events(update_all=False, start_at=1):
     global local_events
+    global limit_checker
+    global current_limit
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 10
+    limit_checker = 10
 
     mylogger("Start events worker", LOGGER_ALERT)
     
