@@ -157,6 +157,9 @@ services:
       API_UID: ${API_BACK_UID}
       API_SECRET: ${API_BACK_SECRET}
 
+      FASTAPI_UID: ${FASTAPI_BACK_UID}
+      FASTAPI_SECRET: ${FASTAPI_BACK_SECRET}
+
     working_dir: /app
 
 

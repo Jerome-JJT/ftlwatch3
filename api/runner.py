@@ -36,24 +36,29 @@ def scheduler_watcher(scheduled):
 
 
 if (env("BUILD_TYPE") == "PROD"):
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'achievements'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'campus'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coalitions'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'cursus'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'groups'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'products'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'projects'}))
-    scheduler_update.every().day.at("02:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'titles'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'achievements'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'campus'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coalitions'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'cursus'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'groups'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'products'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'projects'}))
+    scheduler_update.every().day.at("03:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'titles'}))
 
 
     scheduler_update.every().day.at("13:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'events'}))
 
     scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users'}))
 
-    scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coals_users'}))
-    scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_points'}))
-    scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'update_pdf'}))
-    scheduler_update.every().sunday.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))
+    scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coals_users'}))
+    scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_points'}))
+    scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'update_pdf'}))
+    scheduler_update.every().day.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))
+
+    # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coals_users'}))
+    # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_points'}))
+    # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'update_pdf'}))
+    # scheduler_update.every().sunday.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))
 
     scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_locations'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_love'}))

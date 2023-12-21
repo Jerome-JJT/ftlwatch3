@@ -12,8 +12,8 @@ import pytz
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 local_teams = []
-current_limit = 300
-limit_checker = 300
+current_limit = 150
+limit_checker = 150
 
 
 
@@ -274,7 +274,7 @@ def team_callback(team):
 
 
 
-def import_teams(update_all=False, start_at=1):
+def import_teams(update_all=False, start_at=1, mode="slow"):
     global local_teams
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
@@ -286,11 +286,11 @@ def import_teams(update_all=False, start_at=1):
 
     if (update_all):
         mylogger("Start teams full worker", LOGGER_ALERT)
-        callapi("/v2/teams?filter[campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False)
+        callapi("/v2/teams?filter[campus]=47&sort=id", nultiple=start_at, callback=team_callback, callback_limit=False, mode=mode)
         mylogger("End teams full worker", LOGGER_ALERT)
 
     else:
-        callapi(f"/v2/teams?filter[campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True)
+        callapi(f"/v2/teams?filter[campus]=47&sort=-updated_at", nultiple=1, callback=team_callback, callback_limit=True, mode=mode)
 
 
 @click.command()

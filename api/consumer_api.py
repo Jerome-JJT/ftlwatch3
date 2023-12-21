@@ -108,12 +108,12 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
 
         elif (resource == "locations"):
-            import_locations()
+            import_locations(mode="fast")
         elif (resource == "process_locations"):
             process_locations()
 
         elif (resource == "teams"):
-            import_teams()
+            import_teams(mode="fast")
 
 
         elif (resource == "generate_love"):

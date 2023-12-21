@@ -11,8 +11,8 @@ from _hosts import host_locations
 
 local_locations = []
 
-current_limit = 300
-limit_checker = 300
+current_limit = 150
+limit_checker = 150
 
 
 def process_locations(update_all = False):

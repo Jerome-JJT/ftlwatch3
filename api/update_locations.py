@@ -173,7 +173,7 @@ def location_callback(location):
 
 
 
-def import_locations(update_all=False, start_at=1):
+def import_locations(update_all=False, start_at=1, mode="slow"):
     global local_locations
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
@@ -185,11 +185,11 @@ def import_locations(update_all=False, start_at=1):
 
     if (update_all):
         mylogger("Start locations full worker", LOGGER_ALERT)
-        callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False)
+        callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False, mode=mode)
         mylogger("End locations full worker", LOGGER_ALERT)
 
     else:
-        callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True)
+        callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True, mode=mode)
 
 
 
