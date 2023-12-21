@@ -31,13 +31,13 @@ def campus_notification(fetched):
         refer = refer[0]
 
 
-    check_fields = ["name", "timezone", "country", "city", "address", "website", "users_count"]
+    check_fields = ["name", "timezone", "country", "city", "address", "website"]
     
     diffs = {}
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and len(refer[check]) > 0) else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs

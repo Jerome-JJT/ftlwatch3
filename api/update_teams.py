@@ -86,7 +86,7 @@ def team_notification(fetched):
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
             diff_flag = True
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and len(refer[check]) > 0) else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
         elif (check in mandatory_fields):
             diffs[check] = f'`{fetched[check]}`'
 
@@ -112,7 +112,7 @@ def team_notification(fetched):
 
             if (scale["feedback"] != None and (refer_scale == None or refer_scale['feedback'] == None)):
                 diff_flag = True
-                diffs[f'feedback_{num+1}'] = f'Comment: ```{scale["feedback"]}```'
+                diffs[f'feedback_{num+1}'] = f'Feedback: ```{scale["feedback"]}```'
                 diffs[f'final_mark_{num+1}'] = f'Mark: `{scale["final_mark"]}`'
                 diffs[f'corrector_{num+1}'] = f'Corrector `{scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}`'
 

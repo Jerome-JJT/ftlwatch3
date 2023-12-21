@@ -43,7 +43,7 @@ def project_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and len(refer[check]) > 0) else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs

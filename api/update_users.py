@@ -18,17 +18,17 @@ def user_notification(fetched):
     refer = executeQuerySelect("SELECT * FROM users WHERE id = %(id)s", {
         "id": fetched["id"]
     })
-    refer_title_users = executeQuerySelect("""SELECT title_id FROM title_users WHERE user_id = %(user_id)s""",
+    refer_titles_users = executeQuerySelect("""SELECT title_id FROM titles_users WHERE user_id = %(user_id)s""",
     {
         "user_id": fetched["id"]
     })
-    refer_title_users_id = [x["title_id"] for x in refer_title_users]
-    fetched_title_users_id = [x["id"] for x in fetched["title_users"]]
-    fetched_title_users = [x["id"] for x in fetched["title_users"]]
-    refer_title_users_id.sort()
-    fetched_title_users_id.sort()
-    refer_title_users_id = ", ".join(refer_title_users_id)
-    fetched_title_users_id = ", ".join(fetched_title_users_id)
+    refer_titles_users_id = [x["title_id"] for x in refer_titles_users]
+    fetched_titles_users_id = [x["id"] for x in fetched["titles"]]
+    fetched_titles_users = [x["name"] for x in fetched["titles"]]
+    refer_titles_users_id.sort()
+    fetched_titles_users_id.sort()
+    refer_titles_users_id = ", ".join([str(x) for x in refer_titles_users_id])
+    fetched_titles_users_id = ", ".join([str(x) for x in fetched_titles_users_id])
 
     embed = {
         'message_type': 'embed',
@@ -60,13 +60,13 @@ def user_notification(fetched):
 
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and len(refer[check]) > 0) else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
             if (check == "is_active"):
                 diffs["blackhole"] = f'ref: `{refer["blackhole"] if refer != None else " "}`, new: `{fetched["blackhole"]}`'
 
-    if (refer_title_users_id != fetched_title_users_id):
-        diffs["_title"] = f'ref: `{refer_title_users_id}`, new: `{fetched_title_users_id}`'
-        diffs["_titles"] = f'```{refer_title_users}```'
+    if (refer_titles_users_id != fetched_titles_users_id):
+        diffs["_title"] = f'ref: `{refer_titles_users_id}`, new: `{fetched_titles_users_id}`'
+        diffs["_titles"] = f'```{" | ".join(fetched_titles_users)}```'
 
 
 
@@ -203,7 +203,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
         "updated_at": full_user["updated_at"],
     }
 
-    user_notification({**good, "titles_users": full_user["titles_users"]})
+    user_notification({**good, "titles": full_user["titles"]})
         
     executeQueryAction("""INSERT INTO users (
         "id", "login", "first_name", "last_name", "display_name", "avatar_url",
