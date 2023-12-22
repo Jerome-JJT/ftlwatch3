@@ -94,7 +94,11 @@ def user_points_callback(transac, user_id, login):
 
 def import_points(update_all=False, start_at=1):
     global local_points
+    global current_limit, limit_checker
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 50
+    limit_checker = 50
 
     to_check = executeQuerySelect("""SELECT id, login FROM users WHERE kind = 'student' AND login NOT LIKE '3b3-%%' AND (blackhole > NOW() OR grade = 'Member') ORDER BY id""")
 

@@ -213,9 +213,6 @@ def team_callback(team):
     global limit_checker
     global current_limit
 
-    current_limit = 150
-    limit_checker = 150
-
     mylogger(f"Import team {team['id']} {team['name']} / current_limit = {current_limit}", LOGGER_INFO)
 
     team_user_ids = list(map(lambda x: x['id'], team['users']))
@@ -283,6 +280,9 @@ def import_teams(update_all=False, start_at=1, mode="slow"):
     global limit_checker
     global current_limit
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 150
+    limit_checker = 150
 
     local_teams = executeQuerySelect("SELECT id FROM teams ORDER BY id DESC")
     local_teams = [one['id'] for one in local_teams] 
