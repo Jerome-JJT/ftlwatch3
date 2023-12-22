@@ -22,6 +22,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/ftlwatch3
+            git restore .
             git pull
             make
             make setup
