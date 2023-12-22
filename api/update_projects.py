@@ -35,7 +35,7 @@ def project_notification(fetched):
         refer = refer[0]
 
 
-    check_fields = ["name", "slug", "difficulty", "is_exam", "main_cursus", "project_type_id", "has_lausanne", "parent_id",
+    check_fields = ["name", "slug", "difficulty", "is_exam", "main_cursus", "has_lausanne", "parent_id",
             "session_id", "session_is_solo", "session_estimate_time", "session_duration_days", "session_terminating_after", 
             "session_description", "session_has_moulinette", "session_correction_number", "session_scale_duration",
             "rule_min", "rule_max", "rule_retry_delay", "rule_correction"]
