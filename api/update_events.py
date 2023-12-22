@@ -16,6 +16,7 @@ limit_checker = 10
 
 
 def event_notification(fetched):
+    from _utils_discord import discord_diff
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     from _rabbit import send_to_rabbit
 
@@ -50,7 +51,7 @@ def event_notification(fetched):
             fetched[check] = fetched[check].replace(tzinfo=None)
 
         if (refer == None or refer[check] != fetched[check]):
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = discord_diff(refer, fetched, check)
 
     if (len(diffs.keys()) > 0):
         embed['fields'] = diffs

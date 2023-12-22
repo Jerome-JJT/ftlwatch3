@@ -18,6 +18,7 @@ limit_checker = 150
 
 
 def team_notification(fetched):
+    from _utils_discord import discord_diff
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     from _rabbit import send_to_rabbit
 
@@ -86,7 +87,7 @@ def team_notification(fetched):
     for check in check_fields:
         if (refer == None or refer[check] != fetched[check]):
             diff_flag = True
-            diffs[check] = f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check]}`'
+            diffs[check] = discord_diff(refer, fetched, check)
         elif (check in mandatory_fields):
             diffs[check] = f'`{fetched[check]}`'
 

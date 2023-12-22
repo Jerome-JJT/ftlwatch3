@@ -68,6 +68,8 @@ matcher = {
     "ft_transcendence": "ft_transcendence",
 }
 
+local_projects = []
+
 def process_pdf(update_all = True):
     global local_projects
 
@@ -115,11 +117,13 @@ def process_pdf(update_all = True):
     mylogger("End pdf processor", LOGGER_ALERT)
     
 
-
-if __name__ == "__main__":
+def starter():
     global local_projects
 
     local_projects = executeQuerySelect("SELECT id, slug FROM projects")
     local_projects = {one['slug']: one['id'] for one in local_projects}
-
     process_pdf(True)
+    
+    
+if __name__ == "__main__":
+    starter()
