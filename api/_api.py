@@ -19,6 +19,7 @@ from _utils_logstash import *
 
 
 token = ""
+fast_token = ""
 tokencachefile = "/tmp/.token"
 
 if __name__ == "__main__":
@@ -27,9 +28,9 @@ if __name__ == "__main__":
     print("userify(user)")
 
 
-def test_token(token):
+def test_token(mode="slow"):
     try:
-        check = raw("/v2/users/jjaqueme", for_test = True)
+        check = raw("/v2/users/jjaqueme", for_test = True, mode=mode)
     except:
         return False
     return check.status_code == 200
@@ -37,20 +38,30 @@ def test_token(token):
 def get_headers(force_refresh = False, mode="slow"):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     global token
+    global fast_token
     global tokencachefile
 
-    if (len(token) == 0 and force_refresh == False):
-        if (os.path.isfile(f'{tokencachefile}_mode')):
-            with open(f'{tokencachefile}_mode', "r") as f:
-                token = f.read()
+    if (((len(token) == 0 and mode == "slow") or (len(fast_token) == 0 and mode != "slow")) and force_refresh == False):
+        if (os.path.isfile(f'{tokencachefile}_{mode}')):
+            with open(f'{tokencachefile}_{mode}', "r") as f:
+                if (mode == "slow"):
+                    token = f.read()
+                else:
+                    fast_token = f.read()
 
-        if (len(token) != 0):
+        if (len(token) != 0 and mode == "slow"):
             mylogger("token from file", LOGGER_INFO)
-            if (not test_token(token)):
+            if (not test_token(mode)):
                 mylogger("token from file invalid", LOGGER_INFO)
                 token = ""
 
-    if (len(token) == 0 or force_refresh == True):
+        elif (len(fast_token) != 0 and mode != "slow"):
+            mylogger("fast_token from file", LOGGER_INFO)
+            if (not test_token(mode)):
+                mylogger("fast_token from file invalid", LOGGER_INFO)
+                fast_token = ""
+
+    if (((len(token) == 0 and mode == "slow") or (len(fast_token) == 0 and mode != "slow")) or force_refresh == True):
 
         if (mode == "slow"):
             API_UID = env("API_UID")
@@ -75,18 +86,26 @@ def get_headers(force_refresh = False, mode="slow"):
             jsonres = response.json()
 
             mylogger("got new token", LOGGER_INFO)
-            token = jsonres["access_token"]
-            with open(f'{tokencachefile}_mode', "w") as f:
+            if (mode == "slow"):
+                token = jsonres["access_token"]
+            else:
+                fast_token = jsonres["access_token"]
+            with open(f'{tokencachefile}_{mode}', "w") as f:
                 f.write(jsonres["access_token"])
         
         else:
             mylogger(f"token get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
 
-
-    return {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/json"
-    }
+    if (mode == "slow"):
+        return {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json"
+        }
+    else:
+        return {
+            "Authorization": f"Bearer {fast_token}",
+            "Accept": "application/json"
+        }
     
 
 def mocked_requests_get(data, status, headers = {}):
@@ -104,7 +123,7 @@ def mocked_requests_get(data, status, headers = {}):
 def raw(req, for_test = False, mode="slow"):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
-    auth = get_headers(mode = mode)
+    auth = get_headers(mode=mode)
 
     url = f"https://api.intra.42.fr{req}"
 
