@@ -61,7 +61,7 @@ def user_notification(fetched):
     diffs = {}
 
     for check in check_fields:
-        if (refer == None or refer[check] != fetched[check]):
+        if (refer == None or str(refer[check]) != str(fetched[check])):
             diffs[check] = discord_diff(refer, fetched, check)
             if (check == "is_active"):
                 diffs["blackhole"] = discord_diff(refer, fetched, "blackhole")

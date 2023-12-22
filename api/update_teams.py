@@ -85,7 +85,7 @@ def team_notification(fetched):
     diff_flag = False
 
     for check in check_fields:
-        if (refer == None or refer[check] != fetched[check]):
+        if (refer == None or str(refer[check]) != str(fetched[check])):
             diff_flag = True
             diffs[check] = discord_diff(refer, fetched, check)
         elif (check in mandatory_fields):

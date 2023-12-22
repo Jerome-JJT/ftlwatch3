@@ -50,7 +50,7 @@ def event_notification(fetched):
             fetched[check] = parser.parse(fetched[check])
             fetched[check] = fetched[check].replace(tzinfo=None)
 
-        if (refer == None or refer[check] != fetched[check]):
+        if (refer == None or str(refer[check]) != str(fetched[check])):
             diffs[check] = discord_diff(refer, fetched, check)
 
     if (len(diffs.keys()) > 0):
