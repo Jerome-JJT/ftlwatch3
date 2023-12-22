@@ -124,7 +124,9 @@ services:
     working_dir: /app
 
   api:
-    build: ./_build/api
+    build: 
+      context: .
+      dockerfile: ./_build/api/Dockerfile
     #restart: on-failure
     
     stdin_open: true # docker run -i
@@ -164,7 +166,9 @@ services:
 
 
   nginx:
-    build: ./_build/nginx
+    build: 
+      context: .
+      dockerfile: ./_build/nginx/Dockerfile
 
     depends_on:
       - front

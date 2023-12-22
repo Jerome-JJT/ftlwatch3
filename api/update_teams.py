@@ -76,8 +76,8 @@ def team_notification(fetched):
         refer = refer[0]
 
     if (refer):
-        refer["_users"] = ", ".join(sorted(list(map(lambda x: x["login"], refer_team_users))))
-    fetched["_users"] = ", ".join(sorted(list(map(lambda x: x["login"], fetched["users"]))))
+        refer["_users"] = ", ".join(sorted(list(map(lambda x: x["login"] if x["login"] else "", refer_team_users))))
+    fetched["_users"] = ", ".join(sorted(list(map(lambda x: x["login"] if x["login"] else "", fetched["users"]))))
     check_fields.append("_users")
 
     
