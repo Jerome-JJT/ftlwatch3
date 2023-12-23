@@ -14,6 +14,9 @@ from discord.errors import PrivilegedIntentsRequired
 from discord.ext import commands
 from discord.commands import slash_command, Option, OptionChoice
 
+import environ
+import pika
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -37,6 +40,89 @@ valid_cursus = [
     OptionChoice(name="Cursus 42", value="all"),
     OptionChoice(name="Not cursus 42", value="not")
 ]
+
+
+
+
+
+
+import rich
+
+def get_rabbitmq():
+    url = f'http://rabbit:15672/api/queues/%2F/private.message.queue/get'
+    auth = (env('RABBIT_USER'), env('RABBIT_PASS'))
+
+    response = requests.post(url, auth=auth, json={
+        "ackmode": "ack_requeue_true",
+        "count": 1, 
+        "encoding": "auto", 
+        "name": "private.message.queue",
+        "requeue": True,
+        "vhost": "/"
+    })
+
+
+    if response.status_code == 200:
+        js = response.json()
+
+        if (len(js) > 0):
+            js = js[0]
+
+            rich.print(f"GOT MESSAGE FROM {js['routing_key']}")
+            
+            return js
+        else:
+            return []
+        
+    else:
+        rich.print(f"RABBIT MQ ERROR {response.status_code} - {response.text}")
+
+
+    return ([])
+
+
+
+def send_rabbitmq(routing_key, payload = "{}", payload_encoding = "string"):
+    url = f'http://rabbit:15672/api/exchanges/%2F/main/publish'
+    auth = (env('RABBIT_USER'), env('RABBIT_PASS'))
+
+    response = requests.post(url, auth=auth, json={
+        "properties": {'delivery_mode': 2},
+        "routing_key": routing_key,
+        "payload": payload,
+        "payload_encoding": payload_encoding
+    })
+
+    if response.status_code == 200:
+        rich.print(response.json())
+        message = response.json()[0]
+        print(f"Received message: {message['payload']}")
+        return message['payload'], message['delivery_tag']
+    else:
+        print(f"Error fetching message: {response.status_code} - {response.text}")
+        return None, None
+
+
+
+
+async def consume_messages():
+
+    while True:
+
+
+        print("LOOP")
+        time.sleep(10)
+
+
+
+@bot.event
+async def on_ready():
+    bot.loop.create_task(consume_messages())
+
+# if __name__ == "__main__":
+#     # bot.run("") #PROD
+#     bot.run("") #DEV
+
 
 
 # async def manage_send_bot(ctx, bot, mess):
@@ -299,10 +385,6 @@ valid_cursus = [
 
 
 
-import environ
-# from consumer_bot import bot_consumer
-import pika
-
 # env = environ.Env()
 # environ.Env.read_env()
 
@@ -369,38 +451,71 @@ import pika
 
 # import aiormq
 
-import asyncio
-from consumer_bot import bot_consumer
 
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
 
-def tmpt(ch, method, properties, body):
+# loop = asyncio.new_event_loop()
+# asyncio.set_event_loop(loop)
+
+# def tmpt(ch, method, properties, body):
     
-    # res = asyncio.run(bot_consumer(bot, ch, method, properties, body))
-    # res = loop.run_until_complete(bot_consumer(bot, ch, method, properties, body))
-    res = bot.loop.create_task(bot_consumer(bot, ch, method, properties, body))
-    return res
+#     # res = asyncio.run(bot_consumer(bot, ch, method, properties, body))
+#     # res = loop.run_until_complete(bot_consumer(bot, ch, method, properties, body))
+#     res = bot.loop.create_task(bot_consumer(bot, ch, method, properties, body))
+#     return res
 
 
-async def consume_messages():
+# async def consume_messages():
 
-    credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
-    parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
+#     credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
+#     parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
 
-    connection = pika.BlockingConnection(parameters)
-    channel = connection.channel()
+#     connection = pika.BlockingConnection(parameters)
+#     channel = connection.channel()
 
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='private.message.queue', auto_ack=False, on_message_callback=tmpt)
+#     channel.basic_qos(prefetch_count=1)
+#     channel.basic_consume(queue='private.message.queue', auto_ack=False, on_message_callback=tmpt)
 
-    channel.start_consuming()
+#     channel.start_consuming()
 
-@bot.event
-async def on_ready():
-    bot.loop.create_task(consume_messages())
+# @bot.event
+# async def on_ready():
+#     bot.loop.create_task(consume_messages())
 
-if __name__ == "__main__":
-    # bot.run("") #PROD
-    bot.run("") #DEV
+# if __name__ == "__main__":
+#     # bot.run("") #PROD
+#     bot.run("") #DEV
+
+
+
+# def acknowledge_message(delivery_tag):
+#     # Acknowledge the message in RabbitMQ
+#     url = f'{rabbitmq_api_url}/queues/%2F/{rabbitmq_queue_name}/ack'
+#     auth = (rabbitmq_username, rabbitmq_password)
+#     data = {"delivery_tag": delivery_tag}
+#     response = requests.post(url, auth=auth, json=data)
+
+#     if response.status_code == 200:
+#         print("Message acknowledged successfully.")
+#     else:
+#         print(f"Error acknowledging message: {response.status_code} - {response.text}")
+
+# def main():
+#     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+#     channel = connection.channel()
+
+#     while True:
+#         # Get a message from RabbitMQ
+#         message, delivery_tag = get_messages_from_rabbitmq()
+
+#         if message is not None:
+#             # Process the message (print it in this case)
+#             print(f"Processing message: {message}")
+
+#             # Acknowledge the message in RabbitMQ
+#             acknowledge_message(delivery_tag)
+
+#     connection.close()
+
+# if __name__ == "__main__":
+#     main()
