@@ -68,7 +68,7 @@ matcher = {
     "ft_transcendence": "ft_transcendence",
 }
 
-local_projects = []
+local_projects = {}
 
 def process_pdf(update_all = True):
     global local_projects
@@ -86,10 +86,6 @@ def process_pdf(update_all = True):
         flag = False
 
         for search in matcher.keys():
-
-            if ("Inception" in subject_header['title']):
-                mylogger(f"Inc ___{subject_header['title']}___ {search}", LOGGER_DEBUG)
-
 
             if search in subject_header['title'] and local_projects.get(matcher[search]) != None:
 
