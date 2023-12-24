@@ -1,6 +1,10 @@
 
 from _rabbit import send_to_rabbit
 from datetime import datetime
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 LOGGER_DEBUG = 0
 LOGGER_INFO = 1
@@ -29,7 +33,8 @@ def mylogger(log, level = 0, rabbit = True):
 
   custom_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-  print(custom_date, lvltotxt, log)
+  if (level >= LOGGER_INFO or env("BUILD_TYPE") != "PROD"):
+    print(custom_date, lvltotxt, log)
 
   if (level >= LOGGER_WARNING and rabbit):
     send_to_rabbit('errors.server.message.queue', {'content': f'{custom_date} {lvltotxt}, {log}'})
