@@ -24,7 +24,7 @@ def send_to_rabbit(routing_key, body):
     channel.basic_publish(exchange="main", routing_key=routing_key, body=body, 
         properties=pika.BasicProperties(delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE))
 
-    mylogger(f'Sent to rabbit {routing_key}', LOGGER_INFO, rabbit=False)
+    mylogger(f'Sent to rabbit {routing_key}', LOGGER_DEBUG, rabbit=False)
 
     connection.close()
 
