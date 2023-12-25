@@ -132,7 +132,7 @@ def raw(req, for_test = False, mode="slow"):
     elif ("page[size]" not in url):
         url = f"{url}?page[size]=100"
 
-    mylogger(f"request to {req}", LOGGER_INFO)
+    mylogger(f"request {mode} to {req}", LOGGER_INFO)
 
     fails = 0
     maxfails = 10 if not for_test else 2
@@ -142,9 +142,9 @@ def raw(req, for_test = False, mode="slow"):
         if (threading.current_thread() is threading.main_thread()):
             try:
                 with timeout(30):
-                    res = requests.get(url, headers=auth)
+                    res = requests.get(url, headers=auth, timeout=60)
             except TimeoutError:
-                mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
+                mylogger(f"Timeout of 30 seconds {mode} on {url}", LOGGER_WARNING)
                 fails += 1
                 time.sleep(5)
                 continue
@@ -176,7 +176,7 @@ def raw(req, for_test = False, mode="slow"):
 
         elif (res.status_code == 401 and for_test == False):
 
-            mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
+            mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
             auth = get_headers(force_refresh = True)
 
         # elif (res.status_code == 401):
@@ -187,24 +187,24 @@ def raw(req, for_test = False, mode="slow"):
         elif (res.status_code == 429):
             ttl = res.headers.get('Retry-After')
 
-            mylogger(f"Timeout api 429, retry: {ttl}", LOGGER_WARNING)
+            mylogger(f"Timeout api {mode} 429, retry: {ttl}", LOGGER_WARNING)
             if ttl != None and int(ttl) < 300:
                 time.sleep(int(ttl))
             else:
                 time.sleep(300)
 
         elif (res.status_code == 404):
-            mylogger(f"API NOT FOUND {url}", LOGGER_ERROR)
+            mylogger(f"API {mode} NOT FOUND {url}", LOGGER_ERROR)
             return mocked_requests_get([], 200)
 
         else:
-            mylogger(f"Api http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)
+            mylogger(f"Api {mode} http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)
 
         fails += 1
         time.sleep(1)
 
-    mylogger(f"Raw api failed {maxfails} times", LOGGER_ERROR)
-    raise Exception(f"Raw api failed {maxfails} times") 
+    mylogger(f"Raw api {mode} failed {maxfails} times", LOGGER_ERROR)
+    raise Exception(f"Raw api {mode} failed {maxfails} times") 
 
 
 def callapi(req, multiple = False, callback = None, callback_limit = True, nultiple=0, mode="slow"):
@@ -256,11 +256,11 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
                 res = []
 
             if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
-                mylogger(f"So fast", LOGGER_DEBUG)
+                mylogger(f"So fast {mode}", LOGGER_DEBUG)
                 time.sleep(0.5)
 
     end_time = time.time()
-    mylogger(f"""Request {req} {'mult' if multiple else 'direct'} {'with' if callback != None else 'without'} callback, 
+    mylogger(f"""Request {mode} {req} {'mult' if multiple else 'direct'} {'with' if callback != None else 'without'} callback, 
     start:\t{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     end:\t{datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     elapsed:\t{end_time - start_time}""", LOGGER_DEBUG)
