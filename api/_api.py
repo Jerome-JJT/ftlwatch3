@@ -50,9 +50,9 @@ def get_headers(force_refresh = False, mode="slow"):
                     fast_token = f.read()
 
         if (len(token) != 0 and mode == "slow"):
-            mylogger("token from file", LOGGER_INFO)
+            mylogger(f"token {mode} from file", LOGGER_INFO)
             if (not test_token(mode)):
-                mylogger("token from file invalid", LOGGER_INFO)
+                mylogger(f"token {mode} from file invalid", LOGGER_INFO)
                 token = ""
 
         elif (len(fast_token) != 0 and mode != "slow"):
@@ -78,14 +78,14 @@ def get_headers(force_refresh = False, mode="slow"):
             "scope": "public",
         }
 
-        mylogger("ask new token", LOGGER_INFO)
+        mylogger(f"ask new token {mode}", LOGGER_INFO)
         token_url = "https://api.intra.42.fr/v2/oauth/token"
         response = requests.post(token_url, data=request_token_payload)
 
         if(response.ok == True or response.status_code == 200):
             jsonres = response.json()
 
-            mylogger("got new token", LOGGER_INFO)
+            mylogger(f"got new token {mode}", LOGGER_INFO)
             if (mode == "slow"):
                 token = jsonres["access_token"]
             else:
@@ -94,7 +94,7 @@ def get_headers(force_refresh = False, mode="slow"):
                 f.write(jsonres["access_token"])
         
         else:
-            mylogger(f"token get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
+            mylogger(f"token {mode} get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
 
     if (mode == "slow"):
         return {
@@ -233,7 +233,7 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
     perpage = rawres.headers.get("X-Per-Page")
     tot = rawres.headers.get("X-Total")
     if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
-        mylogger(f"So fast", LOGGER_DEBUG)
+        mylogger(f"So fast {mode}", LOGGER_DEBUG)
         time.sleep(0.5)
 
     if (type(res) == type([]) and (multiple == True or nultiple >= 1) and perpage != None and tot != None):
