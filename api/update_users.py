@@ -71,7 +71,7 @@ def user_notification(fetched):
                 diffs["blackhole"] = discord_diff(refer, fetched, "blackhole")
 
     if (refer_titles_users_id != fetched_titles_users_id):
-        diffs["_title"] = f'ref: `{refer_titles_users_id}`, new: `{fetched_titles_users_id}`'
+        diffs["_title"] = discord_diff({"_title": refer_titles_users_id}, {"_title": fetched_titles_users_id}, "_title")
         diffs["_titles"] = f'```{" | ".join(fetched_titles_users)}```'
 
 
