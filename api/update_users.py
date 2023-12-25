@@ -61,7 +61,7 @@ def user_notification(fetched):
     diffs = {}
 
     for check in check_fields:
-        if ("blackhole" in check):
+        if ("blackhole" in check and fetched[check] != None):
             fetched[check] = parser.parse(fetched[check])
             fetched[check] = fetched[check].replace(tzinfo=None)
 
