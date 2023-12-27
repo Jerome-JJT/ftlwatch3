@@ -72,6 +72,7 @@ local_projects = {}
 
 def process_pdf(update_all = True):
     global local_projects
+    global matcher
 
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR, LOGGER_ALERT
 
