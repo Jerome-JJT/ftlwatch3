@@ -5,7 +5,6 @@ from _dbConnector import *
 from _api import *
 # from dateutil.parser import parse
 import datetime
-from _hosts import host_locations
 
 
 def get_matcher():
@@ -80,6 +79,7 @@ def process_pdf(update_all = True):
 
     mylogger("Start pdf processor", LOGGER_ALERT)
 
+    matcher = get_matcher()
     subject_headers = executeQuerySelect("SELECT id, title FROM subject_hashmaps")
 
 
@@ -118,9 +118,6 @@ def process_pdf(update_all = True):
 
 def starter():
     global local_projects
-    global matcher
-
-    matcher = get_matcher()
 
     local_projects = executeQuerySelect("SELECT id, slug FROM projects")
     local_projects = {one['slug']: one['id'] for one in local_projects}
