@@ -30,6 +30,12 @@ services:
     build: ./_build/rabbit
     hostname: rabbit
 
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
     volumes:
       - rabbit_data:/var/lib/rabbitmq
 
@@ -127,6 +133,9 @@ services:
     build: 
       context: .
       dockerfile: ./_build/api/Dockerfile
+    depends_on:
+      rabbit:
+        condition: service_healthy
     #restart: on-failure
     
     stdin_open: true # docker run -i
