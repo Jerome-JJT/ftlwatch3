@@ -67,23 +67,25 @@ export function SingleProjectPage(): JSX.Element {
             <textarea className='col-span-2 w-full grow border p-2' readOnly defaultValue={values.session_description} />
 
 
-            <table className='my-text w-full col-span-2'>
-              <tbody>
-                {values.session_id &&
-                  <tr><td colSpan={5}>Session id: {values.session_id}</td></tr>
-                }
-                { values.rules.map((rule: any) => {
-                  return <tr key={rule.id}>
-                    <td className='p-2 border border-white'>{rule.id}</td>
-                    <td className='p-2 border border-white'>{rule.name}</td>
-                    <td className='p-2 border border-white'>{rule.kind}</td>
-                    <td className='p-2 border border-white'>{rule.description}</td>
-                    <td className='p-2 border border-white'>{rule.slug}</td>
-                  </tr>;
-                })
-                }
-              </tbody>
-            </table>
+            {values.session_id &&
+              <p className='col-span-2'>Session id: {values.session_id}</p>
+            }
+            <div className='my-text w-full col-span-2 overflow-x-scroll'>
+              <table>
+                <tbody>
+                  { values.rules.map((rule: any) => {
+                    return <tr key={rule.id}>
+                      <td className='p-2 border border-white'>{rule.id}</td>
+                      <td className='p-2 border border-white'>{rule.name}</td>
+                      <td className='p-2 border border-white'>{rule.kind}</td>
+                      <td className='p-2 border border-white'>{rule.description}</td>
+                      <td className='p-2 border border-white'>{rule.slug}</td>
+                    </tr>;
+                  })
+                  }
+                </tbody>
+              </table>
+            </div>
 
             <table className='my-text w-full col-span-2'>
               <tbody>
@@ -119,7 +121,7 @@ export function SingleProjectPage(): JSX.Element {
                   className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
               </div>
 
-              {focusSubject?.subjects && <DialogBody className='grid grid-cols-3 auto-cols-max gap-y-2 justify-center mb-2' divider>
+              {focusSubject?.subjects && <DialogBody className='grid grid-cols-3 auto-cols-max gap-y-2 justify-center mb-2 max-h-[60vh] overflow-y-scroll' divider>
                 {
                   focusSubject?.subjects.map((link: {id: string, url: string, date: string}) =>
                     <React.Fragment key={link.id}>

@@ -122,6 +122,9 @@ def team_notification(fetched):
         embed['fields'] = diffs
 
         mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
+        if (fetched["status"] == "finished"):
+            send_to_rabbit('finished.server.message.queue', embed)
+
         send_to_rabbit('teams.server.message.queue', embed)
 
 
