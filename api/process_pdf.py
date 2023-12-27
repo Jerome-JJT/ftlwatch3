@@ -8,66 +8,68 @@ import datetime
 from _hosts import host_locations
 
 
-matcher = {
-    "Shell 00": "c-piscine-shell-00",
-    "Shell 01": "c-piscine-shell-01",
+def get_matcher():
+    return {
+        "Shell 00": "c-piscine-shell-00",
+        "Shell 01": "c-piscine-shell-01",
 
-    "C 00": "c-piscine-c-00",
-    "C 01": "c-piscine-c-01",
-    "C 02": "c-piscine-c-02",
-    "C 03": "c-piscine-c-03",
-    "C 04": "c-piscine-c-04",
-    "C 05": "c-piscine-c-05",
-    "C 06": "c-piscine-c-06",
-    "C 07": "c-piscine-c-07",
-    "C 08": "c-piscine-c-08",
-    "C 09": "c-piscine-c-09",
-    "C 10": "c-piscine-c-10",
-    "C 11": "c-piscine-c-11",
-    "C 12": "c-piscine-c-12",
-    "C 13": "c-piscine-c-13",
+        "C 00": "c-piscine-c-00",
+        "C 01": "c-piscine-c-01",
+        "C 02": "c-piscine-c-02",
+        "C 03": "c-piscine-c-03",
+        "C 04": "c-piscine-c-04",
+        "C 05": "c-piscine-c-05",
+        "C 06": "c-piscine-c-06",
+        "C 07": "c-piscine-c-07",
+        "C 08": "c-piscine-c-08",
+        "C 09": "c-piscine-c-09",
+        "C 10": "c-piscine-c-10",
+        "C 11": "c-piscine-c-11",
+        "C 12": "c-piscine-c-12",
+        "C 13": "c-piscine-c-13",
 
-    "Rush 00": "c-piscine-rush-00",
-    "Rush 01": "c-piscine-rush-01",
-    "Rush 02": "c-piscine-rush-02",
-    "BSQ": "c-piscine-bsq",
+        "Rush 00": "c-piscine-rush-00",
+        "Rush 01": "c-piscine-rush-01",
+        "Rush 02": "c-piscine-rush-02",
+        "BSQ": "c-piscine-bsq",
 
-    "Your very first own library": "42cursus-libft",
-    "Get Next Line": "42cursus-get_next_line",
-    "printf": "42cursus-ft_printf",
-    "Born2beRoot": "born2beroot",
+        "Your very first own library": "42cursus-libft",
+        "Get Next Line": "42cursus-get_next_line",
+        "printf": "42cursus-ft_printf",
+        "Born2beRoot": "born2beroot",
 
-    "Push_swap": "42cursus-push_swap",
-    "Minitalk": "minitalk",
-    "Pipex": "pipex",
-    "FDF": "42cursus-fdf",
-    "fract’ol": "42cursus-fract-ol",
-    "So Long": "so_long",
+        "Push_swap": "42cursus-push_swap",
+        "Minitalk": "minitalk",
+        "Pipex": "pipex",
+        "FDF": "42cursus-fdf",
+        "fract’ol": "42cursus-fract-ol",
+        "So Long": "so_long",
 
-    "Philosophers": "42cursus-philosophers",
-    "Minishell": "42cursus-minishell",
+        "Philosophers": "42cursus-philosophers",
+        "Minishell": "42cursus-minishell",
 
-    "miniRT": "minirt",
-    "cub3D": "cub3d",
-    "Net_Practice": "netpractice",
-    "C++ - Module 00": "cpp-module-00",
-    "C++ - Module 01": "cpp-module-01",
-    "C++ Pool - Module 01": "cpp-module-01",
-    "C++ - Module 02": "cpp-module-02",
-    "C++ - Module 03": "cpp-module-03",
-    "C++ - Module 04": "cpp-module-04",
-    "C++ - Module 05": "cpp-module-05",
-    "C++ - Module 06": "cpp-module-06",
-    "C++ - Module 07": "cpp-module-07",
-    "C++ - Module 08": "cpp-module-08",
-    "C++ - Module 09": "cpp-module-09",
-    "Inception\nS": "inception",
-    "Webserv": "webserv",
-    "IRC": "ft_irc",
-    "ft_containers": "ft_containers",
-    "ft_transcendence": "ft_transcendence",
-}
+        "miniRT": "minirt",
+        "cub3D": "cub3d",
+        "Net_Practice": "netpractice",
+        "C++ - Module 00": "cpp-module-00",
+        "C++ - Module 01": "cpp-module-01",
+        "C++ Pool - Module 01": "cpp-module-01",
+        "C++ - Module 02": "cpp-module-02",
+        "C++ - Module 03": "cpp-module-03",
+        "C++ - Module 04": "cpp-module-04",
+        "C++ - Module 05": "cpp-module-05",
+        "C++ - Module 06": "cpp-module-06",
+        "C++ - Module 07": "cpp-module-07",
+        "C++ - Module 08": "cpp-module-08",
+        "C++ - Module 09": "cpp-module-09",
+        "Inception\nS": "inception",
+        "Webserv": "webserv",
+        "IRC": "ft_irc",
+        "ft_containers": "ft_containers",
+        "ft_transcendence": "ft_transcendence",
+    }
 
+matcher = {}
 local_projects = {}
 
 def process_pdf(update_all = True):
@@ -116,6 +118,9 @@ def process_pdf(update_all = True):
 
 def starter():
     global local_projects
+    global matcher
+
+    matcher = get_matcher()
 
     local_projects = executeQuerySelect("SELECT id, slug FROM projects")
     local_projects = {one['slug']: one['id'] for one in local_projects}
