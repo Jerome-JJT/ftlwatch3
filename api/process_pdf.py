@@ -71,7 +71,7 @@ def get_matcher():
 matcher = {}
 local_projects = {}
 
-def process_pdf(update_all = True):
+def process_pdf():
     global local_projects
     global matcher
 
@@ -80,6 +80,8 @@ def process_pdf(update_all = True):
     mylogger("Start pdf processor", LOGGER_ALERT)
 
     matcher = get_matcher()
+    local_projects = executeQuerySelect("SELECT id, slug FROM projects")
+    local_projects = {one['slug']: one['id'] for one in local_projects}
     subject_headers = executeQuerySelect("SELECT id, title FROM subject_hashmaps")
 
 
@@ -116,13 +118,8 @@ def process_pdf(update_all = True):
     mylogger("End pdf processor", LOGGER_ALERT)
     
 
-def starter():
-    global local_projects
-
-    local_projects = executeQuerySelect("SELECT id, slug FROM projects")
-    local_projects = {one['slug']: one['id'] for one in local_projects}
-    process_pdf(True)
     
     
 if __name__ == "__main__":
-    starter()
+    process_pdf()
+
