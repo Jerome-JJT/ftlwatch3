@@ -77,7 +77,7 @@ def webhook_consumer(ch, method, properties, body, reject_first=False):
                 raise Exception(f'Channel {discord_channel}, status {response.status_code}, Response: {response.text}')
 
             mylogger(f"Consume webhook {method.routing_key}, chan {discord_channel}", LOGGER_INFO, rabbit=False)
-            time.sleep(1.2)
+            time.sleep(1.5)
             ch.basic_ack(delivery_tag = method.delivery_tag)
             break
 
