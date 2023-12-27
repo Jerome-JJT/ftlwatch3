@@ -47,6 +47,9 @@ export function TableauPage(): JSX.Element {
 
   React.useEffect(() => {document.title = commonTitle('Tableau');}, []);
 
+  React.useEffect(() => { setUsedFilter(defaultFilter || undefined); }, [defaultFilter]);
+  React.useEffect(() => { setUsedProjects(defaultProjects || undefined); }, [defaultProjects]);
+
   React.useEffect(() => {
     axios
       .get(`/?page=tableau&action=get${usedFilter ? `&filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`,
