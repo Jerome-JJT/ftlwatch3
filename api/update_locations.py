@@ -5,6 +5,8 @@ from _api import *
 from dateutil import parser
 import datetime
 import click
+from dateutil import parser
+import pytz
 
 from astral import LocationInfo
 from astral.sun import sun
@@ -60,6 +62,46 @@ def sun_values(date, sit1):
 
     return (sun_time, moon_time)
 
+
+
+def location_notification(fetched):
+    from _utils_discord import discord_diff
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    locations_active = executeQuerySelect("SELECT id FROM locations_active WHERE id = %(id)s", {
+        "id": str(fetched["id"])
+    })
+    locations = executeQuerySelect("SELECT id FROM locations WHERE id = %(id)s", {
+        "id": str(fetched["id"])
+    })
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://profile.intra.42.fr/users/{fetched["user"]["login"]}'
+    }
+    if fetched.get("user") != None and fetched.get("user").get("image") != None and fetched.get("user").get("image").get("link") != None:
+        embed["thumbnail"] = fetched.get("user").get("image").get("link")
+
+
+    if (fetched["end_at"] == None and len(locations_active) == 0):
+        embed['title'] = f'{fetched["user"]["login"]} logged on {fetched["host"]}'
+        embed['description'] = f'Connected at <t:{int(parser.parse(fetched["begin_at"]).timestamp())}:f>\n{fetched["host"]}'
+        embed['footer_text'] = parser.parse(fetched["begin_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+
+        mylogger(f"Nofified location {fetched['id']} {fetched['host']}", LOGGER_INFO)
+        send_to_rabbit('locations.server.message.queue', embed)
+
+
+    elif (fetched["end_at"] != None and len(locations) == 0):
+        embed['title'] = f'{fetched["user"]["login"]} unlogged on {fetched["host"]}'
+        embed['description'] = f'Disconnected at <t:{int(parser.parse(fetched["end_at"]).timestamp())}:f>\n{fetched["host"]}'
+        embed['footer_text'] = parser.parse(fetched["end_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+        
+        mylogger(f"Nofified location {fetched['id']} {fetched['host']}", LOGGER_INFO)
+        send_to_rabbit('locations.server.message.queue', embed)
+
+
     
 def location_callback(location):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
@@ -86,6 +128,8 @@ def location_callback(location):
 
         piscine_concern = f"{location['user']['pool_year'] if location['user']['pool_year'] else '2000'}-10-01"
         good_is_piscine = good_start_date < piscine_concern
+
+        location_notification(location)
 
 
         if (good_start_date == good_end_date):
