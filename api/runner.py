@@ -66,7 +66,7 @@ if (env("BUILD_TYPE") == "PROD"):
 
     scheduler_update.every(10).minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'locations'}))
     scheduler_update.every().minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'teams'}))
-    scheduler_update.every().minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'intranotif'}))
+    scheduler_update.every(10).minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'intranotif'}))
 
 thread_update = threading.Thread(target=scheduler_watcher, args=(scheduler_update,))
 # thread_live = threading.Thread(target=scheduler_watcher, args=(scheduler_live,))
