@@ -90,8 +90,8 @@ def get_notifs():
                 embed = {
                     'message_type': 'embed',
                     'url': f'https://profile.intra.42.fr/notifications',
-                    'title': notif_content,
-                    'description': notif_link,
+                    'title': notif_content[:250],
+                    'description': f'{notif_link}\n{notif_content}',
                     'footer_text': parser.parse(notif_date).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
                 }
 
