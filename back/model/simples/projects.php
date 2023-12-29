@@ -7,7 +7,7 @@ function getProjects()
   projects.difficulty, projects.is_exam, projects.main_cursus, projects.has_lausanne, 
   projects.session_id, projects.session_is_solo, projects.session_estimate_time, projects.session_duration_days, projects.session_terminating_after,
   projects.session_description, projects.session_has_moulinette, projects.session_correction_number, projects.session_scale_duration, 
-  projects.rule_min, projects.rule_max, projects.rule_retry_delay
+  projects.rule_min, projects.rule_max, projects.rule_retry_delay, projects.rule_correction
   FROM projects
   ORDER BY id";
   $data = array();
@@ -24,7 +24,7 @@ function getProject($id)
   projects.difficulty, projects.is_exam, projects.main_cursus, projects.has_lausanne, 
   projects.session_id, projects.session_is_solo, projects.session_estimate_time, projects.session_duration_days, projects.session_terminating_after,
   projects.session_description, projects.session_has_moulinette, projects.session_correction_number, projects.session_scale_duration, 
-  projects.rule_min, projects.rule_max, projects.rule_retry_delay
+  projects.rule_min, projects.rule_max, projects.rule_retry_delay, projects.rule_correction
   FROM projects
   WHERE id = :id
   ";

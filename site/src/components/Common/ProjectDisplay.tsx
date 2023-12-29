@@ -42,6 +42,14 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         </>
         }
 
+        {(project.rule_correction && project.rule_correction.length > 0) && <>
+          <p>Correction rules</p>
+          <p>
+            {project.rule_correction} jours
+          </p>
+        </>
+        }
+
         { link &&
           <Link to={`/basics/projects/${project.id}`} className='col-span-2'>
             <button className='col-span-2 text-xs'>Details</button>
