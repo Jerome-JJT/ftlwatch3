@@ -113,7 +113,17 @@ def location_callback(location):
     if str(location["id"]) not in local_locations:
         current_limit = limit_checker
 
-        if (location['begin_at'] == None or location['end_at'] == None):
+        location_notification(location)
+
+        if (location['end_at'] == None):
+            executeQueryAction("""INSERT INTO locations_active ("id") VALUES (%(id)s)
+                ON CONFLICT DO NOTHING
+                """, {
+                "id": location["id"]
+            })
+            return True
+        
+        elif (location['begin_at'] == None or location['end_at'] == None):
             return True
 
         mylogger(f"Import location {location['id']} {location['host']} / current_limit = {current_limit}", LOGGER_INFO)
@@ -128,8 +138,6 @@ def location_callback(location):
 
         piscine_concern = f"{location['user']['pool_year'] if location['user']['pool_year'] else '2000'}-10-01"
         good_is_piscine = good_start_date < piscine_concern
-
-        location_notification(location)
 
 
         if (good_start_date == good_end_date):
