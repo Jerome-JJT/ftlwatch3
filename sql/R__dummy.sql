@@ -249,7 +249,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (150, 'Users visibility', 40, 'admin/users', NULL, 3, 1),
   (152, 'Projects visibility', 50, 'admin/projects', NULL, 3, 1),
 
-  (200, 'Tableau infos', 10, NULL, 'filter=cursus&infos', 1, 5),
+  (200, 'Tableau infos', 10, NULL, 'filter=cursus&projects=infos', 1, 5),
   (205, 'Tableau cursus common core', 22, NULL, 'filter=cursus&projects=common-core', 1, 10),
   (210, 'Tableau cursus outer core', 30, NULL, 'filter=cursus&projects=outer-core', 1, 10),
 

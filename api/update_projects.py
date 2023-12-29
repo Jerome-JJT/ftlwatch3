@@ -10,6 +10,8 @@ import pytz
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 existing_projects = []
+current_limit = 150
+limit_checker = 150
 
 def project_notification(fetched):
     from _utils_discord import discord_diff
@@ -128,6 +130,9 @@ def import_rule(rules):
 
 
 def project_callback(project):
+    global existing_projects
+    global limit_checker
+    global current_limit
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     mylogger(f"Import project {project['id']} {project['slug']}", LOGGER_INFO)
@@ -315,15 +320,27 @@ def project_callback(project):
                        
     """, good)
 
+    if project["id"] not in existing_projects:
+        current_limit = limit_checker
+    else:
+        current_limit -= 1
+
+    return (current_limit > 0)
+
 
 
 def import_projects(update_all = False, start_at=1):
     global existing_projects
+    global limit_checker
+    global current_limit
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 150
+    limit_checker = 150
 
     mylogger("Start projects worker", LOGGER_ALERT)
     existing_projects = executeQuerySelect("SELECT id FROM projects")
-    existing_projects = {one["id"]: one for one in existing_projects} 
+    existing_projects = [one["id"] for one in existing_projects] 
 
     if (len(existing_projects) == 0):
         update_all = True

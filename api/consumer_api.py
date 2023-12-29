@@ -104,7 +104,7 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "update_pdf"):
             import_subjects()
         elif (resource == "process_pdf"):
-            process_pdf(True)
+            process_pdf()
 
 
         elif (resource == "locations"):
