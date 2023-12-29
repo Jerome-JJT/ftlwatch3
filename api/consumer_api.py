@@ -23,6 +23,8 @@ from update_users_points import import_points
 from update_pdf import import_subjects
 from process_pdf import process_pdf
 
+from update_intranotif import get_notifs
+
 from update_events import import_events
 from update_locations import import_locations
 from process_locations import process_locations
@@ -114,6 +116,8 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
         elif (resource == "teams"):
             import_teams(mode="fast")
+        elif (resource == "intranotif"):
+            get_notifs()
 
 
         elif (resource == "generate_love"):

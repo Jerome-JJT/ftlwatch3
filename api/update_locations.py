@@ -5,7 +5,6 @@ from _api import *
 from dateutil import parser
 import datetime
 import click
-from dateutil import parser
 import pytz
 
 from astral import LocationInfo

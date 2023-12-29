@@ -4,6 +4,7 @@ schedule
 
 psycopg2
 watchdog
+beautifulsoup4
 
 pika
 click
