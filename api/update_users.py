@@ -137,13 +137,13 @@ def import_title_user(user):
 
 
 
-def timed_user_log(days, correction_point, wallet, level, date, user_id):
+def timed_user_log(days, correction_point, wallet, level, is_active, date, user_id):
 
     executeQueryAction("""INSERT INTO timedusers (
-        "days", "correction_point", "wallet", "level",
+        "days", "correction_point", "wallet", "level", "is_active",
         "date", "user_id"
     ) VALUES (
-        %(days)s, %(correction_point)s, %(wallet)s, %(level)s, %(date)s, %(user_id)s
+        %(days)s, %(correction_point)s, %(wallet)s, %(level)s, %(is_active)s, %(date)s, %(user_id)s
     )
     ON CONFLICT (date, user_id) DO NOTHING
     """, {
@@ -151,6 +151,7 @@ def timed_user_log(days, correction_point, wallet, level, date, user_id):
         "correction_point": correction_point,
         "wallet": wallet,
         "level": level,
+        "is_active": is_active,
         "date": date,
         "user_id": user_id
     })
@@ -260,7 +261,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     
     import_title_user(full_user)
     timed_user_log(good_days, full_user["correction_point"], full_user["wallet"], 
-                good_level, datetime.datetime.now().strftime("%Y-%m-%d"), full_user["id"])
+                good_level, full_user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), full_user["id"])
 
 
 
@@ -337,7 +338,7 @@ def user_callback(user, cursus21_ids, local_users):
             "updated_at": user["updated_at"],
         })
 
-        timed_user_log(-1, user["correction_point"], user["wallet"], -1, datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
+        timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
 
     return True
 
