@@ -52,10 +52,10 @@ parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
 
 
 async def discord_send(ctx, body):
-    if (type(body) == type("")):
-        content = json.loads(body)
-    else:
+    if (type(body) == type({})):
         content = body
+    else:
+        content = json.loads(body)
     payload = create_discord_payload(content)
 
     if (content.get('content') != None):
