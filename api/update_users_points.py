@@ -27,7 +27,8 @@ def point_notification(fetched):
 
     embed = {
         'message_type': 'embed',
-        'url': f'https://42lwatch.ch/basics/points',
+        'url': f'https://profile.intra.42.ch/users/{fetched["login"]}/correction_point_historics',
+        'description': f'https://42lwatch.ch/basics/points',
         'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
     }
 
