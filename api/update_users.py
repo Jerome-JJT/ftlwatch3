@@ -56,7 +56,7 @@ def user_notification(fetched):
 
     check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
                     "is_staff", "blackhole", "has_cursus21", "is_active", "is_alumni", "wallet",
-                    "grade", "is_bde", "is_tutor"]
+                    "grade", "level", "is_bde", "is_tutor"]
     
     diffs = {}
 
