@@ -107,13 +107,13 @@ def team_notification(fetched):
 
             if (scale["comment"] != None and (refer_scale == None or refer_scale['comment'] == None)):
                 diff_flag = True
-                diffs[f'comment_{num+1}'] = f'Comment: ```{scale["comment"]}```'
+                diffs[f'comment_{num+1}'] = f'Comment: ```{scale["comment"][:1000]}```'
                 diffs[f'final_mark_{num+1}'] = f'Mark: `{scale["final_mark"]}`'
                 diffs[f'corrector_{num+1}'] = f'Corrector `{scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}`'
 
             if (scale["feedback"] != None and (refer_scale == None or refer_scale['feedback'] == None)):
                 diff_flag = True
-                diffs[f'feedback_{num+1}'] = f'Feedback: ```{scale["feedback"]}```'
+                diffs[f'feedback_{num+1}'] = f'Feedback: ```{scale["feedback"][:1000]}```'
                 diffs[f'final_mark_{num+1}'] = f'Mark: `{scale["final_mark"]}`'
                 diffs[f'corrector_{num+1}'] = f'Corrector `{scale["corrector"]["login"] if (scale["corrector"] != "invisible") else "None"}`'
 
