@@ -80,7 +80,7 @@ def get_notifs(session):
 
 
 
-def starter():
+def import_intranotif():
     cookie_jar = http.cookiejar.LWPCookieJar("/jar/.cookie_jar")
     try:
         cookie_jar.load(ignore_discard=True)
