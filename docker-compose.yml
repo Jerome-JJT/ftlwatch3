@@ -37,6 +37,7 @@ services:
       retries: 3
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - rabbit_data:/var/lib/rabbitmq
 
     environment:
@@ -51,6 +52,7 @@ services:
     image: postgres:14.2
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - main_db:/var/lib/postgresql/data/
 
     networks:
@@ -80,6 +82,7 @@ services:
       - db
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./secure_static:/secure_static
       - ./back:/var/www/html
 
@@ -145,6 +148,7 @@ services:
     tty: true        # docker run -t
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./secure_static:/secure_static
       - ./subjects_static:/subjects_static
       - ./api:/app
@@ -191,6 +195,7 @@ services:
       - back
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./static:/var/www/static
 
     networks:
