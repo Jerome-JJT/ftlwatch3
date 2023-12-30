@@ -5,6 +5,7 @@
 
 
 python runner.py &
+python _discord_bot.py &
 python _rabbit.py -server 1
 
 # sleep infinity

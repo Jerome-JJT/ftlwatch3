@@ -105,6 +105,9 @@ services:
       RABBIT_USER: ${RABBIT_USER}
       RABBIT_PASS: ${RABBIT_PASS}
 
+      INTRA_USER: ${INTRA_USER}
+      INTRA_PASS: ${INTRA_PASS}
+
       API_UID: ${API_FRONT_UID}
       API_SECRET: ${API_FRONT_SECRET}
   
@@ -145,6 +148,7 @@ services:
       - ./secure_static:/secure_static
       - ./subjects_static:/subjects_static
       - ./api:/app
+      - jar:/jar
 
     networks:
       - back
@@ -164,6 +168,9 @@ services:
 
       RABBIT_USER: ${RABBIT_USER}
       RABBIT_PASS: ${RABBIT_PASS}
+
+      DISCORD_BOT_PROD: ${DISCORD_BOT_PROD}
+      DISCORD_BOT_DEV: ${DISCORD_BOT_DEV}
       
       API_UID: ${API_BACK_UID}
       API_SECRET: ${API_BACK_SECRET}
@@ -201,5 +208,6 @@ networks:
 volumes:
   main_db:
   rabbit_data:
+  jar:
 
 

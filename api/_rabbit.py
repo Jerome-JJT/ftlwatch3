@@ -12,6 +12,21 @@ environ.Env.read_env()
 credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
 parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
 
+def custom_reject(dlq, ch, method, body, reason=""):
+    new_properties = pika.BasicProperties(
+        headers={'x-rejection-reason': f"Reject update {method.routing_key}, reason : {reason}"}
+    )
+
+    ch.basic_publish(
+        exchange='',
+        routing_key=dlq,
+        properties=new_properties,
+        body=body
+    )
+
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+
+
 def send_to_rabbit(routing_key, body):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 

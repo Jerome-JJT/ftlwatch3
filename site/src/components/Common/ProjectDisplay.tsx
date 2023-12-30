@@ -36,8 +36,8 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
 
         {project.rule_retry_delay && <>
           <p>Cooldown</p>
-          <p>
-            {project.rule_retry_delay} jours
+          <p title={project.rule_retry_delay}>
+            {project.rule_retry_delay}
           </p>
         </>
         }

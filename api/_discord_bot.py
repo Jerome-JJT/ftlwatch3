@@ -1,13 +1,17 @@
 
 
-import os
-import asyncio
 import datetime
 import time
 import json
+import environ
+import pika
+import rich
+import sys
+import asyncio
 
 from _api import *
 from _utils_discord import *
+from _rabbit import custom_reject
 
 import discord
 from discord.errors import PrivilegedIntentsRequired
@@ -39,368 +43,303 @@ valid_cursus = [
 ]
 
 
-# async def manage_send_bot(ctx, bot, mess):
-#     try:
-#         lod = json.loads(mess)
 
-#         titl = "Default title"
-#         ur = "localhost"
-#         desc = "Default desc"
-#         imag = "https://cdn.intra.42.fr/users/3b3.jpg"
+env = environ.Env()
+environ.Env.read_env()
 
-#         if ("title" in lod.keys()):
-#             titl = lod["title"]
+credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
+parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
 
-#         if ("url" in lod.keys()):
-#             ur = lod["url"]
 
-#         if ("desc" in lod.keys()):
-#             desc = lod["desc"]
+async def discord_send(ctx, body):
+    if (type(body) == type({})):
+        content = body
+    else:
+        content = json.loads(body)
+    payload = create_discord_payload(content)
 
+    if (content.get('content') != None):
+        await ctx.send(f"{content.get('content')[:1900]}")
 
-#         embed=discord.Embed(title=titl, url=ur, description=desc, color=discord.Color.green(), timestamp=datetime.datetime.utcnow())
+    else:
+        if (payload.get("embeds") != None):
+            payload = payload["embeds"][0]
+        
+        embed=discord.Embed(
+            title=payload["title"], 
+            url=payload.get("url") if payload.get("url") != None else None, 
+            description=payload.get("description") if payload.get("description") != None else None, 
+            color=payload["color"] if payload.get("color") else 32896, 
+            timestamp=datetime.datetime.utcnow())
+        
+        if (payload.get("thumbnail") != None):
+            embed.set_thumbnail(url=payload.get("thumbnail")["url"])
 
+        if (payload.get("fields") != None):
+            for field in payload.get("fields"):
+                embed.add_field(name=field["name"], value=field["value"], inline=False)
 
-#         if ("image" in lod.keys()):
-#             embed.set_thumbnail(url=lod["image"])
+        if (payload.get("footer") != None):
+            embed.set_footer(text=payload.get("footer")["text"])
 
-#         if ("author" not in lod.keys()):
-#             try:
-#                 embed.set_author(name=bot.user.name, icon_url=bot.user.avatar.url)
-#             except:
-#                 embed.set_author(name="Cheese")
+        await ctx.send(embed=embed)
 
 
-#         if ("msg" in lod.keys()):
-#             msgtitl = "Default"
 
-#             if ("msgtitle" in lod.keys()):
-#                 msgtitl = lod["msgtitle"]
-#             embed.add_field(name=msgtitl, value=lod["msg"][:1000], inline=False)
-
-#         # if ("footer" in lod.keys()):
-#         #     embed.set_footer(text=lod["footer"])
-
-
-#         await ctx.send(embed=embed)
-
-#     except Exception as e:
-#         #print("Error, here ", e)
-#         await ctx.send(f"{mess[:1900]}")
-
-
-# if __name__ == "__main__":
-
-
-    # @bot.slash_command(name="api", description="Api endpoint")
-    # async def api(ctx,
-    #     endpoint: Option(str, 'Endpoint', required=False),
-    #     page_num: Option(int, 'Page num', required=False),
-    #     page_size: Option(int, 'Page size', required=False),
-    #     req_type: Option(str, 'Request type', required=False, choices=(["json", "big", "user"])),
-    #     sub_index: Option(str, 'Sub index', required=False)):
-
-
-    #     print(endpoint, page_num, page_size)
-    #     print(str(ctx.author))
-
-    #     if (page_num == None):
-    #         page_num = 1
-    #     page_num = min(max(page_num, 1), 100)
-
-    #     if (page_size == None):
-    #         page_size = 30
-    #     page_size = min(max(page_size, 1), 100)
-
-
-    #     await ctx.defer()
-
-    #     if (str(ctx.author) in admins):
-    #         try:
-    #             if (endpoint != None):
-
-    #                 url = ""
-    #                 if ("?" in endpoint):
-    #                     url = f"{endpoint}&page[size={page_size}]&page[number={page_num}]"
-    #                 else:
-    #                     url = f"{endpoint}?page[size={page_size}]&page[number={page_num}]"
-
-
-    #                 print(url)
-    #                 await ctx.respond(url)
-    #                 res = pure(url)
-
-    #                 if (type([]) == type(res) and len(res) == 1):
-    #                     res = res[0]
-
-    #                 if (sub_index != None):
-    #                     if (type(res) == type({}) and "," in sub_index):
-    #                         mykeys = sub_index.split(",")
-    #                         mykeys = list(map(lambda x: x.strip(), mykeys))
-    #                         res = {mykey: (res[mykey] if mykey in list(res.keys()) else "none") for mykey in mykeys}
-
-    #                     elif (type(res) == type({}) and sub_index in list(res.keys())):
-    #                         res = res[sub_index]
-
-    #                     elif (type(res) == type([]) and "," in sub_index):
-    #                         mykeys = sub_index.split(",")
-    #                         mykeys = list(map(lambda x: x.strip(), mykeys))
-    #                         res = list(map(lambda x: {mykey: (x[mykey] if mykey in list(x.keys()) else "none") for mykey in mykeys}, res))
-
-    #                     elif (type(res) == type([]) and sub_index in list(res[0].keys())):
-    #                         res = list(map(lambda x: x[sub_index], res))
-    #                     else:
-    #                         await ctx.respond(f"sub_index not found")
-    #                         return 0
-                        
-    #                 if (type(res) == type({}) and req_type == "user"):
-    #                     res = userify(res)
-
-    #                 elif (type(res) == type([]) and req_type == "user"):
-    #                     res = list(map(lambda x: userify(x), res))
-
-    #                 # print(json.dumps(res, indent=2))
-    #                 toprint = json.dumps(res, indent=2, ensure_ascii=False)
-
-
-    #                 if (len(toprint) < 10000 or req_type == "big" or req_type == "user"):
-
-    #                     lines = toprint.split("\n")
-    #                     buffer = ""
-
-    #                     for line in lines:
-    #                         if (len(buffer) > 1900):
-    #                             while (len(buffer) > 1):
-    #                                 minibuf = buffer[:1900]
-    #                                 buffer = f"\n{buffer[1900:]}"
-    #                                 await ctx.send(f"```json{minibuf}```")
-    #                                 time.sleep(0.15)
-
-    #                         elif (len(buffer) + len(line) >= 1900):
-    #                             await ctx.send(f"```json{buffer}```")
-    #                             time.sleep(0.15)
-    #                             buffer = ""
-
-    #                         buffer += f"\n{line}"
-
-    #                     await ctx.send(f"```json{buffer}```")
-    #                     while (len(buffer) > 1):
-    #                         minibuf = buffer[:1900]
-    #                         buffer = f"\n{buffer[1900:]}"
-    #                         await ctx.send(f"```json{minibuf}```")
-    #                         time.sleep(0.15)
-    #                     await ctx.respond(f"{len(res)} results for endpoint {endpoint}")
-                    
-    #                 else:
-    #                     await ctx.respond(f"Result is {len(toprint)} chars long, default limit is 10000 chars\npass 'big' to req_type to bypass the limit")
-                    
-
-    #             else:
-    #                 await ctx.respond(f"Usage /api endpoint:/v2/")
-
-    #         except Exception as e:
-    #             await ctx.respond(f"Try error {e} for {endpoint}")
-
-    #     else:
-    #         await ctx.respond(f"Unauthorized")
-
-
-    # @bot.event
-    # async def on_command_error(ctx, error):
-
-    #     if isinstance(error, commands.CommandNotFound):
-    #         await ctx.respond(f"Command not found")
-
-    #     channel = bot.get_channel(1007247986151133244)
-    #     await channel.send(f"{error} by {ctx.author}")
-
-
-
-    # async def auto_sub(chan_id, sub_id, rb = 0, type="c"):
-    #     global subscriptions
-
-    #     await bot.wait_until_ready()
-    #     if ("42" not in bot.user.name and int(chan_id) != 403285251637379083):
-    #        return 0
-
-    #     channel = 0
-    #     if (type == "c" and int(chan_id) != 0):
-    #         channel = bot.get_channel(int(chan_id))
-    #     elif (type == "u" and int(chan_id) != 0):
-    #         channel = await bot.fetch_user(int(chan_id))
-    #     else:
-    #         return 0
-
-    #     #print(chan_id, sub_id)
-
-    #     nline = 0
-    #     with open(f"res_watcher/{subscriptions[sub_id]['file']}", "r") as f:
-    #         nline = len(f.readlines()) - rb
-    #         if (nline < 0):
-    #             nline = 0
-
-    #     #if (type == "c" or chan_id == 378496894441095168):
-    #     if (chan_id == 378496894441095168):
-    #         await channel.send(f"{sub_id} linked")
-
-    #     while ((type == "c" and chan_id in autos[sub_id]['channels']) or (type == "u" and chan_id in autos[sub_id]['autousers'])):
-    #         toread = []
-    #         #print(f"res_watcher/{subscriptions[sub_id]['file']})
-    #         with open(f"res_watcher/{subscriptions[sub_id]['file']}", "r") as f:
-    #             lines = f.readlines()
-
-    #             #if (chan_id == 1013789722285457428):
-    #             #print(chan_id, sub_id, nline, len(lines))
-
-    #             if (nline > len(lines)):
-    #                 nline = 0
-
-    #             toread = lines[nline:]
-    #             nline = len(lines)
-
-    #         for mess in toread:
-    #             await manage_send(channel, mess)
-
-    #         await asyncio.sleep(15)
-
-
-    # async def logs_sub():
-    #     await bot.wait_until_ready()
-
-    #     channel = bot.get_channel(int(1071417393185816716))
-
-    #     nline = 0
-    #     with open(f"res_html/_newsletter_logs.news", "r") as f:
-    #         nline = len(f.readlines())
-    #         if (nline < 0):
-    #             nline = 0
-
-    #     #if (type == "c" or chan_id == 378496894441095168):
-    #     await channel.send(f"logs linked")
-
-    #     while (True):
-    #         toread = []
-    #         #print(f"res_watcher/{subscriptions[sub_id]['file']})
-    #         with open(f"res_html/_newsletter_logs.news", "r") as f:
-    #             lines = f.readlines()
-
-    #             if (nline > len(lines)):
-    #                 nline = 0
-
-    #             toread = lines[nline:]
-    #             nline = len(lines)
-
-    #         for mess in toread:
-    #             mess = f"Logs: {mess[:512]}"
-    #             await manage_send(channel, mess)
-
-    #         await asyncio.sleep(60)
-
-
-
-
-import environ
-# from consumer_bot import bot_consumer
-import pika
-
-# env = environ.Env()
-# environ.Env.read_env()
-
-# credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
-# parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
-
-# async def rabbit_worker():
-
-#     await bot.wait_until_ready()
-
-
-#     titl = "Default title"
-#     desc = "Default desc"
-#     imag = "https://dev.42lwatch.ch/static/animals.png"
-
-
-
-#     embed=discord.Embed(title=titl, description=desc, color=discord.Color.green(), timestamp=datetime.datetime.utcnow())
-
-
-#     embed.set_thumbnail(url=imag)
-
-#     channel = await bot.fetch_user(int(378496894441095168))
-
-#     await channel.send(embed=embed)
-
-
-
-
-
-
-
-
-    # async def exam():
-    #     pass
-
-    # connection = pika.BlockingConnection(parameters)
-    # channel = connection.channel()
-    # channel.basic_qos(prefetch_count=1)
-    # # channel.basic_consume(
-    # #     queue='server_message_queue', 
-    # #     auto_ack=False, 
-    # #     on_message_callback=lambda ch, method, properties, body: bot_consumer(bot, ch, method, properties, body)
-    # # )
-    # channel.start_consuming()
-
-    # channel = await bot.fetch_user(int(378496894441095168))
-    # channel = bot.get_channel(int(1071417393185816716))
-
-
-    # channel.basic_consume(on_message_callback=lambda ch, method, properties, body: on_message(window, ch, method, body),
-    #                 queue=queue_name,
-    #                 no_ack=True)
-
-
-    # await channel.send(f"logs linked")
-
-
-    #     for mess in toread:
-    #         mess = f"Logs: {mess[:512]}"
-    #         await manage_send(channel, mess)
-
-    #     await asyncio.sleep(60)
-
-# import aiormq
-
-import asyncio
-from consumer_bot import bot_consumer
-
-
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-
-def tmpt(ch, method, properties, body):
-    
-    # res = asyncio.run(bot_consumer(bot, ch, method, properties, body))
-    # res = loop.run_until_complete(bot_consumer(bot, ch, method, properties, body))
-    res = bot.loop.create_task(bot_consumer(bot, ch, method, properties, body))
-    return res
-
-
-async def consume_messages():
-
-    credentials = pika.PlainCredentials(env('RABBIT_USER'), env('RABBIT_PASS'))
-    parameters = pika.ConnectionParameters('rabbit', 5672, '/', credentials)
+async def get_private_messages():
+    global bot
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='private.message.queue', auto_ack=False, on_message_callback=tmpt)
+    ctx = await bot.fetch_user(int(378496894441095168))
+    # channel = bot.get_channel(int(chan_id))
 
-    channel.start_consuming()
+    for i in range(100):
+        method, properties, body = channel.basic_get(queue="private.message.queue")
+
+        if (method == None):
+            break
+
+        try:
+            if (type(body) == type({})):
+                body = json.dumps(body)
+
+            mylogger(f'Got {method.routing_key} for private', LOGGER_DEBUG, rabbit=False)
+            await discord_send(ctx, body)
+
+            channel.basic_ack(delivery_tag = method.delivery_tag)
+
+        except Exception as e:
+
+            print(e)
+            mylogger(f'Error for {str(e)}', LOGGER_ERROR, rabbit=True)
+            custom_reject("message.dlq", channel, method, body, f"Discord reject {str(e)}")
+
+    connection.close()
+
+
+
+
+
+@bot.slash_command(name="api", description="Api endpoint")
+async def api(ctx,
+    endpoint: Option(str, 'Endpoint', required=False),
+    page_num: Option(int, 'Page num', required=False),
+    page_size: Option(int, 'Page size', required=False),
+    req_type: Option(str, 'Request type', required=False, choices=(["json", "big", "user", "keys", "options", "rules"])),
+    sub_index: Option(str, 'Sub index', required=False)):
+
+    if (req_type == "rules"):
+        if ("v2" not in url):
+            url = f"/v2/project_sessions/{url}"
+
+        if (sub_index == None or len(sub_index) == 0):
+            sub_index = "project_sessions_rules"
+
+    print(endpoint, page_num, page_size)
+    print(str(ctx.author))
+
+    if (page_num == None):
+        page_num = 1
+    page_num = min(max(page_num, 1), 100)
+
+    if (page_size == None):
+        page_size = 30
+    page_size = min(max(page_size, 1), 100)
+
+    if (req_type == "options"):
+        page_size = 100
+
+
+    await ctx.defer()
+
+    if (str(ctx.author) in ["didji#0"]):
+        try:
+            if (endpoint != None):
+
+                url = ""
+                if ("?" in endpoint):
+                    url = f"{endpoint}&page[size]={page_size}&page[number]={page_num}"
+                else:
+                    url = f"{endpoint}?page[size]={page_size}&page[number]={page_num}"
+
+
+                print(url)
+                await ctx.respond(url)
+                if (req_type == "options"):
+                    res = raw(url, True)
+                    res = dict(res.headers)
+                else:
+                    res = callapi(url, nultiple=0, mode="fast")
+
+                if (type([]) == type(res) and len(res) == 1):
+                    res = res[0]
+
+                if (sub_index != None):
+                    if (type(res) == type({}) and "," in sub_index):
+                        mykeys = sub_index.split(",")
+                        mykeys = list(map(lambda x: x.strip(), mykeys))
+                        res = {mykey: (res[mykey] if mykey in list(res.keys()) else "none") for mykey in mykeys}
+
+                    elif (type(res) == type({}) and sub_index in list(res.keys())):
+                        res = res[sub_index]
+
+                    elif (type(res) == type([]) and "," in sub_index):
+                        mykeys = sub_index.split(",")
+                        mykeys = list(map(lambda x: x.strip(), mykeys))
+                        res = list(map(lambda x: {mykey: (x[mykey] if mykey in list(x.keys()) else "none") for mykey in mykeys}, res))
+
+                    elif (type(res) == type([]) and sub_index in list(res[0].keys())):
+                        res = list(map(lambda x: x[sub_index], res))
+                    else:
+                        await ctx.respond(f"sub_index not found")
+                        return 0
+                    
+                if (type(res) == type({}) and req_type == "user"):
+                    res = userify(res)
+
+                elif (type(res) == type([]) and req_type == "user"):
+                    res = list(map(lambda x: userify(x), res))
+
+                # print(json.dumps(res, indent=2))
+                if (req_type == "keys"):
+                    toprint = json.dumps(list(res.keys()), indent=2, ensure_ascii=False)
+                else:
+                    toprint = json.dumps(res, indent=2, ensure_ascii=False)
+
+
+                if (len(toprint) < 10000 or req_type == "big" or req_type == "user"):
+
+                    lines = toprint.split("\n")
+                    buffer = ""
+
+                    for line in lines:
+                        if (len(buffer) > 1900):
+                            while (len(buffer) > 1):
+                                minibuf = buffer[:1900]
+                                buffer = f"\n{buffer[1900:]}"
+                                await ctx.send(f"```json{minibuf}```")
+                                time.sleep(0.15)
+
+                        elif (len(buffer) + len(line) >= 1900):
+                            await ctx.send(f"```json{buffer}```")
+                            time.sleep(0.15)
+                            buffer = ""
+
+                        buffer += f"\n{line}"
+
+                    #await ctx.send(f"```json{buffer}```")
+                    while (len(buffer) > 1):
+                        minibuf = buffer[:1900]
+                        buffer = f"\n{buffer[1900:]}"
+                        await ctx.send(f"```json{minibuf}```")
+                        time.sleep(0.15)
+                    await ctx.respond(f"{len(res)} results for endpoint {endpoint}")
+                
+                else:
+                    await ctx.respond(f"Result is {len(toprint)} chars long, default limit is 10000 chars\npass 'big' to req_type to bypass the limit")
+                
+
+            else:
+                await ctx.respond(f"Usage /api endpoint:/v2/")
+
+        except Exception as e:
+            await ctx.respond(f"Try error {e} for {endpoint}")
+
+    else:
+        await ctx.respond(f"Unauthorized")
+
+
+
+    @bot.slash_command(name="comments", description="Nb comments over 180 chars")
+    async def comments(ctx, pseudo: Option(str, 'Pseudo', required=True)):
+
+        await ctx.defer()
+
+        r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2025-03-01T00:00:00.000Z", nultiple=1)
+        list = ["comment", "created_at"]
+
+        #print(r)
+        fulltab = []
+        for line in r:
+            tab = {}
+            for k in line.keys():
+                if (k == "id" or k in list):
+                    tab[k] = line[k]
+
+            fulltab.append(tab)
+            #print(tab)
+
+        nbdone = 0
+        for aa in fulltab:
+            try:
+                if (len(aa["comment"]) >= 180):
+                    nbdone += 1
+            except:
+                continue
+
+        await ctx.respond(f"{pseudo} has done {nbdone} comments with over 180 characters chars")
+
+
+
+@bot.slash_command(name="logged", description="Logged people")
+async def logged(ctx,
+    cluster: Option(str, 'Cluster', required=False, choices=(valid_cluster)),
+    list: Option(str, 'Cursus', required=False, choices=(valid_cursus))):
+
+    await ctx.defer()
+    lst = callapi("/v2/campus/47/locations?filter[active]=true&sort=begin_at", nultiple=1, mode="fast")
+
+    for log in lst:
+        if (cluster and cluster not in log['host']):
+            continue
+
+        begin = datetime.datetime.strptime(log["begin_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        end = datetime.datetime.now()
+
+        diff = end - begin
+
+        payload = {'message_type': 'embed'}
+        payload["title"] = f"{log['user']['login']} on {log['host']}"
+        payload["url"] = f"https://profile.intra.42.fr/users/{log['user']['login']}"
+
+        try:
+            payload["thumbnail"] = log['user']["image"]["link"]
+        except:
+            pass
+
+        payload["description"] = f"""Since {diff.total_seconds() // 3600} hours and {diff.total_seconds() % 3600 // 60} minutes"""
+
+
+        await discord_send(ctx, payload)
+
+    await discord_send(ctx, {"content": f"{len(lst)} people logged in query"})
+    await ctx.respond(f"Done")
+
+
+
+
+
+async def consume_messages():
+    await bot.wait_until_ready()
+
+    while True:
+
+        print("LOOP")
+        await get_private_messages()
+        await asyncio.sleep(10)
+
 
 @bot.event
 async def on_ready():
     bot.loop.create_task(consume_messages())
 
 if __name__ == "__main__":
-    # bot.run("") #PROD
-    bot.run("") #DEV
+
+    if (env('BUILD_TYPE') == "PROD"):
+        bot.run(env('DISCORD_BOT_PROD'))
+
+    else:
+        bot.run(env('DISCORD_BOT_DEV'))

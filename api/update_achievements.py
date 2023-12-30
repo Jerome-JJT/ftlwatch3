@@ -49,7 +49,7 @@ def achievement_notification(fetched):
         mylogger(f"Nofified achievement {fetched['id']} {fetched['name']}", LOGGER_INFO)
         send_to_rabbit('basics.server.message.queue', embed)
 
-        
+
 
 def achievement_callback(achievement):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
