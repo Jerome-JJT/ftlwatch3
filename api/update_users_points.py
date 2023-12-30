@@ -70,6 +70,7 @@ def user_points_callback(transac, user_id, login):
             "reason": transac['reason'],
             "sum": transac['sum'],
             "total": transac['total'],
+            'scale_team_id': transac['scale_team_id'],
             "created_at": transac['created_at'],
             "updated_at": transac['updated_at'],
         }
@@ -80,9 +81,9 @@ def user_points_callback(transac, user_id, login):
             point_notification({**good, "login": login})
 
         executeQueryAction("""INSERT INTO points_transactions (
-                "id", "user_id", "reason", "sum", "total", "created_at", "updated_at"
+                "id", "user_id", "reason", "sum", "total", "scale_team_id", "created_at", "updated_at"
             ) VALUES (
-                %(id)s, %(user_id)s, %(reason)s, %(sum)s, %(total)s, %(created_at)s, %(updated_at)s
+                %(id)s, %(user_id)s, %(reason)s, %(sum)s, %(total)s, %(scale_team_id)s, %(created_at)s, %(updated_at)s
             )
             ON CONFLICT DO NOTHING
             """, good)
