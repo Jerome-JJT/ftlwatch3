@@ -56,5 +56,5 @@ jobs:
             git checkout ${{ env.RELEASE_VERSION }} 
             make
             make setup
-            make msgdev
+            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgdev
 

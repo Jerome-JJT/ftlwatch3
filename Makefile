@@ -37,9 +37,9 @@ makerabbit:
 
 
 msgdev:
-			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy dev done'})"
+			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy dev ${RELEASE_VERSION} done'})"
 msgprod:
-			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy prod done'})"
+			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy prod ${RELEASE_VERSION} done'})"
 
 start:
 			${DOCKER} up -d --build
