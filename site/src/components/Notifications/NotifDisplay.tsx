@@ -41,7 +41,7 @@ export function NotifDisplay(): JSX.Element {
 
   //
   return (
-    <StyledAlert className='fixed bottom-0 right-0 mb-5 mr-5 space-y-2'>
+    <StyledAlert className='fixed bottom-0 right-0 mb-5 mr-5 z-20 space-y-2'>
       { notifications.map((notif) =>
         <Alert
           key={notif.id}

@@ -19,6 +19,7 @@ from _utils_logstash import *
 
 
 token = ""
+fast_token = ""
 tokencachefile = "/tmp/.token"
 
 if __name__ == "__main__":
@@ -27,33 +28,48 @@ if __name__ == "__main__":
     print("userify(user)")
 
 
-def test_token(token):
+def test_token(mode="slow"):
     try:
-        check = raw("/v2/users/jjaqueme", for_test = True)
+        check = raw("/v2/users/jjaqueme", for_test = True, mode=mode)
     except:
         return False
     return check.status_code == 200
 
-def get_headers(force_refresh = False):
+def get_headers(force_refresh = False, mode="slow"):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     global token
+    global fast_token
     global tokencachefile
 
-    if (len(token) == 0 and force_refresh == False):
-        if (os.path.isfile(tokencachefile)):
-            with open(f"{tokencachefile}", "r") as f:
-                token = f.read()
+    if (((len(token) == 0 and mode == "slow") or (len(fast_token) == 0 and mode != "slow")) and force_refresh == False):
+        if (os.path.isfile(f'{tokencachefile}_{mode}')):
+            with open(f'{tokencachefile}_{mode}', "r") as f:
+                if (mode == "slow"):
+                    token = f.read()
+                else:
+                    fast_token = f.read()
 
-        if (len(token) != 0):
-            mylogger("token from file", LOGGER_INFO)
-            if (not test_token(token)):
-                mylogger("token from file invalid", LOGGER_INFO)
+        if (len(token) != 0 and mode == "slow"):
+            mylogger(f"token {mode} from file", LOGGER_INFO)
+            if (not test_token(mode)):
+                mylogger(f"token {mode} from file invalid", LOGGER_INFO)
                 token = ""
 
-    if (len(token) == 0 or force_refresh == True):
+        elif (len(fast_token) != 0 and mode != "slow"):
+            mylogger("fast_token from file", LOGGER_INFO)
+            if (not test_token(mode)):
+                mylogger("fast_token from file invalid", LOGGER_INFO)
+                fast_token = ""
 
-        API_UID = env("API_UID")
-        API_SECRET = env("API_SECRET")
+    if (((len(token) == 0 and mode == "slow") or (len(fast_token) == 0 and mode != "slow")) or force_refresh == True):
+
+        if (mode == "slow"):
+            API_UID = env("API_UID")
+            API_SECRET = env("API_SECRET")
+        
+        else:
+            API_UID = env("FASTAPI_UID")
+            API_SECRET = env("FASTAPI_SECRET")
 
         request_token_payload = {
             "client_id": API_UID,
@@ -62,26 +78,34 @@ def get_headers(force_refresh = False):
             "scope": "public",
         }
 
-        mylogger("ask new token", LOGGER_INFO)
+        mylogger(f"ask new token {mode}", LOGGER_INFO)
         token_url = "https://api.intra.42.fr/v2/oauth/token"
         response = requests.post(token_url, data=request_token_payload)
 
         if(response.ok == True or response.status_code == 200):
             jsonres = response.json()
 
-            mylogger("got new token", LOGGER_INFO)
-            token = jsonres["access_token"]
-            with open(f"{tokencachefile}", "w") as f:
+            mylogger(f"got new token {mode}", LOGGER_INFO)
+            if (mode == "slow"):
+                token = jsonres["access_token"]
+            else:
+                fast_token = jsonres["access_token"]
+            with open(f'{tokencachefile}_{mode}', "w") as f:
                 f.write(jsonres["access_token"])
         
         else:
-            mylogger(f"token get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
+            mylogger(f"token {mode} get failed, status {response.status_code}, {response.reason}", LOGGER_ERROR)
 
-
-    return {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/json"
-    }
+    if (mode == "slow"):
+        return {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json"
+        }
+    else:
+        return {
+            "Authorization": f"Bearer {fast_token}",
+            "Accept": "application/json"
+        }
     
 
 def mocked_requests_get(data, status, headers = {}):
@@ -96,10 +120,10 @@ def mocked_requests_get(data, status, headers = {}):
 
     return MockResponse(data, status, headers)
 
-def raw(req, for_test = False):
+def raw(req, for_test = False, mode="slow"):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
-    auth = get_headers()
+    auth = get_headers(mode=mode)
 
     url = f"https://api.intra.42.fr{req}"
 
@@ -108,7 +132,7 @@ def raw(req, for_test = False):
     elif ("page[size]" not in url):
         url = f"{url}?page[size]=100"
 
-    mylogger(f"request to {req}", LOGGER_INFO)
+    mylogger(f"request {mode} to {req}", LOGGER_INFO)
 
     fails = 0
     maxfails = 10 if not for_test else 2
@@ -118,9 +142,9 @@ def raw(req, for_test = False):
         if (threading.current_thread() is threading.main_thread()):
             try:
                 with timeout(30):
-                    res = requests.get(url, headers=auth)
+                    res = requests.get(url, headers=auth, timeout=60)
             except TimeoutError:
-                mylogger(f"Timeout of 30 seconds on {url}", LOGGER_WARNING)
+                mylogger(f"Timeout of 30 seconds {mode} on {url}", LOGGER_WARNING)
                 fails += 1
                 time.sleep(5)
                 continue
@@ -152,38 +176,38 @@ def raw(req, for_test = False):
 
         elif (res.status_code == 401 and for_test == False):
 
-            mylogger(f"Token expired / Unauthorized", LOGGER_INFO)
-            auth = get_headers(force_refresh = True)
+            mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
+            auth = get_headers(force_refresh = True, mode=mode)
 
-        # elif (res.status_code == 401):
+        elif (res.status_code == 401 and for_test == False):
 
-        #     rich.print(res)
-        #     return res
+            mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
 
         elif (res.status_code == 429):
             ttl = res.headers.get('Retry-After')
 
-            mylogger(f"Timeout api 429, retry: {ttl}", LOGGER_WARNING)
+            mylogger(f"Timeout api {mode} 429, retry: {ttl}", LOGGER_WARNING)
             if ttl != None and int(ttl) < 300:
                 time.sleep(int(ttl))
             else:
                 time.sleep(300)
 
         elif (res.status_code == 404):
-            mylogger(f"API NOT FOUND {url}", LOGGER_ERROR)
+            mylogger(f"API {mode} NOT FOUND {url}", LOGGER_ERROR)
             return mocked_requests_get([], 200)
 
         else:
-            mylogger(f"Api http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)
+            mylogger(f"Api {mode} http error: {res.status_code} {res.reason} {url}", LOGGER_WARNING)
 
         fails += 1
         time.sleep(1)
 
-    mylogger(f"Raw api failed {maxfails} times", LOGGER_ERROR)
-    raise Exception(f"Raw api failed {maxfails} times") 
+    if (not for_test):
+        mylogger(f"Raw api {mode} failed {maxfails} times", LOGGER_ERROR)
+    raise Exception(f"Raw api {mode} failed {maxfails} times") 
 
 
-def callapi(req, multiple = False, callback = None, callback_limit = True, nultiple=0):
+def callapi(req, multiple = False, callback = None, callback_limit = True, nultiple=0, mode="slow"):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
 
@@ -193,7 +217,7 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
     start_time = time.time()
 
     page = req
-    rawres = raw(page)
+    rawres = raw(page, mode=mode)
     res = rawres.json()
 
     if (type(res) == type([]) and callback != None and nultiple <= 1):
@@ -209,7 +233,7 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
     perpage = rawres.headers.get("X-Per-Page")
     tot = rawres.headers.get("X-Total")
     if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
-        mylogger(f"So fast", LOGGER_DEBUG)
+        mylogger(f"So fast {mode}", LOGGER_DEBUG)
         time.sleep(0.5)
 
     if (type(res) == type([]) and (multiple == True or nultiple >= 1) and perpage != None and tot != None):
@@ -221,7 +245,7 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
             else:
                 page = f"{req}?page[number]={i}"
 
-            rawres = raw(page)
+            rawres = raw(page, mode=mode)
             res.extend(rawres.json())
 
             if (type(res) == type([]) and callback != None):
@@ -232,11 +256,11 @@ def callapi(req, multiple = False, callback = None, callback_limit = True, nulti
                 res = []
 
             if (rawres.headers.get("X-Runtime") and float(rawres.headers.get("X-Runtime")) <= 0.5):
-                mylogger(f"So fast", LOGGER_DEBUG)
+                mylogger(f"So fast {mode}", LOGGER_DEBUG)
                 time.sleep(0.5)
 
     end_time = time.time()
-    mylogger(f"""Request {req} {'mult' if multiple else 'direct'} {'with' if callback != None else 'without'} callback, 
+    mylogger(f"""Request {mode} {req} {'mult' if multiple else 'direct'} {'with' if callback != None else 'without'} callback, 
     start:\t{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     end:\t{datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')}, 
     elapsed:\t{end_time - start_time}""", LOGGER_DEBUG)
@@ -282,3 +306,24 @@ def userify(user):
         pass
 
     return (user)
+
+
+
+
+def raw_change(req, method, data = {}):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    
+    auth = get_headers()
+
+    url = f"https://api.intra.42.fr{req}"
+
+
+    if (method.lower() == "post"):
+        return requests.post(url, headers=auth)
+    
+    if (method.lower() == "patch"):
+        return requests.patch(url, headers=auth)
+
+    if (method.lower() == "get"):
+        return requests.get(url, headers=auth)
+

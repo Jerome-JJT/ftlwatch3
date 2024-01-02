@@ -92,7 +92,8 @@ export function AchievementsPage(): JSX.Element {
           customCard={AchievementCard}
 
           tableTitle='All possible achievements'
-          options={[10, 25, 50, 100]}
+          tableDesc='List of all existing achievements, some might not be visible at 42lausanne'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

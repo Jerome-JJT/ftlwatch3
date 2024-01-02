@@ -31,7 +31,10 @@ export default function NotFoundPage(): JSX.Element {
 
           {!isLogged &&
             <p>
-              Maybe it&apos;s because you aren&apos;t <a href="/api/?page=login&action=authorizeapi">logged</a> ?
+              Maybe it&apos;s because you aren&apos;t&nbsp;
+              <a href={`/api/?page=login&action=authorizeapi&next=${encodeURIComponent(window.location.pathname+window.location.search)}`}>
+                logged
+              </a> ?
             </p>
           }
           <p className="my-2">
@@ -42,7 +45,7 @@ export default function NotFoundPage(): JSX.Element {
         <CardFooter className="pt-0 flex gap-2">
           {
             !isLogged &&
-            <a href={'/api/?page=login&action=authorizeapi'}>
+            <a href={`/api/?page=login&action=authorizeapi&next=${encodeURIComponent(window.location.pathname+window.location.search)}`}>
               <Button color='blue'>Sign in</Button>
             </a>
           }

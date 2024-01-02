@@ -30,7 +30,14 @@ services:
     build: ./_build/rabbit
     hostname: rabbit
 
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - rabbit_data:/var/lib/rabbitmq
 
     environment:
@@ -45,6 +52,7 @@ services:
     image: postgres:14.2
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - main_db:/var/lib/postgresql/data/
 
     networks:
@@ -74,6 +82,7 @@ services:
       - db
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./secure_static:/secure_static
       - ./back:/var/www/html
 
@@ -98,6 +107,9 @@ services:
 
       RABBIT_USER: ${RABBIT_USER}
       RABBIT_PASS: ${RABBIT_PASS}
+
+      INTRA_USER: ${INTRA_USER}
+      INTRA_PASS: ${INTRA_PASS}
 
       API_UID: ${API_FRONT_UID}
       API_SECRET: ${API_FRONT_SECRET}
@@ -124,15 +136,23 @@ services:
     working_dir: /app
 
   api:
-    build: ./_build/api
+    build: 
+      context: .
+      dockerfile: ./_build/api/Dockerfile
+    depends_on:
+      rabbit:
+        condition: service_healthy
     #restart: on-failure
     
     stdin_open: true # docker run -i
     tty: true        # docker run -t
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./secure_static:/secure_static
+      - ./subjects_static:/subjects_static
       - ./api:/app
+      - jar:/jar
 
     networks:
       - back
@@ -152,21 +172,30 @@ services:
 
       RABBIT_USER: ${RABBIT_USER}
       RABBIT_PASS: ${RABBIT_PASS}
+
+      DISCORD_BOT_PROD: ${DISCORD_BOT_PROD}
+      DISCORD_BOT_DEV: ${DISCORD_BOT_DEV}
       
       API_UID: ${API_BACK_UID}
       API_SECRET: ${API_BACK_SECRET}
+
+      FASTAPI_UID: ${FASTAPI_BACK_UID}
+      FASTAPI_SECRET: ${FASTAPI_BACK_SECRET}
 
     working_dir: /app
 
 
   nginx:
-    build: ./_build/nginx
+    build: 
+      context: .
+      dockerfile: ./_build/nginx/Dockerfile
 
     depends_on:
       - front
       - back
 
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./static:/var/www/static
 
     networks:
@@ -184,5 +213,6 @@ networks:
 volumes:
   main_db:
   rabbit_data:
+  jar:
 
 

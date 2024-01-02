@@ -17,8 +17,13 @@ from update_projects import import_projects
 from update_titles import import_titles
 from update_users import import_users
 
-from update_users_coals import import_coals_users
-from update_users_points import import_points
+from update_users_coals import import_users_coals
+from update_users_points import import_users_points
+
+from update_pdf import import_subjects
+from process_pdf import process_pdf
+
+from update_intranotif import import_intranotif
 
 from update_events import import_events
 from update_locations import import_locations
@@ -92,19 +97,27 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "events"):
             import_events()
 
-        elif (resource == "coals_users"):
-            import_coals_users()
+        elif (resource == "users_coals"):
+            import_users_coals()
 
         elif (resource == "users_points"):
-            import_points()
+            import_users_points()
+
+        elif (resource == "update_pdf"):
+            import_subjects()
+        elif (resource == "process_pdf"):
+            process_pdf()
+
 
         elif (resource == "locations"):
-            import_locations()
+            import_locations(mode="fast")
         elif (resource == "process_locations"):
             process_locations()
 
         elif (resource == "teams"):
-            import_teams()
+            import_teams(mode="fast")
+        elif (resource == "intranotif"):
+            import_intranotif()
 
 
         elif (resource == "generate_love"):

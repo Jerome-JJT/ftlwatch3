@@ -138,7 +138,8 @@ export function ImagePage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Images'
-          options={[10, 25, 50, 100]}
+          tableDesc='Search for students by head'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

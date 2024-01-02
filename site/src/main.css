@@ -116,6 +116,10 @@ p, .my-text {
   @apply text-blue-gray-400 dark:text-gray-200;
 }
 
+textarea {
+  @apply dark:text-white;
+}
+
 input[type='checkbox'] { 
   @apply border-black;
 }

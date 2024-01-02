@@ -41,15 +41,15 @@ function get_image_poolfilters()
 
 function image_api($selectedFilter)
 {
-
-    $filters = get_image_poolfilters();
-    $validFilters = array_map(function ($filter) { return $filter["name"]; }, $filters);
-
     if ($selectedFilter == "") {
         $selectedFilter = "cursus";
     }
 
-    if (!in_array($selectedFilter, $validFilters)) {
+    $poolFilters = get_image_poolfilters();
+    $poolFiltersSlugs = array_map(function ($filter) { return $filter["name"]; }, $poolFilters);
+
+
+    if (!in_array($selectedFilter, $poolFiltersSlugs)) {
         jsonResponse(array("error" => "Unknown pool filter"), 404);
     }
 
@@ -78,15 +78,13 @@ function image_api($selectedFilter)
         $selectedFilter = substr($currentFilter, 0, 4);
     }
 
-    // mylogger($selectedFilter, LOGGER_DEBUG());
-    
 
     $res = array();
     
-    $res["poolfilters"] = $filters;
+    $res["poolfilters"] = $poolFilters;
 
 
-    $users = getUserImages(has_permission("p_admin"), $selectedFilter);
+    $users = getUserImages($selectedFilter == "all", $selectedFilter);
 
     $res["values"] = $users;
 

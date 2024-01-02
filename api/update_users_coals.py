@@ -3,7 +3,7 @@
 
 from _dbConnector import *
 from _api import *
-
+import time
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -39,10 +39,10 @@ def user_coal_callback(coals):
 
     return True
 
-def import_coals_users():
+def import_users_coals():
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    to_check = executeQuerySelect("""SELECT login FROM users WHERE kind = 'student' AND (blackhole > NOW() OR grade = 'Member')""")
+    to_check = executeQuerySelect("""SELECT login FROM users WHERE kind = 'student' AND login NOT LIKE '3b3-%%' AND (blackhole > NOW() OR grade = 'Member')""")
 
 
     mylogger("Start users coals worker", LOGGER_ALERT)
@@ -50,6 +50,7 @@ def import_coals_users():
     for check in to_check:
         tmp = callapi(f"/v2/users/{check['login']}/coalitions_users", False)
         user_coal_callback(tmp)
+        time.sleep(0.6)
 
 
     mylogger("End users coals worker", LOGGER_ALERT)
@@ -58,4 +59,4 @@ def import_coals_users():
 
 
 if __name__ == "__main__":
-    import_coals_users()
+    import_users_coals()

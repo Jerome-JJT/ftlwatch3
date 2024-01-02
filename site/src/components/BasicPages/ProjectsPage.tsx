@@ -7,27 +7,24 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Checkbox,
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
 import { commonTitle } from 'Utils/commonTitle';
+import ProjectDisplay from 'Common/ProjectDisplay';
 
-class CursusProps {
-  id: string = '';
-  name: string = '';
-}
+
 export function ProjectsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [values, setValues] = React.useState<any[]>([]);
 
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
-  const [selectedCursus, setSelectedCursus] = React.useState<CursusProps | undefined>(undefined);
+  const [selectedCursus, setSelectedCursus] = React.useState<number | undefined>(21);
 
-  React.useEffect(() => {document.title = commonTitle('Rules page');}, []);
+  React.useEffect(() => {document.title = commonTitle('Project page');}, []);
 
   React.useEffect(() => {
     axios
@@ -61,86 +58,7 @@ export function ProjectsPage(): JSX.Element {
 
         <CardBody className="grid grid-cols-2 grow gap-4 text-center align-center p-2">
 
-          <div className='blue-gray grid grid-cols-2 gap-1 place-content-start'>
-
-            <p>Cursus</p>
-            <p>{card.main_cursus}</p>
-
-            {(card.difficulty !== undefined && card.difficulty !== null) && <>
-              <p>Difficulty</p>
-              <p>
-                {card.difficulty}
-              </p>
-            </>
-            }
-
-            {(card.session_duration_days !== undefined && card.session_duration_days !== null) && <>
-              <p>Duration</p>
-              <p>
-                {card.session_duration_days ? `${card.session_duration_days} days` : card.session_estimate_time }
-              </p>
-            </>
-            }
-
-            {card.session_scale_duration && <>
-              <p>Slot</p>
-              <p>
-                {card.session_scale_duration / 60} minutes
-              </p>
-            </>
-            }
-
-            {card.cooldown && <>
-              <p>Cooldown</p>
-              <p>
-                {card.rule_retry_delay} jours
-              </p>
-            </>
-            }
-
-            <div className='col-span-2'>
-              <button className='col-span-2 text-xs'>Details</button>
-            </div>
-          </div>
-
-          <div className='blue-gray grid grid-cols-2 gap-1 place-content-start grow'>
-            <p>Exam</p>
-            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.is_exam} readOnly disabled /></div>
-
-            <p>Solo</p>
-            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.session_is_solo} readOnly disabled /></div>
-
-            <p>Moulinette</p>
-            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.session_has_moulinette} readOnly disabled /></div>
-
-            <p>Lausanne</p>
-            <div><Checkbox crossOrigin={undefined} containerProps={{ className: 'p-0' }} checked={card.has_lausanne} readOnly disabled /></div>
-
-            {card.session_correction_number && <>
-              <p>Correction</p>
-              <p>{card.session_correction_number}</p>
-            </>
-            }
-
-            {(card.rule_min || card.rule_max) && <>
-              <p>
-                Min: {card.rule_min || '-'}
-              </p>
-              <p>
-                Max: {card.rule_max || '-'}
-              </p>
-            </>
-            }
-
-            {card.session_terminating_after && <>
-              <p>Auto close</p>
-              <p>
-                {card.session_terminating_after} jours
-              </p>
-            </>
-            }
-
-          </div>
+          <ProjectDisplay project={card} link={true} />
 
         </CardBody>
 
@@ -211,7 +129,8 @@ export function ProjectsPage(): JSX.Element {
           subOptions={subOptions}
 
           tableTitle='Projects'
-          options={[10, 25, 50, 100]}
+          tableDesc='All existing projects with cursus, inscription and corrections informations. Also past subjects available in details'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

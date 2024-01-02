@@ -7,6 +7,12 @@ if (isset($_GET["action"])) {
     $action = $_GET["action"];
 }
 
+
+$next = "";
+if (isset($_GET["next"])) {
+    $next = $_GET["next"];
+}
+
 switch ($action) {
 
     case "login":
@@ -15,7 +21,7 @@ switch ($action) {
 
 
     case "authorizeapi":
-        loginapi_authorize();
+        loginapi_authorize($next);
         break;
 
     case "loginapi":

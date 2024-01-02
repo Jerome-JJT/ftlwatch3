@@ -237,7 +237,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
-  (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, NULL, 10),
+  (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
@@ -249,7 +249,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (150, 'Users visibility', 40, 'admin/users', NULL, 3, 1),
   (152, 'Projects visibility', 50, 'admin/projects', NULL, 3, 1),
 
-  (200, 'Tableau infos', 10, NULL, 'filter=cursus&infos', 1, 5),
+  (200, 'Tableau infos', 10, NULL, 'filter=cursus&projects=infos', 1, 5),
   (205, 'Tableau cursus common core', 22, NULL, 'filter=cursus&projects=common-core', 1, 10),
   (210, 'Tableau cursus outer core', 30, NULL, 'filter=cursus&projects=outer-core', 1, 10),
 
@@ -260,13 +260,17 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
+  (295, 'Projects list', 2, 'basics/projects', NULL, 5, 4),
   (300, 'Teams', 5, 'projects/teams', NULL, 5, 10),
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
+  (310, 'Subjects', 15, 'projects/subjects', NULL, 5, 10),
+  (315, 'Unmatched subjects', 20, 'projects/unmatchedsubjects', NULL, 5, 3),
 
   (350, 'Users computers', 40, 'locations/userscomputers', NULL, 6, 10),
   (355, 'Users totals', 30, 'locations/userstotal', NULL, 6, 10),
   (360, 'Computers totals', 10, 'locations/computerstotal', NULL, 6, 10),
-  (365, 'Connections', 20, 'locations/peaks', NULL, 6, 10),
+  (365, 'Connections peaks', 20, 'locations/peaks', NULL, 6, 10),
+  (366, 'Personal computers', 20, 'locations/personalcomputers', NULL, 6, 4),
 
   (370, 'Love piscine 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
   (371, 'Love piscine blackhole 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),

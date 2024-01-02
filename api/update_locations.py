@@ -5,12 +5,13 @@ from _api import *
 from dateutil import parser
 import datetime
 import click
+import pytz
 
 from astral import LocationInfo
 from astral.sun import sun
 
-current_limit = 300
-limit_checker = 300
+current_limit = 150
+limit_checker = 150
 
 
 city = LocationInfo("Switzerland", "Renens", "Europe/Zurich", 46.533, 6.591)
@@ -60,6 +61,46 @@ def sun_values(date, sit1):
 
     return (sun_time, moon_time)
 
+
+
+def location_notification(fetched):
+    from _utils_discord import discord_diff
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    locations_active = executeQuerySelect("SELECT id FROM locations_active WHERE id = %(id)s", {
+        "id": str(fetched["id"])
+    })
+    locations = executeQuerySelect("SELECT id FROM locations WHERE id = %(id)s", {
+        "id": str(fetched["id"])
+    })
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://profile.intra.42.fr/users/{fetched["user"]["login"]}'
+    }
+    if fetched.get("user") != None and fetched.get("user").get("image") != None and fetched.get("user").get("image").get("link") != None:
+        embed["thumbnail"] = fetched.get("user").get("image").get("link")
+
+
+    if (fetched["end_at"] == None and len(locations_active) == 0):
+        embed['title'] = f'{fetched["user"]["login"]} logged on {fetched["host"]}'
+        embed['description'] = f'Connected at <t:{int(parser.parse(fetched["begin_at"]).timestamp())}:f>\n{fetched["host"]}'
+        embed['footer_text'] = parser.parse(fetched["begin_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+
+        mylogger(f"Nofified location {fetched['id']} {fetched['host']}", LOGGER_INFO)
+        send_to_rabbit('locations.server.message.queue', embed)
+
+
+    elif (fetched["end_at"] != None and len(locations) == 0):
+        embed['title'] = f'{fetched["user"]["login"]} unlogged on {fetched["host"]}'
+        embed['description'] = f'Disconnected at <t:{int(parser.parse(fetched["end_at"]).timestamp())}:f>\n{fetched["host"]}'
+        embed['footer_text'] = parser.parse(fetched["end_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+        
+        mylogger(f"Nofified location {fetched['id']} {fetched['host']}", LOGGER_INFO)
+        send_to_rabbit('locations.server.message.queue', embed)
+
+
     
 def location_callback(location):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
@@ -71,7 +112,17 @@ def location_callback(location):
     if str(location["id"]) not in local_locations:
         current_limit = limit_checker
 
-        if (location['begin_at'] == None or location['end_at'] == None):
+        location_notification(location)
+
+        if (location['end_at'] == None):
+            executeQueryAction("""INSERT INTO locations_active ("id") VALUES (%(id)s)
+                ON CONFLICT DO NOTHING
+                """, {
+                "id": location["id"]
+            })
+            return True
+        
+        elif (location['begin_at'] == None or location['end_at'] == None):
             return True
 
         mylogger(f"Import location {location['id']} {location['host']} / current_limit = {current_limit}", LOGGER_INFO)
@@ -173,9 +224,15 @@ def location_callback(location):
 
 
 
-def import_locations(update_all=False, start_at=1):
+def import_locations(update_all=False, start_at=1, mode="slow"):
     global local_locations
+    global limit_checker
+    global current_limit
     from _utils_mylogger import mylogger, LOGGER_ALERT
+
+    current_limit = 150
+    limit_checker = 150
+
 
     local_locations = executeQuerySelect("SELECT id FROM locations ORDER BY id DESC LIMIT 1000")
     local_locations = [one["id"] for one in local_locations] 
@@ -185,11 +242,11 @@ def import_locations(update_all=False, start_at=1):
 
     if (update_all):
         mylogger("Start locations full worker", LOGGER_ALERT)
-        callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False)
+        callapi("/v2/campus/47/locations?sort=id", nultiple=start_at, callback=location_callback, callback_limit=False, mode=mode)
         mylogger("End locations full worker", LOGGER_ALERT)
 
     else:
-        callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True)
+        callapi(f"/v2/campus/47/locations?sort=-end_at", nultiple=1, callback=location_callback, callback_limit=True, mode=mode)
 
 
 

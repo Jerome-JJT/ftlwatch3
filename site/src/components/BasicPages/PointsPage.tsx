@@ -27,9 +27,19 @@ export function PointsPage(): JSX.Element {
           setColumns(res.data.columns as ColumnProps[]);
 
           const displayValues = res.data.values.map((user: any) => {
+            res.data.columns.forEach((col: ColumnProps) => {
+
+              if (col.field === 'login') {
+                user[`_${col.field}`] = user[col.field];
+                user[col.field] = <a
+                  href={`https://profile.intra.42.fr/users/${user.login}`}
+                >{user.login}</a>;
+              }
+            });
 
             return user;
           });
+
           setValues(displayValues);
         }
       })
@@ -48,7 +58,8 @@ export function PointsPage(): JSX.Element {
 
 
           tableTitle='Points'
-          options={[10, 25, 50, 100]}
+          tableDesc='Stats about points given to pool and evaluations'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

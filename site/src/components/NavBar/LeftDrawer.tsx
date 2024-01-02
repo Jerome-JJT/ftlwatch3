@@ -80,7 +80,7 @@ export default function LeftDrawer({
           return (
             (selectedSubs.indexOf(id) !== -1) &&
             <ListItem key={`${id}_${subId}`}
-              className='ml-4 hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
+              className='ml-2 hover:dark:bg-blue-gray-900 focus:dark:bg-blue-gray-900 active:dark:bg-blue-gray-900'
               onClick={() => {
                 sub.route.startsWith('http') ? window.location = sub.route :
                   sub.basefilter ? navigate(`${sub.route}?${sub.basefilter}`) : navigate(`${sub.route}`);
@@ -106,7 +106,7 @@ export default function LeftDrawer({
     <Drawer
       open={openedMenu === 'leftdrawer'}
       onClose={() => { setOpenedMenu(''); }}
-      className="p-4 dark:text-white dark:bg-gray-600 overflow-y-scroll"
+      className="p-4 px-2 !max-w-[260px] dark:text-white dark:bg-gray-600 overflow-y-scroll"
       overlayProps={{ className: 'fixed' }}
     >
       <div className="mb-2 flex items-center justify-between p-4">

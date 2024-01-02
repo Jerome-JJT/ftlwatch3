@@ -40,6 +40,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: SSH and Deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -49,8 +52,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/ftlwatch3dev
-            git pull
+            git fetch
+            git checkout ${{ env.RELEASE_VERSION }} 
             make
             make setup
-            make msgdev
+            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgdev
 

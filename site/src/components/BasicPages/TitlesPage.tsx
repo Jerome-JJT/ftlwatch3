@@ -61,7 +61,8 @@ export function TitlesPage(): JSX.Element {
 
 
           tableTitle='Titles'
-          options={[10, 25, 50, 100]}
+          tableDesc='All existing titles'
+          options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />
       }

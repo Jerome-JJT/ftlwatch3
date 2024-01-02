@@ -81,6 +81,7 @@ function get_users_totals()
         ["label" => "Total hours", "field" => "total"],
         ["label" => "Total piscine hours", "field" => "total_piscine"],
 
+        ["label" => "Nb computers", "field" => "nb_hosts"],
         ["label" => "Total entries", "field" => "entries"],
         ["label" => "Average hours by log", "field" => "average"],
 
@@ -141,4 +142,25 @@ function get_computers_totals()
 }
 
 
+function get_personal_computers($user_id, $login)
+{
+    $res = array();
+
+    if ($login !== "") {
+        need_permission("p_view4");
+    }
+
+    $tmp = getPersonalComputers($login !== "" ? null : $user_id, $login !== "" ? $login : null);
+
+    $tmp = array_map(function ($value) {
+        $value["total"] = round(max($value["total"], 0.1) / 3600, 2);
+        $value["total_piscine"] = round(max($value["total_piscine"], 0.1) / 3600, 2);
+
+        return $value;
+    }, $tmp);
+
+    $res["values"] = $tmp;
+
+    jsonResponse($res, 200);
+}
 

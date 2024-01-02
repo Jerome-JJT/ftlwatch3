@@ -4,9 +4,12 @@ schedule
 
 psycopg2
 watchdog
+beautifulsoup4
 
 pika
 click
+
+pypdf2
 
 oauthlib
 plotly

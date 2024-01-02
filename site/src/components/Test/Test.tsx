@@ -1,4 +1,7 @@
 import { Button } from '@material-tailwind/react';
+import AsgardMap from 'Maps/AsgardMap';
+import GothamMap from 'Maps/GothamMap';
+import SsdMap from 'Maps/SsdMap';
 import { useNotification } from 'Notifications/NotificationsProvider';
 
 export default function TestPage(): JSX.Element {
@@ -15,6 +18,11 @@ export default function TestPage(): JSX.Element {
       <Button onClick={() => { addNotif('test', 'error', 0); }}>Error</Button>
       <Button onClick={() => { addNotif('test', 'info', 0); }}>Info</Button>
       <Button onClick={() => { addNotif('test', 'question', 0); }}>Question</Button>
+
+
+      <GothamMap id='test' />
+      <AsgardMap id='test' />
+      <SsdMap id='test' />
 
     </div>
   );

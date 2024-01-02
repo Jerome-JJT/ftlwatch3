@@ -41,11 +41,17 @@ function login($post)
     }
 }
 
-function loginapi_authorize()
+function loginapi_authorize($next)
 {
+    $redirect_uri = getenv("CALLBACK_URL");
+    if (strlen($next) > 0) {
+        $redirect_uri .= "?next=" . $next;
+    }
+
 
     $authorization_redirect_url = "https://api.intra.42.fr/oauth/authorize?response_type=code";
-    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&redirect_uri=" . getenv("CALLBACK_URL") . "&scope=public";
+    $authorization_redirect_url .= "&client_id=" . getenv("API_UID") . "&scope=public";
+    $authorization_redirect_url .= "&redirect_uri=" . urlencode($redirect_uri);
 
     header("Location: " . $authorization_redirect_url);
     exit();
@@ -57,7 +63,7 @@ function loginapi_callback($post)
     if (isset($post["code"])) {
 
         require_once("controller/api.php");
-        $response = code_exchange($post["code"]);
+        $response = code_exchange($post["code"], isset($post["next"]) ? $post["next"] : "");
 
         if ($response === false) {
             jsonResponse(array(), 406);

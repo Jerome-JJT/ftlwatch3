@@ -5,10 +5,96 @@ from _dbConnector import *
 from _api import *
 import datetime
 from dateutil import parser
+import pytz
 
-
-
+# any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
+# all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 poolfilters = []
+
+
+def user_notification(fetched):
+    from _utils_discord import discord_diff
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    from _rabbit import send_to_rabbit
+
+    refer = executeQuerySelect("SELECT * FROM users WHERE id = %(id)s", {
+        "id": fetched["id"]
+    })
+    refer_titles_users = executeQuerySelect("""SELECT title_id FROM titles_users WHERE user_id = %(user_id)s""",
+    {
+        "user_id": fetched["id"]
+    })
+    refer_titles_users_id = [x["title_id"] for x in refer_titles_users]
+    fetched_titles_users_id = [x["id"] for x in fetched["titles"]]
+    fetched_titles_users = [x["name"] for x in fetched["titles"]]
+    refer_titles_users_id.sort()
+    fetched_titles_users_id.sort()
+    refer_titles_users_id = ", ".join([str(x) for x in refer_titles_users_id])
+    fetched_titles_users_id = ", ".join([str(x) for x in fetched_titles_users_id])
+
+    embed = {
+        'message_type': 'embed',
+        'url': f'https://profile.intra.42.fr/users/{fetched["login"]}',
+        'footer_text': datetime.datetime.now().astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
+    }
+    if fetched["avatar_url"] != None:
+        embed["thumbnail"] = f'{fetched["avatar_url"]}'
+
+    if (len(refer) == 0):
+        embed['title'] = f'Created user {fetched["id"]}, {fetched["login"]}'
+        refer = None
+    else:
+        embed['title'] = f'Updated user {fetched["id"]}, {fetched["login"]}'
+        refer = refer[0]
+
+
+    # check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
+    #                 "is_staff", "is_active", "is_alumni", "wallet", "correction_point", 
+    #                 "nbcursus", "has_cursus21", "has_cursus9", "cursus21_coalition_id", 
+    #                 "cursus9_coalition_id", "blackhole", "grade", "level", "is_bde", "is_tutor", 
+    #                 "poolfilter_id", "hidden"]
+
+    check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
+                    "is_staff", "blackhole", "has_cursus21", "is_active", "is_alumni", "wallet",
+                    "grade", "level", "is_bde", "is_tutor"]
+    
+    diffs = {}
+
+    for check in check_fields:
+        if ("blackhole" in check and fetched[check] != None):
+            fetched[check] = parser.parse(fetched[check])
+            fetched[check] = fetched[check].replace(tzinfo=None)
+
+        if (refer == None or str(refer[check]) != str(fetched[check])):
+            diffs[check] = discord_diff(refer, fetched, check)
+            if (check == "is_active"):
+                diffs["blackhole"] = discord_diff(refer, fetched, "blackhole")
+
+    if (refer_titles_users_id != fetched_titles_users_id):
+        diffs["_title"] = discord_diff({"_title": refer_titles_users_id}, {"_title": fetched_titles_users_id}, "_title")
+        diffs["_titles"] = f'```{" | ".join(fetched_titles_users)}```'
+
+
+
+    if (len(diffs.keys()) > 0):
+        embed['fields'] = diffs
+
+        mylogger(f"Nofified for user {fetched['id']} {fetched['login']}", LOGGER_INFO)
+        if (refer == None): # created
+            send_to_rabbit('created.server.message.queue', embed)
+
+        if ("is_active" in diffs.keys()): # active
+            send_to_rabbit('activity.server.message.queue', embed)
+
+        if ("has_cursus21" in diffs.keys()): # cursus
+            send_to_rabbit('joincursus.server.message.queue', embed)
+
+        if (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor"]) for e in diffs.keys()) 
+                or ("blackhole" in diffs.keys() and "is_active" not in diffs.keys())):
+            send_to_rabbit('users.server.message.queue', embed)
+        
+
+
 
 def import_title_user(user):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
@@ -51,13 +137,13 @@ def import_title_user(user):
 
 
 
-def timed_user_log(days, correction_point, wallet, level, date, user_id):
+def timed_user_log(days, correction_point, wallet, level, is_active, date, user_id):
 
     executeQueryAction("""INSERT INTO timedusers (
-        "days", "correction_point", "wallet", "level",
+        "days", "correction_point", "wallet", "level", "is_active",
         "date", "user_id"
     ) VALUES (
-        %(days)s, %(correction_point)s, %(wallet)s, %(level)s, %(date)s, %(user_id)s
+        %(days)s, %(correction_point)s, %(wallet)s, %(level)s, %(is_active)s, %(date)s, %(user_id)s
     )
     ON CONFLICT (date, user_id) DO NOTHING
     """, {
@@ -65,6 +151,7 @@ def timed_user_log(days, correction_point, wallet, level, date, user_id):
         "correction_point": correction_point,
         "wallet": wallet,
         "level": level,
+        "is_active": is_active,
         "date": date,
         "user_id": user_id
     })
@@ -89,6 +176,43 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     good_is_bde = len(list(filter(lambda x: x["name"] == "BDE", full_user["groups"]))) > 0
     good_is_tutor = len(list(filter(lambda x: x["name"] == "TUTOR", full_user["groups"]))) > 0
 
+    good = {
+        "id": full_user["id"],
+        "login": full_user["login"],
+        "first_name": good_firstname,
+        "last_name": full_user["last_name"],
+        "display_name": good_displayname,
+        "avatar_url": good_avatar_url,
+
+        "kind": full_user["kind"],
+        "is_staff": full_user["staff?"],
+        "is_active": full_user["active?"],
+        "is_alumni": full_user["alumni?"],
+        "wallet": full_user["wallet"],
+        "correction_point": full_user["correction_point"],
+
+        "nbcursus": good_nbcursus,
+        "has_cursus21": good_has_cursus21,
+        "has_cursus9": good_has_cursus9,
+
+        "cursus21_coalition_id": None,
+        "cursus9_coalition_id": None,
+
+        "blackhole": good_blackhole,
+
+        "grade": good_grade,
+        "level": good_level,
+        "is_bde": good_is_bde,
+        "is_tutor": good_is_tutor,
+
+        "poolfilter_id": good_poolfilter_id,
+
+        "hidden": False,
+        "created_at": full_user["created_at"],
+        "updated_at": full_user["updated_at"],
+    }
+
+    user_notification({**good, "titles": full_user["titles"]})
         
     executeQueryAction("""INSERT INTO users (
         "id", "login", "first_name", "last_name", "display_name", "avatar_url",
@@ -130,48 +254,14 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
         "poolfilter_id" = EXCLUDED.poolfilter_id,
         "created_at" = EXCLUDED.created_at,
         "updated_at" = EXCLUDED.updated_at
-    """, {
-        "id": full_user["id"],
-        "login": full_user["login"],
-        "first_name": good_firstname,
-        "last_name": full_user["last_name"],
-        "display_name": good_displayname,
-        "avatar_url": good_avatar_url,
-
-        "kind": full_user["kind"],
-        "is_staff": full_user["staff?"],
-        "is_active": full_user["active?"],
-        "is_alumni": full_user["alumni?"],
-        "wallet": full_user["wallet"],
-        "correction_point": full_user["correction_point"],
-
-        "nbcursus": good_nbcursus,
-        "has_cursus21": good_has_cursus21,
-        "has_cursus9": good_has_cursus9,
-
-        "cursus21_coalition_id": None,
-        "cursus9_coalition_id": None,
-
-        "blackhole": good_blackhole,
-
-        "grade": good_grade,
-        "level": good_level,
-        "is_bde": good_is_bde,
-        "is_tutor": good_is_tutor,
-
-        "poolfilter_id": good_poolfilter_id,
-
-        "hidden": False,
-        "created_at": full_user["created_at"],
-        "updated_at": full_user["updated_at"],
-    })
+    """, good)
 
 
     good_days = (parser.parse(good_blackhole).replace(tzinfo=None) - datetime.datetime.now().replace(tzinfo=None)).days if good_blackhole != None else -1
     
     import_title_user(full_user)
     timed_user_log(good_days, full_user["correction_point"], full_user["wallet"], 
-                good_level, datetime.datetime.now().strftime("%Y-%m-%d"), full_user["id"])
+                good_level, full_user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), full_user["id"])
 
 
 
@@ -248,7 +338,7 @@ def user_callback(user, cursus21_ids, local_users):
             "updated_at": user["updated_at"],
         })
 
-        timed_user_log(-1, user["correction_point"], user["wallet"], -1, datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
+        timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
 
     return True
 
@@ -273,6 +363,8 @@ def import_users():
 
     for user in all_users:
         user_callback(user, cursus21_ids, local_users)
+        # import time
+        # time.sleep(5)
 
     infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
                                      SUM(correction_point) AS sumpoints, 

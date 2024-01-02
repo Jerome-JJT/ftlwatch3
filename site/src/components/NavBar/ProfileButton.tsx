@@ -73,7 +73,7 @@ export default function ProfileButton(): JSX.Element {
           </>
 
         )) || (
-          <a href={'/api/?page=login&action=authorizeapi'}>
+          <a href={`/api/?page=login&action=authorizeapi&next=${encodeURIComponent(window.location.pathname+window.location.search)}`}>
             <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
               <AiOutlineLogout className={classNames(textColor)} />
 
