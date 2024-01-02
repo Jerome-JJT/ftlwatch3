@@ -177,7 +177,7 @@ def raw(req, for_test = False, mode="slow"):
         elif (res.status_code == 401 and for_test == False):
 
             mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
-            auth = get_headers(force_refresh = True)
+            auth = get_headers(force_refresh = True, mode=mode)
 
         # elif (res.status_code == 401):
 
