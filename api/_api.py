@@ -179,10 +179,9 @@ def raw(req, for_test = False, mode="slow"):
             mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
             auth = get_headers(force_refresh = True, mode=mode)
 
-        # elif (res.status_code == 401):
+        elif (res.status_code == 401 and for_test == False):
 
-        #     rich.print(res)
-        #     return res
+            mylogger(f"Token {mode} expired / Unauthorized", LOGGER_INFO)
 
         elif (res.status_code == 429):
             ttl = res.headers.get('Retry-After')
@@ -203,7 +202,8 @@ def raw(req, for_test = False, mode="slow"):
         fails += 1
         time.sleep(1)
 
-    mylogger(f"Raw api {mode} failed {maxfails} times", LOGGER_ERROR)
+    if (not for_test):
+        mylogger(f"Raw api {mode} failed {maxfails} times", LOGGER_ERROR)
     raise Exception(f"Raw api {mode} failed {maxfails} times") 
 
 
