@@ -94,7 +94,7 @@ def user_points_callback(transac, user_id, login):
     return (current_limit > 0)
 
 
-def import_points(update_all=False, start_at=1):
+def import_users_points(update_all=False, start_at=1):
     global local_points
     global current_limit, limit_checker
     from _utils_mylogger import mylogger, LOGGER_ALERT
@@ -132,7 +132,7 @@ def import_points(update_all=False, start_at=1):
 @click.option("--start-at", "-s", type=int, default=1, help="start at")
 
 def starter(update_all=False, start_at=1):
-    import_points(update_all, start_at)
+    import_users_points(update_all, start_at)
 
 if __name__ == "__main__":
     starter()

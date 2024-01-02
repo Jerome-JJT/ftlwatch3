@@ -50,12 +50,12 @@ if (env("BUILD_TYPE") == "PROD"):
 
     scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users'}))
 
-    scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coals_users'}))
+    # scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_coals'}))
     scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_points'}))
     scheduler_update.every().day.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'update_pdf'}))
     scheduler_update.every().day.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))
 
-    # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'coals_users'}))
+    scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_coals'}))
     # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users_points'}))
     # scheduler_update.every().sunday.at("04:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'update_pdf'}))
     # scheduler_update.every().sunday.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))

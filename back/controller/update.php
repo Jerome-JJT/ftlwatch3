@@ -15,7 +15,7 @@ $updates = array(
     array('id' => 'events', 'name' => 'Update events', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'events')); }),
 
 
-    array('id' => 'generate_coals_users', 'name' => 'Update users coals', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'coals_users')); }),
+    array('id' => 'generate_users_coals', 'name' => 'Update users coals', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users_coals')); }),
     array('id' => 'generate_users_points', 'name' => 'Update users points', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users_points')); }),
     
     array('id' => 'update_pdf', 'name' => 'Update pdf subjects', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'update_pdf')); }),
