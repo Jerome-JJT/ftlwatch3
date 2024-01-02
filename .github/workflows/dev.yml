@@ -52,9 +52,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/ftlwatch3dev
-            echo $RELEASE_VERSION > t1
-            echo ${{ env.RELEASE_VERSION }} > t2
-            git pull
+            git fetch
+            git checkout ${{ env.RELEASE_VERSION }} 
             make
             make setup
             make msgdev
