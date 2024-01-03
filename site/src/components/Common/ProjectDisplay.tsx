@@ -45,7 +45,7 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
         {(project.rule_correction && project.rule_correction.length > 0) && <>
           <p>Correction rules</p>
           <p>
-            {project.rule_correction} jours
+            {project.rule_correction}
           </p>
         </>
         }
