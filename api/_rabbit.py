@@ -109,6 +109,7 @@ working = [
     {"queue": "fast.update.queue", "function": api_consumer},
 
     {"queue": "server.message.queue", "function": webhook_consumer},
+    {"queue": "servercomplain.message.queue", "function": webhook_consumer},
 ]
 
 # working_test = [
