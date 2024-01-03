@@ -4,7 +4,6 @@ import { Avatar, Button, Menu, MenuHandler, MenuItem, MenuList, Typography } fro
 import { AiFillSetting, AiOutlineLogin, AiOutlineLogout, AiOutlineReload } from 'react-icons/ai';
 import classNames from 'classnames';
 import { useLogin } from 'Hooks/LoginProvider';
-import { SyntheticEvent } from 'react';
 import axios from 'axios';
 
 export default function ProfileButton(): JSX.Element {
