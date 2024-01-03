@@ -9,15 +9,15 @@ function specials_tig($user) {
 
     if (isset($ban["ban_date"])) {
         if ($ban["ban_date"] == null) {
-            sentToRabbit("tig.server.message.queue", array('content' => 'Tig '.$login));
+            sentToRabbit("tig.server.message.queue", array('content' => 'Tig '.$user["login"]));
     
-            setBanDate($userId, date("Y-m-d"));
+            setBanDate($user["id"], date("Y-m-d"));
             jsonResponse(array(), 201);
         }
         else if (strtotime($ban["ban_date"]) + 86400 < time()) {
-            sentToRabbit("tig.server.message.queue", array('content' => 'Tig '.$login));
+            sentToRabbit("tig.server.message.queue", array('content' => 'Tig '.$user["login"]));
     
-            setBanDate($userId, date("Y-m-d"));
+            setBanDate($user["id"], date("Y-m-d"));
             jsonResponse(array(), 201);
         }
         else {
@@ -32,7 +32,7 @@ function specials_tig($user) {
 function specials_css($user) {
     
     setIncrementCss($user["id"]);
-    sentToRabbit("complain.server.message.queue", array('content' => 'Complain '.$login.' '.getCss($userId)));
+    sentToRabbit("complain.server.message.queue", array('content' => 'Complain '.$user["login"].' '.getCss($user["id"])));
 
     jsonResponse(array(), 200);
 }
