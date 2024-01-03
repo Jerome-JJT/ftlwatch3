@@ -13,7 +13,7 @@ export default function ProfileButton(): JSX.Element {
   const { isLogged, userInfos, getUserData } = useLogin();
 
 
-  const handleComplain = (event: SyntheticEvent): void => {
+  const handleComplain = (): void => {
     axios
       .post('/?page=specials&action=complain', '', { withCredentials: true }
       )

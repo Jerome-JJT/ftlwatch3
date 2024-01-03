@@ -32,7 +32,7 @@ function specials_tig($user) {
 function specials_css($user) {
     
     setIncrementCss($user["id"]);
-    sentToRabbit("complain.server.message.queue", array('content' => 'Complain '.$login));
+    sentToRabbit("complain.server.message.queue", array('content' => 'Complain '.$login.' '.getCss($userId)));
 
     jsonResponse(array(), 200);
 }

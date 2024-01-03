@@ -52,6 +52,30 @@ function setBanDate($userId, $banDate)
   return executeQueryAction($query, $data);
 }
 
+function getCss($userId)
+{
+
+  $query = "SELECT login_user_profiles.css_click
+  FROM login_user_profiles
+  
+  WHERE id = :user_id
+  ";
+
+  $data = array(":user_id" => $userId);
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  if (count($result) === 1) {
+    $result = $result[0];
+
+    return array(
+      "css_click" => $result["css_click"]
+    );
+  }
+
+  return array("error" => "Not found");
+}
 
 function setIncrementCss($userId)
 {

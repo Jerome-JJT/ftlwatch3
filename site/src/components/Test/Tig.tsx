@@ -1,8 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useLogin } from 'Hooks/LoginProvider';
-import { commonTitle } from 'Utils/commonTitle';
 
 export default function TigPage(): JSX.Element {
 
