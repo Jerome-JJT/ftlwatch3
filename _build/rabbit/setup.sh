@@ -22,6 +22,8 @@ $RABBITCMD declare queue name=private.message.queue durable=true arguments='{"co
 $RABBITCMD declare binding source="main" destination_type="queue" destination="slow.update.queue" routing_key="slow.update.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="fast.update.queue" routing_key="fast.update.queue"
 
+$RABBITCMD declare binding source="main" destination_type="queue" destination="servercomplain.message.queue" routing_key="*.servercomplain.message.queue"
+
 $RABBITCMD declare binding source="main" destination_type="queue" destination="server.message.queue" routing_key="*.server.message.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="*.private.message.queue"
 
