@@ -111,6 +111,10 @@ try {
         case "events":
             require_once("routes/events.php");
             break;
+
+        case "specials":
+            require_once("routes/specials.php");
+            break;
     }
 
     jsonResponse(array(), 510);

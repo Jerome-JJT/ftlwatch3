@@ -11,6 +11,62 @@ function getThemes() {
 }
 
 
+function getBanDate($userId)
+{
+
+  $query = "SELECT login_user_profiles.ban_date
+  FROM login_user_profiles
+  
+  WHERE id = :user_id
+  ";
+
+  $data = array(":user_id" => $userId);
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  if (count($result) === 1) {
+    $result = $result[0];
+
+    return array(
+      "ban_date" => $result["ban_date"]
+    );
+  }
+
+  return array("error" => "Not found");
+}
+
+
+function setBanDate($userId, $banDate)
+{
+  $query = "UPDATE login_user_profiles SET ban_date = :ban_date
+
+  WHERE id = :user_id";
+
+  $data = array(
+    ":user_id" => $userId,
+    ":ban_date" => $banDate
+  );
+
+  require_once("model/dbConnector.php");
+  return executeQueryAction($query, $data);
+}
+
+
+function setIncrementCss($userId)
+{
+  $query = "UPDATE login_user_profiles SET css_click = css_click + 1
+
+  WHERE id = :user_id";
+
+  $data = array(
+    ":user_id" => $userId
+  );
+
+  require_once("model/dbConnector.php");
+  return executeQueryAction($query, $data);
+
+}
 
 function setSettings($userId, $themeId, $themeColor, $terms) {
 

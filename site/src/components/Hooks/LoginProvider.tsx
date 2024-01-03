@@ -13,6 +13,8 @@ export interface LoggedUser {
 
   is_admin: boolean
 
+  css_click: number
+
   theme_id: number
   theme_image: string
   theme_color: string
@@ -64,7 +66,7 @@ export function LoginProvider({ children }: { children: ReactNode }): JSX.Elemen
           if (announce) {
             addNotif(`Welcome ${res.data.user.login}!`, 'success');
           }
-          else if (reload) {
+          else if (reload && announce) {
             addNotif('Reload done', 'info');
           }
         }

@@ -53,6 +53,7 @@ import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
 import { SubjectsPage } from 'Projects/SubjectsPage';
 import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
+import TigPage from 'Test/Tig';
 // import Place from './components/Place/Place';
 
 
@@ -169,6 +170,7 @@ export default function App(): JSX.Element {
 
 
             <Route path="/test" element={<TestPage />} />
+            <Route path="/tig" element={<TigPage />} />
           </>}
 
           <Route path="*" element={<NotFoundPage />} />
