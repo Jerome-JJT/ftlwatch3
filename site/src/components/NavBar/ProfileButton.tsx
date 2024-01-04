@@ -27,7 +27,7 @@ export default function ProfileButton(): JSX.Element {
   return (
     <div>
     
-      <Button onClick={handleComplain} className='bg-[#FA8072] p-2 mr-4'>Complain {userInfos?.css_click}</Button>
+      { isLogged && <Button onClick={handleComplain} className='bg-[#FA8072] p-2 mr-4'>Complain {userInfos?.css_click}</Button> }
       
       <Menu>
         <MenuHandler>
