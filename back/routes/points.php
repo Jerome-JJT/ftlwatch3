@@ -18,6 +18,10 @@ switch ($action) {
     case "get_pools":
         get_pools();
         break;
+
+    case "get_pools2":
+        get_pools2();
+        break;
 }
 
 exit();

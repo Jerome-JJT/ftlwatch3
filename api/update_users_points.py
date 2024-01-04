@@ -132,7 +132,7 @@ def import_users_points(update_all=False, start_at=1):
     current_limit = 50
     limit_checker = 50
 
-    to_check = executeQuerySelect("""SELECT id, login FROM users WHERE kind = 'student' ORDER BY id""")
+    to_check = executeQuerySelect("""SELECT id, login FROM users ORDER BY id""")
 
     mylogger("Start users points worker", LOGGER_ALERT)
 

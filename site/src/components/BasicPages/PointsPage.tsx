@@ -19,7 +19,7 @@ export function PointsPage(): JSX.Element {
 
   React.useEffect(() => {
     axios
-      .get('/?page=basic&action=get_points',
+      .get('/?page=points&action=get_points',
         { withCredentials: true }
       )
       .then((res) => {
