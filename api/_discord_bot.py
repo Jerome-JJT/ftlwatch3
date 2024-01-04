@@ -12,6 +12,8 @@ import asyncio
 from _api import *
 from _utils_discord import *
 from _rabbit import custom_reject
+from _dbConnector import *
+from update_users import import_users
 
 import discord
 from discord.errors import PrivilegedIntentsRequired
@@ -40,6 +42,11 @@ valid_cluster = [
 valid_cursus = [
     OptionChoice(name="Cursus 42", value="all"),
     OptionChoice(name="Not cursus 42", value="not")
+]
+
+valid_timelines = [
+    OptionChoice(name="Future", value="future"),
+    OptionChoice(name="Past", value="past")
 ]
 
 
@@ -319,6 +326,56 @@ async def logged(ctx,
     await ctx.respond(f"Done")
 
 
+@bot.slash_command(name="blackhole", description="Blackholes", guild=discord.Object(id=1192396529705701477))
+async def blackhole(ctx, 
+                    timeline: Option(str, 'Future or Past', required=True, choices=(valid_timelines)), 
+                    days: Option(int, 'Days', required=False)):
+
+    await ctx.defer()
+
+    if days is None:
+        days = 5
+    datenow = datetime.datetime.now()
+    if timeline == "future":
+        datelimit = datenow + datetime.timedelta(days=days)
+        refer = executeQuerySelect("SELECT * FROM users WHERE has_cursus21 = True AND blackhole < %s AND blackhole > %s", (datelimit, datenow))
+    else:
+        datelimit = datenow - datetime.timedelta(days=days)
+        refer = executeQuerySelect("SELECT * FROM users WHERE has_cursus21 = True AND blackhole > %s AND blackhole < %s", (datelimit, datenow))
+
+    user_days_list = []
+
+    for user in refer:
+        bhdate_timedelta = user['blackhole'] - datenow
+        days_until_bh = bhdate_timedelta.days
+
+        user_days_list.append((user, days_until_bh))
+    user_days_list.sort(key=lambda x: x[1])
+
+    for user, days_until_bh in user_days_list:
+        payload = {'message_type': 'embed'}
+        payload["title"] = f"{user['login']}"
+        payload["url"] = f"https://profile.intra.42.fr/users/{user['login']}"
+
+        try:
+            payload["thumbnail"] = user["avatar_url"]
+        except KeyError:
+            pass
+
+        if days_until_bh > 0:
+            payload["description"] = f"{user['login']} will blackhole in {days_until_bh} days"
+        elif days_until_bh == 0:
+            payload["description"] = f"{user['login']} is blackholing today"
+        else:
+            payload["description"] = f"{user['login']} have blackholed {abs(days_until_bh)} days ago"
+
+
+        await discord_send(ctx, payload)
+    if timeline == "future":
+        await discord_send(ctx, {"content": f"{len(refer)} people could blackhole within {days} days"})
+    else:
+        await discord_send(ctx, {"content": f"{len(refer)} people have blackholed in the last {days} days"})
+    await ctx.respond(f"Done")
 
 
 
