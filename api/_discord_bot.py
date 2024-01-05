@@ -121,6 +121,18 @@ async def get_private_messages():
 
 
 
+@bot.slash_command(name="ping", description="Ping private")
+async def ping(ctx):
+
+    from _rabbit import send_to_rabbit
+    
+    await ctx.defer()
+    send_to_rabbit('private.message.queue', {'content': 'Ping'})
+
+    await ctx.respond(f"Done")
+
+
+
 
 
 @bot.slash_command(name="api", description="Api endpoint")
