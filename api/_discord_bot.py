@@ -8,6 +8,7 @@ import pika
 import rich
 import sys
 import asyncio
+from operator import itemgetter
 
 from _api import *
 from _utils_discord import *
@@ -46,7 +47,8 @@ valid_cursus = [
 
 valid_timelines = [
     OptionChoice(name="Future", value="future"),
-    OptionChoice(name="Past", value="past")
+    OptionChoice(name="Past", value="past"),
+    OptionChoice(name="Both", value="both"),
 ]
 
 
@@ -328,9 +330,8 @@ async def logged(ctx,
 
 @bot.slash_command(name="blackhole", description="Blackholes", guild=discord.Object(id=1192396529705701477))
 async def blackhole(ctx, 
-                    timeline: Option(str, 'Future or Past', required=True, choices=(valid_timelines)), 
+                    timeline: Option(str, 'Future or/and Past', required=True, choices=(valid_timelines)), 
                     days: Option(int, 'Days', required=False)):
-
     await ctx.defer()
 
     if days is None:
@@ -339,18 +340,20 @@ async def blackhole(ctx,
     if timeline == "future":
         datelimit = datenow + datetime.timedelta(days=days)
         refer = executeQuerySelect("SELECT * FROM users WHERE has_cursus21 = True AND blackhole < %s AND blackhole > %s", (datelimit, datenow))
-    else:
+    elif timeline == "past":
         datelimit = datenow - datetime.timedelta(days=days)
         refer = executeQuerySelect("SELECT * FROM users WHERE has_cursus21 = True AND blackhole > %s AND blackhole < %s", (datelimit, datenow))
+    else:
+        datepast = datenow - datetime.timedelta(days=days)
+        datelimit = datetime.datetime.now() + datetime.timedelta(days=days)
+        refer = executeQuerySelect("SELECT * FROM users WHERE has_cursus21 = True AND blackhole > %s AND blackhole < %s", (datepast, datelimit))
 
     user_days_list = []
-
     for user in refer:
         bhdate_timedelta = user['blackhole'] - datenow
         days_until_bh = bhdate_timedelta.days
-
         user_days_list.append((user, days_until_bh))
-    user_days_list.sort(key=lambda x: x[1])
+    user_days_list.sort(key=itemgetter(1))
 
     for user, days_until_bh in user_days_list:
         payload = {'message_type': 'embed'}
@@ -362,19 +365,23 @@ async def blackhole(ctx,
         except KeyError:
             pass
 
+        past_blackholes = 0
         if days_until_bh > 0:
             payload["description"] = f"{user['login']} will blackhole in {days_until_bh} days"
         elif days_until_bh == 0:
             payload["description"] = f"{user['login']} is blackholing today"
         else:
             payload["description"] = f"{user['login']} have blackholed {abs(days_until_bh)} days ago"
+            past_blackholes += 1
 
 
         await discord_send(ctx, payload)
     if timeline == "future":
-        await discord_send(ctx, {"content": f"{len(refer)} people could blackhole within {days} days"})
+        await discord_send(ctx, {"content": f"{len(refer) - past_blackholes} people could blackhole within {days} days"})
+    elif timeline == "past":
+        await discord_send(ctx, {"content": f"{past_blackholes} people have blackholed in the last {days} days"})
     else:
-        await discord_send(ctx, {"content": f"{len(refer)} people have blackholed in the last {days} days"})
+        await discord_send(ctx, {"content": f"{past_blackholes} people have blackholed in the last {days} days and {len(refer) - past_blackholes} could blackhole within the next {days} days"})
     await ctx.respond(f"Done")
 
 
