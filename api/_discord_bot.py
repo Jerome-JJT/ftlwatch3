@@ -362,7 +362,7 @@ async def blackhole(ctx,
         bhdate_timedelta = user['blackhole'] - datenow
         days_until_bh = bhdate_timedelta.days
         user_days_list.append((user, days_until_bh))
-    user_days_list.sort(key=itemgetter(1))
+    user_days_list.sort()
 
     past_blackholes = 0
     for user, days_until_bh in user_days_list:
@@ -382,9 +382,9 @@ async def blackhole(ctx,
         else:
             payload["description"] = f"{user['login']} have blackholed {abs(days_until_bh)} days ago"
             past_blackholes += 1
-
-
+            
         await discord_send(ctx, payload)
+        
     if timeline == "future":
         await discord_send(ctx, {"content": f"{len(refer) - past_blackholes} people could blackhole within {days} days"})
     elif timeline == "past":
