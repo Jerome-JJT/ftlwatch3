@@ -367,7 +367,7 @@ async def logged(ctx,
     await ctx.respond(f"Done")
 
 
-@bot.slash_command(name="blackhole", description="Blackholes", guild=discord.Object(id=1192396529705701477))
+@bot.slash_command(name="blackhole", description="Blackholes")
 async def blackhole(ctx, 
                     timeline: Option(str, 'Future or/and Past', required=True, choices=(valid_timelines)), 
                     days: Option(int, 'Days', required=False)):
