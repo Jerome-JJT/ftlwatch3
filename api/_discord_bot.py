@@ -8,7 +8,6 @@ import pika
 import rich
 import sys
 import asyncio
-from operator import itemgetter
 
 from _api import *
 from _utils_discord import *
