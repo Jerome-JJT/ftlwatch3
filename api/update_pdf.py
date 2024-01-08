@@ -119,6 +119,7 @@ def import_subjects(update_all=False, start_at=1500):
         start_at = max(local_subjects)
 
 
+    counter_500 = 0
     limit_checker = 200
     current_limit = limit_checker
 
@@ -128,13 +129,13 @@ def import_subjects(update_all=False, start_at=1500):
         url = f"https://cdn.intra.42.fr/pdf/pdf/{start_at}/en.subject.pdf"
         
 
-        mylogger(f"Try import subject {start_at} {url} / current_limit {current_limit}", LOGGER_INFO)
+        mylogger(f"Try import subject {start_at} {url} / current_limit {current_limit}, 500 limit {counter_500}", LOGGER_INFO)
         try:
             res = urlopen(url)
 
             if (res.status == 200):
 
-                mylogger(f"Find import subject {start_at} {url} / current_limit {current_limit}", LOGGER_INFO)
+                mylogger(f"Find import subject {start_at} {url} / current_limit {current_limit}, 500 limit {counter_500}", LOGGER_INFO)
                 
                 current_limit = limit_checker
 
@@ -155,6 +156,11 @@ def import_subjects(update_all=False, start_at=1500):
 
         except urllib.error.HTTPError as e:
             current_limit -= 1
+            if ("500" in str(e) and counter_500 < 3):
+                counter_500 += 1
+                time.sleep(1)
+                continue
+
             if ("404" not in str(e)):
                 mylogger(f"Pdf http error {url} {type(e)} {e}", LOGGER_ERROR)
 
@@ -166,6 +172,7 @@ def import_subjects(update_all=False, start_at=1500):
             break
 
         start_at += 1
+        counter_500 = 0
         time.sleep(0.5)
 
     mylogger("End pdfs full worker", LOGGER_ALERT)
