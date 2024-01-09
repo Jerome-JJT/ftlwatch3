@@ -161,8 +161,8 @@ async def api(ctx,
 
 
     if (req_type == "rules"):
-        if ("v2" not in url):
-            url = f"/v2/project_sessions/{url}"
+        if ("v2" not in endpoint):
+            endpoint = f"/v2/project_sessions/{endpoint}"
 
         if (sub_index == None or len(sub_index) == 0):
             sub_index = "project_sessions_rules"
