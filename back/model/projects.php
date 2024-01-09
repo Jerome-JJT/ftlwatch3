@@ -2,7 +2,7 @@
 
 function getGroupProjects($cursus = '')
 {
-  $query = "SELECT 
+	$query = "SELECT 
       te.team_id, te.team_name, te.retry_common,
       te.project_name, te.project_slug, 
       users.id AS user_id, users.login, users.avatar_url,
@@ -38,18 +38,18 @@ function getGroupProjects($cursus = '')
     ORDER BY te.team_updated_at ASC
   ";
 
-  $data = array(":cursus" => $cursus);
+	$data = array(":cursus" => $cursus);
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 
-function getUserProjects()
+function getTinderUserProjects()
 {
-  $query = "SELECT 
+	$query = "SELECT 
       users.id AS user_id, users.login, users.avatar_url,
       projects.id AS project_id, projects.slug AS project_slug,
       MAX(CASE WHEN is_locked THEN 1 ELSE 0 END) AS is_locked
@@ -68,17 +68,17 @@ function getUserProjects()
     GROUP BY users.id, projects.id
   ";
 
-  $data = array();
+	$data = array();
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 function getProjectsCount()
 {
-  $query = "SELECT pr.user_id, SUM(pr.is_validated) AS validated from 
+	$query = "SELECT pr.user_id, SUM(pr.is_validated) AS validated from 
     (SELECT 
       users.id AS user_id, users.login, projects.slug,
       SUM(CASE WHEN is_validated THEN 1 ELSE 0 END) AS is_validated,
@@ -100,17 +100,17 @@ function getProjectsCount()
   GROUP BY pr.user_id
   ";
 
-  $data = array();
+	$data = array();
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 function getExamCount()
 {
-  $query = "SELECT pr.user_id, SUM(pr.is_validated) AS validated from  
+	$query = "SELECT pr.user_id, SUM(pr.is_validated) AS validated from  
     (SELECT users.id AS user_id, users.login, projects.slug,
     SUM(CASE WHEN is_validated THEN 1 ELSE 0 END) AS is_validated,
       COUNT(projects.id) AS tries
@@ -132,19 +132,19 @@ function getExamCount()
 
   ";
 
-  $data = array();
+	$data = array();
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 
 
 function getSubjectsHeads()
 {
-  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
+	$query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
     projects.slug AS project_slug, 
     projects.slug AS project_slug, 
     subjects.id AS subject_id, 
@@ -158,17 +158,17 @@ function getSubjectsHeads()
     ORDER BY subjects.id ASC
   ";
 
-  $data = array();
+	$data = array();
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 function getProjectSubjects($id)
 {
-  $query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
+	$query = "SELECT subject_hashmaps.id, subject_hashmaps.title, subject_hashmaps.title_hash, 
     projects.slug AS project_slug, 
     subjects.id AS subject_id, 
     subjects.url AS subject_url,
@@ -185,10 +185,35 @@ function getProjectSubjects($id)
     ORDER BY subjects.id ASC
   ";
 
-  $data = array(":project_id" => $id);
+	$data = array(":project_id" => $id);
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
+}
+
+function getSingleUserTeams($user_id)
+{
+	$query = "SELECT 
+	  projects.id AS project_id, projects.slug AS project_slug,
+	  MAX(CASE WHEN is_validated THEN 1 ELSE 0 END) AS is_validated, MAX(teams.final_mark) AS final_mark
+
+	FROM teams
+	JOIN team_user ON teams.id = team_user.team_id
+	JOIN users ON users.id = team_user.user_id
+	left JOIN projects ON projects.id = teams.project_id
+	
+	WHERE users.id = :user_id
+	AND (projects.main_cursus is null or projects.main_cursus = 21)
+	
+	GROUP BY projects.id, projects.slug
+  ";
+
+	$data = array(":user_id" => $user_id);
+
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
+
+	return $result;
 }

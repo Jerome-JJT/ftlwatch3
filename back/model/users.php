@@ -2,7 +2,7 @@
 
 function getUsersShort($hidden)
 {
-  $query = "SELECT 
+	$query = "SELECT 
   users.id,
   users.login,
   users.avatar_url,
@@ -25,17 +25,17 @@ function getUsersShort($hidden)
   ORDER BY login
   ";
 
-  $data = array(":show_hidden" => $hidden ? "TRUE" : "FALSE");
+	$data = array(":show_hidden" => $hidden ? "TRUE" : "FALSE");
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 function getUsers($hidden, $poolfilter = '')
 {
-  $query = "SELECT 
+	$query = "SELECT 
   users.id,
   users.login,
   users.first_name,
@@ -87,18 +87,18 @@ function getUsers($hidden, $poolfilter = '')
   ORDER BY login
   ";
 
-  $data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
+	$data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 
 function getUserImages($hidden, $poolfilter = '')
 {
-  $query = "SELECT 
+	$query = "SELECT 
   users.id,
   users.login,
   users.first_name,
@@ -124,25 +124,25 @@ function getUserImages($hidden, $poolfilter = '')
   ORDER BY login
   ";
 
-  $data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
+	$data = array(":poolfilter" => $poolfilter, ":hidden" => $hidden ? "TRUE" : "FALSE");
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
 }
 
 
 
 function setUser($userId, $value)
 {
-  $query = "UPDATE users
+	$query = "UPDATE users
   SET hidden = :hidden
   WHERE id = :user_id";
 
-  $data = array(":user_id" => $userId, ":hidden" => $value == "true" ? "TRUE" : "FALSE");
+	$data = array(":user_id" => $userId, ":hidden" => $value == "true" ? "TRUE" : "FALSE");
 
-  return executeQueryAction($query, $data);
+	return executeQueryAction($query, $data);
 }
 
 
@@ -150,7 +150,7 @@ function setUser($userId, $value)
 
 function getUserProjects($hidden, $poolfilter, $projects)
 {
-  $query = "SELECT 
+	$query = "SELECT 
   users.id AS user_id,
   users.login,
   users.first_name,
@@ -196,12 +196,31 @@ function getUserProjects($hidden, $poolfilter, $projects)
   ORDER BY projects.corder, projects.slug
   ";
 
-  $data = array(":poolfilter" => $poolfilter, ":projects" => $projects, ":hidden" => $hidden == true ? "TRUE" : "FALSE");
+	$data = array(":poolfilter" => $poolfilter, ":projects" => $projects, ":hidden" => $hidden == true ? "TRUE" : "FALSE");
 
-  require_once("model/dbConnector.php");
-  $result = executeQuerySelect($query, $data);
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
 
-  return $result;
+	return $result;
+}
+
+function getUserInfos($user_id)
+{
+	$query = "SELECT 
+  users.id,
+  users.login,
+  users.grade,
+  users.level
+  
+  FROM users
+  WHERE users.id = :user_id";
+
+	$data = array(":user_id" => $user_id);
+
+	require_once("model/dbConnector.php");
+	$result = executeQuerySelect($query, $data);
+
+	return $result;
 }
 
 
