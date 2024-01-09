@@ -107,7 +107,8 @@ async def get_private_messages():
                 body = json.dumps(body)
 
             mylogger(f'Got {method.routing_key} for private', LOGGER_DEBUG, rabbit=False)
-            await discord_send(ctx, body)
+            if (env('BUILD_TYPE') == 'PROD'):
+                await discord_send(ctx, body)
 
             channel.basic_ack(delivery_tag = method.delivery_tag)
 
@@ -368,8 +369,15 @@ async def consume_messages():
     while True:
 
         print("LOOP")
-        await get_private_messages()
-        await asyncio.sleep(10)
+
+        try:
+            await get_private_messages()
+            await asyncio.sleep(10)
+
+        except pika.exceptions.AMQPConnectionError as e:
+            print(f"RabbitMQ connection error {str(e)}")
+            await asyncio.sleep(60)
+
 
 
 @bot.event
