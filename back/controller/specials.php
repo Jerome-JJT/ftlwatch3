@@ -7,7 +7,7 @@ function specials_tig($user) {
     
     $ban = getBanDate($user["id"]);
 
-    if (isset($ban["ban_date"])) {
+    if (in_array("ban_date", array_keys($ban))) {
         if ($ban["ban_date"] == null) {
             sentToRabbit("tig.server.message.queue", array('content' => 'Tig '.$user["login"]));
     
