@@ -242,8 +242,9 @@ function logtrafic($status)
 
     $message = "$userId $userLogin $status ".$_SERVER['REQUEST_METHOD']." ".$_SERVER['HTTP_HOST']." ".$_SERVER['REQUEST_URI'];
 
-    if ($_SERVER['REQUEST_URI'] != "?page=specials&action=complain") {
-        sentToRabbit('trafic.server.message.queue', array("content" => $message));
+    if ($_SERVER['REQUEST_URI'] != "/?page=specials&action=complain") {
+        sentToRabbit('trafic.servercomplain.message.queue', array("content" => $message));
+        // sentToRabbit('trafic.server.message.queue', array("content" => $message));
     }
 }
 
