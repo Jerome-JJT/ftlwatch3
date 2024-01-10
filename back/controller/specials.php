@@ -32,9 +32,9 @@ function specials_tig($user) {
 function specials_css($user) {
     
     setIncrementCss($user["id"]);
-    $number = getCss($user["id"]);
+    $number = getCss($user["id"])["css_click"];
     if ($number < 100 || $number % 10 == 0) {
-        sentToRabbit("complain.servercomplain.message.queue", array('content' => 'Complain '.$user["login"].' '.getCss($user["id"])["css_click"]));
+        sentToRabbit("complain.servercomplain.message.queue", array('content' => 'Complain '.$user["login"].' '.$number));
     }
 
     jsonResponse(array(), 200);
