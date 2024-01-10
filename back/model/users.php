@@ -171,7 +171,7 @@ function getUsersPools()
   FROM users
   JOIN poolfilters ON users.poolfilter_id = poolfilters.id
 
-  WHERE (users.hidden = FALSE AND poolfilters.hidden = FALSE AND poolfilters.name != 'None.None')
+  WHERE (users.kind = 'student' AND users.hidden = FALSE AND poolfilters.hidden = FALSE AND poolfilters.name != 'None.None')
   ORDER BY poolfilters.name
   ";
 

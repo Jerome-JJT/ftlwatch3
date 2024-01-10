@@ -288,18 +288,19 @@ function tableau_pools()
 
     foreach ($pools as $poolid => $pool) {
 
-        $pools[$poolid]['_perc_selected'] = $pools[$poolid]['participants'] > 0 ? round($pools[$poolid]['selected'] / $pools[$poolid]['participants'], 2) : 0;
+        $pools[$poolid]['_perc_selected'] = $pools[$poolid]['participants'] > 0 ? round(($pools[$poolid]['selected'] / $pools[$poolid]['participants']) * 100, 2) : 0;
         $pools[$poolid]['perc_selected'] = $pools[$poolid]['_perc_selected']." %";
 
-        $pools[$poolid]['_perc_blackhole'] = $pools[$poolid]['selected'] > 0 ? round($pools[$poolid]['blackholes'] / $pools[$poolid]['selected'], 2) : 0;
+        $pools[$poolid]['_perc_blackhole'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['blackholes'] / $pools[$poolid]['selected']) * 100, 2) : 0;
         $pools[$poolid]['perc_blackhole'] = $pools[$poolid]['_perc_blackhole']." %";
 
-        $pools[$poolid]['_perc_incursus'] = $pools[$poolid]['selected'] > 0 ? round($pools[$poolid]['incursus'] / $pools[$poolid]['selected'], 2) : 0;
+        $pools[$poolid]['_perc_incursus'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['incursus'] / $pools[$poolid]['selected']) * 100, 2) : 0;
         $pools[$poolid]['perc_incursus'] = $pools[$poolid]['_perc_incursus']." %";
 
-        $pools[$poolid]['_perc_transcendead'] = $pools[$poolid]['selected'] > 0 ? round($pools[$poolid]['transcendead'] / $pools[$poolid]['selected'], 2) : 0;
+        $pools[$poolid]['_perc_transcendead'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['transcendead'] / $pools[$poolid]['selected']) * 100, 2) : 0;
         $pools[$poolid]['perc_transcendead'] = $pools[$poolid]['_perc_transcendead']." %";
-    }
+    }        
+    
 
     $res = array();
 
