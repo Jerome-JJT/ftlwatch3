@@ -54,6 +54,7 @@ import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
 import { SubjectsPage } from 'Projects/SubjectsPage';
 import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
 import TigPage from 'Test/Tig';
+import { PoolTableauPage } from 'Tableau/PoolTableau';
 // import Place from './components/Place/Place';
 
 
@@ -138,6 +139,7 @@ export default function App(): JSX.Element {
 
 
             <Route path="/tableau" element={<TableauPage />} />
+            <Route path="/tableau/pools" element={<PoolTableauPage />} />
             <Route path="/image" element={<ImagePage />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/projects/teams" element={<TeamsPage />} />
