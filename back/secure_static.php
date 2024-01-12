@@ -57,6 +57,12 @@ try {
         $page = $_GET["page"];
     }
 
+    need_permission("p_logged");
+    
+    if (str_starts_with($page, "fall")) {
+        need_permission("p_watch");
+    }
+
     mylogger("REQUEST TO secure static " . $page, LOGGER_DEBUG());
 
     if (in_array($page, $allowed)) {

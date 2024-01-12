@@ -55,6 +55,7 @@ import { SubjectsPage } from 'Projects/SubjectsPage';
 import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
 import TigPage from 'Test/Tig';
 import { PoolTableauPage } from 'Tableau/PoolTableau';
+import { FallGraphPage } from 'FallPages/FallGraphPage';
 // import Place from './components/Place/Place';
 
 
@@ -152,6 +153,8 @@ export default function App(): JSX.Element {
             <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
             <Route path="/locations/peaks" element={<PeaksDaysPage />} />
             <Route path="/locations/love" element={<LoveGraphPage />} />
+
+            <Route path="/watch/fall" element={<FallGraphPage />} />
 
             <Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
 

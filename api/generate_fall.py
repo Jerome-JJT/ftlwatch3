@@ -37,7 +37,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
         JOIN users evaluator ON evaluator.id = team_user.user_id
         JOIN users corrector ON corrector.id = team_scale.corrector_id       
 
-        WHERE projects.main_cursus = 21 AND corrector_id IS NOT NULL
+        WHERE projects.main_cursus = 21 AND corrector_id IS NOT NULL AND projects.project_type_id = 1
                                    
         GROUP BY evaluator.login, corrector.login
         HAVING COUNT(*) >= %(minoccure)s
@@ -87,8 +87,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
     for rlink in raw_links:
 
         if (rlink['corrector_login'] in nodes.keys() and rlink['evaluated_login'] in nodes.keys()):
-            nodes[rlink['corrector_login']]['size'] = max(10 + rlink['occure'], nodes[rlink['corrector_login']]['size'] + rlink['occure'])
-            nodes[rlink['evaluated_login']]['size'] = max(10, nodes[rlink['evaluated_login']]['size'])
+            nodes[rlink['corrector_login']]['size'] = max(20 + rlink['occure'] * 4, nodes[rlink['corrector_login']]['size'] + rlink['occure'] * 4)
+            nodes[rlink['evaluated_login']]['size'] = max(20, nodes[rlink['evaluated_login']]['size'])
         
 
     sizes = []
@@ -152,15 +152,15 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
 
     links_force_distance=50.0
-    links_force_strength=0.5
-    collision_force_strength=0.7
-    collision_force_radius=60.0
+    links_force_strength=0.2
+    collision_force_strength=1.0
+    collision_force_radius=100.0
 
 
     fig = gv.d3(graph_generator, 
                 graph_height=1000, 
                 many_body_force_strength=-360, 
-                edge_curvature=0.2,
+                edge_curvature=0.4,
                 links_force_distance=links_force_distance,
                 links_force_strength=links_force_strength,
                 use_collision_force=True, 
@@ -186,7 +186,7 @@ def gen_falls():
         # target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
         # target_date = target_date.strftime("%Y-%m-%d")
 
-        generate_love(output_name='fall_all', takes=['T', 'S'], nboccure=3)
+        generate_love(output_name='fall_all', takes=['T', 'S', 'B'], nboccure=4)
 
         mylogger("End fall graph generator", LOGGER_ALERT)
 
