@@ -26,7 +26,7 @@ def event_notification(fetched):
 
     embed = {
         'message_type': 'embed',
-        'url': f'https://42lwatch.ch/basics/events',
+        'url': f'https://42lwatch.ch/events',
         'footer_text': parser.parse(fetched["updated_at"]).astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
     }
 
