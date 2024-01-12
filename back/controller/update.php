@@ -27,6 +27,7 @@ $updates = array(
     array('id' => 'process_locations', 'name' => 'Process locations', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'process_locations')); }),
     array('id' => 'generate_love', 'name' => 'Generate love', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_love')); }),
     array('id' => 'generate_peaks', 'name' => 'Generate peaks', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_peaks')); }),
+    array('id' => 'generate_fall', 'name' => 'Generate fall', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_fall')); }),
 );
 
 
