@@ -130,7 +130,8 @@ INSERT INTO "permissions" ("id", "name", "slug", "corder") VALUES
   (7, 'View3', 'p_view3', 70),
   (8, 'View4', 'p_view4', 80),
   (9, 'Permission management', 'p_perm', 25),
-  (10, '47Student', 'p_47student', 40)
+  (10, '47Student', 'p_47student', 40),
+  (11, 'Watching', 'p_watch', 40)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -152,7 +153,8 @@ INSERT INTO "login_groups" ("id", "name", "slug", "corder") VALUES
   (8, 'Stalk3', 'g_stalk3', 80),
   (9, 'Stalk4', 'g_stalk4', 90),
   (10, 'Permissions manager', 'g_perm', 15),
-  (11, '47Student', 'g_47student', 50)
+  (11, '47Student', 'g_47student', 50),
+  (12, 'Watchers', 'g_watch', 50)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -174,6 +176,7 @@ INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id")
   (8, 8, 1),
   (9, 9, 1),
   (10, 10, 1),
+  (11, 11, 1),
 
   (20, 3, 2), -- p_event to g_event
   (21, 3, 4), -- p_event to g_bde
@@ -184,6 +187,7 @@ INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id")
   (26, 8, 9), -- p_view4 to g_stalk4
   (27, 10, 11), -- p_47student to g_47student
   (28, 9, 10), -- p_perm to g_perm
+  (29, 11, 12), -- p_watch to g_watch
   (10000, 1, 1) 
 
   ON CONFLICT(id) DO UPDATE
@@ -211,7 +215,8 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (4, 'Basics', 20, NULL),
   (5, 'Projects', 50, NULL),
   (6, 'Locations', 60, NULL),
-  (7, 'Love', 70, NULL)
+  (7, 'Love', 70, NULL),
+  (8, 'Watch', 15, NULL)
   
 
   ON CONFLICT(id) DO UPDATE
@@ -284,7 +289,9 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (386, 'Love cursus 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
   (387, 'Love piscine blackhole 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
   (390, 'Love actual 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
-  (395, 'Love recent 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10)
+  (395, 'Love recent 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
+
+  (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11)
 
 
   ON CONFLICT(id) DO UPDATE
