@@ -56,6 +56,7 @@ import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
 import TigPage from 'Test/Tig';
 import { PoolTableauPage } from 'Tableau/PoolTableau';
 import { FallGraphPage } from 'FallPages/FallGraphPage';
+import { SalesWatchPage } from 'FallPages/SalesWatchPage';
 // import Place from './components/Place/Place';
 
 
@@ -155,6 +156,7 @@ export default function App(): JSX.Element {
             <Route path="/locations/love" element={<LoveGraphPage />} />
 
             <Route path="/watch/fall" element={<FallGraphPage />} />
+            <Route path="/watch/sales" element={<SalesWatchPage />} />
 
             <Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
 
