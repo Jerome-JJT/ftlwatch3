@@ -9,13 +9,16 @@ if (isset($_GET["action"])) {
 
 need_permission("p_logged");
 
-
 switch ($action) {
     case "get_points":
         get_points();
         break;
+}
 
-    case "get_pools":
+need_permission("p_watch");
+
+switch ($action) {
+    case "get_sales":
         get_pools();
         break;
 

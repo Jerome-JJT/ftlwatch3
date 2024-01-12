@@ -114,6 +114,7 @@ try {
 
         case "points":
             require_once("routes/points.php");
+            
         case "specials":
             require_once("routes/specials.php");
             break;
