@@ -47,6 +47,7 @@ jsonlogger('SECURE PERMISSIONS ', $_REQUEST["permissions"], LOGGER_DEBUG());
 $allowed = ["peaks_days", 
 "love_piscine_2d", "love_piscine_blackhole_2d", "love_actual_2d", "love_cursus_2d", "love_recent_2d", 
 "love_piscine_3d", "love_piscine_blackhole_3d", "love_actual_3d", "love_cursus_3d", "love_recent_3d",
+"fall_all",
 ];
 
 

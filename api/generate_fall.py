@@ -13,7 +13,7 @@ import networkx as nx
 
 
     
-def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date='2099-99-99', is_piscine=None, takes=['T', 'S']):
+def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date='2099-99-99', is_piscine=None, takes=['T', 'S'], nboccure=3):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
     mylogger(f"Fall {output_name}, start generation", LOGGER_INFO)
@@ -38,9 +38,12 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
         JOIN users corrector ON corrector.id = team_scale.corrector_id       
 
         WHERE projects.main_cursus = 21 AND corrector_id IS NOT NULL
-
+                                   
         GROUP BY evaluator.login, corrector.login
-    """, {})
+        HAVING COUNT(*) >= %(minoccure)s
+    """, {
+        "minoccure": nboccure,
+    })
 
     raw_nodes = executeQuerySelect("""
         SELECT users.id AS user_id, users.login AS user_login, users.avatar_url AS user_image,
@@ -135,13 +138,11 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
     mylogger(f"Fall {output_name}, start link creation", LOGGER_INFO)
 
     for link in raw_links:
-        truelength = mathmap(math.sqrt(link["occure"]), 0, max_occure, 0.0, 10.0)
-
         try:
-            if (link["corrector_login"] != link["evaluated_login"] and (truelength > 0.6)):
+            if (link["corrector_login"] != link["evaluated_login"]):
 
                 graph_generator.add_edge(link["corrector_login"], link["evaluated_login"], 
-                                    size=max(1, int(round(truelength, 0))), 
+                                    size=max(1, link["occure"]), 
                                     color=nodes[link["corrector_login"]]['link_color'])
         except:
             pass
@@ -182,10 +183,10 @@ def gen_falls():
 
     try:
 
-        target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
-        target_date = target_date.strftime("%Y-%m-%d")
+        # target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
+        # target_date = target_date.strftime("%Y-%m-%d")
 
-        generate_love(output_name='fall_all', takes=['T', 'S', 'B', 'N'])
+        generate_love(output_name='fall_all', takes=['T', 'S'], nboccure=3)
 
         mylogger("End fall graph generator", LOGGER_ALERT)
 
