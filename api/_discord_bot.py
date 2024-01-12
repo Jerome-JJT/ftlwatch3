@@ -107,7 +107,8 @@ async def get_private_messages():
                 body = json.dumps(body)
 
             mylogger(f'Got {method.routing_key} for private', LOGGER_DEBUG, rabbit=False)
-            await discord_send(ctx, body)
+            if (env('BUILD_TYPE') == 'PROD'):
+                await discord_send(ctx, body)
 
             channel.basic_ack(delivery_tag = method.delivery_tag)
 
@@ -121,6 +122,25 @@ async def get_private_messages():
 
 
 
+@bot.slash_command(name="ping", description="Ping private")
+async def ping(ctx):
+
+    from _rabbit import send_to_rabbit
+
+    await ctx.defer()
+
+    try:
+        send_to_rabbit('errors.server.message.queue', {'content': f'Bot ping request by {str(ctx.author)}'})
+    except:
+        pass
+    
+    if (str(ctx.author) in env('BOT_ADMIN_WL').split(",")):
+        send_to_rabbit('private.message.queue', {'content': 'Ping'})
+
+    await ctx.respond(f"Done")
+
+
+
 
 
 @bot.slash_command(name="api", description="Api endpoint")
@@ -131,9 +151,18 @@ async def api(ctx,
     req_type: Option(str, 'Request type', required=False, choices=(["json", "big", "user", "keys", "options", "rules"])),
     sub_index: Option(str, 'Sub index', required=False)):
 
+    await ctx.defer()
+
+    try:
+        from _rabbit import send_to_rabbit
+        send_to_rabbit('errors.server.message.queue', {'content': f'Bot api request by {str(ctx.author)} on {endpoint}'})
+    except:
+        pass
+
+
     if (req_type == "rules"):
-        if ("v2" not in url):
-            url = f"/v2/project_sessions/{url}"
+        if ("v2" not in endpoint):
+            endpoint = f"/v2/project_sessions/{endpoint}"
 
         if (sub_index == None or len(sub_index) == 0):
             sub_index = "project_sessions_rules"
@@ -153,103 +182,102 @@ async def api(ctx,
         page_size = 100
 
 
-    await ctx.defer()
 
-    if (str(ctx.author) in ["didji#0"]):
-        try:
-            if (endpoint != None):
+    # if (str(ctx.author) in env('BOT_API_WL').split(",")):
+    try:
+        if (endpoint != None):
 
-                url = ""
-                if ("?" in endpoint):
-                    url = f"{endpoint}&page[size]={page_size}&page[number]={page_num}"
-                else:
-                    url = f"{endpoint}?page[size]={page_size}&page[number]={page_num}"
-
-
-                print(url)
-                await ctx.respond(url)
-                if (req_type == "options"):
-                    res = raw(url, True)
-                    res = dict(res.headers)
-                else:
-                    res = callapi(url, nultiple=0, mode="fast")
-
-                if (type([]) == type(res) and len(res) == 1):
-                    res = res[0]
-
-                if (sub_index != None):
-                    if (type(res) == type({}) and "," in sub_index):
-                        mykeys = sub_index.split(",")
-                        mykeys = list(map(lambda x: x.strip(), mykeys))
-                        res = {mykey: (res[mykey] if mykey in list(res.keys()) else "none") for mykey in mykeys}
-
-                    elif (type(res) == type({}) and sub_index in list(res.keys())):
-                        res = res[sub_index]
-
-                    elif (type(res) == type([]) and "," in sub_index):
-                        mykeys = sub_index.split(",")
-                        mykeys = list(map(lambda x: x.strip(), mykeys))
-                        res = list(map(lambda x: {mykey: (x[mykey] if mykey in list(x.keys()) else "none") for mykey in mykeys}, res))
-
-                    elif (type(res) == type([]) and sub_index in list(res[0].keys())):
-                        res = list(map(lambda x: x[sub_index], res))
-                    else:
-                        await ctx.respond(f"sub_index not found")
-                        return 0
-                    
-                if (type(res) == type({}) and req_type == "user"):
-                    res = userify(res)
-
-                elif (type(res) == type([]) and req_type == "user"):
-                    res = list(map(lambda x: userify(x), res))
-
-                # print(json.dumps(res, indent=2))
-                if (req_type == "keys"):
-                    toprint = json.dumps(list(res.keys()), indent=2, ensure_ascii=False)
-                else:
-                    toprint = json.dumps(res, indent=2, ensure_ascii=False)
-
-
-                if (len(toprint) < 10000 or req_type == "big" or req_type == "user"):
-
-                    lines = toprint.split("\n")
-                    buffer = ""
-
-                    for line in lines:
-                        if (len(buffer) > 1900):
-                            while (len(buffer) > 1):
-                                minibuf = buffer[:1900]
-                                buffer = f"\n{buffer[1900:]}"
-                                await ctx.send(f"```json{minibuf}```")
-                                time.sleep(0.15)
-
-                        elif (len(buffer) + len(line) >= 1900):
-                            await ctx.send(f"```json{buffer}```")
-                            time.sleep(0.15)
-                            buffer = ""
-
-                        buffer += f"\n{line}"
-
-                    #await ctx.send(f"```json{buffer}```")
-                    while (len(buffer) > 1):
-                        minibuf = buffer[:1900]
-                        buffer = f"\n{buffer[1900:]}"
-                        await ctx.send(f"```json{minibuf}```")
-                        time.sleep(0.15)
-                    await ctx.respond(f"{len(res)} results for endpoint {endpoint}")
-                
-                else:
-                    await ctx.respond(f"Result is {len(toprint)} chars long, default limit is 10000 chars\npass 'big' to req_type to bypass the limit")
-                
-
+            url = ""
+            if ("?" in endpoint):
+                url = f"{endpoint}&page[size]={page_size}&page[number]={page_num}"
             else:
-                await ctx.respond(f"Usage /api endpoint:/v2/")
+                url = f"{endpoint}?page[size]={page_size}&page[number]={page_num}"
 
-        except Exception as e:
-            await ctx.respond(f"Try error {e} for {endpoint}")
 
-    else:
-        await ctx.respond(f"Unauthorized")
+            print(url)
+            await ctx.respond(url)
+            if (req_type == "options"):
+                res = raw(url, True)
+                res = dict(res.headers)
+            else:
+                res = callapi(url, nultiple=0, mode="fast")
+
+            if (type([]) == type(res) and len(res) == 1):
+                res = res[0]
+
+            if (sub_index != None):
+                if (type(res) == type({}) and "," in sub_index):
+                    mykeys = sub_index.split(",")
+                    mykeys = list(map(lambda x: x.strip(), mykeys))
+                    res = {mykey: (res[mykey] if mykey in list(res.keys()) else "none") for mykey in mykeys}
+
+                elif (type(res) == type({}) and sub_index in list(res.keys())):
+                    res = res[sub_index]
+
+                elif (type(res) == type([]) and "," in sub_index):
+                    mykeys = sub_index.split(",")
+                    mykeys = list(map(lambda x: x.strip(), mykeys))
+                    res = list(map(lambda x: {mykey: (x[mykey] if mykey in list(x.keys()) else "none") for mykey in mykeys}, res))
+
+                elif (type(res) == type([]) and sub_index in list(res[0].keys())):
+                    res = list(map(lambda x: x[sub_index], res))
+                else:
+                    await ctx.respond(f"sub_index not found")
+                    return 0
+                
+            if (type(res) == type({}) and req_type == "user"):
+                res = userify(res)
+
+            elif (type(res) == type([]) and req_type == "user"):
+                res = list(map(lambda x: userify(x), res))
+
+            # print(json.dumps(res, indent=2))
+            if (req_type == "keys"):
+                toprint = json.dumps(list(res.keys()), indent=2, ensure_ascii=False)
+            else:
+                toprint = json.dumps(res, indent=2, ensure_ascii=False)
+
+
+            if (len(toprint) < 10000 or req_type == "big" or req_type == "user"):
+
+                lines = toprint.split("\n")
+                buffer = ""
+
+                for line in lines:
+                    if (len(buffer) > 1900):
+                        while (len(buffer) > 1):
+                            minibuf = buffer[:1900]
+                            buffer = f"\n{buffer[1900:]}"
+                            await ctx.send(f"```json{minibuf}```")
+                            time.sleep(0.15)
+
+                    elif (len(buffer) + len(line) >= 1900):
+                        await ctx.send(f"```json{buffer}```")
+                        time.sleep(0.15)
+                        buffer = ""
+
+                    buffer += f"\n{line}"
+
+                #await ctx.send(f"```json{buffer}```")
+                while (len(buffer) > 1):
+                    minibuf = buffer[:1900]
+                    buffer = f"\n{buffer[1900:]}"
+                    await ctx.send(f"```json{minibuf}```")
+                    time.sleep(0.15)
+                await ctx.respond(f"{len(res)} results for endpoint {endpoint}")
+            
+            else:
+                await ctx.respond(f"Result is {len(toprint)} chars long, default limit is 10000 chars\npass 'big' to req_type to bypass the limit")
+            
+
+        else:
+            await ctx.respond(f"Usage /api endpoint:/v2/")
+
+    except Exception as e:
+        await ctx.respond(f"Try error {e} for {endpoint}")
+
+    # else:
+    #     await ctx.respond(f"Unauthorized")
 
 
 
@@ -257,6 +285,12 @@ async def api(ctx,
     async def comments(ctx, pseudo: Option(str, 'Pseudo', required=True)):
 
         await ctx.defer()
+
+        try:
+            from _rabbit import send_to_rabbit
+            send_to_rabbit('errors.server.message.queue', {'content': f'Bot comments request by {str(ctx.author)} for {pseudo}'})
+        except:
+            pass
 
         r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2025-03-01T00:00:00.000Z", nultiple=1)
         list = ["comment", "created_at"]
@@ -290,6 +324,13 @@ async def logged(ctx,
     list: Option(str, 'Cursus', required=False, choices=(valid_cursus))):
 
     await ctx.defer()
+
+    try:
+        from _rabbit import send_to_rabbit
+        send_to_rabbit('errors.server.message.queue', {'content': f'Bot loggeds request by {str(ctx.author)}'})
+    except:
+        pass
+    
     lst = callapi("/v2/campus/47/locations?filter[active]=true&sort=begin_at", nultiple=1, mode="fast")
 
     for log in lst:
@@ -328,8 +369,15 @@ async def consume_messages():
     while True:
 
         print("LOOP")
-        await get_private_messages()
-        await asyncio.sleep(10)
+
+        try:
+            await get_private_messages()
+            await asyncio.sleep(10)
+
+        except pika.exceptions.AMQPConnectionError as e:
+            print(f"RabbitMQ connection error {str(e)}")
+            await asyncio.sleep(60)
+
 
 
 @bot.event

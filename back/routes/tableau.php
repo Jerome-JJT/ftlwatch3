@@ -30,6 +30,15 @@ if (isset($_GET["projects"])) {
     $projects = $_GET["projects"];
 }
 
-tableau_api($selectedFilter, $projects);
+
+switch ($action) {
+    case "get":
+        tableau_api($selectedFilter, $projects);
+        break;
+
+    case "pools":
+        tableau_pools();
+        break;
+}
 
 exit();

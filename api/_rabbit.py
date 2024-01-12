@@ -98,6 +98,12 @@ def rabbit_connection(queue, consumer_function):
             time.sleep(1)
             continue
 
+        except pika.exceptions.AMQPConnectionError:
+            mylogger(f"RabbitMQ connection error", LOGGER_ERROR)
+            time.sleep(60)
+            continue
+
+
         mylogger(f"Forbidden looping for {queue}", LOGGER_WARNING)
         time.sleep(1)
 
@@ -109,6 +115,7 @@ working = [
     {"queue": "fast.update.queue", "function": api_consumer},
 
     {"queue": "server.message.queue", "function": webhook_consumer},
+    {"queue": "servercomplain.message.queue", "function": webhook_consumer},
 ]
 
 # working_test = [
@@ -134,8 +141,10 @@ def main(server=False):
             threads[-1].start()
             time.sleep(0.5)
 
-        for thread in threads:
+        for num, thread in enumerate(threads):
             thread.join()
+            mylogger(f"Thread {num} exited", LOGGER_ERROR)
+
 
 if __name__ == '__main__':
     main(True if len(sys.argv) >= 3 and sys.argv[1:3] == ['-server', '1'] else False)

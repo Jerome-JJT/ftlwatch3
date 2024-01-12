@@ -36,6 +36,7 @@ function getUserInfos($login)
   $query = "SELECT login_users.id, login_users.login, 
   login_users.display_name, login_users.avatar_url,
   themes.id AS theme_id, themes.image AS theme_image, 
+  login_user_profiles.css_click AS css_click, 
   login_user_profiles.color AS theme_color, login_user_profiles.terms,
   login_user_profiles.citation AS citation, login_user_profiles.citation_avatar AS citation_avatar
   FROM login_users
@@ -60,6 +61,8 @@ function getUserInfos($login)
       "display_name" => $result["display_name"],
       "avatar_url" => $result["avatar_url"],
 
+      "css_click" => $result["css_click"],
+      
       "theme_id" => $result["theme_id"],
       "theme_image" => $result["theme_image"],
       "theme_color" => $result["theme_color"],

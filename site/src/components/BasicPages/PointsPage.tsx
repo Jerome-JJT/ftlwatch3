@@ -55,7 +55,7 @@ export function PointsPage(): JSX.Element {
         <SuperTable
           columns={columns}
           values={values}
-
+          indexColumn={true}
 
           tableTitle='Points'
           tableDesc='Stats about points given to pool and evaluations'

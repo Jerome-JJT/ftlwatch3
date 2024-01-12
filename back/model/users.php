@@ -148,6 +148,43 @@ function setUser($userId, $value)
 
 
 
+function getUsersPools()
+{
+  $query = "SELECT 
+  users.id,
+  users.login,
+
+  users.kind,
+  users.is_staff,
+  users.is_active,
+  users.is_alumni,
+
+  users.nbcursus,
+  users.has_cursus21,
+  users.has_cursus9,
+
+  users.blackhole,
+  users.grade,
+
+  poolfilters.name AS poolfilter
+  
+  FROM users
+  JOIN poolfilters ON users.poolfilter_id = poolfilters.id
+
+  WHERE (users.kind = 'student' AND users.hidden = FALSE AND poolfilters.hidden = FALSE AND poolfilters.name != 'None.None')
+  ORDER BY poolfilters.name
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
+
+
+
 function getUserProjects($hidden, $poolfilter, $projects)
 {
   $query = "SELECT 

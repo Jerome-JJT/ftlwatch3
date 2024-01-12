@@ -63,6 +63,7 @@ if (env("BUILD_TYPE") == "PROD"):
     scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_locations'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_love'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_peaks'}))
+    scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_fall'}))
 
     scheduler_update.every(10).minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'locations'}))
     scheduler_update.every().minutes.until("23:59").do(lambda: send_to_rabbit('fast.update.queue', {'resource': 'teams'}))

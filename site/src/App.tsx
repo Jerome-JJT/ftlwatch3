@@ -53,6 +53,9 @@ import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
 import { SubjectsPage } from 'Projects/SubjectsPage';
 import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
+import TigPage from 'Test/Tig';
+import { PoolTableauPage } from 'Tableau/PoolTableau';
+import { FallGraphPage } from 'FallPages/FallGraphPage';
 // import Place from './components/Place/Place';
 
 
@@ -137,6 +140,7 @@ export default function App(): JSX.Element {
 
 
             <Route path="/tableau" element={<TableauPage />} />
+            <Route path="/tableau/pools" element={<PoolTableauPage />} />
             <Route path="/image" element={<ImagePage />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/projects/teams" element={<TeamsPage />} />
@@ -149,6 +153,8 @@ export default function App(): JSX.Element {
             <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
             <Route path="/locations/peaks" element={<PeaksDaysPage />} />
             <Route path="/locations/love" element={<LoveGraphPage />} />
+
+            <Route path="/watch/fall" element={<FallGraphPage />} />
 
             <Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
 
@@ -169,6 +175,7 @@ export default function App(): JSX.Element {
 
 
             <Route path="/test" element={<TestPage />} />
+            <Route path="/tig" element={<TigPage />} />
           </>}
 
           <Route path="*" element={<NotFoundPage />} />
