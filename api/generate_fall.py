@@ -13,7 +13,7 @@ import networkx as nx
 
 
     
-def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date='2099-99-99', is_piscine=None, takes=['T', 'S'], nboccure=3):
+def generate_fall(graph_type="", output_name='', min_date='2000-00-00', max_date='2099-99-99', is_piscine=None, takes=['T', 'S'], nboccure=3):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
     mylogger(f"Fall {output_name}, start generation", LOGGER_INFO)
@@ -186,7 +186,7 @@ def gen_falls():
         # target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
         # target_date = target_date.strftime("%Y-%m-%d")
 
-        generate_love(output_name='fall_all', takes=['T', 'S', 'B'], nboccure=4)
+        generate_fall(output_name='fall_all', takes=['T', 'S', 'B'], nboccure=4)
 
         mylogger("End fall graph generator", LOGGER_ALERT)
 
