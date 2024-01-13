@@ -142,6 +142,7 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         mylogger(f"Reject api {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
         custom_reject(ch, method, body, reason=f"type {type(e)}, exception {e}")
         if ("ChannelClosedByBroker" in str(type(e))):
+            mylogger(f"Reraise", LOGGER_ERROR)
             raise e
 
     return True
