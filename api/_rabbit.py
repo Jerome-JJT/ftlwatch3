@@ -96,12 +96,10 @@ def rabbit_connection(queue, consumer_function):
             mylogger(f"Message timeout in {queue}", LOGGER_ERROR)
             reject_first = [True]
             time.sleep(1)
-            continue
 
         except pika.exceptions.AMQPConnectionError:
             mylogger(f"RabbitMQ connection error", LOGGER_ERROR)
             time.sleep(60)
-            continue
 
 
         mylogger(f"Forbidden looping for {queue}", LOGGER_WARNING)
