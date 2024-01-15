@@ -10,7 +10,8 @@ import pytz
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 
-local_teams = []
+local_points = []
+local_point_user = None
 current_limit = 50
 limit_checker = 50
 
@@ -63,12 +64,17 @@ def user_points_callback(transac, user):
     if (transac['id'] not in local_points):
         current_limit = limit_checker
 
+        if (local_point_user == None):
+            local_point_user = callapi(f"/v2/users/{user['login']}", nultiple=0)
+            time.sleep(0.4)
+        if (local_point_user == []):
+            return
 
-        mylogger(f"Import point for {user['id']} {user['login']}, {transac['sum']} {transac['reason']} / current_limit = {current_limit}", LOGGER_INFO)
+        mylogger(f"Import point for {local_point_user['id']} {local_point_user['login']}, {transac['sum']} {transac['reason']} / current_limit = {current_limit}", LOGGER_INFO)
 
         transac['is_piscine'] = True
-        if user['pool_year'] != None:
-            year = str(user['pool_year'])
+        if local_point_user['pool_year'] != None:
+            year = str(local_point_user['pool_year'])
 
             if (len(year) > 0):
                 piscine_concern = f"{year if year else '2000'}-10-01"
@@ -76,14 +82,14 @@ def user_points_callback(transac, user):
 
 
         transac['is_local'] = False
-        campus47 = next(filter(lambda x: x['is_primary'] == True and x['campus_id'] == 47, user["campus_users"]), None)
+        campus47 = next(filter(lambda x: x['is_primary'] == True and x['campus_id'] == 47, local_point_user["campus_users"]), None)
         if (campus47 != None):
             transac['is_local'] = transac['created_at'] > campus47['created_at']
 
     
         good = {
             "id": transac['id'],
-            "user_id": user['id'],
+            "user_id": local_point_user['id'],
             "reason": transac['reason'],
             "sum": transac['sum'],
             "total": transac['total'],
@@ -97,7 +103,7 @@ def user_points_callback(transac, user):
         std_transac = ["Defense plannification", "Refund during sales", 
                         "Earning after defense", "Creation"]
         if (good["reason"] not in std_transac):
-            user_points_notification({**good, "login": user['login']})
+            user_points_notification({**good, "login": local_point_user['login']})
 
         executeQueryAction("""INSERT INTO points_transactions (
                 "id", "user_id", "reason", "sum", "total", "scale_team_id", "is_piscine", "is_local", "created_at", "updated_at"
@@ -125,7 +131,7 @@ def user_points_callback(transac, user):
 
 
 def import_users_points(update_all=False, start_at=1):
-    global local_points
+    global local_points, local_point_user
     global current_limit, limit_checker
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
@@ -139,10 +145,7 @@ def import_users_points(update_all=False, start_at=1):
     print(len(to_check))
     for check in to_check[start_at-1:]:
 
-        user = callapi(f"/v2/users/{check['login']}", nultiple=0)
-        time.sleep(0.4)
-        if (user == []):
-            continue
+        local_point_user = None
 
         local_points = executeQuerySelect("SELECT id FROM points_transactions WHERE user_id = %(user_id)s ORDER BY id DESC LIMIT 1000", {
             "user_id": check['id']
@@ -153,10 +156,10 @@ def import_users_points(update_all=False, start_at=1):
             update_all = True
 
         if (update_all):
-            callapi(f"/v2/users/{user['id']}/correction_point_historics?sort=id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=False)
+            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=False)
 
         else:
-            callapi(f"/v2/users/{user['id']}/correction_point_historics?sort=-id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=True)
+            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=-id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=True)
 
         time.sleep(0.4)
 
