@@ -1,3 +1,4 @@
+import os
 import environ
 import pika
 import json
@@ -98,8 +99,14 @@ def rabbit_connection(queue, consumer_function):
             time.sleep(1)
 
         except pika.exceptions.AMQPConnectionError:
-            mylogger(f"RabbitMQ connection error", LOGGER_ERROR)
+            mylogger(f"RabbitMQ connection error", LOGGER_ERROR, rabbit=False)
+            os._exit(1)
             time.sleep(60)
+
+        except Exception as e:
+            mylogger(f"Threaded RabbitMQ connection unexpected {e}", LOGGER_ERROR)
+            os._exit(1)
+            break
 
 
         mylogger(f"Forbidden looping for {queue}", LOGGER_WARNING)
@@ -129,13 +136,13 @@ def main(server=False):
 
     if (server):
 
-        print("Waiting 5 seconds for rabbit")
-        time.sleep(5)
+        print("Waiting 30 seconds for rabbit")
+        time.sleep(30)
         print("Starting rabbit consumers")
         
         threads = []
         for i in working:
-            threads.append(threading.Thread(target=rabbit_connection, args=(i["queue"],i["function"],)))
+            threads.append(threading.Thread(target=rabbit_connection, args=(i["queue"], i["function"], )))
             threads[-1].start()
             time.sleep(0.5)
 
