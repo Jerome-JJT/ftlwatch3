@@ -57,7 +57,7 @@ def user_points_notification(fetched):
 
 
 
-def user_points_callback(transac, user):
+def user_points_callback(transac, login):
     global local_points, current_limit, limit_checker
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
@@ -65,7 +65,7 @@ def user_points_callback(transac, user):
         current_limit = limit_checker
 
         if (local_point_user == None):
-            local_point_user = callapi(f"/v2/users/{user['login']}", nultiple=0)
+            local_point_user = callapi(f"/v2/users/{login}", nultiple=0)
             time.sleep(0.4)
         if (local_point_user == []):
             return
@@ -156,10 +156,10 @@ def import_users_points(update_all=False, start_at=1):
             update_all = True
 
         if (update_all):
-            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=False)
+            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=id", nultiple=1, callback=lambda transac: user_points_callback(transac, check['login']), callback_limit=False)
 
         else:
-            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=-id", nultiple=1, callback=lambda transac: user_points_callback(transac, user), callback_limit=True)
+            callapi(f"/v2/users/{check['id']}/correction_point_historics?sort=-id", nultiple=1, callback=lambda transac: user_points_callback(transac, check['login']), callback_limit=True)
 
         time.sleep(0.4)
 
