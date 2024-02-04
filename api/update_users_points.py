@@ -58,7 +58,7 @@ def user_points_notification(fetched):
 
 
 def user_points_callback(transac, login):
-    global local_points, current_limit, limit_checker
+    global local_points, current_limit, limit_checker, local_point_user
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     if (transac['id'] not in local_points):
