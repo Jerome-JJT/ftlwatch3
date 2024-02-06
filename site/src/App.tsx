@@ -61,123 +61,123 @@ import { XpCalculator } from 'Fun/XpCalculator';
 
 
 export default function App(): JSX.Element {
-  const { isLogged, userInfos, getUserData, logout } = useLogin();
-  const [openedMenu, setOpenedMenu] = React.useState('');
+	const { isLogged, userInfos, getUserData, logout } = useLogin();
+	const [openedMenu, setOpenedMenu] = React.useState('');
 
-  const logging = import.meta.env.DEV;
+	const logging = import.meta.env.DEV;
 
-  React.useEffect(() => {
-    if (!location.pathname.includes('loginapi')) {
-      getUserData();
-    }
-  }, [getUserData]);
+	React.useEffect(() => {
+		if (!location.pathname.includes('loginapi')) {
+			getUserData();
+		}
+	}, [getUserData]);
 
-  axios.interceptors.request.use(
-    (req) => {
-      req.baseURL = '/api';
-      // req.meta.requestStartedAt = new Date().getTime();
-      return req;
-    });
+	axios.interceptors.request.use(
+		(req) => {
+			req.baseURL = '/api';
+			// req.meta.requestStartedAt = new Date().getTime();
+			return req;
+		});
 
-  axios.interceptors.response.use(
-    (response) => {
-      // eslint-disable-next-line no-console
-      if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response); }
+	axios.interceptors.response.use(
+		(response) => {
+			// eslint-disable-next-line no-console
+			if (logging && response.config.method !== 'OPTIONS') { console.log('inter res', response); }
 
-      return response;
-    },
-    (error) => {
-      // eslint-disable-next-line no-console
-      if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error); }
+			return response;
+		},
+		(error) => {
+			// eslint-disable-next-line no-console
+			if (logging && error.response.config.method !== 'OPTIONS') { console.log('myaxiosintercept', AxiosErrorText(error), error); }
 
-      if (error.response && error.response.status === 401) {
-        logout();
-      }
+			if (error.response && error.response.status === 401) {
+				logout();
+			}
 
-      return Promise.reject(error);
-    }
-  );
+			return Promise.reject(error);
+		}
+	);
 
-  return (
-    <Router>
-      <div className="flex flex-col grow bg-[#008080] bg-center bg-cover" style={{
-        backgroundImage: (userInfos?.theme_image && userInfos?.theme_image !== '') ? `url('${userInfos?.theme_image}')` : undefined,
-        backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
-      }}>
-        <NavBar
-          openedMenu={openedMenu}
-          setOpenedMenu={setOpenedMenu}
-        />
+	return (
+		<Router>
+			<div className="flex flex-col grow bg-[#008080] bg-center bg-cover" style={{
+				backgroundImage: (userInfos?.theme_image && userInfos?.theme_image !== '') ? `url('${userInfos?.theme_image}')` : undefined,
+				backgroundColor: (userInfos?.theme_id === 1 || userInfos?.theme_image !== '') ? undefined : userInfos?.theme_color,
+			}}>
+				<NavBar
+					openedMenu={openedMenu}
+					setOpenedMenu={setOpenedMenu}
+				/>
 
-        <LeftDrawer
-          openedMenu={openedMenu}
-          setOpenedMenu={setOpenedMenu}
-        />
+				<LeftDrawer
+					openedMenu={openedMenu}
+					setOpenedMenu={setOpenedMenu}
+				/>
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/about" element={<AboutPage />} />
 
-          <Route path="/login" element={<LogPage />} />
-          <Route path="/loginapi" element={<LoginApi />} />
+					<Route path="/login" element={<LogPage />} />
+					<Route path="/loginapi" element={<LoginApi />} />
 
-          {isLogged && <>
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/settings" element={<SettingsPage />} />
+					{isLogged && <>
+						<Route path="/logout" element={<Logout />} />
+						<Route path="/settings" element={<SettingsPage />} />
 
-            <Route path="/basics/achievements" element={<AchievementsPage />} />
-            <Route path="/basics/campus" element={<CampusPage />} />
-            <Route path="/basics/coalitions" element={<CoalitionsPage />} />
-            <Route path="/basics/cursus" element={<CursusPage />} />
-            <Route path="/basics/groups" element={<GroupsPage />} />
-            <Route path="/basics/products" element={<ProductsPage />} />
-            <Route path="/basics/titles" element={<TitlesPage />} />
-            <Route path="/basics/points" element={<PointsPage />} />
-            <Route path="/basics/projects" element={<ProjectsPage />} />
-            <Route path="/basics/projects/:id" element={<SingleProjectPage />} />
-            <Route path="/basics/rules" element={<RulesPage />} />
+						<Route path="/basics/achievements" element={<AchievementsPage />} />
+						<Route path="/basics/campus" element={<CampusPage />} />
+						<Route path="/basics/coalitions" element={<CoalitionsPage />} />
+						<Route path="/basics/cursus" element={<CursusPage />} />
+						<Route path="/basics/groups" element={<GroupsPage />} />
+						<Route path="/basics/products" element={<ProductsPage />} />
+						<Route path="/basics/titles" element={<TitlesPage />} />
+						<Route path="/basics/points" element={<PointsPage />} />
+						<Route path="/basics/projects" element={<ProjectsPage />} />
+						<Route path="/basics/projects/:id" element={<SingleProjectPage />} />
+						<Route path="/basics/rules" element={<RulesPage />} />
 
 
-            <Route path="/tableau" element={<TableauPage />} />
-            <Route path="/image" element={<ImagePage />} />
-            <Route path="/events" element={<EventPage />} />
-            <Route path="/projects/teams" element={<TeamsPage />} />
-            <Route path="/projects/tinder" element={<TinderPage />} />
-            <Route path="/projects/subjects" element={<SubjectsPage />} />
-            <Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
+						<Route path="/tableau" element={<TableauPage />} />
+						<Route path="/image" element={<ImagePage />} />
+						<Route path="/events" element={<EventPage />} />
+						<Route path="/projects/teams" element={<TeamsPage />} />
+						<Route path="/projects/tinder" element={<TinderPage />} />
+						<Route path="/projects/subjects" element={<SubjectsPage />} />
+						<Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
 
-            <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
-            <Route path="/locations/userstotal" element={<UsersTotalPage />} />
-            <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
-            <Route path="/locations/peaks" element={<PeaksDaysPage />} />
-            <Route path="/locations/love" element={<LoveGraphPage />} />
+						<Route path="/locations/userscomputers" element={<UsersComputersPage />} />
+						<Route path="/locations/userstotal" element={<UsersTotalPage />} />
+						<Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
+						<Route path="/locations/peaks" element={<PeaksDaysPage />} />
+						<Route path="/locations/love" element={<LoveGraphPage />} />
 
-            <Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
+						<Route path="/locations/personalcomputers" element={<PersonalComputerView />} />
 
-            {/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
-            <Route path="/admin/groups" element={<UserGroupsPage />} />
-            <Route path="/admin/permissions" element={<GroupPermissionsPage />} />
-            <Route path="/admin/pages" element={<GroupPermissionsPage />} />
-            <Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
-            <Route path="/admin/profiles" element={<UsersProfilesPage />} />
+						{/* <Route path="/createaccount" element={<CreateAccountPage />} /> */}
+						<Route path="/admin/groups" element={<UserGroupsPage />} />
+						<Route path="/admin/permissions" element={<GroupPermissionsPage />} />
+						<Route path="/admin/pages" element={<GroupPermissionsPage />} />
+						<Route path="/admin/poolfilters" element={<PoolfilterVisibilityPage />} />
+						<Route path="/admin/profiles" element={<UsersProfilesPage />} />
 
-            <Route path="/admin/users" element={<UsersVisibilityPage />} />
-            <Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
+						<Route path="/admin/users" element={<UsersVisibilityPage />} />
+						<Route path="/admin/projects" element={<ProjectsVisibilityPage />} />
 
-            <Route path="/admin/updater" element={<UpdaterPage />} />
+						<Route path="/admin/updater" element={<UpdaterPage />} />
 
-            {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
+						{/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
 
-            <Route path="/test" element={<TestPage />} />
-			{/* <Route path="/tig" element={<TigPage />} /> */}
-          </>}
+						<Route path="/test" element={<TestPage />} />
+						{/* <Route path="/tig" element={<TigPage />} /> */}
 
-		  <Route path="/fun/xp" element={<XpCalculator />} />
+						<Route path="/fun/xp" element={<XpCalculator />} />
+					</>}
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
-      <NotifDisplay/>
-    </Router>
-  );
+					<Route path="*" element={<NotFoundPage />} />
+				</Routes>
+			</div>
+			<NotifDisplay />
+		</Router>
+	);
 }
