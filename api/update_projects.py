@@ -300,6 +300,7 @@ def project_callback(project):
     )
     ON CONFLICT (id)
     DO UPDATE SET
+        name = EXCLUDED.name,
         main_cursus = EXCLUDED.main_cursus,
         has_lausanne = EXCLUDED.has_lausanne,
         parent_id = EXCLUDED.parent_id,
