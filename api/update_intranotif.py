@@ -122,4 +122,4 @@ def import_intranotif():
     get_notifs(session)
 
 if __name__ == "__main__":
-    starter()
+    import_intranotif()
