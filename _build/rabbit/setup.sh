@@ -12,7 +12,7 @@ $RABBITCMD declare binding source="fallback" destination_type="queue" destinatio
 $RABBITCMD declare exchange name=main type=topic arguments='{"alternate-exchange": "fallback"}'
 
 $RABBITCMD declare queue name=slow.update.queue durable=true arguments='{"x-consumer-timeout": 7200000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "update.dlq"}'
-$RABBITCMD declare queue name=fast.update.queue durable=true arguments='{"x-consumer-timeout": 1800000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "update.dlq"}'
+$RABBITCMD declare queue name=fast.update.queue durable=false arguments='{"x-consumer-timeout": 1800000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "update.dlq"}'
 
 
 $RABBITCMD declare queue name=server.message.queue durable=true arguments='{"consumer-timeout": 60000, "x-dead-letter-exchange": "", "x-dead-letter-routing-key": "message.dlq"}'
