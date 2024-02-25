@@ -106,7 +106,7 @@ def import_intranotif():
     session = requests.Session()
     session.cookies = cookie_jar
 
-    my_user_agent = datetime.datetime.now().timestamp()
+    my_user_agent = datetime.datetime.now().strftime("%Y_%W")
 
     headers = {
         'User-Agent': f'ftlwatch agent {my_user_agent}',
