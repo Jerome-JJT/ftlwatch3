@@ -30,13 +30,8 @@ def get_notifs(session):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     from _rabbit import send_to_rabbit
 
-    headers = {
-        'User-Agent': f'ftlwatch agent {my_user_agent}',
-        'Connection': 'close'
-    }
-
     url = f'https://profile.intra.42.fr/notifications'
-    response = session.get(url, timeout=60, headers=headers)
+    response = session.get(url, timeout=60, headers={'Connection': 'close'})
 
     if (response.url == url):
 
@@ -108,13 +103,10 @@ def import_intranotif():
 
     my_user_agent = datetime.datetime.now().strftime("%Y_%W")
 
-    headers = {
-        'User-Agent': f'ftlwatch agent {my_user_agent}',
-        'Connection': 'close'
-    }
+    session.headers.update({'User-Agent': f'ftlwatch agent {my_user_agent}'})
 
     url = 'https://profile.intra.42.fr/'
-    response = session.get(url, timeout=60, headers=headers)
+    response = session.get(url, timeout=60, headers={'Connection': 'close'})
 
     if (response.url != url):
 
