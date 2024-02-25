@@ -8,6 +8,7 @@ import environ
 import base64
 from dateutil import parser
 import pytz
+import datetime
 
 env = environ.Env()
 environ.Env.read_env()
@@ -24,11 +25,18 @@ environ.Env.read_env()
 
 
 def get_notifs(session):
+    global my_user_agent
+
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     from _rabbit import send_to_rabbit
 
+    headers = {
+        'User-Agent': f'ftlwatch agent {my_user_agent}',
+        'Connection': 'close'
+    }
+
     url = f'https://profile.intra.42.fr/notifications'
-    response = session.get(url, timeout=60, headers={'Connection': 'close'})
+    response = session.get(url, timeout=60, headers=headers)
 
     if (response.url == url):
 
@@ -43,11 +51,13 @@ def get_notifs(session):
 
             id = parser.parse(notif_date).timestamp()
 
-            notif = executeQuerySelect("SELECT id FROM intra_notifs WHERE id = %(id)s", {
+            ref_notif = executeQuerySelect("SELECT id FROM intra_notifs WHERE id = %(id)s", {
                 "id": id
             })
 
-            if (len(notif) == 0):
+            print(notif_content, id, ref_notif)
+
+            if (len(ref_notif) == 0):
                 embed = {
                     'message_type': 'embed',
                     'url': f'https://profile.intra.42.fr/notifications',
@@ -81,6 +91,8 @@ def get_notifs(session):
 
 
 def import_intranotif():
+    global my_user_agent
+
     cookie_jar = http.cookiejar.LWPCookieJar("/jar/.cookie_jar")
     try:
         cookie_jar.load(ignore_discard=True)
@@ -90,8 +102,15 @@ def import_intranotif():
     session = requests.Session()
     session.cookies = cookie_jar
 
+    my_user_agent = datetime.datetime.now().timestamp()
+
+    headers = {
+        'User-Agent': f'ftlwatch agent {my_user_agent}',
+        'Connection': 'close'
+    }
+
     url = 'https://profile.intra.42.fr/'
-    response = session.get(url, timeout=60, headers={'Connection': 'close'})
+    response = session.get(url, timeout=60, headers=headers)
 
     if (response.url != url):
 
