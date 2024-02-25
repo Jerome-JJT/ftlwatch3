@@ -43,6 +43,10 @@ def get_notifs(session):
         soup = BeautifulSoup(response.content, 'html.parser')
         notifs = soup.find_all("a", "notification-link")
 
+        if (len(notifs) == 0):
+            mylogger(f"Intranotif {id} no notif founds", LOGGER_ERROR)
+
+
         for notif in notifs:
 
             notif_link = notif.attrs["href"]
