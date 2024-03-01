@@ -23,7 +23,6 @@ environ.Env.read_env()
 
 #     return None
 
-
 def get_notifs(session):
     global my_user_agent
 
@@ -39,7 +38,7 @@ def get_notifs(session):
         notifs = soup.find_all("a", "notification-link")
 
         if (len(notifs) == 0):
-            mylogger(f"Intranotif {id} no notif founds", LOGGER_ERROR)
+            mylogger(f"Intranotif no notif founds", LOGGER_ERROR)
 
 
         for notif in notifs:
@@ -126,13 +125,13 @@ def import_intranotif():
             }
             response_post = session.post(next, data=post_data, timeout=60, headers={'Connection': 'close'})
 
-            cookie_jar.save(ignore_discard=True)
-
         else:
             print("No next found")
 
     else:
         print("Already logged")
+
+    cookie_jar.save(ignore_discard=True)
 
     get_notifs(session)
 
