@@ -26,6 +26,7 @@ from process_pdf import process_pdf
 from update_intranotif import import_intranotif
 
 from update_events import import_events
+from update_offers import import_offers
 from update_locations import import_locations
 from process_locations import process_locations
 from update_teams import import_teams
@@ -97,6 +98,9 @@ def api_consumer(ch, method, properties, body, reject_first=False):
 
         elif (resource == "events"):
             import_events()
+
+        elif (resource == "offers"):
+            import_offers()
 
         elif (resource == "users_coals"):
             import_users_coals()

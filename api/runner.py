@@ -47,6 +47,7 @@ if (env("BUILD_TYPE") == "PROD"):
 
 
     scheduler_update.every().day.at("13:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'events'}))
+    scheduler_update.every().day.at("13:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'offers'}))
 
     scheduler_update.every().day.at("10:30", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'users'}))
 

@@ -57,6 +57,7 @@ import TigPage from 'Test/Tig';
 import { PoolTableauPage } from 'Tableau/PoolTableau';
 import { FallGraphPage } from 'FallPages/FallGraphPage';
 import { SalesWatchPage } from 'FallPages/SalesWatchPage';
+import { OffersPage } from 'BasicPages/OffersPage';
 // import Place from './components/Place/Place';
 
 
@@ -138,6 +139,7 @@ export default function App(): JSX.Element {
             <Route path="/basics/projects" element={<ProjectsPage />} />
             <Route path="/basics/projects/:id" element={<SingleProjectPage />} />
             <Route path="/basics/rules" element={<RulesPage />} />
+            <Route path="/basics/offers" element={<OffersPage />} />
 
 
             <Route path="/tableau" element={<TableauPage />} />

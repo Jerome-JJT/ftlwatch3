@@ -108,6 +108,10 @@ try {
             require_once("routes/update.php");
             break;
 
+        case "offers":
+            require_once("routes/offers.php");
+            break;
+
         case "events":
             require_once("routes/events.php");
             break;

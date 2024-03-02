@@ -239,10 +239,12 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (60, 'Events', 45, 'events', NULL, 4, 3),
   (65, 'Points', 55, 'basics/points', NULL, 4, 4),
+  (70, 'Offers', 52, 'basics/offers', NULL, 4, 4),
 
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
   (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),
+  (94, '42 evals', 97, 'http://42evals.com/', NULL, 3, 1),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
@@ -279,17 +281,17 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (365, 'Connections peaks', 20, 'locations/peaks', NULL, 6, 10),
   (366, 'Personal computers', 20, 'locations/personalcomputers', NULL, 6, 4),
 
-  (370, 'Love piscine 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
-  (371, 'Love piscine blackhole 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
-  (372, 'Love cursus 2d', 25, 'locations/love', 'graph=love_cursus_2d', 7, 5),
-  (375, 'Love actual 2d', 15, 'locations/love', 'graph=love_actual_2d', 7, 10),
-  (380, 'Love recent 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
+  (370, 'Love piscine only 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
+  (371, 'Love all stars 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
+  (372, 'Love selected 2d', 25, 'locations/love', 'graph=love_cursus_2d', 7, 5),
+  (375, 'Love current students 2d', 15, 'locations/love', 'graph=love_actual_2d', 7, 10),
+  (380, 'Love last year 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
 
-  (385, 'Love piscine 3d', 60, 'locations/love', 'graph=love_piscine_3d', 7, 10),
-  (386, 'Love cursus 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
-  (387, 'Love piscine blackhole 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
-  (390, 'Love actual 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
-  (395, 'Love recent 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
+  (385, 'Love piscine only 3d', 60, 'locations/love', 'graph=love_piscine_3d', 7, 10),
+  (386, 'Love selected 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
+  (387, 'Love all stars 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
+  (390, 'Love current students 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
+  (395, 'Love last year 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
 
   (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
   (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11)
