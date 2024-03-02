@@ -13,7 +13,7 @@ CREATE TABLE "offers" (
     "little_description" character varying NOT NULL,
     "big_description" character varying NOT NULL,
 
-    "created_at" TIMESTAMP NOT NULL
+    "created_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "PK_OFFER_ID" PRIMARY KEY ("id")
 );
