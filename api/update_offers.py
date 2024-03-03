@@ -113,7 +113,7 @@ def offer_callback(offer):
 
 
 
-def import_interships(update_all=False, start_at=1, mode="slow"):
+def import_offers(update_all=False, start_at=1, mode="slow"):
     global local_offers
     global limit_checker
     global current_limit
@@ -142,7 +142,7 @@ def import_interships(update_all=False, start_at=1, mode="slow"):
 @click.option("--start-at", "-s", type=int, default=1, help="start at")
 
 def starter(update_all=False, start_at=1):
-    import_interships(update_all, start_at)
+    import_offers(update_all, start_at)
 
 
 if __name__ == "__main__":
