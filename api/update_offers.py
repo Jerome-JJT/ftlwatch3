@@ -40,6 +40,10 @@ def offer_notification(fetched):
     diffs = {}
 
     for check in check_fields:
+        if (check in ["valid_at", "invalid_at"] and fetched[check] != None):
+            fetched[check] = parser.parse(fetched[check])
+            fetched[check] = fetched[check].replace(tzinfo=None)
+            
         if (refer == None or str(refer[check]) != str(fetched[check])):
             diffs[check] = discord_diff(refer, fetched, check)
 
