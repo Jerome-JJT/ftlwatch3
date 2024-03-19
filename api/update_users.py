@@ -174,7 +174,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     good_grade = good_cursus["grade"] if good_cursus != None else None
 
     good_is_bde = len(list(filter(lambda x: x["name"] == "BDE", full_user["groups"]))) > 0
-    good_is_tutor = len(list(filter(lambda x: x["name"] == "TUTOR", full_user["groups"]))) > 0
+    good_is_tutor = len(list(filter(lambda x: x["name"] == "Tutor", full_user["groups"]))) > 0
 
     good = {
         "id": full_user["id"],
