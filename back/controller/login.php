@@ -141,7 +141,7 @@ function storeUser($res, $exists = 0)
                 array_push($perms, 'g_bde');
             }
 
-            if (in_array('Tutor', array_column($res['groups'], 'name')))
+            if (in_array('Tutor', array_column($res['groups'], 'name'))) {
                 array_push($perms, 'g_tutor');
             }
             
