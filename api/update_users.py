@@ -85,7 +85,7 @@ def user_notification(fetched):
         if (any(e in ["is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind"] for e in diffs.keys())): # active
             send_to_rabbit('activity.server.message.queue', embed)
 
-        if ("has_cursus21" in diffs.keys()): # cursus
+        if ("has_cursus21" in diffs.keys() and fetched["has_cursus21"] == True): # cursus
             send_to_rabbit('joincursus.server.message.queue', embed)
 
         if (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor"]) for e in diffs.keys()) 
