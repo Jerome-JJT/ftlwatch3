@@ -34,7 +34,7 @@ def team_notification(fetched):
         "team_id": fetched["id"]
     })
 
-    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.name AS cursus FROM projects 
+    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug FROM projects 
                                     LEFT JOIN cursus on cursus.id = projects.main_cursus WHERE projects.id = %(id)s""", 
     {
         "id": fetched["project_id"]
@@ -127,7 +127,7 @@ def team_notification(fetched):
         if (project != None and 'internship' in project['slug']):
             send_to_rabbit('internships.server.message.queue', embed)
 
-        elif (project != None and project['cursus'] in ['piscine-c', 'c-piscine', 'discovery-piscine-web']):
+        elif (project != None and project['cursus_slug'] in ['piscine-c', 'c-piscine', 'discovery-piscine-web']):
 
             if (project != None and project['is_exam'] == True):
                 send_to_rabbit('exams_piscine.server.message.queue', embed)
