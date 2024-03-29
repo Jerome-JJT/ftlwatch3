@@ -135,7 +135,7 @@ export default function LeftDrawer({
         {createDrawer}
 
       </List>
-      <div className='text-xs text-right text-gray-500 dark:text-gray-500'>Release {import.meta.env.VITE_RELEASE_VERSION}</div>
+      <div className='text-xs text-right text-gray-500 dark:text-gray-500'>Release {import.meta.env.VITE_RELEASE_VERSION ?? '-'}</div>
     </Drawer>
   );
 }
