@@ -28,7 +28,8 @@ jobs:
             git restore .
             git fetch
             git checkout ${{ env.RELEASE_VERSION }} 
-            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make
-            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make setup
+            echo "VITE_RELEASE_VERSION=${{ env.RELEASE_VERSION }}" > .version
+            make
+            make setup
             RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgprod
 
