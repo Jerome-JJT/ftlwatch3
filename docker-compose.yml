@@ -130,8 +130,8 @@ services:
     networks:
       - front
 
-    environment:
-      VITE_RELEASE_VERSION: ${RELEASE_VERSION}
+    env_file:
+      - "./.version"
 
     working_dir: /app
 
