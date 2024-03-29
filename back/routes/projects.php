@@ -14,6 +14,10 @@ switch ($action) {
         get_group_projects();
         break;
 
+    case "get_rushes":
+        get_rush_projects();
+        break;
+
     case "get_tinder":
         get_tinder();
         break;

@@ -17,7 +17,7 @@ import {
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
-import { AiFillStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import { longDate, shortDate } from 'Utils/dateUtils';
 import { commonTitle } from 'Utils/commonTitle';
 import classNames from 'classnames';
@@ -50,7 +50,7 @@ export function TeamsPage(): JSX.Element {
 
         <CardBody className="flex flex-row grow justify-evenly text-center align-center gap-2 p-2">
 
-          <div className='flex flex-col justify-evenly'>
+          <div className='flex flex-col justify-start'>
             <p color="blue-gray">
               <a href={`https://projects.intra.42.fr/projects/${card.project_slug}/projects_users/${card.projects_user_id}`}>{card.team_name}</a>
             </p>
@@ -60,13 +60,14 @@ export function TeamsPage(): JSX.Element {
           </div>
 
           <div className='flex flex-col justify-evenly'>
-            <div className="flex items-center">
-              <p color="blue-gray">{card.current_status}</p> <Checkbox crossOrigin={undefined} checked={card.is_validated} readOnly disabled></Checkbox>
+            <div className="flex items-center justify-center">
+              <p color="blue-gray">Mark : {card.final_mark}</p>
+
+              <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' /> }
+                color={card.is_validated ? 'green' : 'deep-orange'} crossOrigin={undefined} checked={true} readOnly disabled></Checkbox>
             </div>
 
-            <p color="blue-gray">
-              Mark : {card.final_mark}
-            </p>
+            <p color="blue-gray">State : {card.current_status}</p>
 
             <Popover placement="right-start">
               <PopoverHandler>
