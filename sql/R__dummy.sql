@@ -267,6 +267,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (220, 'Tableau current year', 50, NULL, 'filter=currentyear&projects=c-piscine', 1, 7),
 
   (250, 'Images cursus', 10, NULL, 'filter=cursus', 2, 10),
+  (252, 'Images tutors', 14, NULL, 'filter=tutors', 2, 10),
+  (253, 'Images bde', 15, NULL, 'filter=bde', 2, 10),
   (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
