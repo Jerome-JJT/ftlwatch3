@@ -10,10 +10,22 @@ function get_group_projects()
 
     $teams = getGroupProjects(21);
 
+    $filters = array(
+        "42cursus-minishell" => "minishell", 
+        "cub3d" => "cub3d", 
+        "minirt" => "minirt", 
+        "webserv" => "webserv", 
+        "ft_irc" => "ft_irc", 
+        "ft_transcendence" => "ft_transcendence"
+    );
 
     $tmp = array();
 
     foreach ($teams as $team) {
+        if (!in_array($team['project_slug'], array_keys($filters))) {
+            $filters[$team['project_slug']] = $team['project_name'];
+        }
+
         if ($team['retry_common'] != null) {
 
             if (isset($tmp[$team['retry_common']])) {
@@ -89,6 +101,7 @@ function get_group_projects()
         }
     }
 
+    $res["filters"] = $filters;
     $res["values"] = array_values($tmp);
 
     jsonResponse($res, 200);
