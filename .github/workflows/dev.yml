@@ -55,6 +55,6 @@ jobs:
             git fetch
             git checkout ${{ env.RELEASE_VERSION }} 
             RELEASE_VERSION=${{ env.RELEASE_VERSION }} make
-            RELEASE_VERSION=${{ env.RELEASE_VERSION }} ake setup
+            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make setup
             RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgdev
 
