@@ -12,6 +12,7 @@ import asyncio
 from _api import *
 from _utils_discord import *
 from _rabbit import custom_reject
+from _dbConnector import *
 
 import discord
 from discord.errors import PrivilegedIntentsRequired
@@ -40,6 +41,12 @@ valid_cluster = [
 valid_cursus = [
     OptionChoice(name="Cursus 42", value="all"),
     OptionChoice(name="Not cursus 42", value="not")
+]
+
+valid_timelines = [
+    OptionChoice(name="Future", value="future"),
+    OptionChoice(name="Past", value="past"),
+    OptionChoice(name="Both", value="both"),
 ]
 
 
@@ -361,6 +368,71 @@ async def logged(ctx,
     await ctx.respond(f"Done")
 
 
+@bot.slash_command(name="blackhole", description="Blackholes")
+async def blackhole(ctx, 
+                    timeline: Option(str, 'Future or/and Past', required=True, choices=(valid_timelines)), 
+                    days: Option(int, 'Days', required=False)):
+    await ctx.defer()
+
+    if days is None:
+        days = 5
+    datenow = datetime.datetime.now()
+
+    try:
+        if timeline == "future":
+            refer = executeQuerySelect("""SELECT * FROM users WHERE has_cursus21 = True AND blackhole < %(datelimit)s AND blackhole > %(datenow)s""", {
+                "datelimit": datenow + datetime.timedelta(days=days),
+                "datenow" : datetime.datetime.now()
+            })
+        elif timeline == "past":
+            refer = executeQuerySelect("""SELECT * FROM users WHERE has_cursus21 = True AND blackhole > %(datelimit)s AND blackhole < %(datenow)s""", {
+                "datelimit": datenow - datetime.timedelta(days=days),
+                "datenow" : datetime.datetime.now()
+            })
+        else:
+            refer = executeQuerySelect("""SELECT * FROM users WHERE has_cursus21 = True AND blackhole > %(datepast)s AND blackhole < %(datelimit)s""", {
+                "datelimit": datenow + datetime.timedelta(days=days),
+                "datepast" : datenow - datetime.timedelta(days=days)
+            })
+    except Exception as e:
+            await ctx.respond(f"Error {e} when querying the DB")
+        
+
+    user_days_list = []
+    for user in refer:
+        bhdate_timedelta = user['blackhole'] - datenow
+        days_until_bh = bhdate_timedelta.days
+        user_days_list.append((user, days_until_bh))
+    user_days_list.sort()
+
+    past_blackholes = 0
+    for user, days_until_bh in user_days_list:
+        payload = {'message_type': 'embed'}
+        payload["title"] = f"{user['login']}"
+        payload["url"] = f"https://profile.intra.42.fr/users/{user['login']}"
+
+        try:
+            payload["thumbnail"] = user["avatar_url"]
+        except KeyError:
+            pass
+
+        if days_until_bh > 0:
+            payload["description"] = f"{user['login']} will blackhole in {days_until_bh} days"
+        elif days_until_bh == 0:
+            payload["description"] = f"{user['login']} is blackholing today"
+        else:
+            payload["description"] = f"{user['login']} have blackholed {abs(days_until_bh)} days ago"
+            past_blackholes += 1
+            
+        await discord_send(ctx, payload)
+        
+    if timeline == "future":
+        await discord_send(ctx, {"content": f"{len(refer) - past_blackholes} people could blackhole within {days} days"})
+    elif timeline == "past":
+        await discord_send(ctx, {"content": f"{past_blackholes} people have blackholed in the last {days} days"})
+    else:
+        await discord_send(ctx, {"content": f"{past_blackholes} people have blackholed in the last {days} days and {len(refer) - past_blackholes} could blackhole within the next {days} days"})
+    await ctx.respond(f"Done")
 
 
 
