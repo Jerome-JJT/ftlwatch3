@@ -25,6 +25,7 @@ interface SuperTableProps {
   values: any[];
 
   subOptions?: ReactNode | undefined;
+  defaultSearch?: string | undefined;
 
   tableTitle?: string | undefined;
   tableDesc?: string | undefined;
@@ -40,6 +41,7 @@ export function SuperTable({
   values,
 
   subOptions = undefined,
+  defaultSearch = '',
 
   tableTitle = undefined,
   tableDesc = undefined,
@@ -51,7 +53,7 @@ export function SuperTable({
   reloadFunction = undefined,
 }: SuperTableProps): JSX.Element {
 
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState(defaultSearch);
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -255,6 +257,7 @@ export function SuperTable({
             <MyInput
               label="Search"
               onChange={handleSearchChange}
+              defaultValue={searchQuery}
             />
           </div>
         </div>
@@ -331,7 +334,7 @@ export function SuperTable({
                     {columns.map((col) => col.visible !== false && (
 
                       <td key={`${createKey(value, index)}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}
+                        className={classNames('border-x border-blue-gray-50 overflow-hidden max-w-4 table-cell', typeof value[col.field] !== 'object' ? 'p-4' : '' )}
                         style={{ backgroundColor: value[`_${col.field}_color`] ? `${value[`_${col.field}_color`]}` : undefined }}>
                         <div className="h-full flex justify-center items-center text-black">
                           {

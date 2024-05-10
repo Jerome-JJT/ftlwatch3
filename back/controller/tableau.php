@@ -212,3 +212,117 @@ function tableau_api($selectedFilter, $selectedProjects) {
 
 }
 
+
+
+
+function tableau_pools()
+{
+    $pools = array();
+
+    $pools['all'] = array(
+        'pool' => 'all',
+        'participants' => 0,
+        'selected' => 0,
+        'blackholes' => 0,
+        'incursus' => 0,
+        'transcendead' => 0,
+    );
+    
+    $users = getUsersPools();
+
+    foreach ($users as $user) {
+
+        if (!isset($pools[$user['poolfilter']])) {
+            $pools[$user['poolfilter']] = array(
+                'pool' => $user['poolfilter'],
+                'participants' => 0,
+                'selected' => 0,
+                'blackholes' => 0,
+                'incursus' => 0,
+                'transcendead' => 0,
+            );
+        }
+
+        $year = substr($user['poolfilter'], 0, 4);
+        if (!isset($pools[$year])) {
+            $pools[$year] = array(
+                'pool' => $year,
+                'participants' => 0,
+                'selected' => 0,
+                'blackholes' => 0,
+                'incursus' => 0,
+                'transcendead' => 0,
+            );
+        }
+
+        $pools['all']['participants'] += 1;
+        $pools[$year]['participants'] += 1;
+        $pools[$user['poolfilter']]['participants'] += 1;
+
+        if ($user['has_cursus21']) {
+            $pools['all']['selected'] += 1;
+            $pools[$year]['selected'] += 1;
+            $pools[$user['poolfilter']]['selected'] += 1;
+
+            if ($user['blackhole'] == null || strtotime($user['blackhole']) >= time()) {
+                
+                if ($user['grade'] == 'Member') {
+                    $pools['all']['transcendead'] += 1;
+                    $pools[$year]['transcendead'] += 1;
+                    $pools[$user['poolfilter']]['transcendead'] += 1;
+                }
+                else {
+                    $pools['all']['incursus'] += 1;
+                    $pools[$year]['incursus'] += 1;
+                    $pools[$user['poolfilter']]['incursus'] += 1;
+                }
+            }
+            else {
+                $pools['all']['blackholes'] += 1;
+                $pools[$year]['blackholes'] += 1;
+                $pools[$user['poolfilter']]['blackholes'] += 1;
+            }
+        }
+    }
+
+
+    foreach ($pools as $poolid => $pool) {
+
+        $pools[$poolid]['_perc_selected'] = $pools[$poolid]['participants'] > 0 ? round(($pools[$poolid]['selected'] / $pools[$poolid]['participants']) * 100, 2) : 0;
+        $pools[$poolid]['perc_selected'] = $pools[$poolid]['_perc_selected']." %";
+
+        $pools[$poolid]['_perc_blackhole'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['blackholes'] / $pools[$poolid]['selected']) * 100, 2) : 0;
+        $pools[$poolid]['perc_blackhole'] = $pools[$poolid]['_perc_blackhole']." %";
+
+        $pools[$poolid]['_perc_incursus'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['incursus'] / $pools[$poolid]['selected']) * 100, 2) : 0;
+        $pools[$poolid]['perc_incursus'] = $pools[$poolid]['_perc_incursus']." %";
+
+        $pools[$poolid]['_perc_transcendead'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['transcendead'] / $pools[$poolid]['selected']) * 100, 2) : 0;
+        $pools[$poolid]['perc_transcendead'] = $pools[$poolid]['_perc_transcendead']." %";
+    }        
+    
+
+    $res = array();
+
+    $res["columns"] = [
+        ["label" => "Pool", "field" => "pool"],
+        ["label" => "Participants", "field" => "participants"],
+
+        ["label" => "Selected", "field" => "selected"],
+        ["label" => "Perc Selected", "field" => "perc_selected"],
+
+        ["label" => "Blackholes", "field" => "blackholes"],
+        ["label" => "Perc Blackholes", "field" => "perc_blackhole"],
+
+        ["label" => "In Cursus", "field" => "incursus"],
+        ["label" => "Perc In Cursus", "field" => "perc_incursus"],
+
+        ["label" => "Transcendead", "field" => "transcendead"],
+        ["label" => "Perc Transcendead", "field" => "perc_transcendead"],
+    ];
+
+    $res["values"] = array_values($pools);
+
+    jsonResponse($res, 200);
+
+}

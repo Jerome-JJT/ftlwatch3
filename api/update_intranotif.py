@@ -8,6 +8,7 @@ import environ
 import base64
 from dateutil import parser
 import pytz
+import datetime
 
 env = environ.Env()
 environ.Env.read_env()
@@ -22,8 +23,9 @@ environ.Env.read_env()
 
 #     return None
 
-
 def get_notifs(session):
+    global my_user_agent
+
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     from _rabbit import send_to_rabbit
 
@@ -35,6 +37,10 @@ def get_notifs(session):
         soup = BeautifulSoup(response.content, 'html.parser')
         notifs = soup.find_all("a", "notification-link")
 
+        if (len(notifs) == 0):
+            mylogger(f"Intranotif no notif founds", LOGGER_ERROR)
+
+
         for notif in notifs:
 
             notif_link = notif.attrs["href"]
@@ -43,11 +49,13 @@ def get_notifs(session):
 
             id = parser.parse(notif_date).timestamp()
 
-            notif = executeQuerySelect("SELECT id FROM intra_notifs WHERE id = %(id)s", {
+            ref_notif = executeQuerySelect("SELECT id FROM intra_notifs WHERE id = %(id)s", {
                 "id": id
             })
 
-            if (len(notif) == 0):
+            print(notif_content, id, ref_notif)
+
+            if (len(ref_notif) == 0):
                 embed = {
                     'message_type': 'embed',
                     'url': f'https://profile.intra.42.fr/notifications',
@@ -81,6 +89,8 @@ def get_notifs(session):
 
 
 def import_intranotif():
+    global my_user_agent
+
     cookie_jar = http.cookiejar.LWPCookieJar("/jar/.cookie_jar")
     try:
         cookie_jar.load(ignore_discard=True)
@@ -89,6 +99,10 @@ def import_intranotif():
 
     session = requests.Session()
     session.cookies = cookie_jar
+
+    my_user_agent = datetime.datetime.now().strftime("%Y_%W")
+
+    session.headers.update({'User-Agent': f'ftlwatch agent {my_user_agent}'})
 
     url = 'https://profile.intra.42.fr/'
     response = session.get(url, timeout=60, headers={'Connection': 'close'})
@@ -111,15 +125,15 @@ def import_intranotif():
             }
             response_post = session.post(next, data=post_data, timeout=60, headers={'Connection': 'close'})
 
-            cookie_jar.save(ignore_discard=True)
-
         else:
             print("No next found")
 
     else:
         print("Already logged")
 
+    cookie_jar.save(ignore_discard=True)
+
     get_notifs(session)
 
 if __name__ == "__main__":
-    starter()
+    import_intranotif()

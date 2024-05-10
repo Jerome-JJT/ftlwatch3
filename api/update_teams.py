@@ -34,13 +34,15 @@ def team_notification(fetched):
         "team_id": fetched["id"]
     })
 
-    project = executeQuerySelect("SELECT slug FROM projects WHERE id = %(id)s", {
+    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug FROM projects 
+                                    LEFT JOIN cursus on cursus.id = projects.main_cursus WHERE projects.id = %(id)s""", 
+    {
         "id": fetched["project_id"]
     })
     if (len(project) > 0):
-        project = project[0]["slug"]
+        project = project[0]
     else:
-        project = ""
+        project = None
 
     leader = list(filter(lambda x: x["leader"], fetched["users"]))
     if len(leader) > 0:
@@ -69,10 +71,10 @@ def team_notification(fetched):
         embed["thumbnail"] = f'{leader["avatar_url"]}'
 
     if (len(refer) == 0):
-        embed['title'] = f'Created team for {leader["login"]}, on {project}'
+        embed['title'] = f'Created team for {leader["login"]}, on {project["slug"] if project != None else ""}'
         refer = None
     else:
-        embed['title'] = f'Updated team for {leader["login"]}, on {project}'
+        embed['title'] = f'Updated team for {leader["login"]}, on {project["slug"] if project != None else ""}'
         refer = refer[0]
 
     if (refer):
@@ -122,10 +124,24 @@ def team_notification(fetched):
         embed['fields'] = diffs
 
         mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
-        if (fetched["status"] == "finished"):
-            send_to_rabbit('finished.server.message.queue', embed)
+        if (project != None and 'internship' in project['slug']):
+            send_to_rabbit('internships.server.message.queue', embed)
 
-        send_to_rabbit('teams.server.message.queue', embed)
+        elif (project != None and project['cursus_slug'] in ['piscine-c', 'c-piscine', 'discovery-piscine-web']):
+
+            if (project != None and project['is_exam'] == True):
+                send_to_rabbit('exams_piscine.server.message.queue', embed)
+            else:
+                send_to_rabbit('teams_piscine.server.message.queue', embed)
+
+        else:
+            if (fetched["status"] == "finished"):
+                send_to_rabbit('finished.server.message.queue', embed)
+
+            if (project != None and project['is_exam'] == True):
+                send_to_rabbit('exams.server.message.queue', embed)
+            else:
+                send_to_rabbit('teams.server.message.queue', embed)
 
 
 
@@ -216,7 +232,7 @@ def team_callback(team):
     global limit_checker
     global current_limit
 
-    mylogger(f"Import team {team['id']} {team['name']} / current_limit = {current_limit}", LOGGER_INFO)
+    # mylogger(f"Import team {team['id']} {team['name']} / current_limit = {current_limit}", LOGGER_DEBUG)
 
     team_user_ids = list(map(lambda x: x['id'], team['users']))
     team_user_ids.sort()

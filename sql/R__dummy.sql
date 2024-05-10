@@ -130,7 +130,8 @@ INSERT INTO "permissions" ("id", "name", "slug", "corder") VALUES
   (7, 'View3', 'p_view3', 70),
   (8, 'View4', 'p_view4', 80),
   (9, 'Permission management', 'p_perm', 25),
-  (10, '47Student', 'p_47student', 40)
+  (10, '47Student', 'p_47student', 40),
+  (11, 'Watching', 'p_watch', 40)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -152,7 +153,8 @@ INSERT INTO "login_groups" ("id", "name", "slug", "corder") VALUES
   (8, 'Stalk3', 'g_stalk3', 80),
   (9, 'Stalk4', 'g_stalk4', 90),
   (10, 'Permissions manager', 'g_perm', 15),
-  (11, '47Student', 'g_47student', 50)
+  (11, '47Student', 'g_47student', 50),
+  (12, 'Watchers', 'g_watch', 50)
 
   ON CONFLICT(id) DO UPDATE
   SET 
@@ -174,6 +176,7 @@ INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id")
   (8, 8, 1),
   (9, 9, 1),
   (10, 10, 1),
+  (11, 11, 1),
 
   (20, 3, 2), -- p_event to g_event
   (21, 3, 4), -- p_event to g_bde
@@ -184,6 +187,7 @@ INSERT INTO "login_groups_permissions" ("id", "permission_id", "login_group_id")
   (26, 8, 9), -- p_view4 to g_stalk4
   (27, 10, 11), -- p_47student to g_47student
   (28, 9, 10), -- p_perm to g_perm
+  (29, 11, 12), -- p_watch to g_watch
   (10000, 1, 1) 
 
   ON CONFLICT(id) DO UPDATE
@@ -211,7 +215,8 @@ INSERT INTO "submenus" ("id", "name", "corder", "route") VALUES
   (4, 'Basics', 20, NULL),
   (5, 'Projects', 50, NULL),
   (6, 'Locations', 60, NULL),
-  (7, 'Love', 70, NULL)
+  (7, 'Love', 70, NULL),
+  (8, 'Watch', 15, NULL)
   
 
   ON CONFLICT(id) DO UPDATE
@@ -234,10 +239,13 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (60, 'Events', 45, 'events', NULL, 4, 3),
   (65, 'Points', 55, 'basics/points', NULL, 4, 4),
+  (70, 'Offers', 52, 'basics/offers', NULL, 4, 4),
 
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
   (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),
+  (94, '42 evals', 99, 'http://42evals.com/', NULL, NULL, 10),
+  (95, 'PONG', 98, 'https://pong.42lwatch.ch/', NULL, NULL, 10),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
@@ -250,6 +258,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (152, 'Projects visibility', 50, 'admin/projects', NULL, 3, 1),
 
   (200, 'Tableau infos', 10, NULL, 'filter=cursus&projects=infos', 1, 5),
+  (202, 'Tableau pools', 15, 'tableau/pools', NULL, 1, 10),
+
   (205, 'Tableau cursus common core', 22, NULL, 'filter=cursus&projects=common-core', 1, 10),
   (210, 'Tableau cursus outer core', 30, NULL, 'filter=cursus&projects=outer-core', 1, 10),
 
@@ -257,6 +267,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (220, 'Tableau current year', 50, NULL, 'filter=currentyear&projects=c-piscine', 1, 7),
 
   (250, 'Images cursus', 10, NULL, 'filter=cursus', 2, 10),
+  (252, 'Images tutors', 14, NULL, 'filter=tutors', 2, 10),
+  (253, 'Images bde', 15, NULL, 'filter=bde', 2, 10),
   (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
@@ -272,17 +284,20 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (365, 'Connections peaks', 20, 'locations/peaks', NULL, 6, 10),
   (366, 'Personal computers', 20, 'locations/personalcomputers', NULL, 6, 4),
 
-  (370, 'Love piscine 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
-  (371, 'Love piscine blackhole 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
-  (372, 'Love cursus 2d', 25, 'locations/love', 'graph=love_cursus_2d', 7, 5),
-  (375, 'Love actual 2d', 15, 'locations/love', 'graph=love_actual_2d', 7, 10),
-  (380, 'Love recent 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
+  (370, 'Love piscine only 2d', 20, 'locations/love', 'graph=love_piscine_2d', 7, 10),
+  (371, 'Love all stars 2d', 30, 'locations/love', 'graph=love_piscine_blackhole_2d', 7, 5),
+  (372, 'Love selected 2d', 25, 'locations/love', 'graph=love_cursus_2d', 7, 5),
+  (375, 'Love current students 2d', 15, 'locations/love', 'graph=love_actual_2d', 7, 10),
+  (380, 'Love last year 2d', 10, 'locations/love', 'graph=love_recent_2d', 7, 10),
 
-  (385, 'Love piscine 3d', 60, 'locations/love', 'graph=love_piscine_3d', 7, 10),
-  (386, 'Love cursus 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
-  (387, 'Love piscine blackhole 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
-  (390, 'Love actual 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
-  (395, 'Love recent 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10)
+  (385, 'Love piscine only 3d', 60, 'locations/love', 'graph=love_piscine_3d', 7, 10),
+  (386, 'Love selected 3d', 70, 'locations/love', 'graph=love_piscine_blackhole_3d', 7, 5),
+  (387, 'Love all stars 3d', 65, 'locations/love', 'graph=love_cursus_3d', 7, 5),
+  (390, 'Love current students 3d', 55, 'locations/love', 'graph=love_actual_3d', 7, 10),
+  (395, 'Love last year 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
+
+  (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
+  (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11)
 
 
   ON CONFLICT(id) DO UPDATE

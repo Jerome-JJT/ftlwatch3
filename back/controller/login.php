@@ -141,13 +141,7 @@ function storeUser($res, $exists = 0)
                 array_push($perms, 'g_bde');
             }
 
-            $achievements = array_column($res['achievements'], 'id');
-            if (in_array(103, $achievements) || 
-                in_array(104, $achievements) || 
-                in_array(105, $achievements) || 
-                in_array(106, $achievements) || 
-                in_array(1219, array_column($res['titles'], 'id'))) {
-
+            if (in_array('Tutor', array_column($res['groups'], 'name'))) {
                 array_push($perms, 'g_tutor');
             }
             

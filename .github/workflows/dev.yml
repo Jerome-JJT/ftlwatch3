@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -54,7 +54,7 @@ jobs:
             cd /var/www/ftlwatch3dev
             git fetch
             git checkout ${{ env.RELEASE_VERSION }} 
-            make
-            make setup
+            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make
+            RELEASE_VERSION=${{ env.RELEASE_VERSION }} make setup
             RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgdev
 

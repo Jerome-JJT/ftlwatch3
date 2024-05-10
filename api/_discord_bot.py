@@ -100,6 +100,7 @@ async def get_private_messages():
         method, properties, body = channel.basic_get(queue="private.message.queue")
 
         if (method == None):
+            mylogger(f'No method for private', LOGGER_DEBUG, rabbit=False)
             break
 
         try:
@@ -107,7 +108,8 @@ async def get_private_messages():
                 body = json.dumps(body)
 
             mylogger(f'Got {method.routing_key} for private', LOGGER_DEBUG, rabbit=False)
-            await discord_send(ctx, body)
+            if (env('BUILD_TYPE') == 'PROD'):
+                await discord_send(ctx, body)
 
             channel.basic_ack(delivery_tag = method.delivery_tag)
 
@@ -160,8 +162,8 @@ async def api(ctx,
 
 
     if (req_type == "rules"):
-        if ("v2" not in url):
-            url = f"/v2/project_sessions/{url}"
+        if ("v2" not in endpoint):
+            endpoint = f"/v2/project_sessions/{endpoint}"
 
         if (sub_index == None or len(sub_index) == 0):
             sub_index = "project_sessions_rules"
@@ -364,12 +366,21 @@ async def logged(ctx,
 
 async def consume_messages():
     await bot.wait_until_ready()
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     while True:
 
         print("LOOP")
-        await get_private_messages()
-        await asyncio.sleep(10)
+
+        try:
+            await get_private_messages()
+            await asyncio.sleep(10)
+
+        except pika.exceptions.AMQPConnectionError as e:
+            print(f"RabbitMQ connection error {str(e)}")
+            mylogger(f"RabbitMQ connection error {str(e)}", LOGGER_ERROR)
+            await asyncio.sleep(60)
+
 
 
 @bot.event

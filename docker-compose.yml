@@ -31,7 +31,7 @@ services:
     hostname: rabbit
 
     healthcheck:
-      test: rabbitmq-diagnostics -q ping
+      test: 'rabbitmq-diagnostics -q ping && rabbitmq-diagnostics listeners'
       interval: 30s
       timeout: 30s
       retries: 3
@@ -130,8 +130,8 @@ services:
     networks:
       - front
 
-    # environment:
-      # API_UID: ${API_FRONT_UID}
+    env_file:
+      - "./.version"
 
     working_dir: /app
 

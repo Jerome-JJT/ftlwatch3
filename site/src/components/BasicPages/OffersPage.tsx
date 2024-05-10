@@ -8,36 +8,39 @@ import { commonTitle } from 'Utils/commonTitle';
 
 
 
-export function PointsPage(): JSX.Element {
+export function OffersPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [columns, setColumns] = React.useState<ColumnProps[] | undefined>(undefined);
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Points page');}, []);
+  React.useEffect(() => {document.title = commonTitle('Offers page');}, []);
 
 
   React.useEffect(() => {
     axios
-      .get('/?page=points&action=get_points',
+      .get('/?page=offers&action=get_offers',
         { withCredentials: true }
       )
       .then((res) => {
         if (res.status === 200) {
           setColumns(res.data.columns as ColumnProps[]);
 
-          const displayValues = res.data.values.map((user: any) => {
+          const displayValues = res.data.values.map((offer: any) => {
             res.data.columns.forEach((col: ColumnProps) => {
 
-              if (col.field === 'login') {
-                user[`_${col.field}`] = user[col.field];
-                user[col.field] = <a
-                  href={`https://profile.intra.42.fr/users/${user.login}`}
-                >{user.login}</a>;
+              if (col.field === 'title') {
+                offer[`_${col.field}`] = offer[col.field];
+                offer[col.field] = <a className='text-center' href={`https://companies.intra.42.fr/en/offers/${offer['id']}`}>{offer[col.field]}</a>;
+              }
+
+              else if (col.field === 'big_description') {
+                offer[`_${col.field}`] = offer[col.field];
+                offer[col.field] = <textarea className='w-80 h-36 bg-black/10' readOnly defaultValue={offer.big_description}/>;
               }
             });
 
-            return user;
+            return offer;
           });
 
           setValues(displayValues);
@@ -57,8 +60,10 @@ export function PointsPage(): JSX.Element {
           values={values}
           indexColumn={true}
 
-          tableTitle='Points'
-          tableDesc='Stats about points given to pool and evaluations'
+          defaultSearch='Switzerland'
+
+          tableTitle='Offers'
+          tableDesc='Offers'
           options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

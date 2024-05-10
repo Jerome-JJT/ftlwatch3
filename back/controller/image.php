@@ -32,6 +32,8 @@ function get_image_poolfilters()
     if (has_permission("p_view1")) {
         array_unshift($poolfilters, array("name" => "currentmonth", "hidden" => false));
     }
+    array_unshift($poolfilters, array("name" => "bde", "hidden" => false));
+    array_unshift($poolfilters, array("name" => "tutors", "hidden" => false));
     array_unshift($poolfilters, array("name" => "cursus", "hidden" => false));
 
 
@@ -56,7 +58,7 @@ function image_api($selectedFilter)
     //TODO static in DB
     $currentFilter = "2023.september";
 
-    if ($selectedFilter == "cursus") {
+    if (in_array($selectedFilter, array("cursus", "tutors", "bde"))) {
         need_permission("p_47student");
     }
     else if ($selectedFilter == "currentmonth") {

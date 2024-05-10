@@ -13,6 +13,9 @@ $updates = array(
     array('id' => 'titles', 'name' => 'Update titles', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'titles')); }),
     array('id' => 'users', 'name' => 'Update users', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users')); }),
     array('id' => 'events', 'name' => 'Update events', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'events')); }),
+    array('id' => 'offers', 'name' => 'Update offers', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'offers')); }),
+
+    array('id' => 'intranotif', 'name' => 'Update intra notifs', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'intranotif')); }),
 
 
     array('id' => 'generate_users_coals', 'name' => 'Update users coals', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users_coals')); }),
@@ -27,6 +30,7 @@ $updates = array(
     array('id' => 'process_locations', 'name' => 'Process locations', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'process_locations')); }),
     array('id' => 'generate_love', 'name' => 'Generate love', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_love')); }),
     array('id' => 'generate_peaks', 'name' => 'Generate peaks', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_peaks')); }),
+    array('id' => 'generate_fall', 'name' => 'Generate fall', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'generate_fall')); }),
 );
 
 

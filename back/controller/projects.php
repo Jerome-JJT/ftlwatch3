@@ -7,91 +7,192 @@ require_once("model/users.php");
 
 function get_group_projects()
 {
-	$res = array();
+    $res = array();
 
-	$teams = getGroupProjects(21);
+    $teams = getGroupProjects(21);
+
+    $filters = array(
+        "42cursus-minishell" => "minishell", 
+        "cub3d" => "cub3d", 
+        "minirt" => "minirt", 
+        "webserv" => "webserv", 
+        "ft_irc" => "ft_irc", 
+        "ft_transcendence" => "ft_transcendence"
+    );
+
+    $tmp = array();
+
+    foreach ($teams as $team) {
+        if (!in_array($team['project_slug'], array_keys($filters))) {
+            $filters[$team['project_slug']] = $team['project_name'];
+        }
+
+        if ($team['retry_common'] != null) {
+
+            if (isset($tmp[$team['retry_common']])) {
+
+                if ($tmp[$team['retry_common']]['leader_id'] == -1 && $team['user_is_leader']) {
+                    $tmp[$team['retry_common']]['leader_id'] = $team['user_id'];
+                    $tmp[$team['retry_common']]['projects_user_id']  = $team['projects_user_id'];
+                }
+                $tmp[$team['retry_common']]['is_validated'] |= $team['is_validated'];
+                $tmp[$team['retry_common']]['final_mark'] = max($tmp[$team['retry_common']]['final_mark'], $team['final_mark']);
+
+                if ($tmp[$team['retry_common']]['current_team_id'] < $team['team_id']) {
+                    
+                    $tmp[$team['retry_common']]['current_team_id'] = $team['team_id'];
+                    $tmp[$team['retry_common']]['current_locked'] = $team['is_locked'];
+                    $tmp[$team['retry_common']]['current_status'] = $team['status'];
+                    $tmp[$team['retry_common']]['current_updated_at'] = $team['team_updated_at'];
+                }
+
+                if (!isset($tmp[$team['retry_common']]['users'][$team['user_id']])) {
+
+                    $tmp[$team['retry_common']]['users'][$team['user_id']] = array(
+                        'id' => $team['user_id'], 
+                        'login' => $team['login'], 
+                        'avatar_url' => $team['avatar_url']
+                    );
+                }
 
 
-	$tmp = array();
+                if (!isset($tmp[$team['retry_common']]['teams'][$team['team_id']])) {
 
-	foreach ($teams as $team) {
-		if ($team['retry_common'] != null) {
+                    $tmp[$team['retry_common']]['teams'][$team['team_id']] = array(
+                        "id" => $team['team_id'],
+                        "name" => $team['team_name'],
+                        "final_mark" => $team['final_mark'],
+                        "updated_at" => $team['team_updated_at']
+                    );
+                }
+            }
+            else {
+                $tmp[$team['retry_common']] = array(
+                    "retry_common" => $team['retry_common'],
+                    "project_name" => $team['project_name'],
+                    "project_slug" => $team['project_slug'],
+                    "team_name" => $team['team_name'],
 
-			if (isset($tmp[$team['retry_common']])) {
+                    "leader_id" => $team['user_is_leader'] ? $team['user_id'] : -1,
+                    "projects_user_id" => $team['user_is_leader'] ? $team['projects_user_id'] : -1,
+                    "is_validated" => $team['is_validated'],
+                    "final_mark" => $team['final_mark'],
+                    "current_team_id" => $team['team_id'],
+                    "current_locked" => $team['is_locked'],
+                    "current_status" => $team['status'],
+                    "current_updated_at" => $team['team_updated_at'],
 
-				if ($tmp[$team['retry_common']]['leader_id'] == -1 && $team['user_is_leader']) {
-					$tmp[$team['retry_common']]['leader_id'] = $team['user_id'];
-					$tmp[$team['retry_common']]['projects_user_id'] = $team['projects_user_id'];
-				}
-				$tmp[$team['retry_common']]['is_validated'] |= $team['is_validated'];
-				$tmp[$team['retry_common']]['final_mark'] = max($tmp[$team['retry_common']]['final_mark'], $team['final_mark']);
+                    "users" => array(
+                        $team['user_id'] => array(
+                            'id' => $team['user_id'], 
+                            'login' => $team['login'], 
+                            'avatar_url' => $team['avatar_url']
+                        )
+                    ),
+                    "teams" => array(
+                        $team['team_id'] => array(
+                            "id" => $team['team_id'],
+                            "name" => $team['team_name'],
+                            "final_mark" => $team['final_mark'],
+                            "updated_at" => $team['team_updated_at']
+                        )
+                    ),
+                );
+            }
+        }
+    }
 
-				if ($tmp[$team['retry_common']]['current_team_id'] < $team['team_id']) {
+    $res["filters"] = $filters;
+    $res["values"] = array_values($tmp);
 
-					$tmp[$team['retry_common']]['current_team_id'] = $team['team_id'];
-					$tmp[$team['retry_common']]['current_locked'] = $team['is_locked'];
-					$tmp[$team['retry_common']]['current_status'] = $team['status'];
-					$tmp[$team['retry_common']]['current_updated_at'] = $team['team_updated_at'];
-				}
-
-				if (!isset($tmp[$team['retry_common']]['users'][$team['user_id']])) {
-
-					$tmp[$team['retry_common']]['users'][$team['user_id']] = array(
-						'id' => $team['user_id'],
-						'login' => $team['login'],
-						'avatar_url' => $team['avatar_url']
-					);
-				}
+    jsonResponse($res, 200);
+}
 
 
-				if (!isset($tmp[$team['retry_common']]['teams'][$team['team_id']])) {
 
-					$tmp[$team['retry_common']]['teams'][$team['team_id']] = array(
-						"id" => $team['team_id'],
-						"name" => $team['team_name'],
-						"final_mark" => $team['final_mark'],
-						"updated_at" => $team['team_updated_at']
-					);
-				}
-			} else {
-				$tmp[$team['retry_common']] = array(
-					"retry_common" => $team['retry_common'],
-					"project_name" => $team['project_name'],
-					"project_slug" => $team['project_slug'],
-					"team_name" => $team['team_name'],
+function get_rush_projects()
+{
+    $res = array();
 
-					"leader_id" => $team['user_is_leader'] ? $team['user_id'] : -1,
-					"projects_user_id" => $team['user_is_leader'] ? $team['projects_user_id'] : -1,
-					"is_validated" => $team['is_validated'],
-					"final_mark" => $team['final_mark'],
-					"current_team_id" => $team['team_id'],
-					"current_locked" => $team['is_locked'],
-					"current_status" => $team['status'],
-					"current_updated_at" => $team['team_updated_at'],
+    $teams = getRushProjects(9);
 
-					"users" => array(
-						$team['user_id'] => array(
-							'id' => $team['user_id'],
-							'login' => $team['login'],
-							'avatar_url' => $team['avatar_url']
-						)
-					),
-					"teams" => array(
-						$team['team_id'] => array(
-							"id" => $team['team_id'],
-							"name" => $team['team_name'],
-							"final_mark" => $team['final_mark'],
-							"updated_at" => $team['team_updated_at']
-						)
-					),
-				);
-			}
-		}
-	}
+    $project_filters = array(
+        "c-piscine-rush-00" => "C Piscine Rush 00",
+        "c-piscine-rush-01" => "C Piscine Rush 01",
+        "c-piscine-rush-02" => "C Piscine Rush 02",
+        "c-piscine-bsq" => "C Piscine BSQ"
+    );
 
-	$res["values"] = array_values($tmp);
+    $pool_filters = array();
 
-	jsonResponse($res, 200);
+    $tmp = array();
+
+    foreach ($teams as $team) {
+        if (!in_array($team['project_slug'], array_keys($project_filters))) {
+            $project_filters[$team['project_slug']] = $team['project_name'];
+        }
+
+        if (!in_array($team['user_pool'], $pool_filters)) {
+            array_push($pool_filters, $team['user_pool']);
+        }
+
+        if ($team['team_id'] != null) {
+
+            if (isset($tmp[$team['team_id']])) {
+
+                if ($tmp[$team['team_id']]['leader_id'] == -1 && $team['user_is_leader']) {
+                    $tmp[$team['team_id']]['leader_id'] = $team['user_id'];
+                    $tmp[$team['team_id']]['projects_user_id']  = $team['projects_user_id'];
+                }
+                $tmp[$team['team_id']]['is_validated'] |= $team['is_validated'];
+                $tmp[$team['team_id']]['final_mark'] = $team['final_mark'];
+
+                if (!isset($tmp[$team['team_id']]['users'][$team['user_id']])) {
+
+                    $tmp[$team['team_id']]['users'][$team['user_id']] = array(
+                        'id' => $team['user_id'], 
+                        'login' => $team['login'], 
+                        'avatar_url' => $team['avatar_url']
+                    );
+                }
+            }
+            else {
+                $tmp[$team['team_id']] = array(
+                    "team_id" => $team['team_id'],
+                    "project_name" => $team['project_name'],
+                    "project_slug" => $team['project_slug'],
+                    "team_name" => $team['team_name'],
+                    "team_pool" => $team['user_pool'],
+
+                    "scale_comment" => $team['scale_comment'],
+                    "scale_feedback" => $team['scale_feedback'],
+                    "scale_corrector" => $team['scale_corrector'],
+
+                    "leader_id" => $team['user_is_leader'] ? $team['user_id'] : -1,
+                    "projects_user_id" => $team['user_is_leader'] ? $team['projects_user_id'] : -1,
+                    "is_validated" => $team['is_validated'],
+                    "final_mark" => $team['final_mark'],
+                    "locked" => $team['is_locked'],
+                    "status" => $team['status'],
+                    "updated_at" => $team['team_updated_at'],
+
+                    "users" => array(
+                        $team['user_id'] => array(
+                            'id' => $team['user_id'], 
+                            'login' => $team['login'], 
+                            'avatar_url' => $team['avatar_url']
+                        )
+                    )
+                );
+            }
+        }
+    }
+
+    $res["project_filters"] = $project_filters;
+    $res["pool_filters"] = $pool_filters;
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
 }
 
 function get_tinder()

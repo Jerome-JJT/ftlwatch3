@@ -204,7 +204,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             continue
         
         try:
-            img = gv.convert.image_to_data_url(node['image'], 'svg')
+            img = gv.convert.image_to_data_url(node['image'], 'jpg')
         except:
             img = ''
 
@@ -255,12 +255,31 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                     )
     
     else:
+
+        links_force_distance=50.0
+        links_force_strength=0.5
+        collision_force_strength=0.7
+        collision_force_radius=60.0
+
+        if ("cursus" in output_name or "piscine_2d" in output_name or "actual" in output_name):
+            links_force_distance=200.0
+            collision_force_strength=1.0
+            collision_force_radius=100
+        # if ("cursus" in output_name or "actual" in output_name):
+        #     links_force_strength=0.2
+        #     collision_force_strength=1.0
+        #     collision_force_radius=100
+
+
         fig = gv.d3(graph_generator, 
                     graph_height=1000, 
                     many_body_force_strength=-360, 
                     edge_curvature=0.2,
+                    links_force_distance=links_force_distance,
+                    links_force_strength=links_force_strength,
                     use_collision_force=True, 
-                    collision_force_radius=60.0,
+                    collision_force_radius=collision_force_radius,
+                    collision_force_strength=collision_force_strength,
                     zoom_factor=0.5
                 )
 
@@ -278,7 +297,7 @@ def gen_loves():
 
     try:
 
-        target_date = datetime.datetime(datetime.datetime.now().year, 10, 1)
+        target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
         target_date = target_date.strftime("%Y-%m-%d")
 
         generate_love(output_name='love_piscine_blackhole_2d', is_piscine=True, takes=['T', 'S', 'B', 'N'], nbrank=3)

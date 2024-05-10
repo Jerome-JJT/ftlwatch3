@@ -106,7 +106,7 @@ export default function LeftDrawer({
     <Drawer
       open={openedMenu === 'leftdrawer'}
       onClose={() => { setOpenedMenu(''); }}
-      className="p-4 px-2 !max-w-[260px] dark:text-white dark:bg-gray-600 overflow-y-scroll"
+      className="p-4 px-2 !max-w-[260px] dark:text-white dark:bg-gray-600 overflow-y-scroll overflow-x-hidden"
       overlayProps={{ className: 'fixed' }}
     >
       <div className="mb-2 flex items-center justify-between p-4">
@@ -135,6 +135,7 @@ export default function LeftDrawer({
         {createDrawer}
 
       </List>
+      <div className='text-xs text-right text-gray-500 dark:text-gray-500'>Release {import.meta.env.VITE_RELEASE_VERSION ?? '-'}</div>
     </Drawer>
   );
 }

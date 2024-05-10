@@ -26,11 +26,13 @@ from process_pdf import process_pdf
 from update_intranotif import import_intranotif
 
 from update_events import import_events
+from update_offers import import_offers
 from update_locations import import_locations
 from process_locations import process_locations
 from update_teams import import_teams
 from generate_love import gen_loves
 from generate_peaks import gen_peaks
+from generate_fall import gen_falls
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -97,6 +99,9 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "events"):
             import_events()
 
+        elif (resource == "offers"):
+            import_offers()
+
         elif (resource == "users_coals"):
             import_users_coals()
 
@@ -126,6 +131,9 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         elif (resource == "generate_peaks"):
             gen_peaks()
 
+        elif (resource == "generate_fall"):
+            gen_falls()
+
 
         else:
             raise Exception(f'{resource} resource not found')
@@ -138,6 +146,7 @@ def api_consumer(ch, method, properties, body, reject_first=False):
         mylogger(f"Reject api {method.routing_key}, type {type(e)}, reason {e}", LOGGER_ERROR)
         custom_reject(ch, method, body, reason=f"type {type(e)}, exception {e}")
         if ("ChannelClosedByBroker" in str(type(e))):
+            mylogger(f"Reraise", LOGGER_ERROR)
             raise e
 
     return True

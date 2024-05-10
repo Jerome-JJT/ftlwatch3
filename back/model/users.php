@@ -114,10 +114,20 @@ function getUserImages($hidden, $poolfilter = '')
   WHERE (users.hidden = false OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
-    OR (:poolfilter = 'cursus' AND (
+       OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
       AND (users.blackhole > NOW() OR users.grade = 'Member')
        AND users.login NOT LIKE '3b3-%'
+    ))
+    OR (:poolfilter = 'tutors' AND (
+      users.is_tutor = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
+    ))
+    OR (:poolfilter = 'bde' AND (
+      users.is_bde = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
     ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
   )
@@ -145,6 +155,43 @@ function setUser($userId, $value)
 	return executeQueryAction($query, $data);
 }
 
+
+
+
+function getUsersPools()
+{
+  $query = "SELECT 
+  users.id,
+  users.login,
+
+  users.kind,
+  users.is_staff,
+  users.is_active,
+  users.is_alumni,
+
+  users.nbcursus,
+  users.has_cursus21,
+  users.has_cursus9,
+
+  users.blackhole,
+  users.grade,
+
+  poolfilters.name AS poolfilter
+  
+  FROM users
+  JOIN poolfilters ON users.poolfilter_id = poolfilters.id
+
+  WHERE (users.kind = 'student' AND users.hidden = FALSE AND poolfilters.hidden = FALSE AND poolfilters.name != 'None.None')
+  ORDER BY poolfilters.name
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}
 
 
 

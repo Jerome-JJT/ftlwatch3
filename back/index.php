@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     jsonResponse(array(), 200);
 }
 
-if (1 == 0) {
+if (getenv("ENV") == "PROD") {
     ini_set('display_errors', 0);
     ini_set('display_startup_errors', 0);
     error_reporting(-1);
@@ -108,10 +108,17 @@ try {
             require_once("routes/update.php");
             break;
 
+        case "offers":
+            require_once("routes/offers.php");
+            break;
+
         case "events":
             require_once("routes/events.php");
             break;
 
+        case "points":
+            require_once("routes/points.php");
+            
         case "specials":
             require_once("routes/specials.php");
             break;
