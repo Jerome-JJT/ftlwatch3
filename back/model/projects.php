@@ -47,10 +47,6 @@ function getGroupProjects($cursus = '')
 }
 
 
-<<<<<<< HEAD
-function getTinderUserProjects()
-=======
-
 function getRushProjects($cursus = '')
 {
   $query = "SELECT 
@@ -104,8 +100,7 @@ function getRushProjects($cursus = '')
 }
 
 
-function getUserProjects()
->>>>>>> 7a78a289d48547b76db6b8082bb7302810557a21
+function getTinderUserProjects()
 {
 	$query = "SELECT 
       users.id AS user_id, users.login, users.avatar_url,
