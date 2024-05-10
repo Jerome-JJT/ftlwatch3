@@ -53,6 +53,8 @@ import { SingleProjectPage } from 'BasicPages/SingleProjectsPage';
 import { PersonalComputerView } from 'LocationsPages/PersonalComputerView';
 import { SubjectsPage } from 'Projects/SubjectsPage';
 import { UnmatchedSubjectsPage } from 'Projects/UnmatchedSubjectsPage';
+import { XpCalculator } from 'Fun/XpCalculator';
+// import TigPage from 'Test/Tig';
 import TigPage from 'Test/Tig';
 import { PoolTableauPage } from 'Tableau/PoolTableau';
 import { FallGraphPage } from 'FallPages/FallGraphPage';
@@ -183,12 +185,13 @@ export default function App(): JSX.Element {
 
             <Route path="/test" element={<TestPage />} />
             <Route path="/tig" element={<TigPage />} />
+            <Route path="/fun/xp" element={<XpCalculator />} />
           </>}
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
-      <NotifDisplay/>
+      <NotifDisplay />
     </Router>
   );
 }
