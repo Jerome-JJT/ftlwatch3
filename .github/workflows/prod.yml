@@ -29,7 +29,7 @@ jobs:
             git fetch
             git checkout ${{ env.RELEASE_VERSION }} 
             echo "VITE_RELEASE_VERSION=${{ env.RELEASE_VERSION }}" > .version
-            make
+            export VITE_RELEASE_VERSION=${{ env.RELEASE_VERSION }} make
             make setup
             RELEASE_VERSION=${{ env.RELEASE_VERSION }} make msgprod
 

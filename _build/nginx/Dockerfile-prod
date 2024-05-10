@@ -6,6 +6,8 @@ COPY site .
 
 RUN yarn install
 RUN (cd node_modules/react-gauge-chart && npm i lodash.isequal)
+
+ARG VITE_RELEASE_VERSION
 RUN yarn build
 
 
