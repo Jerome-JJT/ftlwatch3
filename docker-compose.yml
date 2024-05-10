@@ -125,7 +125,7 @@ services:
     #  - "8443:443"
 
     volumes:
-      - ./site:/app
+      - ${PWD}/site:/app
 
     networks:
       - front

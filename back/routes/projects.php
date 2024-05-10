@@ -4,7 +4,7 @@ require_once("controller/projects.php");
 
 $action = "";
 if (isset($_GET["action"])) {
-    $action = $_GET["action"];
+	$action = $_GET["action"];
 }
 
 need_permission("p_47student");
@@ -31,6 +31,10 @@ switch ($action) {
     case "get_subject":
         get_subject(isset($_GET["id"]) ? $_GET["id"] : -1);
         break;
+
+	case "get_xp_info":
+		get_xp_info($_SESSION['user']['id']);
+		break;
 
 }
 
