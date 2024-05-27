@@ -343,3 +343,75 @@ function get_subjects($filter = "all")
     jsonResponse($res, 200);
 }
 
+
+
+
+
+
+function get_internships_projects()
+{
+    $internships = getInternshipProjects();
+
+    $tmp = array();
+
+    foreach ($internships as $internship) {
+
+        $parent_slug = ($internship['parent_slug'] != null && $internship['parent_slug'] != '') ? $internship['parent_slug'] : $internship['project_slug'];
+
+        $cid = $parent_slug.'_'.$internship['team_name'];
+
+        if (!isset($tmp[$cid])) {
+
+            $tmp[$cid] = array(
+                'cid' => $cid,
+                'login' => $internship['login'], 
+                'login' => $internship['login'], 
+                'avatar_url' => $internship['avatar_url'],
+
+                'subs' => array(
+                    'contract-upload' => array(),
+                    'duration' => array(),
+                    'company-mid-evaluation' => array(),
+                    'company-final-evaluation' => array(),
+                    'peer-video' => array(),
+                )
+            );
+        }
+
+        
+        if ($internship['parent_slug'] != null && $internship['parent_slug'] != '') {
+            
+            $real_slug = str_replace($internship['parent_slug'], '', $internship['project_slug']);
+            $real_slug = trim($real_slug, '-');
+            
+            $tmp[$cid]['subs'][$real_slug] = array(
+                'project_slug' => $internship['project_slug'],
+                'projects_user_id' => $internship['projects_user_id'],
+                'final_mark' => $internship['final_mark'],
+                'time_at' => $internship['time_at'],
+                'comment' => $internship['comment'],
+                'feedback' => $internship['feedback']
+                
+            );
+        }
+        else {
+            $tmp[$cid]['status'] = $internship['status'];
+            $tmp[$cid]['is_validated'] = $internship['is_validated'];
+
+            $tmp[$cid]['project_slug'] = $internship['project_slug'];
+            
+            $tmp[$cid]['projects_user_id'] = $internship['projects_user_id'];
+            $tmp[$cid]['final_mark'] = $internship['final_mark'];
+            $tmp[$cid]['time_at'] = $internship['time_at'];
+            $tmp[$cid]['comment'] = $internship['comment'];
+            $tmp[$cid]['feedback'] = $internship['feedback'];
+        }
+    }
+
+    $res = array();
+
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
+}
+

@@ -50,7 +50,7 @@ export function TeamsPage(): JSX.Element {
 
         <CardBody className="flex flex-row grow justify-evenly text-center align-center gap-2 p-2">
 
-          <div className='flex flex-col justify-start'>
+          <div className='flex flex-col justify-center gap-4'>
             <p color="blue-gray">
               <a href={`https://projects.intra.42.fr/projects/${card.project_slug}/projects_users/${card.projects_user_id}`}>{card.team_name}</a>
             </p>

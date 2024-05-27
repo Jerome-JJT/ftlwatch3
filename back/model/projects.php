@@ -246,3 +246,39 @@ function getProjectSubjects($id)
 
   return $result;
 }
+
+
+function getInternshipProjects()
+{
+  $query = "SELECT teams.id, teams.name AS team_name, users.login, users.avatar_url, 
+  projects.slug AS project_slug, parent.slug AS parent_slug, team_user.projects_user_id,
+  teams.is_validated, teams.is_locked, teams.status,
+  
+  COALESCE(team_scale.final_mark, teams.final_mark) AS final_mark,
+  COALESCE(team_scale.begin_at, teams.created_at) AS time_at,
+  team_scale.comment,
+  team_scale.feedback
+
+  FROM teams 
+
+    JOIN projects ON teams.project_id = projects.id 
+    LEFT JOIN projects AS parent ON projects.parent_id = parent.id
+    JOIN team_user ON teams.id = team_user.team_id 
+    JOIN users ON users.id = team_user.user_id
+
+    LEFT JOIN team_scale ON team_scale.team_id = teams.id
+
+    WHERE projects.slug LIKE '%internship%'
+    AND users.hidden = FALSE AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR users.grade = 'Member')
+
+    ORDER BY teams.id
+    ";
+
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}

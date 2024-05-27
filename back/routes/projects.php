@@ -32,6 +32,10 @@ switch ($action) {
         get_subject(isset($_GET["id"]) ? $_GET["id"] : -1);
         break;
 
+    case "get_internships":
+        get_internships_projects();
+        break;
+
 }
 
 exit();

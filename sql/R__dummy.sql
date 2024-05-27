@@ -274,6 +274,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (295, 'Projects list', 2, 'basics/projects', NULL, 5, 4),
   (300, 'Teams', 5, 'projects/teams', NULL, 5, 10),
+  (302, 'Rushes', 20, 'projects/rushes', NULL, 5, 5),
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
   (310, 'Subjects', 15, 'projects/subjects', NULL, 5, 10),
   (315, 'Unmatched subjects', 20, 'projects/unmatchedsubjects', NULL, 5, 3),
@@ -298,6 +299,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
   (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11)
+  (440, 'Internships', 20, 'projects/rushes', NULL, 5, 11),
 
 
   ON CONFLICT(id) DO UPDATE

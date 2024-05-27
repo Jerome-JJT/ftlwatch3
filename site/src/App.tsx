@@ -59,6 +59,7 @@ import { FallGraphPage } from 'FallPages/FallGraphPage';
 import { SalesWatchPage } from 'FallPages/SalesWatchPage';
 import { OffersPage } from 'BasicPages/OffersPage';
 import { RushesPage } from 'Projects/RushesPage';
+import { InternshipsPage } from 'Projects/InternshipsPage';
 // import Place from './components/Place/Place';
 
 
@@ -153,6 +154,7 @@ export default function App(): JSX.Element {
             <Route path="/projects/tinder" element={<TinderPage />} />
             <Route path="/projects/subjects" element={<SubjectsPage />} />
             <Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
+            <Route path="/projects/internships" element={<InternshipsPage />} />
 
             <Route path="/locations/userscomputers" element={<UsersComputersPage />} />
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />
