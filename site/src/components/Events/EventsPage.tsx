@@ -70,7 +70,7 @@ export function EventPage(): JSX.Element {
         </CardBody>
 
         <CardFooter className="pt-0 flex justify-center pb-4">
-          <Button onClick={() => setFocusEvent(card)}>Subsrcibers ({card.users.length})</Button>
+          <Button onClick={() => setFocusEvent(card)}>Subscribers ({card.users.length})</Button>
         </CardFooter>
       </Card>
     );
@@ -107,15 +107,15 @@ export function EventPage(): JSX.Element {
           // reloadFunction={() => { setValues([]); }}
         />
       }
-      <Dialog open={focusEvent !== undefined} handler={() => setFocusEvent(undefined)}>
-        <div className="flex flex-row items-center justify-between pr-4">
+      <Dialog className='flex flex-col h-[80%]' open={focusEvent !== undefined} handler={() => setFocusEvent(undefined)}>
+        <div className="flex flex-row items-center justify-between pr-4 border-b border-gray-300">
 
           <DialogHeader className='grow w-96 truncate' title={focusEvent?.name || ''}>{focusEvent?.name || ''}</DialogHeader>
           <AiOutlineClose onClick={() => setFocusEvent(undefined)}
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
 
-        <DialogBody className='grid grid-cols-4 auto-cols-max gap-6 justify-center mb-2' divider>
+        <DialogBody className='flex-grow grid grid-cols-3 auto-cols-max gap-6 justify-center mb-2 overflow-y-scroll'>
           {
             focusEvent?.users.map((user: string) => <p key={user} className='text-black'>{user}</p>)
           }
