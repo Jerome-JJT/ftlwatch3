@@ -298,8 +298,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (395, 'Love last year 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
 
   (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
-  (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11)
-  (440, 'Internships', 20, 'projects/rushes', NULL, 5, 11),
+  (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11),
+  (440, 'Internships', 20, 'projects/rushes', NULL, 5, 11)
 
 
   ON CONFLICT(id) DO UPDATE
