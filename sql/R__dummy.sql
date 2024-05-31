@@ -299,7 +299,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
 
   (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
   (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11),
-  (440, 'Internships', 20, 'projects/rushes', NULL, 5, 11)
+  (440, 'Internships', 20, 'projects/internships', NULL, 5, 11)
 
 
   ON CONFLICT(id) DO UPDATE
