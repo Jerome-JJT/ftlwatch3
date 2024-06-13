@@ -348,7 +348,9 @@ def import_users(longway=True):
     global poolfilters
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    mylogger("Start users worker", LOGGER_ALERT)
+    if (longway == True):
+        mylogger("Start users worker", LOGGER_ALERT)
+        
     local_users = executeQuerySelect("SELECT id FROM users")
     # local_users = {user["id"]: user for user in local_users} 
     local_users = [user["id"] for user in local_users] 
@@ -374,14 +376,15 @@ def import_users(longway=True):
         # import time
         # time.sleep(5)
 
-    infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
-                                     SUM(correction_point) AS sumpoints, 
-                                     AVG(correction_point) AS avgpoints, 
-                                     AVG(wallet) AS avgwallets
-                                     FROM users
-                                     WHERE (blackhole > NOW() OR active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
+    if (longway == True):
+        infos = executeQuerySelect("""SELECT count(id) AS nbusers, 
+                                        SUM(correction_point) AS sumpoints, 
+                                        AVG(correction_point) AS avgpoints, 
+                                        AVG(wallet) AS avgwallets
+                                        FROM users
+                                        WHERE (blackhole > NOW() OR active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
 
-    mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
+        mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     
 
 @click.command()
