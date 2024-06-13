@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import axios from 'axios';
 import { AxiosErrorText } from 'Hooks/AxiosErrorText';
 import {
@@ -17,9 +17,11 @@ import {
 } from '@material-tailwind/react';
 import { useNotification } from 'Notifications/NotificationsProvider';
 import { SuperCards } from 'Common/SuperCards';
-import { AiFillStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import { longDate, shortDate } from 'Utils/dateUtils';
 import { commonTitle } from 'Utils/commonTitle';
+import classNames from 'classnames';
+import Separator from 'Common/Separator';
 
 
 
@@ -29,6 +31,9 @@ export function TeamsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
+  const [filters, setFilters] = React.useState<any[] | undefined>(undefined);
+
+  const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {document.title = commonTitle('Teams');}, []);
 
@@ -45,7 +50,7 @@ export function TeamsPage(): JSX.Element {
 
         <CardBody className="flex flex-row grow justify-evenly text-center align-center gap-2 p-2">
 
-          <div className='flex flex-col justify-evenly'>
+          <div className='flex flex-col justify-center gap-4'>
             <p color="blue-gray">
               <a href={`https://projects.intra.42.fr/projects/${card.project_slug}/projects_users/${card.projects_user_id}`}>{card.team_name}</a>
             </p>
@@ -55,13 +60,14 @@ export function TeamsPage(): JSX.Element {
           </div>
 
           <div className='flex flex-col justify-evenly'>
-            <div className="flex items-center">
-              <p color="blue-gray">{card.current_status}</p> <Checkbox crossOrigin={undefined} checked={card.is_validated} readOnly disabled></Checkbox>
+            <div className="flex items-center justify-center">
+              <p color="blue-gray">Mark : {card.final_mark}</p>
+
+              <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' /> }
+                color={card.is_validated ? 'green' : 'deep-orange'} crossOrigin={undefined} checked={true} readOnly disabled></Checkbox>
             </div>
 
-            <p color="blue-gray">
-              Mark : {card.final_mark}
-            </p>
+            <p color="blue-gray">State : {card.current_status}</p>
 
             <Popover placement="right-start">
               <PopoverHandler>
@@ -135,6 +141,7 @@ export function TeamsPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
+          setFilters(res.data.filters);
           setValues(res.data.values);
         }
       })
@@ -143,40 +150,54 @@ export function TeamsPage(): JSX.Element {
       });
   }, [addNotif]);
 
-  // const subOptions = useMemo(() => (
-  //   <>
-  //     <div className='flex flex-wrap gap-2 justify-evenly'>
+  const subOptions = useMemo(() => (
+    <>
+      <div className='flex flex-wrap gap-2 justify-evenly'>
 
-  //       {poolFilters && poolFilters.map((filter) => {
-  //         return (
-  //           <Button
-  //             key={filter.id}
-  //             className={classNames(filter.name === usedFilter ? 'bg-blue-900' : (filter.hidden ? 'bg-blue-200' : 'bg-blue-700' ))}
-  //             //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-  //             onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }
-  //           >
-  //             {filter.name}
-  //           </Button>
-  //         );
-  //       })}
-  //     </div>
-  //     <Separator></Separator>
-  //   </>
+        {filters && Object.entries(filters).map((filter) => {
+          return (
+            <Button
+              key={filter[0]}
+              className={classNames(filter[1] === currentFilter ? 'selected-option' : 'available-option' )}
+              onClick={() => { setCurrentFilter((prev) => prev !== filter[0] ? filter[0] : undefined); } }
+            >
+              {filter[1]}
+            </Button>
+          );
+        })}
+      </div>
+      <Separator></Separator>
+    </>
 
-  // ), [poolFilters, usedFilter]);
+  ), [currentFilter, filters]);
+
+  const displayValues = useMemo(() => {
+
+    if (values === undefined) {
+      return [];
+    }
+
+    return values.filter((team) => {
+
+      if (currentFilter === undefined || team.project_slug === currentFilter) {
+        return true;
+      }
+      return false;
+    });
+  }, [currentFilter, values]);
 
   //
   return (
     <div className='my-content'>
       {(values) &&
         <SuperCards
-          values={values}
+          values={displayValues || []}
           customCard={TeamCard}
 
-          // subOptions={subOptions}
+          subOptions={subOptions}
 
           tableTitle='Teams'
-          tableDesc={'Teams\'projects'}
+          tableDesc={'Teams projects'}
           options={[25, 50, 100]}
           // reloadFunction={() => { setValues([]); }}
         />

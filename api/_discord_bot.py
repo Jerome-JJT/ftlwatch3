@@ -100,6 +100,7 @@ async def get_private_messages():
         method, properties, body = channel.basic_get(queue="private.message.queue")
 
         if (method == None):
+            mylogger(f'No method for private', LOGGER_DEBUG, rabbit=False)
             break
 
         try:
@@ -365,6 +366,7 @@ async def logged(ctx,
 
 async def consume_messages():
     await bot.wait_until_ready()
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     while True:
 
@@ -376,6 +378,7 @@ async def consume_messages():
 
         except pika.exceptions.AMQPConnectionError as e:
             print(f"RabbitMQ connection error {str(e)}")
+            mylogger(f"RabbitMQ connection error {str(e)}", LOGGER_ERROR)
             await asyncio.sleep(60)
 
 

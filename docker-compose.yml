@@ -130,8 +130,8 @@ services:
     networks:
       - front
 
-    # environment:
-      # API_UID: ${API_FRONT_UID}
+    env_file:
+      - "./.version"
 
     working_dir: /app
 

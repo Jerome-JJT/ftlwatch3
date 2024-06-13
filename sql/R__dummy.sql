@@ -244,7 +244,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
   (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),
-  (94, '42 evals', 97, 'http://42evals.com/', NULL, 3, 1),
+  (94, '42 evals', 99, 'http://42evals.com/', NULL, NULL, 10),
+  (95, 'PONG', 98, 'https://pong.42lwatch.ch/', NULL, NULL, 10),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
@@ -266,11 +267,14 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (220, 'Tableau current year', 50, NULL, 'filter=currentyear&projects=c-piscine', 1, 7),
 
   (250, 'Images cursus', 10, NULL, 'filter=cursus', 2, 10),
+  (252, 'Images tutors', 14, NULL, 'filter=tutors', 2, 10),
+  (253, 'Images bde', 15, NULL, 'filter=bde', 2, 10),
   (255, 'Images current month', 20, NULL, 'filter=currentmonth', 2, 6),
   (260, 'Images current year', 30, NULL, 'filter=currentyear', 2, 7),
 
   (295, 'Projects list', 2, 'basics/projects', NULL, 5, 4),
   (300, 'Teams', 5, 'projects/teams', NULL, 5, 10),
+  (302, 'Rushes', 20, 'projects/rushes', NULL, 5, 5),
   (305, 'Tinder', 10, 'projects/tinder', NULL, 5, 10),
   (310, 'Subjects', 15, 'projects/subjects', NULL, 5, 10),
   (315, 'Unmatched subjects', 20, 'projects/unmatchedsubjects', NULL, 5, 3),
@@ -294,7 +298,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (395, 'Love last year 3d', 50, 'locations/love', 'graph=love_recent_3d', 7, 10),
 
   (420, 'Fall graph all', 50, 'watch/fall', 'graph=fall_all', 8, 11),
-  (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11)
+  (430, 'Sales calculations', 55, 'watch/sales', NULL, 8, 11),
+  (440, 'Internships', 20, 'projects/internships', NULL, 5, 11)
 
 
   ON CONFLICT(id) DO UPDATE

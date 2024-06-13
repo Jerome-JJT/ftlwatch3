@@ -11,7 +11,7 @@ DOCKER		= docker compose ${COMPOSE_DEV} -p ${APP_NAME}_dev
 ifeq ($(shell hostname), 42lwatch3)
 	ifeq ($(shell pwd), /var/www/ftlwatch3)
 		#Prod
-		DOCKER		= docker compose ${COMPOSE_PROD} ${ENV_FILE} -p ${APP_NAME}
+		DOCKER		= docker compose ${COMPOSE_PROD} -p ${APP_NAME}
 	endif
 endif
 

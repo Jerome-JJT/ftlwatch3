@@ -34,6 +34,7 @@ $RABBITCMD declare binding source="main" destination_type="queue" destination="p
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="points.server.message.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="shop.server.message.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="teams.server.message.queue"
+$RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="exams.server.message.queue"
 
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="created.server.message.queue"
 $RABBITCMD declare binding source="main" destination_type="queue" destination="private.message.queue" routing_key="activity.server.message.queue"

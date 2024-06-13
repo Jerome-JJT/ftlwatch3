@@ -114,10 +114,20 @@ function getUserImages($hidden, $poolfilter = '')
   WHERE (users.hidden = false OR users.hidden = :hidden)
   AND (
        (:poolfilter = 'all')
-    OR (:poolfilter = 'cursus' AND (
+       OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
       AND (users.blackhole > NOW() OR users.active = TRUE OR users.grade = 'Member')
        AND users.login NOT LIKE '3b3-%'
+    ))
+    OR (:poolfilter = 'tutors' AND (
+      users.is_tutor = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
+    ))
+    OR (:poolfilter = 'bde' AND (
+      users.is_bde = TRUE
+      AND (users.blackhole > NOW() OR users.grade = 'Member')
+      AND users.login NOT LIKE '3b3-%'
     ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
   )

@@ -14,6 +14,10 @@ switch ($action) {
         get_group_projects();
         break;
 
+    case "get_rushes":
+        get_rush_projects();
+        break;
+
     case "get_tinder":
         get_tinder();
         break;
@@ -26,6 +30,10 @@ switch ($action) {
         break;
     case "get_subject":
         get_subject(isset($_GET["id"]) ? $_GET["id"] : -1);
+        break;
+
+    case "get_internships":
+        get_internships_projects();
         break;
 
 }

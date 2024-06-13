@@ -10,10 +10,22 @@ function get_group_projects()
 
     $teams = getGroupProjects(21);
 
+    $filters = array(
+        "42cursus-minishell" => "minishell", 
+        "cub3d" => "cub3d", 
+        "minirt" => "minirt", 
+        "webserv" => "webserv", 
+        "ft_irc" => "ft_irc", 
+        "ft_transcendence" => "ft_transcendence"
+    );
 
     $tmp = array();
 
     foreach ($teams as $team) {
+        if (!in_array($team['project_slug'], array_keys($filters))) {
+            $filters[$team['project_slug']] = $team['project_name'];
+        }
+
         if ($team['retry_common'] != null) {
 
             if (isset($tmp[$team['retry_common']])) {
@@ -89,6 +101,94 @@ function get_group_projects()
         }
     }
 
+    $res["filters"] = $filters;
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
+}
+
+
+
+function get_rush_projects()
+{
+    $res = array();
+
+    $teams = getRushProjects(9);
+
+    $project_filters = array(
+        "c-piscine-rush-00" => "C Piscine Rush 00",
+        "c-piscine-rush-01" => "C Piscine Rush 01",
+        "c-piscine-rush-02" => "C Piscine Rush 02",
+        "c-piscine-bsq" => "C Piscine BSQ"
+    );
+
+    $pool_filters = array();
+
+    $tmp = array();
+
+    foreach ($teams as $team) {
+        if (!in_array($team['project_slug'], array_keys($project_filters))) {
+            $project_filters[$team['project_slug']] = $team['project_name'];
+        }
+
+        if (!in_array($team['user_pool'], $pool_filters)) {
+            array_push($pool_filters, $team['user_pool']);
+        }
+
+        if ($team['team_id'] != null) {
+
+            if (isset($tmp[$team['team_id']])) {
+
+                if ($tmp[$team['team_id']]['leader_id'] == -1 && $team['user_is_leader']) {
+                    $tmp[$team['team_id']]['leader_id'] = $team['user_id'];
+                    $tmp[$team['team_id']]['projects_user_id']  = $team['projects_user_id'];
+                }
+                $tmp[$team['team_id']]['is_validated'] |= $team['is_validated'];
+                $tmp[$team['team_id']]['final_mark'] = $team['final_mark'];
+
+                if (!isset($tmp[$team['team_id']]['users'][$team['user_id']])) {
+
+                    $tmp[$team['team_id']]['users'][$team['user_id']] = array(
+                        'id' => $team['user_id'], 
+                        'login' => $team['login'], 
+                        'avatar_url' => $team['avatar_url']
+                    );
+                }
+            }
+            else {
+                $tmp[$team['team_id']] = array(
+                    "team_id" => $team['team_id'],
+                    "project_name" => $team['project_name'],
+                    "project_slug" => $team['project_slug'],
+                    "team_name" => $team['team_name'],
+                    "team_pool" => $team['user_pool'],
+
+                    "scale_comment" => $team['scale_comment'],
+                    "scale_feedback" => $team['scale_feedback'],
+                    "scale_corrector" => $team['scale_corrector'],
+
+                    "leader_id" => $team['user_is_leader'] ? $team['user_id'] : -1,
+                    "projects_user_id" => $team['user_is_leader'] ? $team['projects_user_id'] : -1,
+                    "is_validated" => $team['is_validated'],
+                    "final_mark" => $team['final_mark'],
+                    "locked" => $team['is_locked'],
+                    "status" => $team['status'],
+                    "updated_at" => $team['team_updated_at'],
+
+                    "users" => array(
+                        $team['user_id'] => array(
+                            'id' => $team['user_id'], 
+                            'login' => $team['login'], 
+                            'avatar_url' => $team['avatar_url']
+                        )
+                    )
+                );
+            }
+        }
+    }
+
+    $res["project_filters"] = $project_filters;
+    $res["pool_filters"] = $pool_filters;
     $res["values"] = array_values($tmp);
 
     jsonResponse($res, 200);
@@ -237,6 +337,78 @@ function get_subjects($filter = "all")
         array("label" => "Project", "field" => "project_slug"),
         array("label" => "Details", "field" => "details"),
     );
+
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
+}
+
+
+
+
+
+
+function get_internships_projects()
+{
+    $internships = getInternshipProjects();
+
+    $tmp = array();
+
+    foreach ($internships as $internship) {
+
+        $parent_slug = ($internship['parent_slug'] != null && $internship['parent_slug'] != '') ? $internship['parent_slug'] : $internship['project_slug'];
+
+        $cid = $parent_slug.'_'.$internship['team_name'];
+
+        if (!isset($tmp[$cid])) {
+
+            $tmp[$cid] = array(
+                'cid' => $cid,
+                'login' => $internship['login'], 
+                'login' => $internship['login'], 
+                'avatar_url' => $internship['avatar_url'],
+
+                'subs' => array(
+                    'contract-upload' => array(),
+                    'duration' => array(),
+                    'company-mid-evaluation' => array(),
+                    'company-final-evaluation' => array(),
+                    'peer-video' => array(),
+                )
+            );
+        }
+
+        
+        if ($internship['parent_slug'] != null && $internship['parent_slug'] != '') {
+            
+            $real_slug = str_replace($internship['parent_slug'], '', $internship['project_slug']);
+            $real_slug = trim($real_slug, '-');
+            
+            $tmp[$cid]['subs'][$real_slug] = array(
+                'project_slug' => $internship['project_slug'],
+                'projects_user_id' => $internship['projects_user_id'],
+                'final_mark' => $internship['final_mark'],
+                'time_at' => $internship['time_at'],
+                'comment' => $internship['comment'],
+                'feedback' => $internship['feedback']
+                
+            );
+        }
+        else {
+            $tmp[$cid]['status'] = $internship['status'];
+            $tmp[$cid]['is_validated'] = $internship['is_validated'];
+
+            $tmp[$cid]['project_slug'] = $internship['project_slug'];
+            
+            $tmp[$cid]['projects_user_id'] = $internship['projects_user_id'];
+            $tmp[$cid]['final_mark'] = $internship['final_mark'];
+            $tmp[$cid]['time_at'] = $internship['time_at'];
+            $tmp[$cid]['comment'] = $internship['comment'];
+            $tmp[$cid]['feedback'] = $internship['feedback'];
+        }
+    }
+
+    $res = array();
 
     $res["values"] = array_values($tmp);
 

@@ -6,7 +6,7 @@ interface SeparatorProps{
 
 const Separator = ({ className }: SeparatorProps): JSX.Element => {
   return (
-    <div className={classNames('border-t border-gray-300 my-4', className)}></div>
+    <div className={classNames('border-t border-gray-400 my-4', className)}></div>
   );
 };
 

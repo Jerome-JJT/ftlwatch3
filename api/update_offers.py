@@ -23,7 +23,7 @@ def offer_notification(fetched):
 
     embed = {
         'message_type': 'embed',
-        'url': f'https://42lwatch.ch/basics/offers',
+        'url': f'https://companies.intra.42.fr/en/offers/{fetched["id"]}',
         'footer_text': datetime.datetime.now().astimezone(tz=pytz.timezone('Europe/Zurich')).strftime('%Y-%m-%d %H:%M:%S')
     }
 
@@ -40,6 +40,10 @@ def offer_notification(fetched):
     diffs = {}
 
     for check in check_fields:
+        if (check in ["valid_at", "invalid_at"] and fetched[check] != None):
+            fetched[check] = parser.parse(fetched[check])
+            fetched[check] = fetched[check].replace(tzinfo=None)
+            
         if (refer == None or str(refer[check]) != str(fetched[check])):
             diffs[check] = discord_diff(refer, fetched, check)
 
