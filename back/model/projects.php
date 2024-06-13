@@ -269,7 +269,7 @@ function getInternshipProjects()
     LEFT JOIN team_scale ON team_scale.team_id = teams.id
 
     WHERE projects.slug LIKE '%internship%'
-    AND users.hidden = FALSE AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR users.grade = 'Member')
+    AND users.hidden = FALSE AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR active = TRUE OR users.grade = 'Member')
 
     ORDER BY teams.id
     ";

@@ -106,8 +106,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 WHERE date between %(min_date)s AND %(max_date)s
                 AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
                 AND dist < %(dist)s
-                AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.blackhole > NOW() OR u1.grade = 'Member')
-                AND u2.hidden = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.blackhole > NOW() OR u2.grade = 'Member')
+                AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.blackhole > NOW() OR u1.active = TRUE OR u1.grade = 'Member')
+                AND u2.hidden = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.blackhole > NOW() OR u2.active = TRUE OR u2.grade = 'Member')
 
 
                 GROUP BY user1_id, user1_login, user2_id, user2_login, u1.blackhole, u2.blackhole, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
@@ -137,7 +137,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             WHERE date between %(min_date)s AND %(max_date)s
             AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
             AND dist < %(dist)s
-            AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (blackhole > NOW() OR grade = 'Member')
+            AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (blackhole > NOW() OR active = TRUE OR grade = 'Member')
                                        
             GROUP BY user_id, user_login, user_image, users.blackhole, users.grade, users.has_cursus21
         """, {
