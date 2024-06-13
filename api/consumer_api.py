@@ -93,7 +93,9 @@ def api_consumer(ch, method, properties, body, reject_first=False):
             import_titles()
 
         elif (resource == "users"):
-            import_users()
+            import_users(longway=True)
+        elif (resource == "users_fast"):
+            import_users(longway=False)
 
 
         elif (resource == "events"):

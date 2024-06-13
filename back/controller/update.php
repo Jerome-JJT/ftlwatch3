@@ -12,6 +12,7 @@ $updates = array(
     array('id' => 'projects', 'name' => 'Update projects', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'projects')); }),
     array('id' => 'titles', 'name' => 'Update titles', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'titles')); }),
     array('id' => 'users', 'name' => 'Update users', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'users')); }),
+    array('id' => 'users_fast', 'name' => 'Update fastusers', 'updater' => function () { sentToRabbit('fast.update.queue', array('resource' => 'users_fast')); }),
     array('id' => 'events', 'name' => 'Update events', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'events')); }),
     array('id' => 'offers', 'name' => 'Update offers', 'updater' => function () { sentToRabbit('slow.update.queue', array('resource' => 'offers')); }),
 

@@ -5,6 +5,7 @@ from _dbConnector import *
 from _api import *
 import datetime
 from dateutil import parser
+import click
 import pytz
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
@@ -265,7 +266,7 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
 
 
 
-def user_callback(user, cursus21_ids, local_users):
+def user_callback(user, cursus21_ids, local_users, longway=True):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     global poolfilters
@@ -296,7 +297,7 @@ def user_callback(user, cursus21_ids, local_users):
 
 
     #Full import
-    if (user["id"] not in local_users or user["id"] in cursus21_ids):
+    if (user["id"] not in local_users or (longway == True and user["id"] in cursus21_ids)):
         user_full_import(user["id"], good_firstname, good_displayname, good_avatar_url, good_poolfilter_id)
         
     else:
@@ -338,12 +339,13 @@ def user_callback(user, cursus21_ids, local_users):
             "updated_at": user["updated_at"],
         })
 
-        timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
+        if (longway):
+            timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
 
     return True
 
 
-def import_users():
+def import_users(longway=True):
     global poolfilters
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
@@ -352,8 +354,15 @@ def import_users():
     # local_users = {user["id"]: user for user in local_users} 
     local_users = [user["id"] for user in local_users] 
 
-    all_users = callapi("/v2/campus/47/users?sort=id", True)
-    cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47", True)
+    all_users = []
+    cursus_users = []
+
+    if (longway):
+        all_users = callapi("/v2/campus/47/users?sort=id", True)
+        cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47", True)
+    else:
+        all_users = callapi("/v2/campus/47/users?sort=-id", False)
+
     # cursus_users = {user["user"]["id"]: user for user in cursus_users} 
     cursus21_ids = [user["user"]["id"] for user in cursus_users]
 
@@ -362,7 +371,7 @@ def import_users():
 
 
     for user in all_users:
-        user_callback(user, cursus21_ids, local_users)
+        user_callback(user, cursus21_ids, local_users, longway)
         # import time
         # time.sleep(5)
 
@@ -376,6 +385,10 @@ def import_users():
     mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     
 
+@click.command()
+@click.option("--longway", "-l", type=bool, default=True, help="update cursus users")
+def starter(longway=True):
+    import_users(longway)
 
 if __name__ == "__main__":
-    import_users()
+    starter()
