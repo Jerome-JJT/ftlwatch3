@@ -346,11 +346,10 @@ def user_callback(user, cursus21_ids, local_users, longway=True):
 
 def import_users(longway=True):
     global poolfilters
-    from _utils_mylogger import mylogger, LOGGER_ALERT
+    from _utils_mylogger import mylogger, LOGGER_ALERT, LOGGER_INFO
 
-    if (longway == True):
-        mylogger("Start users worker", LOGGER_ALERT)
-        
+    mylogger(f"Start users worker{' FASTWAY' if longway == False else ''}", LOGGER_ALERT if longway == True else LOGGER_INFO)
+
     local_users = executeQuerySelect("SELECT id FROM users")
     # local_users = {user["id"]: user for user in local_users} 
     local_users = [user["id"] for user in local_users] 
@@ -385,6 +384,9 @@ def import_users(longway=True):
                                         WHERE (blackhole > NOW() OR active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
 
         mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
+    
+    else:
+        mylogger(f"End users worker FASTWAY", LOGGER_INFO)
     
 
 @click.command()
