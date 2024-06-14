@@ -381,7 +381,7 @@ def import_users(longway=True):
                                         AVG(correction_point) AS avgpoints, 
                                         AVG(wallet) AS avgwallets
                                         FROM users
-                                        WHERE (blackhole > NOW() OR active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
+                                        WHERE (blackhole > NOW() OR is_active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
 
         mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     
