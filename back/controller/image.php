@@ -51,32 +51,19 @@ function image_api($selectedFilter)
         $selectedFilter = "cursus";
     }
 
-    $poolFilters = get_image_poolfilters();
-    $poolFiltersSlugs = array_map(function ($filter) { return $filter["name"]; }, $poolFilters);
+    need_permission("p_47student");
+
+    $allowedPoolFilters = get_image_poolfilters();
+    $allowedPoolFiltersSlugs = array_map(function ($filter) { return $filter["name"]; }, $allowedPoolFilters);
 
 
-    if (!in_array($selectedFilter, $poolFiltersSlugs)) {
+    if (!in_array($selectedFilter, $allowedPoolFiltersSlugs)) {
         jsonResponse(array("error" => "Unknown pool filter"), 404);
     }
 
     $currentFilter = getenv("CURRENT_POOL");
     if ($currentFilter === false) {
         $currentFilter = "2013.january";
-    }
-
-    if (in_array($selectedFilter, array("cursus", "tutors", "bde"))) {
-        need_permission("p_47student");
-    }
-    else if ($selectedFilter == "currentmonth") {
-        need_permission("p_view1");
-        $selectedFilter = $currentFilter;
-    }
-    else if ($selectedFilter == "currentyear") {
-        need_permission("p_view2");
-        $selectedFilter = substr($currentFilter, 0, 4);
-    }
-    else {
-        need_permission("p_view4");
     }
 
     if ($selectedFilter == "currentmonth") {
