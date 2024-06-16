@@ -78,7 +78,7 @@ function tableau_api($selectedFilter, $selectedProjects) {
         jsonResponse(array("error" => "Unknown or forbidden pool filter"), 403);
     }
 
-    $currentFilter = get_env("CURRENT_POOL");
+    $currentFilter = getenv("CURRENT_POOL");
     if ($currentFilter === false) {
         $currentFilter = "2013.january";
     }

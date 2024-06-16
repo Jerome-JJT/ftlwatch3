@@ -59,7 +59,7 @@ function image_api($selectedFilter)
         jsonResponse(array("error" => "Unknown pool filter"), 404);
     }
 
-    $currentFilter = get_env("CURRENT_POOL");
+    $currentFilter = getenv("CURRENT_POOL");
     if ($currentFilter === false) {
         $currentFilter = "2013.january";
     }
