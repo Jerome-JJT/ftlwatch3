@@ -17,7 +17,8 @@ function setUserGroupBySlugs($userId, $groupsSlugs)
 
 
   $query = "INSERT INTO login_groups_login_users (login_user_id, login_group_id)
-  VALUES (:user_id, :group_id)";
+  VALUES (:user_id, :group_id)
+  ON CONFLICT (login_group_id, login_user_id) DO NOTHING";
 
   $newdata = array_map(function ($v) use($userId) {return array(":user_id" => $userId, ":group_id" => $v);}, array_column($groups, "id"));
   // jsonLogger('affasf', $newdata, LOGGER_DEBUG());
@@ -95,7 +96,9 @@ function setUserGroup($userId, $groupId, $value)
   else if (count($user_group) == 0 && $value == 'true') {
 
     $query = "INSERT INTO login_groups_login_users (login_user_id, login_group_id)
-    VALUES (:user_id, :group_id)";
+    VALUES (:user_id, :group_id)
+    ON CONFLICT (login_group_id, login_user_id) DO NOTHING";
+
 
     $data = array(":user_id" => $userId, ":group_id" => $groupId);
 

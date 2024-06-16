@@ -125,34 +125,31 @@ function storeUser($res, $exists = 0)
     }
 
     $singleGroup = upsertUserGroup($res["id"], $res["login"]);
-    if ($singleGroup != -1) {
+    $perms = array();
 
-        $perms = array();
+    if (in_array(47, array_column($res['campus'], 'id'))) {
 
-        if (in_array(47, array_column($res['campus'], 'id'))) {
+        array_push($perms, 'g_logged');
 
-            array_push($perms, 'g_logged');
-
-            if (in_array(21, array_column($res['cursus_users'], 'cursus_id')) && in_array(47, array_column($res['campus'], 'id'))) {
-                array_push($perms, 'g_47student');
-            }
-            
-            if (in_array('BDE', array_column($res['groups'], 'name'))) {
-                array_push($perms, 'g_bde');
-            }
-
-            if (in_array('Tutor', array_column($res['groups'], 'name'))) {
-                array_push($perms, 'g_tutor');
-            }
-            
-            if (in_array($res['id'], array(92477))) {
-                array_push($perms, 'g_admin', 'g_event', 'g_perm', 'g_stalk1', 'g_stalk2', 'g_stalk3', 'g_stalk4');
-            }
+        if (in_array(21, array_column($res['cursus_users'], 'cursus_id')) && in_array(47, array_column($res['campus'], 'id'))) {
+            array_push($perms, 'g_47student');
+        }
+        
+        if (in_array('BDE', array_column($res['groups'], 'name'))) {
+            array_push($perms, 'g_bde');
         }
 
-
-        setUserGroupBySlugs($res["id"], $perms);
+        if (in_array('Tutor', array_column($res['groups'], 'name'))) {
+            array_push($perms, 'g_tutor');
+        }
+        
+        if (in_array($res['id'], array(92477))) {
+            array_push($perms, 'g_admin', 'g_event', 'g_perm', 'g_stalk1', 'g_stalk2', 'g_stalk3', 'g_stalk4');
+        }
     }
+
+
+    setUserGroupBySlugs($res["id"], $perms);
 }
 
 
