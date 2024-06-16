@@ -8,7 +8,11 @@ require_once("model/simples/cursus.php");
 
 function get_image_poolfilters()
 {
-    $poolfilters = getPoolFilters(has_permission("p_view4"));
+    $poolfilters = array();
+
+    if (has_permission("p_view3")) {
+        $poolfilters = getPoolFilters(has_permission("p_view4"));
+    }
 
     
     if (has_permission("p_view4")) {

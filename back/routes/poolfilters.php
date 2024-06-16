@@ -1,5 +1,6 @@
 <?php
 
+require_once("controller/_common.php");
 require_once("controller/poolfilters.php");
 
 $action = "";
@@ -10,11 +11,6 @@ if (isset($_GET["action"])) {
 
 need_permission("p_47student");
 
-switch ($action) {
-    case "get_tableau":
-        get_tableau();
-        break;
-
-}
+jsonResponse(array(), 404);
 
 exit();

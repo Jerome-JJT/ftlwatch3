@@ -47,11 +47,11 @@ function tableau_api($selectedFilter, $selectedProjects) {
 
     $projectFilters = array();
     
-    if (has_permission("p_view1") || has_permission("p_view2") || has_permission("p_view3") || has_permission("p_view4")) {
+    if (has_permission("p_view1")) {
         array_push($projectFilters, "infos");
     }
     array_push($projectFilters, "common-core", "outer-core");
-    if (has_permission("p_view2") || has_permission("p_view3") || has_permission("p_view4")) {
+    if (has_permission("p_view2")) {
         array_push($projectFilters, "c-piscine");
     }
     if (has_permission("p_view4")) {
