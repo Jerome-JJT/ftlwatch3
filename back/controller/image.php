@@ -55,8 +55,10 @@ function image_api($selectedFilter)
         jsonResponse(array("error" => "Unknown pool filter"), 404);
     }
 
-    //TODO static in DB
-    $currentFilter = "2023.september";
+    $currentFilter = get_env("CURRENT_POOL");
+    if ($currentFilter === false) {
+        $currentFilter = "2013.january";
+    }
 
     if (in_array($selectedFilter, array("cursus", "tutors", "bde"))) {
         need_permission("p_47student");

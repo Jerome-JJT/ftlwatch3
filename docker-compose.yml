@@ -113,6 +113,8 @@ services:
 
       API_UID: ${API_FRONT_UID}
       API_SECRET: ${API_FRONT_SECRET}
+
+      CURRENT_POOL: ${CURRENT_POOL}
   
     working_dir: /var/www/html
 

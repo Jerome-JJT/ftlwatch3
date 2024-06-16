@@ -78,9 +78,10 @@ function tableau_api($selectedFilter, $selectedProjects) {
         jsonResponse(array("error" => "Unknown or forbidden pool filter"), 403);
     }
 
-
-    //TODO static in DB
-    $currentFilter = "2023.september";
+    $currentFilter = get_env("CURRENT_POOL");
+    if ($currentFilter === false) {
+        $currentFilter = "2013.january";
+    }
 
     if ($selectedFilter == "cursus" && in_array($selectedProjects, array("42cursus", "common-core", "outer-core"))) {
         need_permission("p_47student");
