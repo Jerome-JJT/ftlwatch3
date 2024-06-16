@@ -76,7 +76,7 @@ function image_api($selectedFilter)
 
     $res = array();
     
-    $res["poolfilters"] = $poolFilters;
+    $res["poolfilters"] = $allowedPoolFilters;
 
 
     $users = getUserImages($selectedFilter == "all", $selectedFilter);
