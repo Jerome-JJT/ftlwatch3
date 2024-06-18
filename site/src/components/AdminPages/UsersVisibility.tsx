@@ -83,15 +83,13 @@ export function UsersVisibilityPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
-          tableTitle='Poolfilters'
-          options={[10, 20, 30]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+      <SuperTable
+        columns={columns}
+        values={values}
+        tableTitle='Poolfilters'
+        options={[10, 20, 30]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

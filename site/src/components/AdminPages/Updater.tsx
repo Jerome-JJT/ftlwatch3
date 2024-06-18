@@ -79,15 +79,13 @@ export function UpdaterPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values}
-          customCard={updateButton}
+      <SuperCards
+        values={values}
+        customCard={updateButton}
 
-          tableTitle='Updates'
-          options={[25]}
-        />
-      }
+        tableTitle='Updates'
+        options={[25]}
+      />
     </div>
   );
 }

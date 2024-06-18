@@ -49,17 +49,15 @@ export function UsersComputersPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
-          tableTitle='Users computers'
-          indexColumn={true}
-          options={[10, 25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Users computers'
+        indexColumn={true}
+        options={[10, 25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

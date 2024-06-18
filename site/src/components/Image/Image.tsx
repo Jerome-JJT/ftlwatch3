@@ -130,19 +130,17 @@ export function ImagePage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values}
-          customCard={ImageCard}
+      <SuperCards
+        values={values}
+        customCard={ImageCard}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Images'
-          tableDesc='Search for students by head'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Images'
+        tableDesc='Search for students by head'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog open={focusCard !== undefined} handler={() => setFocusCard(undefined)}>
         <div className="flex items-center justify-between p-2 pr-4">
           <DialogHeader>{focusCard?.login || ''}</DialogHeader>

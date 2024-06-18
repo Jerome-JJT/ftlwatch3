@@ -96,17 +96,15 @@ export function EventPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values}
-          customCard={EventCard}
+      <SuperCards
+        values={values}
+        customCard={EventCard}
 
-          tableTitle='Events'
-          tableDesc='Existing events and subscriptions'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Events'
+        tableDesc='Existing events and subscriptions'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog className='flex flex-col h-[80%]' open={focusEvent !== undefined} handler={() => setFocusEvent(undefined)}>
         <div className="flex flex-row items-center justify-between pr-4 border-b border-gray-300">
 

@@ -54,18 +54,16 @@ export function TitlesPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
 
-          tableTitle='Titles'
-          tableDesc='All existing titles'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Titles'
+        tableDesc='All existing titles'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

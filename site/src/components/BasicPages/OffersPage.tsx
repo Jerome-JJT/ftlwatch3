@@ -54,20 +54,18 @@ export function OffersPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
-          indexColumn={true}
+      <SuperTable
+        columns={columns}
+        values={values}
+        indexColumn={true}
 
-          defaultSearch='Switzerland'
+        defaultSearch='Switzerland'
 
-          tableTitle='Offers'
-          tableDesc='Offers'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Offers'
+        tableDesc='Offers'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

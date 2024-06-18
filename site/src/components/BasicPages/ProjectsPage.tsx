@@ -19,7 +19,7 @@ import ProjectDisplay from 'Common/ProjectDisplay';
 export function ProjectsPage(): JSX.Element {
   const { addNotif } = useNotification();
 
-  const [values, setValues] = React.useState<any[]>([]);
+  const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
   const [selectedCursus, setSelectedCursus] = React.useState<number | undefined>(21);
@@ -114,26 +114,24 @@ export function ProjectsPage(): JSX.Element {
 
 
 
-  const filteredProjects = useMemo(() => values.filter((project) => {
+  const filteredProjects = useMemo(() => values?.filter((project) => {
     return selectedCursus === undefined || selectedCursus === project.main_cursus;
   }), [values, selectedCursus]);
 
 
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={filteredProjects}
-          customCard={ProjectCard}
+      <SuperCards
+        values={filteredProjects}
+        customCard={ProjectCard}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Projects'
-          tableDesc='All existing projects with cursus, inscription and corrections informations. Also past subjects available in details'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Projects'
+        tableDesc='All existing projects with cursus, inscription and corrections informations. Also past subjects available in details'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       {/* <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-between pr-4">
           <DialogHeader>{focusText || ''}</DialogHeader>

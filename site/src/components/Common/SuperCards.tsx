@@ -12,12 +12,13 @@ import {
   Accordion,
   AccordionHeader,
   AccordionBody,
+  Spinner,
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import MyInput from './MyInput';
 
 interface CardsProps {
-  values: any[];
+  values: any[] | undefined;
   customCard: (value: any) => JSX.Element;
 
   subOptions?: ReactNode | undefined;
@@ -79,7 +80,7 @@ export function SuperCards({
     return pageNumbers;
   };
 
-  const filteredCards = useMemo(() => values.filter((card) => {
+  const filteredCards = useMemo(() => values?.filter((card) => {
     const cardValues = Object.values(card);
     const searchTerms = searchQuery.split(',');
 
@@ -119,7 +120,7 @@ export function SuperCards({
   const startIndex = useMemo(() => (currentPage - 1) * cardsPerPage, [currentPage, cardsPerPage]);
   const endIndex = useMemo(() => startIndex + cardsPerPage, [startIndex, cardsPerPage]);
 
-  const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex) || [], [filteredCards, startIndex, endIndex]);
+  const displayedCards = useMemo(() => filteredCards?.slice(startIndex, endIndex), [filteredCards, startIndex, endIndex]);
 
   return (
     <Card className="big-card super-big-card !text-xs md:!text-base">
@@ -158,12 +159,12 @@ export function SuperCards({
                     {option.toString()}
                   </option>
                 )}
-                {hasOptionAll && <option key='all' value={`${values.length}`}>All</option>}
+                {hasOptionAll && <option key='all' value={`${values?.length || 0}`}>All</option>}
               </MySelect>
             </div>
           }
 
-          <p>{filteredCards.length} items</p>
+          <p>{filteredCards?.length || 0} {filteredCards?.length || 0 > 1 ? 'items' : 'item'}</p>
 
           <div>
             <Switch crossOrigin={undefined}
@@ -200,95 +201,101 @@ export function SuperCards({
 
       <CardBody className='super-big-body flex gap-x-2 gap-y-4 md:gap-y-6 flex-wrap justify-around my-cards'>
 
-        { displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
-
+        { displayedCards &&
+          (displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
           <div className='text-6xl text-blue-500 font-bold text-center'>
             <br/>0 results<br/><br/>
+          </div>
+          ) ||
+          <div className="w-full h-32 flex justify-center items-center">
+            <Spinner className="h-12 w-12" />
           </div>
         }
 
       </CardBody>
 
-      <CardFooter className="super-big-footer">
-        <Button
-          variant="outlined"
-          size="sm"
-          className='px-1 md:px-4'
-          onClick={() => { setCurrentPage(currentPage - 1); }}
-          disabled={currentPage === 1}
-        >
+      {values && values.length > 0 && (
+        <CardFooter className="super-big-footer">
+          <Button
+            variant="outlined"
+            size="sm"
+            className='px-1 md:px-4'
+            onClick={() => { setCurrentPage(currentPage - 1); }}
+            disabled={currentPage === 1}
+          >
           Previous
-        </Button>
+          </Button>
 
-        <div className="flex items-center md:gap-2">
+          <div className="flex items-center md:gap-2">
 
-          {!pageNumbers.includes(1) && (
-            <>
-              <IconButton
-                key={1}
-                variant='text'
-                size="sm"
-                onClick={() => { setCurrentPage(1); }}
-              >
+            {!pageNumbers.includes(1) && (
+              <>
+                <IconButton
+                  key={1}
+                  variant='text'
+                  size="sm"
+                  onClick={() => { setCurrentPage(1); }}
+                >
                 1
-              </IconButton>
-              {!pageNumbers.includes(2) && (
-                <IconButton
-                  key='p2'
-                  variant='text'
-                  size="sm"
-                  className='hidden md:block'
-                >
-                  ...
                 </IconButton>
-              )}
-            </>
-          )}
-
-          {pageNumbers.map((pageNumber) => (
-            <IconButton
-              key={pageNumber}
-              variant={pageNumber === currentPage ? 'outlined' : 'text'}
-              size="sm"
-              onClick={() => { setCurrentPage(pageNumber); }}
-            >
-              {pageNumber}
-            </IconButton>
-          ))}
-
-          {!pageNumbers.includes(totalPages) && (
-            <>
-              {!pageNumbers.includes(totalPages - 1) && (
-                <IconButton
-                  key='p3'
-                  variant='text'
-                  size="sm"
-                  className='hidden md:block'
-                >
+                {!pageNumbers.includes(2) && (
+                  <IconButton
+                    key='p2'
+                    variant='text'
+                    size="sm"
+                    className='hidden md:block'
+                  >
                   ...
-                </IconButton>
-              )}
+                  </IconButton>
+                )}
+              </>
+            )}
+
+            {pageNumbers.map((pageNumber) => (
               <IconButton
-                key={totalPages}
-                variant='text'
+                key={pageNumber}
+                variant={pageNumber === currentPage ? 'outlined' : 'text'}
                 size="sm"
-                onClick={() => { setCurrentPage(totalPages); }}
+                onClick={() => { setCurrentPage(pageNumber); }}
               >
-                {totalPages}
+                {pageNumber}
               </IconButton>
-            </>
-          )}
-        </div>
-        <Button
-          variant="outlined"
-          size="sm"
-          className='px-1 md:px-4'
-          onClick={() => { setCurrentPage(currentPage + 1); }}
-          disabled={currentPage === totalPages}
-        >
+            ))}
+
+            {!pageNumbers.includes(totalPages) && (
+              <>
+                {!pageNumbers.includes(totalPages - 1) && (
+                  <IconButton
+                    key='p3'
+                    variant='text'
+                    size="sm"
+                    className='hidden md:block'
+                  >
+                  ...
+                  </IconButton>
+                )}
+                <IconButton
+                  key={totalPages}
+                  variant='text'
+                  size="sm"
+                  onClick={() => { setCurrentPage(totalPages); }}
+                >
+                  {totalPages}
+                </IconButton>
+              </>
+            )}
+          </div>
+          <Button
+            variant="outlined"
+            size="sm"
+            className='px-1 md:px-4'
+            onClick={() => { setCurrentPage(currentPage + 1); }}
+            disabled={currentPage === totalPages}
+          >
             Next
-        </Button>
-      </CardFooter>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

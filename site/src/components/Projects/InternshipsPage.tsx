@@ -132,19 +132,17 @@ export function InternshipsPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values || []}
-          customCard={InternshipCard}
+      <SuperCards
+        values={values}
+        customCard={InternshipCard}
 
-          // subOptions={subOptions}
+        // subOptions={subOptions}
 
-          tableTitle='Internships'
-          tableDesc={'Internships projects'}
-          options={[50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Internships'
+        tableDesc={'Internships projects'}
+        options={[50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
 
       <Dialog open={focusText !== undefined} handler={() => setFocusText(undefined)}>
         <div className="flex items-center justify-end p-2 pr-4 border-b border-gray-300">

@@ -18,11 +18,12 @@ import classNames from 'classnames';
 import { ColumnProps } from 'Utils/columnsProps';
 import MyInput from './MyInput';
 import { createKey } from 'Utils/createKey';
+import { Spinner } from '@material-tailwind/react';
 
 
 interface SuperTableProps {
-  columns: ColumnProps[];
-  values: any[];
+  columns: ColumnProps[] | undefined;
+  values: any[] | undefined;
 
   subOptions?: ReactNode | undefined;
   defaultSearch?: string | undefined;
@@ -140,7 +141,7 @@ export function SuperTable({
   };
 
 
-  const sortedValues = useMemo(() => [...values || []].sort((a, b): number => {
+  const sortedValues = useMemo(() => values?.sort((a, b): number => {
     if (sortDirection === 'asc') {
       return customSort(a, b);
     }
@@ -149,7 +150,7 @@ export function SuperTable({
     }
   }), [values, sortDirection, customSort]);
 
-  const filteredUsers = useMemo(() => sortedValues.filter((user) => {
+  const filteredUsers = useMemo(() => sortedValues?.filter((user) => {
     const userValues = Object.values(user);
     const searchTerms = searchQuery.split(',');
 
@@ -190,7 +191,7 @@ export function SuperTable({
   const startIndex = useMemo(() => (currentPage - 1) * usersPerPage, [currentPage, usersPerPage]);
   const endIndex = useMemo(() => startIndex + usersPerPage, [startIndex, usersPerPage]);
 
-  const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex) || [], [filteredUsers, startIndex, endIndex]);
+  const displayedUsers = useMemo(() => filteredUsers?.slice(startIndex, endIndex), [filteredUsers, startIndex, endIndex]);
 
   const headerClasses = 'w-10 md:w-24 md:max-w-24 border-b border-blue-gray-100 dark:bg-blue-gray-500 pl-1 pr-2 md:px-3 py-4 max-w-4 transition-colors';
   const headerPClasses = 'grow items-center gap-2 font-normal leading-none opacity-70 truncate text-black';
@@ -232,12 +233,12 @@ export function SuperTable({
                     {option.toString()}
                   </option>
                 )}
-                {hasOptionAll && <option key='all' value={`${values.length}`}>All</option>}
+                {hasOptionAll && <option key='all' value={`${values?.length || 0}`}>All</option>}
               </MySelect>
             </div>
           }
 
-          <p>{filteredUsers.length} items</p>
+          <p>{filteredUsers?.length || 0} {filteredUsers?.length || 0 > 1 ? 'items' : 'item'}</p>
 
 
           <div>
@@ -275,175 +276,183 @@ export function SuperTable({
 
       <CardBody className='super-big-body'>
         <div className="mt-4 overflow-auto border-black border-2 h-[800px] resize-y">
-          <table className="w-full min-w-max table-auto text-left">
-            <thead className='sticky top-0 z-10'>
-              <tr className="bg-blue-gray-50">
-                { indexColumn &&
-                <th
-                  key='index'
-                  className={classNames(headerClasses)}
-                >
-                  <div className='flex flex-row justify-center text-sm h-4 text-black'>
-                    <p className={headerPClasses}>
-                    Index
-                    </p>
-                  </div>
-
-                </th>
-                }
-                {columns.map((value) => value.visible !== false && (
+          {columns && displayedUsers && (
+            <table className="w-full min-w-max table-auto text-left">
+              <thead className='sticky top-0 z-10'>
+                <tr className="bg-blue-gray-50">
+                  { indexColumn &&
                   <th
-                    key={value.field}
-                    onClick={() => { handleSort(value.field); }}
-                    className={classNames('cursor-pointer hover:bg-blue-gray-200', headerClasses)}
-                    title={value.label.toString()}
+                    key='index'
+                    className={classNames(headerClasses)}
                   >
-                    <div className='flex flex-row justify-center text-sm h-4 gap-x-2 text-black'>
+                    <div className='flex flex-row justify-center text-sm h-4 text-black'>
                       <p className={headerPClasses}>
-                        {value.label.toString()}
+                      Index
                       </p>
-                      {sortColumn === value.field
-                        ? (sortDirection === 'asc'
-                          ? <AiOutlineCaretUp/>
-                          : <AiOutlineCaretDown/>)
-                        : <AiOutlineCaretLeft />}
                     </div>
+
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {displayedUsers.length > 0 && displayedUsers.map((value, index) => {
+                  }
+                  {columns.map((value) => value.visible !== false && (
+                    <th
+                      key={value.field}
+                      onClick={() => { handleSort(value.field); }}
+                      className={classNames('cursor-pointer hover:bg-blue-gray-200', headerClasses)}
+                      title={value.label.toString()}
+                    >
+                      <div className='flex flex-row justify-center text-sm h-4 gap-x-2 text-black'>
+                        <p className={headerPClasses}>
+                          {value.label.toString()}
+                        </p>
+                        {sortColumn === value.field
+                          ? (sortDirection === 'asc'
+                            ? <AiOutlineCaretUp/>
+                            : <AiOutlineCaretDown/>)
+                          : <AiOutlineCaretLeft />}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {displayedUsers.length > 0 && displayedUsers.map((value, index) => {
                 // const isLast = index === values.length - 1;
 
-                return (
-                  <tr key={createKey(value, index)}
-                    className='border-b border-gray-300
-                    odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
-                    dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'
-                    style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : undefined }}>
-                    { indexColumn &&
-                      <td key={`${createKey(value, index)}-index`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
-                        <div className="h-full flex justify-center items-center text-black">
-                          {(currentPage - 1) * usersPerPage + (index + 1)}
-                        </div>
-                      </td>
-                    }
+                  return (
+                    <tr key={createKey(value, index)}
+                      className='border-b border-gray-300
+                      odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
+                      dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'
+                      style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : undefined }}>
+                      { indexColumn &&
+                        <td key={`${createKey(value, index)}-index`}
+                          className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
+                          <div className="h-full flex justify-center items-center text-black">
+                            {(currentPage - 1) * usersPerPage + (index + 1)}
+                          </div>
+                        </td>
+                      }
 
-                    {columns.map((col) => col.visible !== false && (
+                      {columns.map((col) => col.visible !== false && (
 
-                      <td key={`${createKey(value, index)}-${col.field}`}
-                        className={classNames('border-x border-blue-gray-50 overflow-hidden max-w-4 table-cell', typeof value[col.field] !== 'object' ? 'p-4' : '' )}
-                        style={{ backgroundColor: value[`_${col.field}_color`] ? `${value[`_${col.field}_color`]}` : undefined }}>
-                        <div className="h-full flex justify-center items-center text-black">
-                          {
-                            value[col.field] === undefined ? 'undefined' : (
-                              value[col.field] === null ? 'null' : (
-                                typeof value[col.field] === 'object' ?
-                                  value[col.field] :
-                                  value[col.field].toString()
+                        <td key={`${createKey(value, index)}-${col.field}`}
+                          className={classNames('border-x border-blue-gray-50 overflow-hidden max-w-4 table-cell', typeof value[col.field] !== 'object' ? 'p-4' : '' )}
+                          style={{ backgroundColor: value[`_${col.field}_color`] ? `${value[`_${col.field}_color`]}` : undefined }}>
+                          <div className="h-full flex justify-center items-center text-black">
+                            {
+                              value[col.field] === undefined ? 'undefined' : (
+                                value[col.field] === null ? 'null' : (
+                                  typeof value[col.field] === 'object' ?
+                                    value[col.field] :
+                                    value[col.field].toString()
+                                )
                               )
-                            )
-                          }
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                );
-              }) ||
-              <tr>
-                <td className='text-6xl text-blue-500 font-bold text-center' colSpan={columns.length}>
-                  <br/>0 results<br/><br/>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
+                            }
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                }) ||
+                <tr>
+                  <td className='text-6xl text-blue-500 font-bold text-center' colSpan={columns.length}>
+                    <br/>0 results<br/><br/>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          ) ||
+            <div className="w-full h-32 flex justify-center items-center">
+              <Spinner className="h-12 w-12" />
+            </div>
+          }
         </div>
       </CardBody>
 
-      <CardFooter className="super-big-footer">
-        <Button
-          variant="outlined"
-          size="sm"
-          className='px-1 md:px-4'
-          onClick={() => { setCurrentPage(currentPage - 1); }}
-          disabled={currentPage === 1}
-        >
+      {values && values.length > 0 && (
+        <CardFooter className="super-big-footer">
+          <Button
+            variant="outlined"
+            size="sm"
+            className='px-1 md:px-4'
+            onClick={() => { setCurrentPage(currentPage - 1); }}
+            disabled={currentPage === 1}
+          >
           Previous
-        </Button>
+          </Button>
 
-        <div className="flex items-center md:gap-2">
+          <div className="flex items-center md:gap-2">
 
-          {!pageNumbers.includes(1) && (
-            <>
-              <IconButton
-                key={1}
-                variant='text'
-                size="sm"
-                onClick={() => { setCurrentPage(1); }}
-              >
+            {!pageNumbers.includes(1) && (
+              <>
+                <IconButton
+                  key={1}
+                  variant='text'
+                  size="sm"
+                  onClick={() => { setCurrentPage(1); }}
+                >
                 1
-              </IconButton>
-              {!pageNumbers.includes(2) && (
-                <IconButton
-                  key='p2'
-                  variant='text'
-                  size="sm"
-                  className='hidden md:block'
-                >
-                  ...
                 </IconButton>
-              )}
-            </>
-          )}
-
-          {pageNumbers.map((pageNumber) => (
-            <IconButton
-              key={pageNumber}
-              variant={pageNumber === currentPage ? 'outlined' : 'text'}
-              size="sm"
-              onClick={() => { setCurrentPage(pageNumber); }}
-            >
-              {pageNumber}
-            </IconButton>
-          ))}
-
-          {!pageNumbers.includes(totalPages) && (
-            <>
-              {!pageNumbers.includes(totalPages - 1) && (
-                <IconButton
-                  key='p3'
-                  variant='text'
-                  size="sm"
-                  className='hidden md:block'
-
-                >
+                {!pageNumbers.includes(2) && (
+                  <IconButton
+                    key='p2'
+                    variant='text'
+                    size="sm"
+                    className='hidden md:block'
+                  >
                   ...
-                </IconButton>
-              )}
+                  </IconButton>
+                )}
+              </>
+            )}
+
+            {pageNumbers.map((pageNumber) => (
               <IconButton
-                key={totalPages}
-                variant='text'
+                key={pageNumber}
+                variant={pageNumber === currentPage ? 'outlined' : 'text'}
                 size="sm"
-                onClick={() => { setCurrentPage(totalPages); }}
+                onClick={() => { setCurrentPage(pageNumber); }}
               >
-                {totalPages}
+                {pageNumber}
               </IconButton>
-            </>
-          )}
-        </div>
-        <Button
-          variant="outlined"
-          size="sm"
-          className='px-1 md:px-4'
-          onClick={() => { setCurrentPage(currentPage + 1); }}
-          disabled={currentPage === totalPages}
-        >
+            ))}
+
+            {!pageNumbers.includes(totalPages) && (
+              <>
+                {!pageNumbers.includes(totalPages - 1) && (
+                  <IconButton
+                    key='p3'
+                    variant='text'
+                    size="sm"
+                    className='hidden md:block'
+
+                  >
+                  ...
+                  </IconButton>
+                )}
+                <IconButton
+                  key={totalPages}
+                  variant='text'
+                  size="sm"
+                  onClick={() => { setCurrentPage(totalPages); }}
+                >
+                  {totalPages}
+                </IconButton>
+              </>
+            )}
+          </div>
+          <Button
+            variant="outlined"
+            size="sm"
+            className='px-1 md:px-4'
+            onClick={() => { setCurrentPage(currentPage + 1); }}
+            disabled={currentPage === totalPages}
+          >
             Next
-        </Button>
-      </CardFooter>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

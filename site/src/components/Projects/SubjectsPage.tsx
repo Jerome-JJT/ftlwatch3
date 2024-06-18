@@ -59,17 +59,15 @@ export function SubjectsPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
-          tableTitle='Subjects'
-          tableDesc='List all existing subject grouped by header'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Subjects'
+        tableDesc='List all existing subject grouped by header'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog open={focusSubject !== undefined} handler={() => setFocusSubject(undefined)}>
         <div className="flex flex-row items-center justify-between pr-4 gap-1">
 

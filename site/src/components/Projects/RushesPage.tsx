@@ -185,7 +185,7 @@ export function RushesPage(): JSX.Element {
   const displayValues = useMemo(() => {
 
     if (values === undefined) {
-      return [];
+      return undefined;
     }
 
     return values.filter((team) => {
@@ -201,19 +201,17 @@ export function RushesPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={displayValues || []}
-          customCard={TeamCard}
+      <SuperCards
+        values={displayValues}
+        customCard={TeamCard}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Rushes'
-          tableDesc={'Rushes projects'}
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Rushes'
+        tableDesc={'Rushes projects'}
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

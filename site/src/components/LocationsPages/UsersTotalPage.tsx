@@ -112,20 +112,18 @@ export function UsersTotalPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Users total'
-          tableDesc='Stats about where and how users connects'
-          indexColumn={true}
-          options={[10, 25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Users total'
+        tableDesc='Stats about where and how users connects'
+        indexColumn={true}
+        options={[10, 25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

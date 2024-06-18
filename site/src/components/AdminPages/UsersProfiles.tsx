@@ -99,15 +99,13 @@ export function UsersProfilesPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
-          tableTitle='User profiles'
-          options={[10, 20, 30]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+      <SuperTable
+        columns={columns}
+        values={values}
+        tableTitle='User profiles'
+        options={[10, 20, 30]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog className='dark:bg-gray-600' open={focusedProfile !== undefined} handler={() => setFocusedProfile(undefined)}>
         <div className="flex items-center justify-end p-2 pr-4">
           <AiOutlineClose onClick={() => setFocusedProfile(undefined)}

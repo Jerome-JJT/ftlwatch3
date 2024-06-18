@@ -53,18 +53,16 @@ export function CursusPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
 
-          tableTitle='Cursus'
-          tableDesc='List of existing cursus'
-          options={[100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Cursus'
+        tableDesc='List of existing cursus'
+        options={[100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

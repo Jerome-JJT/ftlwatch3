@@ -48,19 +48,17 @@ export function SalesWatchPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <StyledTableau>
+      <StyledTableau>
 
-          <SuperTable
-            columns={columns}
-            values={values}
+        <SuperTable
+          columns={columns}
+          values={values}
 
-            tableTitle='Tableau sales'
-            tableDesc='Regroup informations about sales'
-            options={[100]}
-          />
-        </StyledTableau>
-      }
+          tableTitle='Tableau sales'
+          tableDesc='Regroup informations about sales'
+          options={[100]}
+        />
+      </StyledTableau>
     </div>
   );
 }

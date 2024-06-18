@@ -174,7 +174,7 @@ export function TeamsPage(): JSX.Element {
   const displayValues = useMemo(() => {
 
     if (values === undefined) {
-      return [];
+      return undefined;
     }
 
     return values.filter((team) => {
@@ -189,19 +189,17 @@ export function TeamsPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={displayValues || []}
-          customCard={TeamCard}
+      <SuperCards
+        values={displayValues}
+        customCard={TeamCard}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Teams'
-          tableDesc={'Teams projects'}
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Teams'
+        tableDesc={'Teams projects'}
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

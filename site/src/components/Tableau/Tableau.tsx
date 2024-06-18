@@ -225,22 +225,19 @@ export function TableauPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <StyledTableau>
+      <StyledTableau>
+        <SuperTable
+          columns={columns}
+          values={values}
 
-          <SuperTable
-            columns={columns}
-            values={values}
+          subOptions={subOptions}
 
-            subOptions={subOptions}
-
-            tableTitle='Tableau'
-            tableDesc='Regroup informations about students'
-            options={[25, 50, 100]}
-            // reloadFunction={() => { setValues([]); }}
-          />
-        </StyledTableau>
-      }
+          tableTitle='Tableau'
+          tableDesc='Regroup informations about students'
+          options={[25, 50, 100]}
+          // reloadFunction={() => { setValues([]); }}
+        />
+      </StyledTableau>
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-end p-2 pr-4">
           <AiOutlineClose onClick={() => setFocusImage(undefined)}

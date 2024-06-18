@@ -51,18 +51,16 @@ export function PointsPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
-          indexColumn={true}
+      <SuperTable
+        columns={columns}
+        values={values}
+        indexColumn={true}
 
-          tableTitle='Points'
-          tableDesc='Stats about points given to pool and evaluations'
-          options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Points'
+        tableDesc='Stats about points given to pool and evaluations'
+        options={[25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

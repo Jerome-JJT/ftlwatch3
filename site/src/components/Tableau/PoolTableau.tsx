@@ -51,19 +51,17 @@ export function PoolTableauPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <StyledTableau>
+      <StyledTableau>
 
-          <SuperTable
-            columns={columns}
-            values={values}
+        <SuperTable
+          columns={columns}
+          values={values}
 
-            tableTitle='Tableau pools'
-            tableDesc='Regroup informations about pools'
-            options={[100]}
-          />
-        </StyledTableau>
-      }
+          tableTitle='Tableau pools'
+          tableDesc='Regroup informations about pools'
+          options={[100]}
+        />
+      </StyledTableau>
     </div>
   );
 }

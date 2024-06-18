@@ -53,18 +53,16 @@ export function RulesPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
 
-          tableTitle='Rules'
-          tableDesc={'Project\'s rules'}
-          options={[100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Rules'
+        tableDesc={'Project\'s rules'}
+        options={[100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

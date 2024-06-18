@@ -105,7 +105,7 @@ export function TinderPage(): JSX.Element {
   const displayValues = useMemo(() => {
 
     if (values === undefined) {
-      return [];
+      return undefined;
     }
 
     return Object.entries(values).flatMap((filtertab) => {
@@ -125,19 +125,17 @@ export function TinderPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={displayValues || []}
-          customCard={TinderCard}
+      <SuperCards
+        values={displayValues}
+        customCard={TinderCard}
 
-          subOptions={subOptions}
+        subOptions={subOptions}
 
-          tableTitle='Tinder'
-          tableDesc='To find peers to do group projects'
-          options={[10, 25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Tinder'
+        tableDesc='To find peers to do group projects'
+        options={[10, 25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

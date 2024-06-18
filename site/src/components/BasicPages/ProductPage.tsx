@@ -95,17 +95,15 @@ export function ProductsPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values}
-          customCard={ProductCard}
+      <SuperCards
+        values={values}
+        customCard={ProductCard}
 
-          tableTitle='Products'
-          tableDesc='Products from shops intra all around the world'
-          options={[10, 25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Products'
+        tableDesc='Products from shops intra all around the world'
+        options={[10, 25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-between pr-4">
           <DialogHeader>{focusText || ''}</DialogHeader>

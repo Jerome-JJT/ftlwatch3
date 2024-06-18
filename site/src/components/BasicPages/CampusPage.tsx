@@ -55,18 +55,16 @@ export function CampusPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
 
-          tableTitle='Campus'
-          tableDesc='List of all existing campuses, user count includes pools'
-          options={[100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Campus'
+        tableDesc='List of all existing campuses, user count includes pools'
+        options={[100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }

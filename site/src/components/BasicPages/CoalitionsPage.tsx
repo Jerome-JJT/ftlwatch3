@@ -84,19 +84,17 @@ export function CoalitionsPage(): JSX.Element {
   //
   return (
     <div className='my-content'>
-      {(values) &&
-        <SuperCards
-          values={values}
-          customCard={CoalitionCard}
+      <SuperCards
+        values={values}
+        customCard={CoalitionCard}
 
-          // subOptions={subOptions}
+        // subOptions={subOptions}
 
-          tableTitle='Coalitions'
-          tableDesc='List of coalitions from all campuses'
-          options={[10, 25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Coalitions'
+        tableDesc='List of coalitions from all campuses'
+        options={[10, 25, 50, 100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-between pr-4">
           <DialogHeader>{focusText || ''}</DialogHeader>

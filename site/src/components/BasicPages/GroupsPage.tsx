@@ -54,18 +54,16 @@ export function GroupsPage(): JSX.Element {
 
   return (
     <div className='my-content'>
-      {(columns && values) &&
-        <SuperTable
-          columns={columns}
-          values={values}
+      <SuperTable
+        columns={columns}
+        values={values}
 
 
-          tableTitle='Groups'
-          tableDesc='List of all groups from intra'
-          options={[100]}
-          // reloadFunction={() => { setValues([]); }}
-        />
-      }
+        tableTitle='Groups'
+        tableDesc='List of all groups from intra'
+        options={[100]}
+        // reloadFunction={() => { setValues([]); }}
+      />
     </div>
   );
 }
