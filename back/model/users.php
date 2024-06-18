@@ -231,6 +231,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
       AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
       AND users.login NOT LIKE '3b3-%'
     ))
+    OR (:poolfilter = poolfilters.name) 
   )
   AND (projects.has_lausanne IS NULL OR projects.has_lausanne <> FALSE)
   AND (

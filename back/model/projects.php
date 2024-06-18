@@ -101,7 +101,7 @@ function getRushProjects($cursus = '')
 }
 
 
-function getUserProjects()
+function getTinderProjects()
 {
   $query = "SELECT 
       users.id AS user_id, users.login, users.avatar_url,

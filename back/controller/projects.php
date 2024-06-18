@@ -198,7 +198,7 @@ function get_tinder()
 {
     $res = array();
 
-    $userProjects = getUserProjects();
+    $userProjects = getTinderProjects();
     $userProjectScore = getProjectsCount();
     $userExamScore = getExamCount();
 
