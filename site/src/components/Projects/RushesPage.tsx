@@ -55,7 +55,7 @@ export function RushesPage(): JSX.Element {
           <div className="flex flex-row grow justify-evenly text-center align-center gap-2">
             <div className='flex flex-col justify-start'>
               <p>Id : {card.team_id}</p>
-              
+
               <p color="blue-gray">
                 {card.project_name}
               </p>

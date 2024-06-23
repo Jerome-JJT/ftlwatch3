@@ -164,7 +164,7 @@ export function SuperCards({
             </div>
           }
 
-          <p>{filteredCards?.length || 0} {filteredCards?.length || 0 > 1 ? 'items' : 'item'}</p>
+          <p>{displayedCards?.length || 0} {displayedCards?.length || 0 > 1 ? 'items' : 'item'}</p>
 
           <div>
             <Switch crossOrigin={undefined}
@@ -204,7 +204,7 @@ export function SuperCards({
         { displayedCards &&
           (displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
           <div className='text-6xl text-blue-500 font-bold text-center'>
-            <br/>0 results<br/><br/>
+            <br/>0 result<br/><br/>
           </div>
           ) ||
           <div className="w-full h-32 flex justify-center items-center">
@@ -214,7 +214,7 @@ export function SuperCards({
 
       </CardBody>
 
-      {values && values.length > 0 && (
+      {displayedCards && displayedCards.length > 0 && (
         <CardFooter className="super-big-footer">
           <Button
             variant="outlined"
