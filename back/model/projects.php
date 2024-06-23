@@ -35,7 +35,7 @@ function getGroupProjects($cursus = '')
     
     ON te.team_id = team_user.team_id
 
-    ORDER BY te.team_updated_at ASC
+    ORDER BY te.team_id ASC
   ";
 
   $data = array(":cursus" => $cursus);
@@ -89,7 +89,7 @@ function getRushProjects($cursus = '')
 
     ON te.team_id = team_user.team_id
 
-    ORDER BY te.team_updated_at ASC
+    ORDER BY te.team_id ASC
   ";
 
   $data = array(":cursus" => $cursus);
