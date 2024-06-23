@@ -109,7 +109,8 @@ async def get_private_messages():
 
             mylogger(f'Got {method.routing_key} for private', LOGGER_DEBUG, rabbit=False)
             if (env('BUILD_TYPE') == 'PROD'):
-                await discord_send(ctx, body)
+                #await discord_send(ctx, body)
+                pass
 
             channel.basic_ack(delivery_tag = method.delivery_tag)
 
