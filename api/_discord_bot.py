@@ -335,6 +335,13 @@ async def logged(ctx,
 
     await ctx.defer()
 
+    if (cluster == None):
+        cluster = "all"
+    if (select == None):
+        select = "all"
+    if (display_type == None):
+        display_type = "count_only"
+
     try:
         from _rabbit import send_to_rabbit
         send_to_rabbit('errors.server.message.queue', {'content': f'Bot loggeds request by {str(ctx.author)}'})
@@ -344,18 +351,17 @@ async def logged(ctx,
     lst = callapi("/v2/campus/47/locations?filter[active]=true&sort=begin_at", nultiple=1, mode="fast")
 
     text_only_list = []
-    today = datetime.datetime.today().strftime('%Y-%m-%d')
 
     for log in lst:
-        if (cluster != None and cluster not in log['host']):
+        if (cluster != "all" and cluster not in log['host']):
             continue
 
-        piscine_concern = f"{log['user']['pool_year'] if location['user']['pool_year'] else '2000'}-10-01"
+        piscine_concern = f"{log['user']['pool_year'] if log['user']['pool_year'] else '2000'}-10-01"
 
-        if (cluster != None and select == "cursus" and today > piscine_concern):
+        if (select == "cursus" and log["begin_at"][:10] > piscine_concern):
             continue
             
-        if (cluster != None and select == "pool" and today < piscine_concern):
+        if (select == "pool" and log["begin_at"][:10] < piscine_concern):
             continue
 
         begin = datetime.datetime.strptime(log["begin_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
@@ -377,8 +383,7 @@ async def logged(ctx,
         if (display_type == "image_list"):
             await discord_send(ctx, payload)
 
-        else:
-            text_only_list.append(f'{payload["title"]} {payload["description"]}')
+        text_only_list.append(f'{payload["title"]} {payload["description"]}')
 
 
     if (display_type == "text_list"):
@@ -388,7 +393,7 @@ async def logged(ctx,
             await discord_send(ctx, {"content": f"```{todisplay}```"})
 
 
-    await discord_send(ctx, {"content": f"{len(lst)} people logged in query"})
+    await discord_send(ctx, {"content": f"{len(text_only_list)} people logged in query (select: {select}, cluster: {cluster})"})
     await ctx.respond(f"Done")
 
 
