@@ -141,14 +141,14 @@ export function SuperTable({
   };
 
 
-  const sortedValues = useMemo(() => values?.sort((a, b): number => {
+  const sortedValues = useMemo(() => values && [...values]?.sort((a, b): number => {
     if (sortDirection === 'asc') {
       return customSort(a, b);
     }
     else {
       return customSort(b, a);
     }
-  }), [values, sortDirection, customSort]);
+  }) || undefined, [values, sortDirection, customSort]);
 
   const filteredUsers = useMemo(() => sortedValues?.filter((user) => {
     const userValues = Object.values(user);
