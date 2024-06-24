@@ -31,17 +31,6 @@ valid_crudcmd = [
     OptionChoice(name="Help", value="help")
 ]
 
-valid_cluster = [
-    OptionChoice(name="Gotham", value="c1"),
-    OptionChoice(name="Asgard", value="c2"),
-    OptionChoice(name="Salle sur demande", value="c3")
-]
-
-valid_cursus = [
-    OptionChoice(name="Cursus 42", value="all"),
-    OptionChoice(name="Not cursus 42", value="not")
-]
-
 
 
 env = environ.Env()
@@ -319,11 +308,30 @@ async def api(ctx,
         await ctx.respond(f"{pseudo} has done {nbdone} comments with over 180 characters chars")
 
 
+valid_cluster = [
+    OptionChoice(name="Gotham", value="c1"),
+    OptionChoice(name="Asgard", value="c2"),
+    OptionChoice(name="Salle sur demande", value="c3")
+]
+
+valid_location_select = [
+    OptionChoice(name="All 42", value="all"),
+    OptionChoice(name="Cursus", value="cursus"),
+    OptionChoice(name="Not cursus", value="pool")
+]
+
+valid_display_type = [
+    OptionChoice(name="Count", value="count_only"),
+    OptionChoice(name="Text list", value="text_list"),
+    OptionChoice(name="Embed Images", value="image_list")
+]
+
 
 @bot.slash_command(name="logged", description="Logged people")
 async def logged(ctx,
     cluster: Option(str, 'Cluster', required=False, choices=(valid_cluster)),
-    list: Option(str, 'Cursus', required=False, choices=(valid_cursus))):
+    select: Option(str, 'Selector', required=False, choices=(valid_location_select)),
+    display_type: Option(str, 'Display', required=False, choices=(valid_display_type))):
 
     await ctx.defer()
 
@@ -335,8 +343,19 @@ async def logged(ctx,
     
     lst = callapi("/v2/campus/47/locations?filter[active]=true&sort=begin_at", nultiple=1, mode="fast")
 
+    text_only_list = []
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+
     for log in lst:
-        if (cluster and cluster not in log['host']):
+        if (cluster != None and cluster not in log['host']):
+            continue
+
+        piscine_concern = f"{log['user']['pool_year'] if location['user']['pool_year'] else '2000'}-10-01"
+
+        if (cluster != None and select == "cursus" and today > piscine_concern):
+            continue
+            
+        if (cluster != None and select == "pool" and today < piscine_concern):
             continue
 
         begin = datetime.datetime.strptime(log["begin_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
@@ -355,8 +374,19 @@ async def logged(ctx,
 
         payload["description"] = f"""Since {diff.total_seconds() // 3600} hours and {diff.total_seconds() % 3600 // 60} minutes"""
 
+        if (display_type == "image_list"):
+            await discord_send(ctx, payload)
 
-        await discord_send(ctx, payload)
+        else:
+            text_only_list.append(f'{payload["title"]} {payload["description"]}')
+
+
+    if (display_type == "text_list"):
+        step = 30
+        for i in range(0, len(text_only_list), step):
+            todisplay = '\n'.join(text_only_list[i:i+step])
+            await discord_send(ctx, {"content": f"```{todisplay}```"})
+
 
     await discord_send(ctx, {"content": f"{len(lst)} people logged in query"})
     await ctx.respond(f"Done")
