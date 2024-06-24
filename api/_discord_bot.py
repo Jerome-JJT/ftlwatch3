@@ -358,10 +358,10 @@ async def logged(ctx,
 
         piscine_concern = f"{log['user']['pool_year'] if log['user']['pool_year'] else '2000'}-10-01"
 
-        if (select == "cursus" and log["begin_at"][:10] > piscine_concern):
+        if (select == "cursus" and log["begin_at"][:10] < piscine_concern):
             continue
             
-        if (select == "pool" and log["begin_at"][:10] < piscine_concern):
+        if (select == "pool" and log["begin_at"][:10] > piscine_concern):
             continue
 
         begin = datetime.datetime.strptime(log["begin_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
