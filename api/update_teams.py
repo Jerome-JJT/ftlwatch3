@@ -196,7 +196,7 @@ def import_team_scale(team):
         good = {
             "id": scale["id"],
             "team_id": team["id"],
-            "scale_id": team["scale_id"],
+            "scale_id": scale["scale_id"],
             "comment": scale["comment"],
             "feedback": scale["feedback"],
             "final_mark": scale["final_mark"],
@@ -216,7 +216,7 @@ def import_team_scale(team):
         )
         ON CONFLICT (id)
         DO UPDATE SET
-            "scale_id" = EXCLUDED.scale_id
+            "scale_id" = EXCLUDED.scale_id,
             "comment" = EXCLUDED.comment,
             "feedback" = EXCLUDED.feedback,
             "final_mark" = EXCLUDED.final_mark,
