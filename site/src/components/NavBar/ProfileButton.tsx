@@ -5,6 +5,7 @@ import { AiFillSetting, AiOutlineLogin, AiOutlineLogout, AiOutlineReload } from 
 import classNames from 'classnames';
 import { useLogin } from 'Hooks/LoginProvider';
 import axios from 'axios';
+import { createAuthorizeURL } from 'Utils/createAuthorizeURL';
 
 export default function ProfileButton(): JSX.Element {
   const buttonColor = 'bg-[#CCCCCC]';
@@ -91,7 +92,7 @@ export default function ProfileButton(): JSX.Element {
             </>
 
           )) || (
-            <a href={`/api/?page=login&action=authorizeapi&next=${encodeURIComponent(window.location.pathname+window.location.search)}`}>
+            <a href={createAuthorizeURL()}>
               <MenuItem className={classNames('flex items-center gap-2', buttonColor)}>
                 <AiOutlineLogout className={classNames(textColor)} />
 

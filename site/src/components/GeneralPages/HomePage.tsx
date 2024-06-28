@@ -2,6 +2,7 @@ import AppLogo from '../../assets/logo_transparent_small.png';
 import { Avatar, Button, Card, CardBody, CardFooter } from '@material-tailwind/react';
 import { useLogin } from 'Hooks/LoginProvider';
 import { commonTitle } from 'Utils/commonTitle';
+import { createAuthorizeURL } from 'Utils/createAuthorizeURL';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -49,7 +50,7 @@ export default function HomePage(): JSX.Element {
 
             {!isLogged &&
             <p>
-              To access most of the pages, you need to be <a href="/api/?page=login&action=authorizeapi">logged</a> first
+              To access most of the pages, you need to be <a href={createAuthorizeURL()}>logged</a> first
             </p>
             }
             <p className="my-2">
@@ -60,7 +61,7 @@ export default function HomePage(): JSX.Element {
           <CardFooter className="pt-0 flex gap-2">
             {
               !isLogged &&
-          <a href={'/api/?page=login&action=authorizeapi'}>
+          <a href={createAuthorizeURL()}>
             <Button color='blue'>Sign in</Button>
           </a>
             }
