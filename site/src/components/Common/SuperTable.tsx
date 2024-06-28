@@ -58,7 +58,7 @@ export function SuperTable({
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [usersPerPage, setUsersPerPage] = React.useState(options[0]);
+  const [usersPerPage, setUsersPerPage] = React.useState(options[options.length - 1]);
 
   const [sortColumn, setSortColumn] = React.useState('id');
   const [sortDirection, setSortDirection] = React.useState('asc');

@@ -49,7 +49,7 @@ export function SuperCards({
   const [doIncludeAll, setDoIncludeAll] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [cardsPerPage, setCardsPerPage] = React.useState(options[0]);
+  const [cardsPerPage, setCardsPerPage] = React.useState(options[options.length - 1]);
   // const [cardsPerPage, setCardsPerPage] = React.useState(values.length);
 
   const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
