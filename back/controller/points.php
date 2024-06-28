@@ -63,7 +63,7 @@ function get_pools()
         if ($tr['reason'] == 'Defense plannification' && ($tr['user_id'] == $tr['leader_id'] || $tr['slug'] == null)) {
             continue;
         }
-        if ($tr['reason'] == 'Earning after defense' && ($tr['sum'] == $tr['price'] || $tr['slug'] == null)) {
+        if ($tr['reason'] == 'Earning after defense' && ($tr['sum'] == $tr['cost'] || $tr['slug'] == null)) {
             continue;
         }
 
@@ -125,7 +125,7 @@ function get_pools()
 
         if ($tr['reason'] == 'Earning after defense') {
             $tmp[$currentSales]['endSales'] = $tr['created_at'];
-            $tmp[$currentSales]['salesPoints'] += ($tr['sum'] - $tr['price']);
+            $tmp[$currentSales]['salesPoints'] += ($tr['sum'] - $tr['cost']);
         }
         if ($tr['reason'] == 'Refund during sales') {
             $tmp[$currentSales]['endSales'] = $tr['created_at'];

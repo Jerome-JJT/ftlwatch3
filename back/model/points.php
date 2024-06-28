@@ -36,8 +36,10 @@ function getPools()
   points_transactions.user_id, 
   points_transactions.reason, 
   ABS(points_transactions.sum) AS sum, 
-  points_transactions.created_at, 
-  CASE WHEN projects.session_scale_duration >= 1800 THEN FLOOR(projects.session_scale_duration / 1800) ELSE 1 END AS price, 
+  points_transactions.created_at,
+
+  CASE WHEN team_scale.cost IS NOT NULL THEN team_scale.cost ELSE
+    CASE WHEN projects.session_scale_duration >= 1800 THEN FLOOR(projects.session_scale_duration / 1800) ELSE 1 END END AS cost,
   team_user.user_id AS leader_id, 
   teams.name, 
   projects.slug
