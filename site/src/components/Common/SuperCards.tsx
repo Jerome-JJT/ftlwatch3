@@ -164,7 +164,7 @@ export function SuperCards({
             </div>
           }
 
-          <p>{displayedCards?.length || 0} {displayedCards?.length || 0 > 1 ? 'items' : 'item'}</p>
+          <p>{/*filtered beacause count all pages */filteredCards?.length || 0} {filteredCards?.length || 0 > 1 ? 'items' : 'item'}</p>
 
           <div>
             <Switch crossOrigin={undefined}

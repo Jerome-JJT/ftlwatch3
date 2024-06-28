@@ -238,7 +238,7 @@ export function SuperTable({
             </div>
           }
 
-          <p>{filteredUsers?.length || 0} {filteredUsers?.length || 0 > 1 ? 'items' : 'item'}</p>
+          <p>{/*filtered beacause count all pages */filteredUsers?.length || 0} {filteredUsers?.length || 0 > 1 ? 'items' : 'item'}</p>
 
 
           <div>
