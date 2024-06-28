@@ -34,7 +34,7 @@ def team_notification(fetched):
         "team_id": fetched["id"]
     })
 
-    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug, projects.main_cursus AS cursus_id FROM projects 
+    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug, projects.main_cursus AS cursus_id, projects.project_type_id FROM projects 
                                     LEFT JOIN cursus on cursus.id = projects.main_cursus WHERE projects.id = %(id)s""", 
     {
         "id": fetched["project_id"]
@@ -160,7 +160,7 @@ def import_team_user(team):
 
     for user in team["users"]:
         good_id = f"""{team["id"]}_{user["id"]}"""
-        
+
         if (good_id not in team_users):
             mylogger(f"Import team_user {good_id} {user['login']}", LOGGER_INFO)
 
