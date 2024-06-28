@@ -22,6 +22,7 @@ from update_users_points import import_users_points
 
 from update_pdf import import_subjects
 from process_pdf import process_pdf
+from process_eval_cost import process_eval_cost
 
 from update_intranotif import import_intranotif
 
@@ -120,6 +121,10 @@ def api_consumer(ch, method, properties, body, reject_first=False):
             import_locations(mode="fast")
         elif (resource == "process_locations"):
             process_locations()
+
+        elif (resource == "process_eval_cost"):
+            process_eval_cost()
+
 
         elif (resource == "teams"):
             import_teams(mode="fast")

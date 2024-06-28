@@ -62,6 +62,7 @@ if (env("BUILD_TYPE") == "PROD"):
     # scheduler_update.every().sunday.at("04:40", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_pdf'}))
 
     scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_locations'}))
+    scheduler_update.every().day.at("08:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'process_eval_cost'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_love'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_peaks'}))
     scheduler_update.every().day.at("09:00", "Europe/Zurich").do(lambda: send_to_rabbit('slow.update.queue', {'resource': 'generate_fall'}))
