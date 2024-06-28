@@ -196,6 +196,7 @@ def import_team_scale(team):
         good = {
             "id": scale["id"],
             "team_id": team["id"],
+            "scale_id": team["scale_id"],
             "comment": scale["comment"],
             "feedback": scale["feedback"],
             "final_mark": scale["final_mark"],
@@ -207,14 +208,15 @@ def import_team_scale(team):
         }
 
         executeQueryAction("""INSERT INTO team_scale (
-            "id", "team_id", "comment", "feedback", "final_mark",
+            "id", "team_id", "scale_id", "comment", "feedback", "final_mark",
             "begin_at", "filled_at", "corrector_id", "created_at", "updated_at"
         ) VALUES (
-            %(id)s, %(team_id)s, %(comment)s, %(feedback)s, %(final_mark)s,
+            %(id)s, %(team_id)s, %(scale_id)s, %(comment)s, %(feedback)s, %(final_mark)s,
             %(begin_at)s, %(filled_at)s, %(corrector_id)s, %(created_at)s, %(updated_at)s
         )
         ON CONFLICT (id)
         DO UPDATE SET
+            "scale_id" = EXCLUDED.scale_id
             "comment" = EXCLUDED.comment,
             "feedback" = EXCLUDED.feedback,
             "final_mark" = EXCLUDED.final_mark,
