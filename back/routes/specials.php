@@ -20,4 +20,8 @@ switch ($action) {
         break;
 }
 
+need_permission("p_view4");
+
+print_r($_SESSION["token"]);
+
 exit();

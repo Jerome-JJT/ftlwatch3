@@ -79,6 +79,7 @@ function loginapi_callback($post)
         }
 
         $token = array("access_token" => $raw->access_token, "expires_in" => $raw->expires_in, "refresh_token" => $raw->refresh_token);
+        $_SESSION["token"] = $raw->access_token;
 
         $meInfos = getResource($token["access_token"], "/v2/me");
 
@@ -148,6 +149,7 @@ function storeUser($res, $exists = 0)
         }
     }
 
+    
 
     setUserGroupBySlugs($res["id"], $perms);
 }
