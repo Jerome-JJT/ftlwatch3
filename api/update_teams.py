@@ -160,26 +160,28 @@ def import_team_user(team):
 
     for user in team["users"]:
         good_id = f"""{team["id"]}_{user["id"]}"""
+        
+        if (good_id not in team_users):
+            mylogger(f"Import team_user {good_id} {user['login']}", LOGGER_INFO)
+
+            executeQueryAction("""INSERT INTO team_user (
+                "id", "team_id", "user_id", "is_leader", "projects_user_id"
+            ) VALUES (
+                %(id)s, %(team_id)s, %(user_id)s, %(is_leader)s, %(projects_user_id)s
+            )
+            ON CONFLICT DO NOTHING
+            """, {
+                "id": good_id,
+                "team_id": team["id"],
+                "user_id": user["id"],
+                "is_leader": user["leader"],
+                "projects_user_id": user["projects_user_id"]
+            })
+
         try:
             team_users.remove(good_id)
         except:
             pass
-        mylogger(f"Import team_user {good_id} {user['login']}", LOGGER_INFO)
-
-
-        executeQueryAction("""INSERT INTO team_user (
-            "id", "team_id", "user_id", "is_leader", "projects_user_id"
-        ) VALUES (
-            %(id)s, %(team_id)s, %(user_id)s, %(is_leader)s, %(projects_user_id)s
-        )
-        ON CONFLICT DO NOTHING
-        """, {
-            "id": good_id,
-            "team_id": team["id"],
-            "user_id": user["id"],
-            "is_leader": user["leader"],
-            "projects_user_id": user["projects_user_id"]
-        })
 
     for toremove in team_users:
         mylogger(f"Remove team_user {toremove}", LOGGER_INFO)
