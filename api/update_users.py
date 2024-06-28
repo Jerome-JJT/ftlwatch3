@@ -89,7 +89,7 @@ def user_notification(fetched):
         elif (any(e in ["is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind"] for e in diffs.keys())): # active
             send_to_rabbit('activity.server.message.queue', embed)
 
-        elif (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor"]) for e in diffs.keys()) 
+        elif (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor", "_title",  "_titles"]) for e in diffs.keys()) 
                 or ("blackhole" in diffs.keys() and "is_active" not in diffs.keys())):
             send_to_rabbit('users.server.message.queue', embed)
         

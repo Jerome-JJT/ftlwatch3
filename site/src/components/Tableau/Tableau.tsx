@@ -231,6 +231,7 @@ export function TableauPage(): JSX.Element {
           values={values}
 
           subOptions={subOptions}
+          indexColumn={true}
 
           tableTitle='Tableau'
           tableDesc='Regroup informations about students'
