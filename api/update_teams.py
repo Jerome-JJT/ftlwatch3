@@ -34,7 +34,7 @@ def team_notification(fetched):
         "team_id": fetched["id"]
     })
 
-    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug FROM projects 
+    project = executeQuerySelect("""SELECT projects.slug, projects.is_exam, cursus.slug AS cursus_slug, projects.main_cursus AS cursus_id FROM projects 
                                     LEFT JOIN cursus on cursus.id = projects.main_cursus WHERE projects.id = %(id)s""", 
     {
         "id": fetched["project_id"]
@@ -124,7 +124,7 @@ def team_notification(fetched):
         embed['fields'] = diffs
 
         mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
-        if (project != None and 'internship' in project['slug']):
+        if (project != None and ('internship' in project['slug'] or 'part_time' in project['slug'])):
             send_to_rabbit('internships.server.message.queue', embed)
 
         elif (project != None and project['cursus_slug'] in ['piscine-c', 'c-piscine', 'discovery-piscine-web']):
@@ -135,13 +135,17 @@ def team_notification(fetched):
                 send_to_rabbit('teams_piscine.server.message.queue', embed)
 
         else:
-            if (fetched["status"] == "finished"):
-                send_to_rabbit('finished.server.message.queue', embed)
+            if (project != None and (project["cursus_id"] != 21 or project["project_type_id"] != 1)):
+                send_to_rabbit('advanced.server.message.queue', embed)
 
-            if (project != None and project['is_exam'] == True):
-                send_to_rabbit('exams.server.message.queue', embed)
             else:
-                send_to_rabbit('teams.server.message.queue', embed)
+                if (fetched["status"] == "finished"):
+                    send_to_rabbit('finished.server.message.queue', embed)
+
+                if (project != None and project['is_exam'] == True):
+                    send_to_rabbit('exams.server.message.queue', embed)
+                else:
+                    send_to_rabbit('teams.server.message.queue', embed)
 
 
 
