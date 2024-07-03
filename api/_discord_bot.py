@@ -272,40 +272,40 @@ async def api(ctx,
 
 
 
-    @bot.slash_command(name="comments", description="Nb comments over 180 chars")
-    async def comments(ctx, pseudo: Option(str, 'Pseudo', required=True)):
+@bot.slash_command(name="comments", description="Nb comments over 180 chars")
+async def comments(ctx, pseudo: Option(str, 'Pseudo', required=True)):
 
-        await ctx.defer()
+    await ctx.defer()
 
+    try:
+        from _rabbit import send_to_rabbit
+        send_to_rabbit('errors.server.message.queue', {'content': f'Bot comments request by {str(ctx.author)} for {pseudo}'})
+    except:
+        pass
+
+    r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2025-03-01T00:00:00.000Z", nultiple=1)
+    list = ["comment", "created_at"]
+
+    #print(r)
+    fulltab = []
+    for line in r:
+        tab = {}
+        for k in line.keys():
+            if (k == "id" or k in list):
+                tab[k] = line[k]
+
+        fulltab.append(tab)
+        #print(tab)
+
+    nbdone = 0
+    for aa in fulltab:
         try:
-            from _rabbit import send_to_rabbit
-            send_to_rabbit('errors.server.message.queue', {'content': f'Bot comments request by {str(ctx.author)} for {pseudo}'})
+            if (len(aa["comment"]) >= 180):
+                nbdone += 1
         except:
-            pass
+            continue
 
-        r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2025-03-01T00:00:00.000Z", nultiple=1)
-        list = ["comment", "created_at"]
-
-        #print(r)
-        fulltab = []
-        for line in r:
-            tab = {}
-            for k in line.keys():
-                if (k == "id" or k in list):
-                    tab[k] = line[k]
-
-            fulltab.append(tab)
-            #print(tab)
-
-        nbdone = 0
-        for aa in fulltab:
-            try:
-                if (len(aa["comment"]) >= 180):
-                    nbdone += 1
-            except:
-                continue
-
-        await ctx.respond(f"{pseudo} has done {nbdone} comments with over 180 characters chars")
+    await ctx.respond(f"{pseudo} has done {nbdone} comments with over 180 characters chars")
 
 
 valid_cluster = [
