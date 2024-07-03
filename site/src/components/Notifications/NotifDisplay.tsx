@@ -45,14 +45,14 @@ export function NotifDisplay(): JSX.Element {
       { notifications.map((notif) =>
         <Alert
           key={notif.id}
-          icon={NotifIcon(notif.type)}
+          icon={NotifIcon(notif.type.toLowerCase())}
           open={notif.open}
           animate={{
             mount:   { x: 0 },
             unmount: { x: 200 },
           }}
           onClose={() => { removeNotif(notif.id); }}
-          className={classNames('rounded-none border-l-4 font-medium', `notif-${notif.type}`)}
+          className={classNames('rounded-none border-l-4 font-medium', `notif-${notif.type.toLowerCase()}`)}
         >
           <div className='flex flex-row gap-2 '>
             {notif.text}

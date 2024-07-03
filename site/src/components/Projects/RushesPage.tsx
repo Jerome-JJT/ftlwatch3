@@ -20,18 +20,23 @@ import { commonTitle } from 'Utils/commonTitle';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
+import { useSearchParams } from 'react-router-dom';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 
 export function RushesPage(): JSX.Element {
   const { addNotif } = useNotification();
+  const [searchParams] = useSearchParams();
+  const defaultPool = searchParams.get('pool');
+  const defaultProject = searchParams.get('project');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [projectFilters, setProjectFilters] = React.useState<any[] | undefined>(undefined);
   const [poolFilters, setPoolFilters] = React.useState<any[] | undefined>(undefined);
 
-  const [currentProjectFilter, setCurrentProjectFilter] = React.useState<string | undefined>(undefined);
-  const [currentPoolFilter, setCurrentPoolFilter] = React.useState<string | undefined>(undefined);
+  const [currentProjectFilter, setCurrentProjectFilter] = React.useState<string | undefined>(defaultProject !== null ? defaultProject : undefined);
+  const [currentPoolFilter, setCurrentPoolFilter] = React.useState<string | undefined>(defaultPool !== null ? defaultPool : undefined);
 
   React.useEffect(() => {document.title = commonTitle('Rushes');}, []);
 
@@ -146,6 +151,16 @@ export function RushesPage(): JSX.Element {
         addNotif(AxiosErrorText(error), 'error');
       });
   }, [addNotif]);
+
+  React.useEffect(() => {
+    const args = objUrlEncode({
+      ...Object.fromEntries(searchParams.entries()),
+      "filter": currentPoolFilter,
+      "project": currentProjectFilter
+    });
+    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+
+  }, [currentPoolFilter, currentProjectFilter]);
 
   const subOptions = useMemo(() => (
     <>

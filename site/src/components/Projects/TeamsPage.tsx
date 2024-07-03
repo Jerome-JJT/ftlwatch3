@@ -22,6 +22,8 @@ import { longDate, shortDate } from 'Utils/dateUtils';
 import { commonTitle } from 'Utils/commonTitle';
 import classNames from 'classnames';
 import Separator from 'Common/Separator';
+import { useSearchParams } from 'react-router-dom';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 
@@ -29,11 +31,13 @@ import Separator from 'Common/Separator';
 
 export function TeamsPage(): JSX.Element {
   const { addNotif } = useNotification();
-
+  const [searchParams] = useSearchParams();
+  const defaultProject = searchParams.get('project');
+  
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [filters, setFilters] = React.useState<any[] | undefined>(undefined);
 
-  const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(undefined);
+  const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(defaultProject !== null ? defaultProject : undefined);
 
   React.useEffect(() => {document.title = commonTitle('Teams');}, []);
 
@@ -149,6 +153,15 @@ export function TeamsPage(): JSX.Element {
         addNotif(AxiosErrorText(error), 'error');
       });
   }, [addNotif]);
+
+  React.useEffect(() => {
+    const args = objUrlEncode({
+        ...Object.fromEntries(searchParams.entries()),
+        "project": currentFilter
+    });
+    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+
+  }, [currentFilter]);
 
   const subOptions = useMemo(() => (
     <>

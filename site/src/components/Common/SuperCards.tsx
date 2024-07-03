@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo } from 'react';
-import { AiOutlineSync } from 'react-icons/ai';
+import { AiOutlineLink, AiOutlineSync } from 'react-icons/ai';
 import {
   Card,
   CardHeader,
@@ -16,6 +16,9 @@ import {
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import MyInput from './MyInput';
+import { useSearchParams } from 'react-router-dom';
+import { objUrlEncode } from 'Utils/objUrlEncode';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 interface CardsProps {
   values: any[] | undefined;
@@ -29,6 +32,7 @@ interface CardsProps {
   options?: number[];
   hasOptionAll?: boolean;
   reloadFunction?: (() => void) | undefined;
+  hasLink?: boolean | undefined;
 }
 
 export function SuperCards({
@@ -44,9 +48,16 @@ export function SuperCards({
   hasOptionAll = true,
 
   reloadFunction = undefined,
+  hasLink = true,
 }: CardsProps): JSX.Element {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [doIncludeAll, setDoIncludeAll] = React.useState(false);
+
+  const { addNotif } = useNotification();
+  const [searchParams] = useSearchParams();
+  const defaultSearchURL = searchParams.get('search');
+  const defaultIncludeAll = searchParams.get('searchIncludeAll');
+
+  const [searchQuery, setSearchQuery] = React.useState(defaultSearchURL !== null ? defaultSearchURL : '');
+  const [doIncludeAll, setDoIncludeAll] = React.useState(defaultIncludeAll === 'true');
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [cardsPerPage, setCardsPerPage] = React.useState(options[options.length - 1]);
@@ -139,6 +150,33 @@ export function SuperCards({
             }
           </div>
 
+          {hasLink &&
+            <IconButton
+              title='Copy to clipboard'
+              onClick={async () => {
+                const base = `${window.location.origin}${window.location.pathname}`;
+
+                const args = objUrlEncode({
+                  ...Object.fromEntries(searchParams.entries()),
+                  "search": searchQuery,
+                  "searchIncludeAll": doIncludeAll ? true : undefined
+                });
+
+                const link = `${base}?${args}`;
+                window.history.replaceState(null, '', link);
+                
+                try {
+                  await navigator.clipboard.writeText(link);
+                  addNotif("Copied to clipboard", "INFO");
+                } catch (error) {
+                  addNotif("Unable to copy to clipboard", "ERROR");
+                }
+              }}
+              variant='outlined'
+            >
+              <AiOutlineLink size={24} />
+            </IconButton>
+          }
           {reloadFunction &&
             <IconButton
               onClick={reloadFunction}
@@ -164,7 +202,7 @@ export function SuperCards({
             </div>
           }
 
-          <p>{/*filtered beacause count all pages */filteredCards?.length || 0} {filteredCards?.length || 0 > 1 ? 'items' : 'item'}</p>
+          <p>{/*filtered beacause count all pages */filteredCards?.length || 0} {(filteredCards?.length || 0) > 1 ? 'items' : 'item'}</p>
 
           <div>
             <Switch crossOrigin={undefined}

@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { commonTitle } from 'Utils/commonTitle';
 import { AiOutlineClose } from 'react-icons/ai';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 class PoolFilterProps {
@@ -89,7 +90,11 @@ export function ImagePage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          window.history.replaceState(null, '', `/image?${usedFilter ? `filter=${usedFilter}` : ''}`);
+          const args = objUrlEncode({
+              ...Object.fromEntries(searchParams.entries()),
+              "filter": usedFilter
+          });
+          window.history.replaceState(null, '', `/image${(args && args !== '') ? `?${args}` : ''}`);
 
           setPoolFilters(() => {
             const pf = res.data.poolfilters as PoolFilterProps[];

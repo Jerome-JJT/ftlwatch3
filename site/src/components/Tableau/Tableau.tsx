@@ -12,6 +12,7 @@ import { comparePoolfilters } from 'Utils/comparePoolfilters';
 import { AiOutlineClose } from 'react-icons/ai';
 import { ColumnProps } from 'Utils/columnsProps';
 import { commonTitle } from 'Utils/commonTitle';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 class PoolFilterProps {
@@ -57,7 +58,12 @@ export function TableauPage(): JSX.Element {
       )
       .then((res) => {
         if (res.status === 200) {
-          window.history.replaceState(null, '', `/tableau?${usedFilter ? `filter=${usedFilter}` : ''}${usedProjects ? `&projects=${usedProjects}` : ''}`);
+          const args = objUrlEncode({
+            ...Object.fromEntries(searchParams.entries()),
+            "filter": usedFilter,
+            "projects": usedProjects
+          });
+          window.history.replaceState(null, '', `/tableau${(args && args !== '') ? `?${args}` : ''}`);
 
           setColumns((prev) =>
             (res.data.columns as ColumnProps[]).map((c) => ({

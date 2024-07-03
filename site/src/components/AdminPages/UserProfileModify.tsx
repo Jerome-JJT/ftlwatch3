@@ -9,7 +9,7 @@ import { useNotification } from 'Notifications/NotificationsProvider';
 import { ThemeProps } from 'Utils/themeProps';
 import MySelect from 'Common/MySelect';
 import MyInput from 'Common/MyInput';
-import { postPayload } from 'Utils/postPayload';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 
@@ -37,7 +37,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
       ...saveSettings } = settings;
 
     return axios
-      .post('/?page=admin&action=profile_set', postPayload(
+      .post('/?page=admin&action=profile_set', objUrlEncode(
         saveSettings
       ),
       { withCredentials: true }
@@ -56,7 +56,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
 
   const modifyUserPassword = useCallback((): Promise<boolean> => {
     return axios
-      .post('/?page=admin&action=password_set', postPayload({
+      .post('/?page=admin&action=password_set', objUrlEncode({
         user_id:  settings.user_id,
         password: password.length > minPasswordLength ? password : '',
       }),

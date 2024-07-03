@@ -14,15 +14,21 @@ import classNames from 'classnames';
 import Separator from 'Common/Separator';
 import { commonTitle } from 'Utils/commonTitle';
 import ProjectDisplay from 'Common/ProjectDisplay';
+import { useSearchParams } from 'react-router-dom';
+import { objUrlEncode } from 'Utils/objUrlEncode';
 
 
 export function ProjectsPage(): JSX.Element {
   const { addNotif } = useNotification();
+  const [searchParams] = useSearchParams();
+  const defaultCursus = searchParams.get('cursus');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
 
   const [cursus, setCursus] = React.useState<any[] | undefined>(undefined);
-  const [selectedCursus, setSelectedCursus] = React.useState<number | undefined>(21);
+  const [selectedCursus, setSelectedCursus] = React.useState<number | undefined>(
+    (defaultCursus !== null && !Number.isNaN(parseInt(defaultCursus))) ? parseInt(defaultCursus) : 21
+  );
 
   React.useEffect(() => {document.title = commonTitle('Project page');}, []);
 
@@ -43,6 +49,14 @@ export function ProjectsPage(): JSX.Element {
       });
   }, [addNotif]);
 
+  React.useEffect(() => {
+    const args = objUrlEncode({
+      ...Object.fromEntries(searchParams.entries()),
+      "cursus": selectedCursus
+    });
+    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+
+  }, [selectedCursus]);
 
 
   function ProjectCard(card: any): JSX.Element {

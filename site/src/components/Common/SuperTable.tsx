@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useMemo } from 'react';
-import { AiOutlineCaretDown, AiOutlineCaretLeft, AiOutlineCaretUp, AiOutlineSync } from 'react-icons/ai';
+import { AiOutlineCaretDown, AiOutlineCaretLeft, AiOutlineCaretUp, AiOutlineSync, AiOutlineLink } from 'react-icons/ai';
 import {
   Card,
   CardHeader,
@@ -19,6 +19,9 @@ import { ColumnProps } from 'Utils/columnsProps';
 import MyInput from './MyInput';
 import { createKey } from 'Utils/createKey';
 import { Spinner } from '@material-tailwind/react';
+import { useSearchParams } from 'react-router-dom';
+import { objUrlEncode } from 'Utils/objUrlEncode';
+import { useNotification } from 'Notifications/NotificationsProvider';
 
 
 interface SuperTableProps {
@@ -35,6 +38,7 @@ interface SuperTableProps {
   indexColumn?: boolean;
   hasOptionAll?: boolean;
   reloadFunction?: (() => void) | undefined;
+  hasLink?: boolean | undefined;
 }
 
 export function SuperTable({
@@ -52,10 +56,16 @@ export function SuperTable({
   hasOptionAll = true,
 
   reloadFunction = undefined,
+  hasLink = true,
 }: SuperTableProps): JSX.Element {
 
-  const [searchQuery, setSearchQuery] = React.useState(defaultSearch);
-  const [doIncludeAll, setDoIncludeAll] = React.useState(false);
+  const { addNotif } = useNotification();
+  const [searchParams] = useSearchParams();
+  const defaultSearchURL = searchParams.get('search');
+  const defaultIncludeAll = searchParams.get('searchIncludeAll');
+
+  const [searchQuery, setSearchQuery] = React.useState(defaultSearchURL !== null ? defaultSearchURL : defaultSearch);
+  const [doIncludeAll, setDoIncludeAll] = React.useState(defaultIncludeAll === 'true');
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [usersPerPage, setUsersPerPage] = React.useState(options[options.length - 1]);
@@ -94,8 +104,6 @@ export function SuperTable({
   const customSort = useCallback((a: any, b: any): number => {
     let aValue = a[`_${sortColumn}`] !== undefined ? a[`_${sortColumn}`] : a[sortColumn];
     let bValue = b[`_${sortColumn}`] !== undefined ? b[`_${sortColumn}`] : b[sortColumn];
-
-
 
     if (typeof aValue !== 'undefined' || typeof bValue !== 'undefined') {
 
@@ -213,6 +221,33 @@ export function SuperTable({
             }
           </div>
 
+          {hasLink &&
+            <IconButton
+              title='Copy to clipboard'
+              onClick={async () => {
+                const base = `${window.location.origin}${window.location.pathname}`;
+
+                const args = objUrlEncode({
+                  ...Object.fromEntries(searchParams.entries()),
+                  "search": searchQuery,
+                  "searchIncludeAll": doIncludeAll ? true : undefined
+                });
+
+                const link = `${base}?${args}`;
+                window.history.replaceState(null, '', link);
+                
+                try {
+                  await navigator.clipboard.writeText(link);
+                  addNotif("Copied to clipboard", "INFO");
+                } catch (error) {
+                  addNotif("Unable to copy to clipboard", "ERROR");
+                }
+              }}
+              variant='outlined'
+            >
+              <AiOutlineLink size={24} />
+            </IconButton>
+          }
           {reloadFunction &&
             <IconButton
               onClick={reloadFunction}
@@ -238,7 +273,7 @@ export function SuperTable({
             </div>
           }
 
-          <p>{/*filtered beacause count all pages */filteredUsers?.length || 0} {filteredUsers?.length || 0 > 1 ? 'items' : 'item'}</p>
+          <p>{/*filtered beacause count all pages */filteredUsers?.length || 0} {(filteredUsers?.length || 0) > 1 ? 'items' : 'item'}</p>
 
 
           <div>
