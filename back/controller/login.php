@@ -87,10 +87,13 @@ function loginapi_callback($post)
             jsonResponse(array("error" => $meInfos->error), 401);
         }
         else if(isset($meInfos["data"])) {
-            jsonResponse(array("error" => "duck api, retry"), 418);
+            $newInfos = $meInfos["data"]["attributes"];
+            $newInfos["id"] = $meInfos["data"]["id"];
+            // jsonResponse(array("error" => "duck api, retry"), 418);
+            mylogger('Duck API', LOGGER_WARNING());
         }
 
-        jsonlogger('Response', $meInfos, LOGGER_DEBUG());
+        // jsonlogger('Response', $meInfos, LOGGER_DEBUG());
 
 
         if (!loginUser($meInfos["login"], null, false)) {
