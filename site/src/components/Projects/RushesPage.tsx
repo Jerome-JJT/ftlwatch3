@@ -155,7 +155,7 @@ export function RushesPage(): JSX.Element {
   React.useEffect(() => {
     const args = objUrlEncode({
       ...Object.fromEntries(searchParams.entries()),
-      "filter": currentPoolFilter,
+      "pool": currentPoolFilter,
       "project": currentProjectFilter
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);

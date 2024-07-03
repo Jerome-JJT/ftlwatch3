@@ -52,7 +52,7 @@ const MyInput = ({ project, link }: {project: any, link: boolean}): JSX.Element 
 
         { link &&
           <Link to={`/basics/projects/${project.id}`} className='col-span-2'>
-            <button className='col-span-2 text-xs'>Details</button>
+            <button className='col-span-2 text-xs bg-gray-900'>Details</button>
           </Link>
         }
       </div>
