@@ -35,7 +35,7 @@ function specials_css($user) {
     if ($number >= 0) {
         setIncrementCss($user["id"]);
         
-        if ($number % min(100, pow(10, max(0, strlen(strval($number)) - 2))) == 0) {
+        if ($number + 1 % min(100, pow(10, max(0, strlen(strval($number + 1)) - 2))) == 0) {
             sentToRabbit("complain.servercomplain.message.queue", array('content' => 'Complain '.$user["login"].' '.($number + 1)));
         }
     }
