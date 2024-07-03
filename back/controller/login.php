@@ -86,8 +86,11 @@ function loginapi_callback($post)
         if (isset($meInfos->status) && $meInfos->status == 401) {
             jsonResponse(array("error" => $meInfos->error), 401);
         }
+        else if(isset($meInfos["data"])) {
+            jsonResponse(array("error" => "duck api, retry"), 418);
+        }
 
-        // jsonlogger('Response', $meInfos, LOGGER_DEBUG());
+        jsonlogger('Response', $meInfos, LOGGER_DEBUG());
 
 
         if (!loginUser($meInfos["login"], null, false)) {
