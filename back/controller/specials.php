@@ -31,10 +31,16 @@ function specials_tig($user) {
 
 function specials_css($user) {
     
-    setIncrementCss($user["id"]);
     $number = getCss($user["id"])["css_click"];
-    if (($number > 0 && $number < 100) || $number % 10 == 0) {
-        sentToRabbit("complain.servercomplain.message.queue", array('content' => 'Complain '.$user["login"].' '.$number));
+    if ($number >= 0) {
+        setIncrementCss($user["id"]);
+        
+        if ($number % min(100, pow(10, max(0, strlen(strval($number)) - 2))) == 0) {
+            sentToRabbit("complain.servercomplain.message.queue", array('content' => 'Complain '.$user["login"].' '.($number + 1)));
+        }
+    }
+    else {
+        jsonResponse(array("error" => "Coin-Coin"), 418);
     }
 
     jsonResponse(array(), 200);
