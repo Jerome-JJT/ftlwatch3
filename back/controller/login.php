@@ -89,6 +89,7 @@ function loginapi_callback($post)
         else if(isset($meInfos["data"])) {
             $newInfos = $meInfos["data"]["attributes"];
             $newInfos["id"] = $meInfos["data"]["id"];
+            $meInfos = $newInfos;
             // jsonResponse(array("error" => "duck api, retry"), 418);
             mylogger('Duck API', LOGGER_WARNING());
         }
