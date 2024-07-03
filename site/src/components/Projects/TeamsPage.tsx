@@ -159,7 +159,7 @@ export function TeamsPage(): JSX.Element {
         ...Object.fromEntries(searchParams.entries()),
         "project": currentFilter
     });
-    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+    window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
 
   }, [currentFilter]);
 

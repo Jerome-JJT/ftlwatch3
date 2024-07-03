@@ -54,7 +54,7 @@ export function ProjectsPage(): JSX.Element {
       ...Object.fromEntries(searchParams.entries()),
       "cursus": selectedCursus
     });
-    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+    window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
 
   }, [selectedCursus]);
 

@@ -158,7 +158,7 @@ export function RushesPage(): JSX.Element {
       "filter": currentPoolFilter,
       "project": currentProjectFilter
     });
-    window.history.replaceState(null, '', `?${(args && args !== '') ? `?${args}` : ''}`);
+    window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
 
   }, [currentPoolFilter, currentProjectFilter]);
 

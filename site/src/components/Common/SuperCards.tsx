@@ -221,6 +221,7 @@ export function SuperCards({
             <MyInput
               label="Search"
               onChange={handleSearchChange}
+              defaultValue={searchQuery}
             />
           </div>
         </div>
@@ -242,7 +243,7 @@ export function SuperCards({
         { displayedCards &&
           (displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
           <div className='text-6xl text-blue-500 font-bold text-center'>
-            <br/>0 result<br/><br/>
+            <br/>0 results<br/><br/>
           </div>
           ) ||
           <div className="w-full h-32 flex justify-center items-center">
