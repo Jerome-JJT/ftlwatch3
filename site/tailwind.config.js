@@ -3,7 +3,7 @@ import withMT from '@material-tailwind/react/utils/withMT';
 
 /** @type {import('tailwindcss').Config} */
 export default withMT({
-  darkMode: 'media',
+  darkMode: 'selector',
   content:  [
     // './src/main.css',
     './src/*.{tsx, ts}',
