@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY site .
 
-RUN yarn install
+RUN yarn install --production 
 RUN (cd node_modules/react-gauge-chart && npm i lodash.isequal)
 
 ARG VITE_RELEASE_VERSION
