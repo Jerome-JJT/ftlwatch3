@@ -36,7 +36,7 @@ export default function ProfileButton(): JSX.Element {
           getUserData({ reload: true, announce: false });
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   return (
@@ -75,24 +75,23 @@ export default function ProfileButton(): JSX.Element {
             </>
           )}
 
-          <div className="mb-2">
-            <MenuItem
-              onClick={toggleTheme}
-              className={classNames(
-                "flex items-center gap-2 mb-2",
-                buttonColor
-              )}
+          <MenuItem
+            onClick={toggleTheme}
+            className={classNames(
+              "flex items-center gap-2",
+              buttonColor
+            )}
+          >
+            <CgDarkMode className={classNames(textColor)} />
+            <Typography
+              variant="small"
+              className={classNames("font-normal", textColor)}
             >
-              <CgDarkMode className={classNames(textColor)} />
-              <Typography
-                variant="small"
-                className={classNames("font-normal", textColor)}
-              >
-                {currentTheme === "light" ? "Dark Mode" : "Light Mode"}
-              </Typography>
-            </MenuItem>
-            <hr className="my-2 border-blue-gray-50" />
-          </div>
+              {currentTheme === "light" ? "Dark Mode" : "Light Mode"}
+            </Typography>
+          </MenuItem>
+
+          <hr className="my-2 border-blue-gray-50" />
 
           {(isLogged && (
             <>
@@ -149,21 +148,21 @@ export default function ProfileButton(): JSX.Element {
               </Link>
             </>
           )) || (
-            <a href={createAuthorizeURL()}>
-              <MenuItem
-                className={classNames("flex items-center gap-2", buttonColor)}
-              >
-                <AiOutlineLogout className={classNames(textColor)} />
-
-                <Typography
-                  variant="small"
-                  className={classNames("font-normal", textColor)}
+              <a href={createAuthorizeURL()}>
+                <MenuItem
+                  className={classNames("flex items-center gap-2", buttonColor)}
                 >
-                  Login api
-                </Typography>
-              </MenuItem>
-            </a>
-          )}
+                  <AiOutlineLogout className={classNames(textColor)} />
+
+                  <Typography
+                    variant="small"
+                    className={classNames("font-normal", textColor)}
+                  >
+                    Login api
+                  </Typography>
+                </MenuItem>
+              </a>
+            )}
         </MenuList>
       </Menu>
     </div>
