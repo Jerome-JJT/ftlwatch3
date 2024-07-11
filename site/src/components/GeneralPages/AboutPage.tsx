@@ -23,7 +23,7 @@ export default function AboutPage(): JSX.Element {
   ];
 
 
-  React.useEffect(() => {document.title = commonTitle('Home');}, []);
+  React.useEffect(() => { document.title = commonTitle('Home'); }, []);
 
   return (
 
@@ -49,7 +49,7 @@ export default function AboutPage(): JSX.Element {
 
             <div className='flex flex-row flex-wrap justify-around gap-4'>
               {logos.map((logo) => {
-                return <img key={logo} src={`/static/stack/${logo}`} className='max-h-32 max-w-32'/>;
+                return <img key={logo} src={`/static/stack/${logo}`} className='max-h-32 max-w-32 object-contain' />;
               })}
             </div>
           </CardBody>
