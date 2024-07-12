@@ -52,7 +52,6 @@ export function SuperCards({
 }: CardsProps): JSX.Element {
 
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultSearchURL = searchParams.get('search');
   const defaultIncludeAll = searchParams.get('searchIncludeAll');
