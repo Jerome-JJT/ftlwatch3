@@ -53,6 +53,7 @@ export function SuperCards({
 
   const { addNotif } = useNotification();
   const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultSearchURL = searchParams.get('search');
   const defaultIncludeAll = searchParams.get('searchIncludeAll');
 
@@ -99,9 +100,9 @@ export function SuperCards({
       return searchTerms.every((term) => {
         return cardValues.some((value: any) => {
           return typeof value !== 'object' &&
-          value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
-            term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          );
+            value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
+              term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            );
         }
         );
       });
@@ -110,9 +111,9 @@ export function SuperCards({
       return searchTerms.some((term) => {
         return cardValues.some((value: any) => {
           return typeof value !== 'object' &&
-          value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
-            term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          );
+            value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
+              term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            );
         }
         );
       });
@@ -164,7 +165,8 @@ export function SuperCards({
 
                 const link = `${base}?${args}`;
                 window.history.replaceState(null, '', link);
-                
+                setSearchParams(args);
+
                 try {
                   await navigator.clipboard.writeText(link);
                   addNotif("Copied to clipboard", "INFO");
@@ -227,24 +229,24 @@ export function SuperCards({
         </div>
 
         {subOptions &&
-         <Accordion open={isSubmenuOpen}>
-           <AccordionHeader className='py-2 my-text bg-black/20' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
+          <Accordion open={isSubmenuOpen}>
+            <AccordionHeader className='py-2 my-text bg-black/20' onClick={() => setIsSubmenuOpen((prev) => !prev)}>Sub options</AccordionHeader>
 
-           <AccordionBody>
+            <AccordionBody>
 
-             {subOptions}
-           </AccordionBody>
-         </Accordion>
+              {subOptions}
+            </AccordionBody>
+          </Accordion>
         }
       </CardHeader>
 
       <CardBody className='super-big-body flex gap-x-2 gap-y-4 md:gap-y-6 flex-wrap justify-around my-cards'>
 
-        { displayedCards &&
+        {displayedCards &&
           (displayedCards.length > 0 && displayedCards.map((card) => customCard(card)) ||
-          <div className='text-6xl text-blue-500 font-bold text-center'>
-            <br/>0 results<br/><br/>
-          </div>
+            <div className='text-6xl text-blue-500 font-bold text-center'>
+              <br />0 results<br /><br />
+            </div>
           ) ||
           <div className="w-full h-32 flex justify-center items-center">
             <Spinner className="h-12 w-12" />
@@ -262,7 +264,7 @@ export function SuperCards({
             onClick={() => { setCurrentPage(currentPage - 1); }}
             disabled={currentPage === 1}
           >
-          Previous
+            Previous
           </Button>
 
           <div className="flex items-center md:gap-2">
@@ -275,7 +277,7 @@ export function SuperCards({
                   size="sm"
                   onClick={() => { setCurrentPage(1); }}
                 >
-                1
+                  1
                 </IconButton>
                 {!pageNumbers.includes(2) && (
                   <IconButton
@@ -284,7 +286,7 @@ export function SuperCards({
                     size="sm"
                     className='hidden md:block'
                   >
-                  ...
+                    ...
                   </IconButton>
                 )}
               </>
@@ -310,7 +312,7 @@ export function SuperCards({
                     size="sm"
                     className='hidden md:block'
                   >
-                  ...
+                    ...
                   </IconButton>
                 )}
                 <IconButton

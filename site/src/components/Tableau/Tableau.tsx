@@ -31,7 +31,7 @@ const StyledTableau = styled.div`
 
 export function TableauPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultFilter = searchParams.get('filter');
   const defaultProjects = searchParams.get('projects');
 
@@ -46,7 +46,7 @@ export function TableauPage(): JSX.Element {
 
   const [focusImage, setFocusImage] = React.useState<string | undefined>(undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Tableau');}, []);
+  React.useEffect(() => { document.title = commonTitle('Tableau'); }, []);
 
   React.useEffect(() => { setUsedFilter(defaultFilter || undefined); }, [defaultFilter]);
   React.useEffect(() => { setUsedProjects(defaultProjects || undefined); }, [defaultProjects]);
@@ -64,6 +64,7 @@ export function TableauPage(): JSX.Element {
             "projects": usedProjects
           });
           window.history.replaceState(null, '', `/tableau${(args && args !== '') ? `?${args}` : ''}`);
+          setSearchParams(args);
 
           setColumns((prev) =>
             (res.data.columns as ColumnProps[]).map((c) => ({
@@ -103,22 +104,22 @@ export function TableauPage(): JSX.Element {
                 const pool_month = user[col.field];
                 let color = undefined;
 
-                if (pool_month === '2020.october') { color = 'firebrick';}
-                else if (pool_month === '2021.july') { color = 'lightcoral';}
-                else if (pool_month === '2021.august') { color = 'indianred';}
-                else if (pool_month === '2021.september') { color = 'crimson';}
+                if (pool_month === '2020.october') { color = 'firebrick'; }
+                else if (pool_month === '2021.july') { color = 'lightcoral'; }
+                else if (pool_month === '2021.august') { color = 'indianred'; }
+                else if (pool_month === '2021.september') { color = 'crimson'; }
 
-                else if (pool_month === '2022.june') { color = 'gold';}
-                else if (pool_month === '2022.july') { color = 'orange';}
-                else if (pool_month === '2022.september') { color = 'darkorange';}
+                else if (pool_month === '2022.june') { color = 'gold'; }
+                else if (pool_month === '2022.july') { color = 'orange'; }
+                else if (pool_month === '2022.september') { color = 'darkorange'; }
 
-                else if (pool_month === '2023.june') { color = 'moccasin';}
-                else if (pool_month === '2023.july') { color = 'palegoldenrod';}
-                else if (pool_month === '2023.september') { color = 'peachpuff';}
+                else if (pool_month === '2023.june') { color = 'moccasin'; }
+                else if (pool_month === '2023.july') { color = 'palegoldenrod'; }
+                else if (pool_month === '2023.september') { color = 'peachpuff'; }
 
-                else if (pool_month === '2024.june') { color = 'springgreen';}
-                else if (pool_month === '2024.july') { color = 'greenyellow';}
-                else if (pool_month === '2024.september') { color = 'chartreuse';}
+                else if (pool_month === '2024.june') { color = 'springgreen'; }
+                else if (pool_month === '2024.july') { color = 'greenyellow'; }
+                else if (pool_month === '2024.september') { color = 'chartreuse'; }
 
                 if (color) {
                   user[`_${col.field}_color`] = color;
@@ -145,9 +146,9 @@ export function TableauPage(): JSX.Element {
           return (
             <Button
               key={project}
-              className={classNames(project === usedProjects ? 'selected-option' : 'available-option' )}
+              className={classNames(project === usedProjects ? 'selected-option' : 'available-option')}
 
-              onClick={() => setUsedProjects(project) }
+              onClick={() => setUsedProjects(project)}
             >
               {project}
             </Button>
@@ -163,8 +164,8 @@ export function TableauPage(): JSX.Element {
           return (
             <Button
               key={filter.name}
-              className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option' ))}
-              onClick={() => setUsedFilter(filter.name) }
+              className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option'))}
+              onClick={() => setUsedFilter(filter.name)}
             >
               {filter.name}
             </Button>
@@ -206,7 +207,7 @@ export function TableauPage(): JSX.Element {
           return (
             <Button
               key={column.field}
-              className={classNames(column.visible ? 'selected-option' : 'available-option' )}
+              className={classNames(column.visible ? 'selected-option' : 'available-option')}
 
               onClick={() =>
                 setColumns((prev) => prev && prev.map((pc) => {
@@ -242,7 +243,7 @@ export function TableauPage(): JSX.Element {
           tableTitle='Tableau'
           tableDesc='Regroup informations about students'
           options={[25, 50, 100]}
-          // reloadFunction={() => { setValues([]); }}
+        // reloadFunction={() => { setValues([]); }}
         />
       </StyledTableau>
       <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
@@ -251,7 +252,7 @@ export function TableauPage(): JSX.Element {
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
         <DialogBody className='flex justify-center' divider>
-          <img className='max-h-[400px]' src={focusImage}/>
+          <img className='max-h-[400px]' src={focusImage} />
         </DialogBody>
       </Dialog>
     </div>

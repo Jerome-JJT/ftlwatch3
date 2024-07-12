@@ -32,7 +32,7 @@ class PoolFilterProps {
 
 export function ImagePage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultFilter = searchParams.get('filter');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
@@ -42,7 +42,7 @@ export function ImagePage(): JSX.Element {
 
   const [focusCard, setFocusCard] = React.useState<any | undefined>(undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Image page');}, []);
+  React.useEffect(() => { document.title = commonTitle('Image page'); }, []);
 
 
 
@@ -91,10 +91,12 @@ export function ImagePage(): JSX.Element {
       .then((res) => {
         if (res.status === 200) {
           const args = objUrlEncode({
-              ...Object.fromEntries(searchParams.entries()),
-              "filter": usedFilter
+            ...Object.fromEntries(searchParams.entries()),
+            "filter": usedFilter
           });
           window.history.replaceState(null, '', `/image${(args && args !== '') ? `?${args}` : ''}`);
+          setSearchParams(args);
+
 
           setPoolFilters(() => {
             const pf = res.data.poolfilters as PoolFilterProps[];
@@ -118,9 +120,9 @@ export function ImagePage(): JSX.Element {
           return (
             <Button
               key={filter.name}
-              className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option' ))}
+              className={classNames(filter.name === usedFilter ? 'selected-option' : (filter.hidden ? 'hidden-option' : 'available-option'))}
               //  className="inline-block rounded-full bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-              onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); } }
+              onClick={() => { setUsedFilter((prev) => prev !== filter.name ? filter.name : undefined); }}
             >
               {filter.name}
             </Button>
@@ -144,7 +146,7 @@ export function ImagePage(): JSX.Element {
         tableTitle='Images'
         tableDesc='Search for students by head'
         options={[25, 50, 100]}
-        // reloadFunction={() => { setValues([]); }}
+      // reloadFunction={() => { setValues([]); }}
       />
       <Dialog open={focusCard !== undefined} handler={() => setFocusCard(undefined)}>
         <div className="flex items-center justify-between p-2 pr-4">
@@ -153,7 +155,7 @@ export function ImagePage(): JSX.Element {
             className='rounded-lg border-transparent border-2 hover:bg-gray-100 hover:border-black hover:text-red-500' size='30' />
         </div>
         <DialogBody className='flex justify-center' divider>
-          <img className='max-h-[400px]' src={focusCard?.avatar_url}/>
+          <img className='max-h-[400px]' src={focusCard?.avatar_url} />
         </DialogBody>
       </Dialog>
     </div>

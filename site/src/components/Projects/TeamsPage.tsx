@@ -31,15 +31,15 @@ import { objUrlEncode } from 'Utils/objUrlEncode';
 
 export function TeamsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultProject = searchParams.get('project');
-  
+
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
   const [filters, setFilters] = React.useState<any[] | undefined>(undefined);
 
   const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(defaultProject !== null ? defaultProject : undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Teams');}, []);
+  React.useEffect(() => { document.title = commonTitle('Teams'); }, []);
 
   function TeamCard(card: any): JSX.Element {
 
@@ -67,7 +67,7 @@ export function TeamsPage(): JSX.Element {
             <div className="flex items-center justify-center">
               <p color="blue-gray">Mark : {card.final_mark}</p>
 
-              <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' /> }
+              <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' />}
                 color={card.is_validated ? 'green' : 'deep-orange'} crossOrigin={undefined} checked={true} readOnly disabled></Checkbox>
             </div>
 
@@ -102,11 +102,24 @@ export function TeamsPage(): JSX.Element {
               users.map((user: any) =>
 
                 user.id === card.leader_id &&
-              <Badge key={user.id}
-                content={<AiFillStar color='yellow' size='14' />}
-                className="min-h-2 min-w-2 bg-transparent bg-black shadow-none"
-              >
-                <Tooltip content={user.login}>
+                <Badge key={user.id}
+                  content={<AiFillStar color='yellow' size='14' />}
+                  className="min-h-2 min-w-2 bg-transparent bg-black shadow-none"
+                >
+                  <Tooltip content={user.login}>
+                    <a href={`https://profile.intra.42.fr/users/${user.login}`}>
+                      <Avatar
+                        size="sm"
+                        variant="circular"
+                        src={user.avatar_url}
+                        className="border-2 border-white hover:z-10 bg-[#008080]"
+                      />
+                    </a>
+                  </Tooltip>
+                </Badge>
+                ||
+
+                <Tooltip key={user.id} content={user.login}>
                   <a href={`https://profile.intra.42.fr/users/${user.login}`}>
                     <Avatar
                       size="sm"
@@ -116,19 +129,6 @@ export function TeamsPage(): JSX.Element {
                     />
                   </a>
                 </Tooltip>
-              </Badge>
-              ||
-
-              <Tooltip key={user.id} content={user.login}>
-                <a href={`https://profile.intra.42.fr/users/${user.login}`}>
-                  <Avatar
-                    size="sm"
-                    variant="circular"
-                    src={user.avatar_url}
-                    className="border-2 border-white hover:z-10 bg-[#008080]"
-                  />
-                </a>
-              </Tooltip>
               )
             }
           </div>
@@ -156,10 +156,11 @@ export function TeamsPage(): JSX.Element {
 
   React.useEffect(() => {
     const args = objUrlEncode({
-        ...Object.fromEntries(searchParams.entries()),
-        "project": currentFilter
+      ...Object.fromEntries(searchParams.entries()),
+      "project": currentFilter
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
+    setSearchParams(args);
 
   }, [currentFilter]);
 
@@ -171,8 +172,8 @@ export function TeamsPage(): JSX.Element {
           return (
             <Button
               key={filter[0]}
-              className={classNames(filter[1] === currentFilter ? 'selected-option' : 'available-option' )}
-              onClick={() => { setCurrentFilter((prev) => prev !== filter[0] ? filter[0] : undefined); } }
+              className={classNames(filter[1] === currentFilter ? 'selected-option' : 'available-option')}
+              onClick={() => { setCurrentFilter((prev) => prev !== filter[0] ? filter[0] : undefined); }}
             >
               {filter[1]}
             </Button>
@@ -211,7 +212,7 @@ export function TeamsPage(): JSX.Element {
         tableTitle='Teams'
         tableDesc={'Teams projects'}
         options={[25, 50, 100]}
-        // reloadFunction={() => { setValues([]); }}
+      // reloadFunction={() => { setValues([]); }}
       />
     </div>
   );

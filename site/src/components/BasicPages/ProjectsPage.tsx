@@ -20,7 +20,7 @@ import { objUrlEncode } from 'Utils/objUrlEncode';
 
 export function ProjectsPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultCursus = searchParams.get('cursus');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
@@ -30,7 +30,7 @@ export function ProjectsPage(): JSX.Element {
     (defaultCursus !== null && !Number.isNaN(parseInt(defaultCursus))) ? parseInt(defaultCursus) : 21
   );
 
-  React.useEffect(() => {document.title = commonTitle('Project page');}, []);
+  React.useEffect(() => { document.title = commonTitle('Project page'); }, []);
 
   React.useEffect(() => {
     axios
@@ -55,6 +55,7 @@ export function ProjectsPage(): JSX.Element {
       "cursus": selectedCursus
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
+    setSearchParams(args);
 
   }, [selectedCursus]);
 
@@ -113,8 +114,8 @@ export function ProjectsPage(): JSX.Element {
           return (
             <Button
               key={cursu.id}
-              className={classNames(cursu.id === selectedCursus ? 'selected-option' : 'available-option' )}
-              onClick={() => { setSelectedCursus((prev) => prev !== cursu.id ? cursu.id : undefined); } }
+              className={classNames(cursu.id === selectedCursus ? 'selected-option' : 'available-option')}
+              onClick={() => { setSelectedCursus((prev) => prev !== cursu.id ? cursu.id : undefined); }}
             >
               {cursu.name}
             </Button>
@@ -144,7 +145,7 @@ export function ProjectsPage(): JSX.Element {
         tableTitle='Projects'
         tableDesc='All existing projects with cursus, inscription and corrections informations. Also past subjects available in details'
         options={[25, 50, 100]}
-        // reloadFunction={() => { setValues([]); }}
+      // reloadFunction={() => { setValues([]); }}
       />
       {/* <Dialog open={focusImage !== undefined} handler={() => setFocusImage(undefined)}>
         <div className="flex items-center justify-between pr-4">

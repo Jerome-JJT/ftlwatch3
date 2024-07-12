@@ -20,7 +20,7 @@ import { objUrlEncode } from 'Utils/objUrlEncode';
 
 export function TinderPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultProject = searchParams.get('project');
 
   const [values, setValues] = React.useState<any[] | undefined>(undefined);
@@ -28,7 +28,7 @@ export function TinderPage(): JSX.Element {
 
   const [currentFilter, setCurrentFilter] = React.useState<string | undefined>(defaultProject !== null ? defaultProject : undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Tinder');}, []);
+  React.useEffect(() => { document.title = commonTitle('Tinder'); }, []);
 
   function TinderCard(card: any): JSX.Element {
 
@@ -57,8 +57,8 @@ export function TinderPage(): JSX.Element {
               nrOfLevels={10}
               colors={['#FF6000', '#00B0B0']}
               animate={false}
-              percent={card.score/200}
-              formatTextValue={(value: string) => `${parseInt(value)*2}%`}
+              percent={card.score / 200}
+              formatTextValue={(value: string) => `${parseInt(value) * 2}%`}
             />
             <div className='grow'></div>
 
@@ -76,8 +76,8 @@ export function TinderPage(): JSX.Element {
           return (
             <Button
               key={filtertab[0]}
-              className={classNames(filtertab[0] === currentFilter ? 'selected-option' : 'available-option' )}
-              onClick={() => { setCurrentFilter((prev) => prev !== filtertab[0] ? filtertab[0] : undefined); } }
+              className={classNames(filtertab[0] === currentFilter ? 'selected-option' : 'available-option')}
+              onClick={() => { setCurrentFilter((prev) => prev !== filtertab[0] ? filtertab[0] : undefined); }}
             >
               {filtertab[1].projects.join('/')}
             </Button>
@@ -111,6 +111,7 @@ export function TinderPage(): JSX.Element {
       "project": currentFilter
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
+    setSearchParams(args);
 
   }, [currentFilter]);
 
@@ -129,7 +130,7 @@ export function TinderPage(): JSX.Element {
 
       return filtertab[1]
         .sort((a: any, b: any) => a.score < b.score)
-        .map((arg: any) => { return { ...arg, circle: filtertab[0], projects: (filters && filters[filtertab[0] as any].projects.join('/') || 'none') };});
+        .map((arg: any) => { return { ...arg, circle: filtertab[0], projects: (filters && filters[filtertab[0] as any].projects.join('/') || 'none') }; });
     });
 
   }, [currentFilter, filters, values]);
@@ -147,7 +148,7 @@ export function TinderPage(): JSX.Element {
         tableTitle='Tinder'
         tableDesc='To find peers to do group projects'
         options={[10, 25, 50, 100]}
-        // reloadFunction={() => { setValues([]); }}
+      // reloadFunction={() => { setValues([]); }}
       />
     </div>
   );

@@ -27,7 +27,7 @@ import { objUrlEncode } from 'Utils/objUrlEncode';
 
 export function RushesPage(): JSX.Element {
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultPool = searchParams.get('pool');
   const defaultProject = searchParams.get('project');
 
@@ -38,13 +38,13 @@ export function RushesPage(): JSX.Element {
   const [currentProjectFilter, setCurrentProjectFilter] = React.useState<string | undefined>(defaultProject !== null ? defaultProject : undefined);
   const [currentPoolFilter, setCurrentPoolFilter] = React.useState<string | undefined>(defaultPool !== null ? defaultPool : undefined);
 
-  React.useEffect(() => {document.title = commonTitle('Rushes');}, []);
+  React.useEffect(() => { document.title = commonTitle('Rushes'); }, []);
 
   function TeamCard(card: any): JSX.Element {
 
     const users = Object.values(card.users);
     users.sort((a: any, _b: any) => {
-      return a.id === card.leader_id ? 1 : 0;
+      return a.id === card.leader_id ? 1 : -1;
     });
 
 
@@ -72,7 +72,7 @@ export function RushesPage(): JSX.Element {
               <div className="flex items-center justify-center">
                 <p color="blue-gray">Mark : {card.final_mark}</p>
 
-                <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' /> }
+                <Checkbox icon={card.is_validated ? <AiOutlineCheck size='18' /> : <AiOutlineClose size='18' />}
                   color={card.is_validated ? 'green' : 'deep-orange'} crossOrigin={undefined} checked={true} readOnly disabled></Checkbox>
               </div>
 
@@ -81,9 +81,9 @@ export function RushesPage(): JSX.Element {
           </div>
 
           <div className="flex flex-row grow justify-evenly text-center align-center gap-2">
-            <textarea rows={6} defaultValue={card.scale_comment}/>
+            <textarea rows={6} defaultValue={card.scale_comment} />
 
-            <textarea rows={6} defaultValue={card.scale_feedback}/>
+            <textarea rows={6} defaultValue={card.scale_feedback} />
           </div>
         </CardBody>
 
@@ -93,11 +93,24 @@ export function RushesPage(): JSX.Element {
               users.map((user: any) =>
 
                 user.id === card.leader_id &&
-              <Badge key={user.id}
-                content={<AiFillStar color='yellow' size='14' />}
-                className="min-h-2 min-w-2 bg-transparent bg-black shadow-none"
-              >
-                <Tooltip content={user.login}>
+                <Badge key={user.id}
+                  content={<AiFillStar color='yellow' size='14' />}
+                  className="min-h-2 min-w-2 bg-transparent bg-black shadow-none"
+                >
+                  <Tooltip content={user.login}>
+                    <a href={`https://profile.intra.42.fr/users/${user.login}`}>
+                      <Avatar
+                        size="sm"
+                        variant="circular"
+                        src={user.avatar_url}
+                        className="border-2 border-white hover:z-10 bg-[#008080]"
+                      />
+                    </a>
+                  </Tooltip>
+                </Badge>
+                ||
+
+                <Tooltip key={user.id} content={user.login}>
                   <a href={`https://profile.intra.42.fr/users/${user.login}`}>
                     <Avatar
                       size="sm"
@@ -107,19 +120,6 @@ export function RushesPage(): JSX.Element {
                     />
                   </a>
                 </Tooltip>
-              </Badge>
-              ||
-
-              <Tooltip key={user.id} content={user.login}>
-                <a href={`https://profile.intra.42.fr/users/${user.login}`}>
-                  <Avatar
-                    size="sm"
-                    variant="circular"
-                    src={user.avatar_url}
-                    className="border-2 border-white hover:z-10 bg-[#008080]"
-                  />
-                </a>
-              </Tooltip>
               )
             }
           </div>
@@ -159,6 +159,7 @@ export function RushesPage(): JSX.Element {
       "project": currentProjectFilter
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
+    setSearchParams(args);
 
   }, [currentPoolFilter, currentProjectFilter]);
 
@@ -170,8 +171,8 @@ export function RushesPage(): JSX.Element {
           return (
             <Button
               key={filter[0]}
-              className={classNames(filter[0] === currentProjectFilter ? 'selected-option' : 'available-option' )}
-              onClick={() => { setCurrentProjectFilter((prev) => prev !== filter[0] ? filter[0] : undefined); } }
+              className={classNames(filter[0] === currentProjectFilter ? 'selected-option' : 'available-option')}
+              onClick={() => { setCurrentProjectFilter((prev) => prev !== filter[0] ? filter[0] : undefined); }}
             >
               {filter[1]}
             </Button>
@@ -186,8 +187,8 @@ export function RushesPage(): JSX.Element {
           return (
             <Button
               key={filter}
-              className={classNames(filter === currentPoolFilter ? 'selected-option' : 'available-option' )}
-              onClick={() => { setCurrentPoolFilter((prev) => prev !== filter ? filter : undefined); } }
+              className={classNames(filter === currentPoolFilter ? 'selected-option' : 'available-option')}
+              onClick={() => { setCurrentPoolFilter((prev) => prev !== filter ? filter : undefined); }}
             >
               {filter}
             </Button>
@@ -208,7 +209,7 @@ export function RushesPage(): JSX.Element {
     return values.filter((team) => {
 
       if ((currentProjectFilter === undefined || team.project_slug === currentProjectFilter) &&
-      (currentPoolFilter === undefined || team.team_pool === currentPoolFilter)) {
+        (currentPoolFilter === undefined || team.team_pool === currentPoolFilter)) {
         return true;
       }
       return false;
@@ -227,7 +228,7 @@ export function RushesPage(): JSX.Element {
         tableTitle='Rushes'
         tableDesc={'Rushes projects'}
         options={[25, 50, 100]}
-        // reloadFunction={() => { setValues([]); }}
+      // reloadFunction={() => { setValues([]); }}
       />
     </div>
   );

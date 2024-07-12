@@ -60,7 +60,7 @@ export function SuperTable({
 }: SuperTableProps): JSX.Element {
 
   const { addNotif } = useNotification();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const defaultSearchURL = searchParams.get('search');
   const defaultIncludeAll = searchParams.get('searchIncludeAll');
 
@@ -166,9 +166,9 @@ export function SuperTable({
       return searchTerms.every((term) => {
         return userValues.some((value: any) => {
           return typeof value !== 'object' &&
-          value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
-            term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          );
+            value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
+              term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            );
         }
         );
       });
@@ -177,9 +177,9 @@ export function SuperTable({
       return searchTerms.some((term) => {
         return userValues.some((value: any) => {
           return typeof value !== 'object' &&
-          value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
-            term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          );
+            value.toString().toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(
+              term.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            );
         }
         );
       });
@@ -235,7 +235,8 @@ export function SuperTable({
 
                 const link = `${base}?${args}`;
                 window.history.replaceState(null, '', link);
-                
+                setSearchParams(args);
+
                 try {
                   await navigator.clipboard.writeText(link);
                   addNotif("Copied to clipboard", "INFO");
@@ -315,18 +316,18 @@ export function SuperTable({
             <table className="w-full min-w-max table-auto text-left">
               <thead className='sticky top-0 z-10'>
                 <tr className="bg-blue-gray-50">
-                  { indexColumn &&
-                  <th
-                    key='index'
-                    className={classNames(headerClasses)}
-                  >
-                    <div className='flex flex-row justify-center text-sm h-4 text-black'>
-                      <p className={headerPClasses}>
-                      Index
-                      </p>
-                    </div>
+                  {indexColumn &&
+                    <th
+                      key='index'
+                      className={classNames(headerClasses)}
+                    >
+                      <div className='flex flex-row justify-center text-sm h-4 text-black'>
+                        <p className={headerPClasses}>
+                          Index
+                        </p>
+                      </div>
 
-                  </th>
+                    </th>
                   }
                   {columns.map((value) => value.visible !== false && (
                     <th
@@ -341,8 +342,8 @@ export function SuperTable({
                         </p>
                         {sortColumn === value.field
                           ? (sortDirection === 'asc'
-                            ? <AiOutlineCaretUp/>
-                            : <AiOutlineCaretDown/>)
+                            ? <AiOutlineCaretUp />
+                            : <AiOutlineCaretDown />)
                           : <AiOutlineCaretLeft />}
                       </div>
                     </th>
@@ -351,7 +352,7 @@ export function SuperTable({
               </thead>
               <tbody>
                 {displayedUsers.length > 0 && displayedUsers.map((value, index) => {
-                // const isLast = index === values.length - 1;
+                  // const isLast = index === values.length - 1;
 
                   return (
                     <tr key={createKey(value, index)}
@@ -359,7 +360,7 @@ export function SuperTable({
                       odd:bg-white even:bg-blue-50 hover:bg-blue-gray-100
                       dark:odd:bg-gray-400 dark:even:bg-blue-gray-200 dark:hover:bg-blue-gray-300'
                       style={{ backgroundColor: value['_line_color'] ? `${value['_line_color']}` : undefined }}>
-                      { indexColumn &&
+                      {indexColumn &&
                         <td key={`${createKey(value, index)}-index`}
                           className={classNames('border-x border-blue-gray-50 overflow-hidden p-4 max-w-4 table-cell')}>
                           <div className="h-full flex justify-center items-center text-black">
@@ -371,7 +372,7 @@ export function SuperTable({
                       {columns.map((col) => col.visible !== false && (
 
                         <td key={`${createKey(value, index)}-${col.field}`}
-                          className={classNames('border-x border-blue-gray-50 overflow-hidden max-w-4 table-cell', typeof value[col.field] !== 'object' ? 'p-4' : '' )}
+                          className={classNames('border-x border-blue-gray-50 overflow-hidden max-w-4 table-cell', typeof value[col.field] !== 'object' ? 'p-4' : '')}
                           style={{ backgroundColor: value[`_${col.field}_color`] ? `${value[`_${col.field}_color`]}` : undefined }}>
                           <div className="h-full flex justify-center items-center text-black">
                             {
@@ -389,11 +390,11 @@ export function SuperTable({
                     </tr>
                   );
                 }) ||
-                <tr>
-                  <td className='text-6xl text-blue-500 font-bold text-center' colSpan={columns.length}>
-                    <br/>0 results<br/><br/>
-                  </td>
-                </tr>
+                  <tr>
+                    <td className='text-6xl text-blue-500 font-bold text-center' colSpan={columns.length}>
+                      <br />0 results<br /><br />
+                    </td>
+                  </tr>
                 }
               </tbody>
             </table>
@@ -414,7 +415,7 @@ export function SuperTable({
             onClick={() => { setCurrentPage(currentPage - 1); }}
             disabled={currentPage === 1}
           >
-          Previous
+            Previous
           </Button>
 
           <div className="flex items-center md:gap-2">
@@ -427,7 +428,7 @@ export function SuperTable({
                   size="sm"
                   onClick={() => { setCurrentPage(1); }}
                 >
-                1
+                  1
                 </IconButton>
                 {!pageNumbers.includes(2) && (
                   <IconButton
@@ -436,7 +437,7 @@ export function SuperTable({
                     size="sm"
                     className='hidden md:block'
                   >
-                  ...
+                    ...
                   </IconButton>
                 )}
               </>
@@ -463,7 +464,7 @@ export function SuperTable({
                     className='hidden md:block'
 
                   >
-                  ...
+                    ...
                   </IconButton>
                 )}
                 <IconButton
