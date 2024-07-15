@@ -30,9 +30,9 @@ export default function NavBar({
           'z-50 px-2 py-2.5 shadow-lg sm:px-4 bg-[#006060]'
         )}
       >
-        <div className="mx-auto flex flex-wrap items-center justify-between">
+        <div className="mx-auto grid grid-cols-3 items-center justify-between">
 
-          <div>
+          <div className="items-center">
             <button
               type="button"
               onClick={handleClick}
@@ -42,9 +42,9 @@ export default function NavBar({
             </button>
           </div>
 
-          <Link to="/" className="justify-start">
+          <Link to="/" className="flex justify-center">
             <img src={AppLogo}
-              className="h-12"
+              className="h-12 items-center"
             />
           </Link>
 

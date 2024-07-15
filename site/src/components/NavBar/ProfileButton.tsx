@@ -40,10 +40,10 @@ export default function ProfileButton(): JSX.Element {
   };
 
   return (
-    <div>
+    <div className="flex justify-end">
       {isLogged && (
-        <Button onClick={handleComplain} className="bg-[#FA8072] p-2 mr-4">
-          Complain {userInfos?.css_click}
+        <Button onClick={handleComplain} className="bg-[#FA8072] p-2 my-auto mr-4">
+          Complain about css {userInfos?.css_click}
         </Button>
       )}
 
