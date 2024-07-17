@@ -302,6 +302,7 @@ def project_callback(project):
     DO UPDATE SET
         name = EXCLUDED.name,
         slug = EXCLUDED.slug,
+        difficulty = EXCLUDED.difficulty,
         main_cursus = EXCLUDED.main_cursus,
         has_lausanne = EXCLUDED.has_lausanne,
         parent_id = EXCLUDED.parent_id,
