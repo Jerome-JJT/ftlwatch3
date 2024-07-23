@@ -197,7 +197,7 @@ def import_team_scale(team):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     for scale in team["scale_teams"]:
-        mylogger(f"Import team_scale {scale['id']}", LOGGER_INFO)
+        mylogger(f"Import team_scale {scale['id']}", LOGGER_DEBUG)
 
         good = {
             "id": scale["id"],

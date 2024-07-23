@@ -204,6 +204,8 @@ function getUserProjects($hidden, $poolfilter, $projects)
   users.last_name,
   users.display_name,
   users.avatar_url,
+  users.has_cursus21,
+  poolfilters.name AS poolfilter,
   projects.id AS project_id,
   projects.slug AS project_slug,
   projects.main_cursus,
@@ -240,7 +242,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
     OR (:projects = project_types.name)
     )
 
-  GROUP BY users.id, projects.id, cursus21_coalition.color, cursus9_coalition.color
+  GROUP BY users.id, projects.id, cursus21_coalition.color, cursus9_coalition.color, poolfilters.id
   ORDER BY projects.corder, projects.slug
   ";
 

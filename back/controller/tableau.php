@@ -192,18 +192,25 @@ function tableau_api($selectedFilter, $selectedProjects) {
             }
         }
 
-        $res["columns"] = array_merge(
-            [
-                ["label" => "ID", "field" => "user_id"],
-                ["label" => "Image", "field" => "avatar_url"],
-                ["label" => "Login", "field" => "login"],
-                ["label" => "First Name", "field" => "first_name"],
-                ["label" => "Last Name", "field" => "last_name"],
-                ["label" => "Display Name", "field" => "display_name"]
-            ],
-            array_values($cols)
-        );
+        $res["columns"] = [
+            ["label" => "ID", "field" => "user_id"],
+            ["label" => "Image", "field" => "avatar_url"],
+            ["label" => "Login", "field" => "login"],
+            ["label" => "First Name", "field" => "first_name"],
+            ["label" => "Last Name", "field" => "last_name"],
+            ["label" => "Display Name", "field" => "display_name"]
+        ];
         
+        if (has_permission("p_view4")) {
+            $res["columns"] = array_merge($res["columns"], 
+                [
+                    ["label" => "Has Cursus 21", "field" => "has_cursus21", "visible" => false],
+                    ["label" => "Pool Filter", "field" => "poolfilter", "visible" => false]
+                ]
+            );
+        }
+
+        $res["columns"] = array_merge($res["columns"], array_values($cols));
 
         $res["values"] = array_values($tmp);
     }
