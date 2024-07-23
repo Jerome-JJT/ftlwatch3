@@ -280,7 +280,7 @@ def team_callback(team):
     )
     ON CONFLICT (id)
     DO UPDATE SET
-        name = EXCLUDED.name
+        name = EXCLUDED.name,
         final_mark = EXCLUDED.final_mark,
         project_id = EXCLUDED.project_id,
         retry_common = EXCLUDED.retry_common,
