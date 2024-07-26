@@ -175,7 +175,9 @@ function tableau_api($selectedFilter, $selectedProjects) {
                     'last_name' => $team['last_name'],
                     'display_name' => $team['display_name'],
                     'avatar_url' => $team['avatar_url'],
-                    '_line_color' => $team['_line_color'],
+                    'has_cursus21' => $team['has_cursus21'],
+                    'poolfilter' => $team['poolfilter'],
+                    '_line_color' => $team['_line_color']
                 );
             }
 
@@ -201,14 +203,12 @@ function tableau_api($selectedFilter, $selectedProjects) {
             ["label" => "Display Name", "field" => "display_name"]
         ];
         
-        if (has_permission("p_view4")) {
-            $res["columns"] = array_merge($res["columns"], 
-                [
-                    ["label" => "Has Cursus 21", "field" => "has_cursus21", "visible" => false],
-                    ["label" => "Pool Filter", "field" => "poolfilter", "visible" => false]
-                ]
-            );
-        }
+        $res["columns"] = array_merge($res["columns"], 
+            [
+                ["label" => "Has Cursus 21", "field" => "has_cursus21", "visible" => false],
+                ["label" => "Pool Filter", "field" => "poolfilter", "visible" => false]
+            ]
+        );
 
         $res["columns"] = array_merge($res["columns"], array_values($cols));
 
