@@ -31,18 +31,14 @@ def TEMPORARY_FIX(user):
 
     user_notification({**good, "titles": []})
         
-    executeQueryAction("""INSERT INTO users (
-        "id", "login", "first_name", "last_name", "display_name", "avatar_url"
-    ) VALUES (
-        %(id)s, %(login)s, %(first_name)s, %(last_name)s, %(display_name)s, %(avatar_url)s
-    )
-    ON CONFLICT (id)
-    DO UPDATE SET
-        "login" = EXCLUDED.login,
-        "first_name" = EXCLUDED.first_name,
-        "last_name" = EXCLUDED.last_name,
-        "display_name" = EXCLUDED.display_name,
-        "avatar_url" = EXCLUDED.avatar_url
+    executeQueryAction("""UPDATE users SET
+        "login" = %(login)s,
+        "first_name" = %(first_name)s,
+        "last_name" = %(last_name)s,
+        "display_name" = %(display_name)s,
+        "avatar_url" = %(avatar_url)s
+                       
+        WHERE "id" = %(id)s
     """, good)
 
 
@@ -100,7 +96,7 @@ def team_notification(fetched):
     if leader["avatar_url"] != None:
         embed["thumbnail"] = f'{leader["avatar_url"]}'
 
-    embed['title'] = f'{fetched["status"]} for {leader["login"]}, on {project["slug"] if project != None else ""}'
+    embed['title'] = f'{fetched["status"]}{(" "+fetched["final_mark"]) if fetched["final_mark"] != None else ""} for {leader["login"]}, on {project["slug"] if project != None else ""}'
     if (len(refer) == 0):
         refer = None
     else:

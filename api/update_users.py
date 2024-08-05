@@ -61,11 +61,11 @@ def user_notification(fetched):
     diffs = {}
 
     for check in check_fields:
-        if ("blackhole" in check and fetched[check] != None):
+        if (check == "blackhole" and "blackhole" in fetched.keys() and fetched[check] != None):
             fetched[check] = parser.parse(fetched[check])
             fetched[check] = fetched[check].replace(tzinfo=None)
 
-        if (refer == None or str(refer[check]) != str(fetched[check])):
+        if (refer == None or (check in fetched.keys() and str(refer[check]) != str(fetched[check]))):
             diffs[check] = discord_diff(refer, fetched, check)
             if (check == "is_active"):
                 diffs["blackhole"] = discord_diff(refer, fetched, "blackhole")
