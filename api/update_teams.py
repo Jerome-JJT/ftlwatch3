@@ -7,13 +7,43 @@ import click
 import time
 from dateutil import parser
 import pytz
-
+from update_users import user_notification
 
 # any(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 # all(isinstance(e, int) and e > 0 for e in [1,2,'joe'])
 local_teams = []
 current_limit = 150
 limit_checker = 150
+
+
+
+
+
+def TEMPORARY_FIX(user):
+    good = {
+        "id": user["id"],
+        "login": user["login"],
+        "first_name": user["login"].split('-')[0],
+        "last_name": user["login"].split('-')[1],
+        "display_name": user["login"].replace('-', ' '),
+        "avatar_url": '/static/logo_gray.png',
+    }
+
+    user_notification({**good, "titles": []})
+        
+    executeQueryAction("""INSERT INTO users (
+        "id", "login", "first_name", "last_name", "display_name", "avatar_url"
+    ) VALUES (
+        %(id)s, %(login)s, %(first_name)s, %(last_name)s, %(display_name)s, %(avatar_url)s
+    )
+    ON CONFLICT (id)
+    DO UPDATE SET
+        "login" = EXCLUDED.login,
+        "first_name" = EXCLUDED.first_name,
+        "last_name" = EXCLUDED.last_name,
+        "display_name" = EXCLUDED.display_name,
+        "avatar_url" = EXCLUDED.avatar_url
+    """, good)
 
 
 
@@ -70,16 +100,23 @@ def team_notification(fetched):
     if leader["avatar_url"] != None:
         embed["thumbnail"] = f'{leader["avatar_url"]}'
 
+    embed['title'] = f'{fetched['status']} for {leader["login"]}, on {project["slug"] if project != None else ""}'
     if (len(refer) == 0):
-        embed['title'] = f'Created team for {leader["login"]}, on {project["slug"] if project != None else ""}'
         refer = None
     else:
-        embed['title'] = f'Updated team for {leader["login"]}, on {project["slug"] if project != None else ""}'
         refer = refer[0]
 
+    tmp_refer_team_users = sorted(list(map(lambda x: x["login"] if x["login"] else "", refer_team_users)))
+    tmp_fetched_team_users = sorted(list(map(lambda x: x["login"] if x["login"] else "", fetched["users"])))
+
+    for tmp_tu in fetched["users"]:
+        if ('3b3' in tmp_tu['login'] and tmp_tu['login'] not in tmp_refer_team_users):
+            TEMPORARY_FIX(tmp_tu)
+
+
     if (refer):
-        refer["_users"] = ", ".join(sorted(list(map(lambda x: x["login"] if x["login"] else "", refer_team_users))))
-    fetched["_users"] = ", ".join(sorted(list(map(lambda x: x["login"] if x["login"] else "", fetched["users"]))))
+        refer["_users"] = ", ".join(tmp_refer_team_users)
+    fetched["_users"] = ", ".join(tmp_fetched_team_users)
     check_fields.append("_users")
 
     
