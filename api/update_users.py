@@ -54,7 +54,7 @@ def user_notification(fetched):
     #                 "cursus9_coalition_id", "blackhole", "grade", "level", "is_bde", "is_tutor", 
     #                 "poolfilter_id", "hidden"]
 
-    check_fields = ["first_name", "last_name", "display_name", "avatar_url", "kind", 
+    check_fields = ["login", "first_name", "last_name", "display_name", "avatar_url", "kind", 
                     "is_staff", "blackhole", "has_cursus21", "is_active", "is_alumni", "wallet",
                     "grade", "level", "is_bde", "is_tutor"]
     
@@ -86,7 +86,7 @@ def user_notification(fetched):
         elif ("has_cursus21" in diffs.keys() and fetched["has_cursus21"] == True): # cursus
             send_to_rabbit('joincursus.server.message.queue', embed)
 
-        elif (any(e in ["is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind"] for e in diffs.keys())): # active
+        elif (any(e in ["login", "is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind"] for e in diffs.keys())): # active
             send_to_rabbit('activity.server.message.queue', embed)
 
         elif (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor", "_title",  "_titles"]) for e in diffs.keys()) 
