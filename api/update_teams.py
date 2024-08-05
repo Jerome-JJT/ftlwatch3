@@ -100,7 +100,7 @@ def team_notification(fetched):
     if leader["avatar_url"] != None:
         embed["thumbnail"] = f'{leader["avatar_url"]}'
 
-    embed['title'] = f'{fetched['status']} for {leader["login"]}, on {project["slug"] if project != None else ""}'
+    embed['title'] = f'{fetched["status"]} for {leader["login"]}, on {project["slug"] if project != None else ""}'
     if (len(refer) == 0):
         refer = None
     else:
