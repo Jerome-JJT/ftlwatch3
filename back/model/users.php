@@ -58,6 +58,8 @@ function getUsers($hidden, $poolfilter = '')
   COALESCE(cursus21_coalition.color, cursus9_coalition.color) AS _line_color,
   
   users.blackhole,
+  users.begin_at,
+  users.end_at,
   COALESCE(EXTRACT(DAY FROM users.blackhole - NOW()), 1000000) AS blackhole_diff,
   users.grade,
   users.level,
