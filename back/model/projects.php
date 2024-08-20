@@ -115,7 +115,7 @@ function getTinderProjects()
     JOIN project_types ON project_types.id = projects.project_type_id
 
     WHERE projects.main_cursus = 21
-      AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+      AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.end_at IS NULL)
       AND project_types.name = 'common-core'
       AND users.hidden = FALSE
 
@@ -145,7 +145,7 @@ function getProjectsCount()
       JOIN project_types ON project_types.id = projects.project_type_id
       
       WHERE projects.main_cursus = 21 
-        AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+        AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.end_at IS NULL)
         AND project_types.name = 'common-core'
         AND projects.slug NOT LIKE 'exam-%'
       
@@ -176,7 +176,7 @@ function getExamCount()
       JOIN project_types ON project_types.id = projects.project_type_id
       
       WHERE projects.main_cursus = 21 
-        AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+        AND users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.end_at IS NULL)
         AND project_types.name = 'common-core'
         AND projects.slug LIKE 'exam-%'
       
@@ -269,7 +269,7 @@ function getInternshipProjects()
     LEFT JOIN team_scale ON team_scale.team_id = teams.id
 
     WHERE projects.slug LIKE '%internship%'
-    AND users.hidden = FALSE AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.blackhole > NOW() OR is_active = TRUE OR users.grade = 'Member')
+    AND users.hidden = FALSE AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True AND (users.end_at IS NULL)
 
     ORDER BY teams.id
     ";

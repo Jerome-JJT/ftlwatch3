@@ -20,7 +20,7 @@ function getUsersShort($hidden)
     users.hidden = FALSE
     AND users.login NOT LIKE '3b3-%'
     AND users.has_cursus21 = True
-    AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+    AND (users.end_at IS NULL)
   ))
   ORDER BY login
   ";
@@ -79,7 +79,7 @@ function getUsers($hidden, $poolfilter = '')
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
-      AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member' OR :hidden = TRUE)
+      AND (users.end_at IS NULL OR :hidden = TRUE)
       AND users.login NOT LIKE '3b3-%'
     ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
@@ -116,17 +116,17 @@ function getUserImages($hidden, $poolfilter = '')
        (:poolfilter = 'all')
        OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
-      AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+      AND (users.end_at IS NULL)
        AND users.login NOT LIKE '3b3-%'
     ))
     OR (:poolfilter = 'tutors' AND (
       users.is_tutor = TRUE
-      AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+      AND (users.end_at IS NULL)
       AND users.login NOT LIKE '3b3-%'
     ))
     OR (:poolfilter = 'bde' AND (
       users.is_bde = TRUE
-      AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+      AND (users.end_at IS NULL)
       AND users.login NOT LIKE '3b3-%'
     ))
     OR (poolfilters.name LIKE CONCAT(:poolfilter,'%'))
@@ -174,6 +174,7 @@ function getUsersPools()
   users.has_cursus9,
 
   users.blackhole,
+  users.end_at,
   users.grade,
 
   poolfilters.name AS poolfilter
@@ -230,7 +231,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
        (:poolfilter = 'all')
     OR (:poolfilter = 'cursus' AND (
       users.has_cursus21 = TRUE
-      AND (users.blackhole > NOW() OR users.is_active = TRUE OR users.grade = 'Member')
+      AND (users.end_at IS NULL)
       AND users.login NOT LIKE '3b3-%'
     ))
     OR (:poolfilter = poolfilters.name) 

@@ -272,7 +272,7 @@ function tableau_pools()
             $pools[$year]['selected'] += 1;
             $pools[$user['poolfilter']]['selected'] += 1;
 
-            if ($user['blackhole'] == null || strtotime($user['blackhole']) >= time()) {
+            if ($user['end_at'] == null || strtotime($user['end_at']) >= time()) {
                 
                 if ($user['grade'] == 'Member') {
                     $pools['all']['transcendead'] += 1;
