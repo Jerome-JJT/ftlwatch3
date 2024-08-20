@@ -38,15 +38,14 @@ def process_eval_cost(update_all = False):
         else:
             mylogger(f"Process unknown {scale_id}", LOGGER_INFO)
 
-            value = -1
+            value = None
             try:
                 scale_team = callapi(f"/v2/scale_teams/{costs_unknown[scale_id]}")
                 time.sleep(0.6)
                 value = max(1, math.floor(scale_team["scale"]["duration"] / 1800))
             except Exception as e:
-                mylogger(f"No duration for {scale_id}", LOGGER_ERROR)
-                 
-                pass
+                mylogger(f"No duration for {scale_id}", LOGGER_ERROR) 
+                continue
 
             executeQueryAction("""UPDATE team_scale 
                                 SET "cost" = %(cost)s 
