@@ -161,6 +161,8 @@ def timed_user_log(days, correction_point, wallet, level, is_active, date, user_
 def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url, good_poolfilter_id):
 
     full_user = callapi(f"/v2/users/{user_id}", False)
+    if (full_user == []):
+        return False
 
     good_nbcursus = len(full_user["cursus_users"])
     good_has_cursus21 = len(list(filter(lambda x: x["cursus_id"] == 21, full_user["cursus_users"]))) > 0
@@ -269,6 +271,8 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     timed_user_log(good_days, full_user["correction_point"], full_user["wallet"], 
                 good_level, full_user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), full_user["id"])
 
+    return True
+
 
 
 def user_callback(user, cursus21_ids, local_users, longway=True):
@@ -305,49 +309,50 @@ def user_callback(user, cursus21_ids, local_users, longway=True):
     if (user["id"] not in local_users.keys() or 
         (local_users[user["id"]] == None and user["id"] not in cursus21_ids) or 
         (longway == True and user["id"] in cursus21_ids)):
-        user_full_import(user["id"], good_firstname, good_displayname, good_avatar_url, good_poolfilter_id)
+        ret = user_full_import(user["id"], good_firstname, good_displayname, good_avatar_url, good_poolfilter_id)
+        if (ret == True):
+            return True
         
-    else:
 
-        executeQueryAction("""UPDATE users SET
-            "login" = %(login)s,
-            "first_name" = %(first_name)s,
-            "last_name" = %(last_name)s,
-            "display_name" = %(display_name)s,
-            "avatar_url" = %(avatar_url)s,
+    executeQueryAction("""UPDATE users SET
+        "login" = %(login)s,
+        "first_name" = %(first_name)s,
+        "last_name" = %(last_name)s,
+        "display_name" = %(display_name)s,
+        "avatar_url" = %(avatar_url)s,
 
-            "kind" = %(kind)s,
-            "is_staff" = %(is_staff)s,
-            "is_active" = %(is_active)s,
-            "is_alumni" = %(is_alumni)s,
-            "wallet" = %(wallet)s,
-            "correction_point" = %(correction_point)s,
+        "kind" = %(kind)s,
+        "is_staff" = %(is_staff)s,
+        "is_active" = %(is_active)s,
+        "is_alumni" = %(is_alumni)s,
+        "wallet" = %(wallet)s,
+        "correction_point" = %(correction_point)s,
 
-            "created_at" = %(created_at)s,
-            "updated_at" = %(updated_at)s
+        "created_at" = %(created_at)s,
+        "updated_at" = %(updated_at)s
 
-            WHERE id = %(id)s
-        """, {
-            "id": user["id"],
-            "login": user["login"],
-            "first_name": good_firstname,
-            "last_name": user["last_name"],
-            "display_name": good_displayname,
-            "avatar_url": good_avatar_url,
+        WHERE id = %(id)s
+    """, {
+        "id": user["id"],
+        "login": user["login"],
+        "first_name": good_firstname,
+        "last_name": user["last_name"],
+        "display_name": good_displayname,
+        "avatar_url": good_avatar_url,
 
-            "kind": user["kind"],
-            "is_staff": user["staff?"],
-            "is_active": user["active?"],
-            "is_alumni": user["alumni?"],
-            "wallet": user["wallet"],
-            "correction_point": user["correction_point"],
+        "kind": user["kind"],
+        "is_staff": user["staff?"],
+        "is_active": user["active?"],
+        "is_alumni": user["alumni?"],
+        "wallet": user["wallet"],
+        "correction_point": user["correction_point"],
 
-            "created_at": user["created_at"],
-            "updated_at": user["updated_at"],
-        })
+        "created_at": user["created_at"],
+        "updated_at": user["updated_at"],
+    })
 
-        if (longway):
-            timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
+    if (longway):
+        timed_user_log(-1, user["correction_point"], user["wallet"], -1, user["active?"], datetime.datetime.now().strftime("%Y-%m-%d"), user["id"])
 
     return True
 
@@ -370,7 +375,7 @@ def import_users(longway=True):
         all_users = callapi("/v2/cursus_users?filter[campus_id]=47", True)
         all_users = dict({ i['user']['login']: i['user'] for i in all_users })
         all_users = list(all_users.values())
-        cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47", True)
+        cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47&filter[active]=true", True)
     else:
         all_users = callapi("/v2/campus/47/users?sort=-id", False)
 
