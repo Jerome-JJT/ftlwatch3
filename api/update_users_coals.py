@@ -42,7 +42,7 @@ def user_coal_callback(coals):
 def import_users_coals():
     from _utils_mylogger import mylogger, LOGGER_ALERT
 
-    to_check = executeQuerySelect("""SELECT login FROM users WHERE kind = 'student' AND login NOT LIKE '3b3-%%' AND (blackhole > NOW() OR is_active = TRUE OR grade = 'Member')""")
+    to_check = executeQuerySelect("""SELECT login FROM users WHERE kind = 'student' AND login NOT LIKE '3b3-%%' AND (end_at IS NULL)""")
 
 
     mylogger("Start users coals worker", LOGGER_ALERT)

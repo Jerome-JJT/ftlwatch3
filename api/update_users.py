@@ -55,7 +55,7 @@ def user_notification(fetched):
     #                 "poolfilter_id", "hidden"]
 
     check_fields = ["login", "first_name", "last_name", "display_name", "avatar_url", "kind", 
-                    "is_staff", "blackhole", "has_cursus21", "is_active", "is_alumni", "wallet",
+                    "is_staff", "blackhole", "begin_at", "end_at", "has_cursus21", "is_active", "is_alumni", "wallet",
                     "grade", "level", "is_bde", "is_tutor"]
     
     diffs = {}
@@ -170,6 +170,8 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     good_cursus = tmp_cursus21[0] if len(tmp_cursus21) > 0 else None
 
     good_blackhole = good_cursus["blackholed_at"] if good_cursus != None else None
+    good_begin_at = good_cursus["begin_at"] if good_cursus != None else None
+    good_end_at = good_cursus["end_at"] if good_cursus != None else None
     good_level = good_cursus["level"] if good_cursus != None else None
     good_grade = good_cursus["grade"] if good_cursus != None else None
 
@@ -199,6 +201,8 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
         "cursus9_coalition_id": None,
 
         "blackhole": good_blackhole,
+        "begin_at": good_begin_at,
+        "end_at": good_end_at,
 
         "grade": good_grade,
         "level": good_level,
@@ -217,12 +221,12 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
     executeQueryAction("""INSERT INTO users (
         "id", "login", "first_name", "last_name", "display_name", "avatar_url",
         "kind", "is_staff", "is_active", "is_alumni", "wallet", "correction_point", "nbcursus", "has_cursus21", "has_cursus9",
-        "cursus21_coalition_id", "cursus9_coalition_id", "blackhole", "grade", "level",
+        "cursus21_coalition_id", "cursus9_coalition_id", "blackhole", "begin_at", "end_at", "grade", "level",
         "is_bde", "is_tutor", "poolfilter_id", "hidden", "created_at", "updated_at"
     ) VALUES (
         %(id)s, %(login)s, %(first_name)s, %(last_name)s, %(display_name)s, %(avatar_url)s,
         %(kind)s, %(is_staff)s, %(is_active)s, %(is_alumni)s, %(wallet)s, %(correction_point)s, %(nbcursus)s, %(has_cursus21)s, %(has_cursus9)s,
-        %(cursus21_coalition_id)s, %(cursus9_coalition_id)s, %(blackhole)s, %(grade)s, %(level)s,
+        %(cursus21_coalition_id)s, %(cursus9_coalition_id)s, %(blackhole)s, %(begin_at)s, %(end_at)s, %(grade)s, %(level)s,
         %(is_bde)s, %(is_tutor)s, %(poolfilter_id)s, %(hidden)s, %(created_at)s, %(updated_at)s
     )
     ON CONFLICT (id)
@@ -245,6 +249,8 @@ def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url,
         "has_cursus9" = EXCLUDED.has_cursus9,
 
         "blackhole" = EXCLUDED.blackhole,
+        "begin_at" = EXCLUDED.begin_at,
+        "end_at" = EXCLUDED.end_at,
 
         "grade" = EXCLUDED.grade,
         "level" = EXCLUDED.level,
@@ -296,7 +302,9 @@ def user_callback(user, cursus21_ids, local_users, longway=True):
 
 
     #Full import
-    if (user["id"] not in local_users or (longway == True and user["id"] in cursus21_ids)):
+    if (user["id"] not in local_users.keys() or 
+        (local_users[user["id"]] == None and user["id"] not in cursus21_ids) or 
+        (longway == True and user["id"] in cursus21_ids)):
         user_full_import(user["id"], good_firstname, good_displayname, good_avatar_url, good_poolfilter_id)
         
     else:
@@ -350,15 +358,18 @@ def import_users(longway=True):
 
     mylogger(f"Start users worker{' FASTWAY' if longway == False else ''}", LOGGER_ALERT if longway == True else LOGGER_INFO)
 
-    local_users = executeQuerySelect("SELECT id FROM users")
+    local_users = executeQuerySelect("SELECT id, end_at FROM users")
     # local_users = {user["id"]: user for user in local_users} 
-    local_users = [user["id"] for user in local_users] 
+    local_users = {user["id"]: user["end_at"] for user in local_users}
 
     all_users = []
     cursus_users = []
 
     if (longway):
-        all_users = callapi("/v2/campus/47/users?sort=id", True)
+        # all_users1 = callapi("/v2/campus/47/users?sort=id", True)
+        all_users = callapi("/v2/cursus_users?filter[campus_id]=47", True)
+        all_users = dict({ i['user']['login']: i['user'] for i in all_users })
+        all_users = list(all_users.values())
         cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47", True)
     else:
         all_users = callapi("/v2/campus/47/users?sort=-id", False)
@@ -381,7 +392,7 @@ def import_users(longway=True):
                                         AVG(correction_point) AS avgpoints, 
                                         AVG(wallet) AS avgwallets
                                         FROM users
-                                        WHERE (blackhole > NOW() OR is_active = TRUE OR grade = 'Member') AND hidden = FALSE""")[0]
+                                        WHERE (end_at IS NOT NULL) AND hidden = FALSE""")[0]
 
         mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     

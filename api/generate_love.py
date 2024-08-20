@@ -30,8 +30,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             SELECT * FROM (
 
                 SELECT user1_id, u1.login AS user1_login, u2.login AS user2_login, user2_id, 
-                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.blackhole < NOW() THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
-                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.blackhole < NOW() THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
+                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
+                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
                     SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
                 FROM (
                     SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
@@ -48,7 +48,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%'
                 AND u2.hidden = False AND u2.kind <> 'external' AND u2.login NOT LIKE '3b3-%%'
 
-                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.blackhole, u2.blackhole, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
+                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
             ) uall
 
             WHERE ranked <= %(rank)s
@@ -63,7 +63,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
         raw_nodes = executeQuerySelect("""
             SELECT user_id, users.login AS user_login, users.avatar_url AS user_image, SUM(length) AS length,
-                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.blackhole < NOW() THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
                 FROM (
                 SELECT user1_id AS user_id, date, dist, length, is_piscine FROM vp_loves
                 UNION 
@@ -77,7 +77,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             AND dist < %(dist)s
             AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%'
                                        
-            GROUP BY user_id, user_login, user_image, users.blackhole, users.grade, users.has_cursus21
+            GROUP BY user_id, user_login, user_image, users.end_at, users.grade, users.has_cursus21
         """, {
             "min_date": min_date,
             "max_date": max_date,
@@ -91,8 +91,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             SELECT * FROM (
 
                 SELECT user1_id, u1.login AS user1_login, u2.login AS user2_login, user2_id,
-                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.blackhole < NOW() THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
-                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.blackhole < NOW() THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
+                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
+                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
                     SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
                 FROM (
                     SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
@@ -106,11 +106,11 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 WHERE date between %(min_date)s AND %(max_date)s
                 AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
                 AND dist < %(dist)s
-                AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.blackhole > NOW() OR u1.is_active = TRUE OR u1.grade = 'Member')
-                AND u2.hidden = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.blackhole > NOW() OR u2.is_active = TRUE OR u2.grade = 'Member')
+                AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.end_at IS NULL)
+                AND u2.hidden = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.end_at IS NULL)
 
 
-                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.blackhole, u2.blackhole, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
+                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
             ) uall
 
             WHERE ranked <= %(rank)s
@@ -125,7 +125,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
         raw_nodes = executeQuerySelect("""
             SELECT user_id, users.login AS user_login, users.avatar_url AS user_image, SUM(length) AS length,
-                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.blackhole < NOW() THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
                 FROM (
                 SELECT user1_id AS user_id, date, dist, length, is_piscine FROM vp_loves
                 UNION 
@@ -137,9 +137,9 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             WHERE date between %(min_date)s AND %(max_date)s
             AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
             AND dist < %(dist)s
-            AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (blackhole > NOW() OR is_active = TRUE OR grade = 'Member')
+            AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (end_at IS NULL)
                                        
-            GROUP BY user_id, user_login, user_image, users.blackhole, users.grade, users.has_cursus21
+            GROUP BY user_id, user_login, user_image, users.end_at, users.grade, users.has_cursus21
         """, {
             "min_date": min_date,
             "max_date": max_date,

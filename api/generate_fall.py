@@ -47,7 +47,7 @@ def generate_fall(graph_type="", output_name='', min_date='2000-00-00', max_date
 
     raw_nodes = executeQuerySelect("""
         SELECT users.id AS user_id, users.login AS user_login, users.avatar_url AS user_image,
-                (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.blackhole < NOW() THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
             FROM users
             
         WHERE users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True
