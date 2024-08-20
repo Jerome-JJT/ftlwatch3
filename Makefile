@@ -128,4 +128,11 @@ re:
 					${MAKE} migrate
 
 
+stats:
+			\wc -l back/*.php back/controller/*.php back/controller/**/*.php back/model/*.php back/model/**/*.php back/routes/*.php
+			\wc -l site/src/*.tsx site/src/components/*/*.tsx
+			\wc -l api/*.py
+			\wc -l sql/*.sql
+			
+
 .PHONY:		all build start ps logs flogs run api down clean re
