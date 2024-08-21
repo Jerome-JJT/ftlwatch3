@@ -105,7 +105,7 @@ const calculate_end_level = (current_level: number, project_xp: number, note: nu
   return [final_level_txt, blackholesDays];
 };
 
-export default function CalculatorPage(): JSX.Element {
+export function CalculatorPage(): JSX.Element {
   const { addNotif } = useNotification();
   const [suggestions, setSuggestions] = useState<project[]>([]);
   const [beginLevel, setBeginLevel] = useState<number>(0);

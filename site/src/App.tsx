@@ -60,7 +60,7 @@ import { SalesWatchPage } from 'FallPages/SalesWatchPage';
 import { OffersPage } from 'BasicPages/OffersPage';
 import { RushesPage } from 'Projects/RushesPage';
 import { InternshipsPage } from 'Projects/InternshipsPage';
-import CalculatorPage from './components/Test/Calculator';
+import { CalculatorPage } from './components/Projects/Calculator';
 // import Place from './components/Place/Place';
 
 
@@ -180,12 +180,12 @@ export default function App(): JSX.Element {
 
             <Route path="/admin/updater" element={<UpdaterPage />} />
 
+            <Route path="/calculator" element={<CalculatorPage />} />
 
             {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
 
 
             <Route path="/test" element={<TestPage />} />
-            <Route path="/calculator" element={<CalculatorPage />} />
             <Route path="/tig" element={<TigPage />} />
           </>}
 
