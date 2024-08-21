@@ -25,8 +25,8 @@ def user_notification(fetched):
         "user_id": fetched["id"]
     })
     refer_titles_users_id = [x["title_id"] for x in refer_titles_users]
-    fetched_titles_users_id = [x["id"] for x in fetched["titles"]]
-    fetched_titles_users = [x["name"] for x in fetched["titles"]]
+    fetched_titles_users_id = [x["id"] for x in fetched["titles"]] if fetched.get('titles') != None else []
+    fetched_titles_users = [x["name"] for x in fetched["titles"]] if fetched.get('titles') != None else []
     refer_titles_users_id.sort()
     fetched_titles_users_id.sort()
     refer_titles_users_id = ", ".join([str(x) for x in refer_titles_users_id])
@@ -159,7 +159,9 @@ def timed_user_log(days, correction_point, wallet, level, is_active, date, user_
 
 
 def user_min_import(user_id):
-    cuser = callapi(f"/v2/cursus/21/cursus_users/?filter[user_id]={user_id}", False)
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
+    
+    cuser = callapi(f"/v2/cursus_users/?filter[user_id]={user_id}", False)
     if (len(cuser) != 1):
         mylogger(f"FAIL PLANB {user_id}  len(cuser) {len(cuser)}", LOGGER_ERROR)
         return False
@@ -176,16 +178,6 @@ def user_min_import(user_id):
     if (good_avatar_url == "" and cuser["user"].get("image") and cuser["user"]["image"].get("link")):
         good_avatar_url = cuser["user"]["image"]["link"]
 
-    good_poolfilter = f"""{cuser["user"]["pool_year"]}.{cuser["user"]["pool_month"]}"""
-
-
-    if (len(list(filter(lambda gfilter: gfilter["name"] == good_poolfilter, poolfilters))) == 0):
-
-        executeQueryAction("""INSERT INTO poolfilters ("name") VALUES (%(name)s)""", {
-            "name": good_poolfilter
-        })
-        poolfilters = executeQuerySelect("SELECT id, name FROM poolfilters")
-
     good = {
         "id": user_id,
         "login": cuser["user"]["login"],
@@ -201,7 +193,6 @@ def user_min_import(user_id):
         "wallet": cuser["user"]["wallet"],
         "correction_point": cuser["user"]["correction_point"],
 
-        "blackhole": cuser["blackholed_at"],
         "begin_at": cuser["begin_at"],
         "end_at": cuser["end_at"],
 
@@ -386,8 +377,10 @@ def user_callback(user, cursus21_ids, local_users, longway=True):
 
     #Full import
     if (user["id"] not in local_users.keys() or 
-        (local_users[user["id"]] == None and user["id"] not in cursus21_ids) or 
-        (longway == True and user["id"] in cursus21_ids)):
+        (longway == True and local_users[user["id"]] == None and user["id"] in cursus21_ids.keys()) or 
+        (longway == True and cursus21_ids.get(user["id"]) == True)):
+
+        mylogger(f"Import DEEP user {user['id']} {user['login']}", LOGGER_INFO)
         ret = user_full_import(user["id"], good_firstname, good_displayname, good_avatar_url, good_poolfilter_id)
         if (ret == True):
             return True
@@ -447,19 +440,22 @@ def import_users(longway=True):
     local_users = {user["id"]: user["end_at"] for user in local_users}
 
     all_users = []
-    cursus_users = []
+    cursus21_ids = {}
 
     if (longway):
         # all_users1 = callapi("/v2/campus/47/users?sort=id", True)
         all_users = callapi("/v2/cursus_users?filter[campus_id]=47", True)
+
+        cursus21_ids = {u["user"]["id"]: u['user']['active?'] for i in list(filter(lambda x: x['cursus_id'] == 21, all_users))}
+
         all_users = dict({ i['user']['login']: i['user'] for i in all_users })
         all_users = list(all_users.values())
-        cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47&filter[active]=true", True)
+        # cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47&filter[active]=true", True)
     else:
         all_users = callapi("/v2/campus/47/users?sort=-id", False)
 
     # cursus_users = {user["user"]["id"]: user for user in cursus_users} 
-    cursus21_ids = [user["user"]["id"] for user in cursus_users]
+    # cursus21_ids = [user["user"]["id"] for user in cursus_users]
 
 
     poolfilters = executeQuerySelect("SELECT id, name FROM poolfilters")
