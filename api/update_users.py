@@ -158,11 +158,90 @@ def timed_user_log(days, correction_point, wallet, level, is_active, date, user_
 
 
 
+def user_min_import(user_id):
+    cuser = callapi(f"/v2/cursus/21/cursus_users/?filter[user_id]={user_id}", False)
+    if (len(cuser) != 1):
+        mylogger(f"FAIL PLANB {user_id}  len(cuser) {len(cuser)}", LOGGER_ERROR)
+        return False
+
+    cuser = cuser[0]
+
+    good_firstname = cuser["user"]["usual_first_name"] if cuser["user"].get("usual_first_name") else cuser["user"]["first_name"]
+    good_displayname = cuser["user"]["usual_full_name"] if cuser["user"].get("usual_full_name") else cuser["user"]["displayname"]
+
+    good_avatar_url = ""
+    if (cuser["user"].get("image") and cuser["user"]["image"].get("versions") and cuser["user"]["image"]["versions"].get("medium")):
+        good_avatar_url = cuser["user"]["image"]["versions"]["medium"]
+
+    if (good_avatar_url == "" and cuser["user"].get("image") and cuser["user"]["image"].get("link")):
+        good_avatar_url = cuser["user"]["image"]["link"]
+
+    good_poolfilter = f"""{cuser["user"]["pool_year"]}.{cuser["user"]["pool_month"]}"""
+
+
+    if (len(list(filter(lambda gfilter: gfilter["name"] == good_poolfilter, poolfilters))) == 0):
+
+        executeQueryAction("""INSERT INTO poolfilters ("name") VALUES (%(name)s)""", {
+            "name": good_poolfilter
+        })
+        poolfilters = executeQuerySelect("SELECT id, name FROM poolfilters")
+
+    good = {
+        "id": user_id,
+        "login": cuser["user"]["login"],
+        "first_name": good_firstname,
+        "last_name": cuser["user"]["last_name"],
+        "display_name": good_displayname,
+        "avatar_url": good_avatar_url,
+
+        "kind": cuser["user"]["kind"],
+        "is_staff": cuser["user"]["staff?"],
+        "is_active": cuser["user"]["active?"],
+        "is_alumni": cuser["user"]["alumni?"],
+        "wallet": cuser["user"]["wallet"],
+        "correction_point": cuser["user"]["correction_point"],
+
+        "blackhole": cuser["blackholed_at"],
+        "begin_at": cuser["begin_at"],
+        "end_at": cuser["end_at"],
+
+        "created_at": cuser["user"]["created_at"],
+        "updated_at": cuser["user"]["updated_at"],
+    }
+
+    user_notification(good)
+
+    executeQueryAction("""UPDATE users SET
+        "login" = %(login)s,
+        "first_name" = %(first_name)s,
+        "last_name" = %(last_name)s,
+        "display_name" = %(display_name)s,
+        "avatar_url" = %(avatar_url)s,
+
+        "kind" = %(kind)s,
+        "is_staff" = %(is_staff)s,
+        "is_active" = %(is_active)s,
+        "is_alumni" = %(is_alumni)s,
+        "wallet" = %(wallet)s,
+        "correction_point" = %(correction_point)s,
+
+        "created_at" = %(created_at)s,
+        "updated_at" = %(updated_at)s
+
+        WHERE id = %(id)s
+    """, good)
+
+    return True
+
 def user_full_import(user_id, good_firstname, good_displayname, good_avatar_url, good_poolfilter_id):
+    from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
 
     full_user = callapi(f"/v2/users/{user_id}", False)
     if (full_user == []):
-        return False
+        mylogger(f"Import user PLANB {user_id}", LOGGER_INFO)
+
+        return user_min_import(user_id)
+
 
     good_nbcursus = len(full_user["cursus_users"])
     good_has_cursus21 = len(list(filter(lambda x: x["cursus_id"] == 21, full_user["cursus_users"]))) > 0

@@ -36,6 +36,10 @@ makerabbit:
 			${DOCKER} exec rabbit bash /setup.sh
 
 
+frontdev:
+		docker compose -f ./docker-compose.front.yml -p ${APP_NAME}_front up -d --build
+
+
 msgdev:
 			${DOCKER} exec api python -c "from _rabbit import send_to_rabbit; send_to_rabbit('errors.server.message.queue', {'content': 'Deploy dev ${RELEASE_VERSION} done'})"
 msgprod:
@@ -106,7 +110,9 @@ runback:
 runpostg:
 			${DOCKER} exec postgres bash
 rundb:
-			${DOCKER} exec postgres psql --host=postgres --dbname=test_db --username=user -W
+			${DOCKER} exec db psql --host=db --dbname=test_db --username=user -W
+db: rundb
+
 runnginx:
 			${DOCKER} exec nginx bash
 runrabbit:
