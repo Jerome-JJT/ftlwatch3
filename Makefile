@@ -15,6 +15,10 @@ ifeq ($(shell hostname), 42lwatch3)
 	endif
 endif
 
+ifeq ($(shell [ -e ./frontdev ] && echo 1), 1)
+	DOCKER = docker compose -f ./docker-compose.front.yml -p ${APP_NAME}_front
+endif
+
 
 all:		start
 
@@ -34,10 +38,6 @@ setup:
 			${DOCKER} exec rabbit bash /setup.sh
 makerabbit:
 			${DOCKER} exec rabbit bash /setup.sh
-
-
-frontdev:
-		docker compose -f ./docker-compose.front.yml -p ${APP_NAME}_front up -d --build
 
 
 msgdev:

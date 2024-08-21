@@ -60,6 +60,7 @@ import { SalesWatchPage } from 'FallPages/SalesWatchPage';
 import { OffersPage } from 'BasicPages/OffersPage';
 import { RushesPage } from 'Projects/RushesPage';
 import { InternshipsPage } from 'Projects/InternshipsPage';
+import CalculatorPage from './components/Test/Calculator';
 // import Place from './components/Place/Place';
 
 
@@ -184,13 +185,14 @@ export default function App(): JSX.Element {
 
 
             <Route path="/test" element={<TestPage />} />
+            <Route path="/calculator" element={<CalculatorPage />} />
             <Route path="/tig" element={<TigPage />} />
           </>}
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
-      <NotifDisplay/>
+      <NotifDisplay />
     </Router>
   );
 }

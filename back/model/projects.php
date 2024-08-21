@@ -282,3 +282,21 @@ function getInternshipProjects()
 
   return $result;
 }
+
+
+
+function getCalculatorProjects()
+{
+  $query = "SELECT projects.name, projects.difficulty AS xp
+    FROM projects
+    WHERE projects.main_cursus = 21
+    ORDER BY projects.name
+  ";
+
+  $data = array();
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  return $result;
+}

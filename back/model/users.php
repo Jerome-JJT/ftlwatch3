@@ -146,6 +146,27 @@ function getUserImages($hidden, $poolfilter = '')
 
 
 
+function getUserXp($id)
+{
+  $query = "SELECT users.level
+  FROM users
+  WHERE users.id = :id
+  ";
+
+  $data = array(":id" => $id);
+
+  require_once("model/dbConnector.php");
+  $result = executeQuerySelect($query, $data);
+
+  if (count($result) == 1) {
+    return ($result[0]['level']);
+  }
+
+  return null;
+}
+
+
+
 function setUser($userId, $value)
 {
   $query = "UPDATE users

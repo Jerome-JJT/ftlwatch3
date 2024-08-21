@@ -1,0 +1,129 @@
+
+
+  .button-calculator {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+
+  /* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr {
+    margin-top: 20px;
+    /* border: 1px solid blue; */
+  }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid black; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		/* position: absolute; */
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	/*
+	Label the data
+	*/
+	td:nth-of-type(1):before { content: "Begin Level"; }
+	td:nth-of-type(2):before { content: "Project"; }
+	td:nth-of-type(3):before { content: "Project Xp"; }
+	td:nth-of-type(4):before { content: "Note"; }
+	td:nth-of-type(5):before { content: "Bonus Coalition"; }
+	td:nth-of-type(6):before { content: "End level :"; }
+  	td:nth-of-type(7):before { content: "Blackhole days earned :"; }
+}
+
+
+
+
+
+.react-autosuggest__container {
+	position: relative;
+}
+
+.react-autosuggest__input {
+	width: 240px;
+	height: 30px;
+	padding: 10px 20px;
+	font-family: Helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 16px;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+}
+
+.react-autosuggest__input--focused {
+	outline: none;
+}
+
+.react-autosuggest__input--open {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.react-autosuggest__suggestions-container {
+	display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+	display: block;
+	position: absolute;
+	top: 51px;
+	width: 280px;
+	border: 1px solid #aaa;
+	background-color: #fff;
+	font-weight: 300;
+	font-size: 16px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	z-index: 2;
+}
+
+.react-autosuggest__suggestions-list {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.react-autosuggest__suggestion {
+	cursor: pointer;
+	padding: 10px 20px;
+}
+
+.react-autosuggest__suggestion--highlighted {
+	background-color: #ddd;
+}
+  

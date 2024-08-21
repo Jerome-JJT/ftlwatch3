@@ -2,6 +2,8 @@
 require_once("model/permissions/permissions.php");
 require_once("model/profile.php");
 require_once("model/account.php");
+require_once("model/projects.php");
+require_once("model/users.php");
 
 function me($reload = false)
 {
@@ -55,4 +57,24 @@ function settings_set($data)
   }
 
   jsonResponse(array(), 403);
+}
+
+
+function calculator_get() {
+
+  $res = array(
+    "projects" => getCalculatorProjects(),
+    "beginLevel" => 0
+  );
+
+  if (isset($_SESSION["user"])) {
+
+    $level = getUserXp($_SESSION["user"]["id"]);
+
+    if ($level !== null) {
+      $res['beginLevel'] = $level;
+    }
+  }
+
+  jsonResponse($res, 200);
 }

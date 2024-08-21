@@ -21,6 +21,10 @@ switch ($action) {
         settings_set($_POST);
         break;
 
+    case "calculator_get":
+        calculator_get();
+        break;
+
 }
 
 exit();

@@ -241,6 +241,8 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (65, 'Points', 55, 'basics/points', NULL, 4, 4),
   (70, 'Offers', 52, 'basics/offers', NULL, 4, 4),
 
+  (85, 'XP Calculator', 40, 'calculator', NULL, NULL, 10),
+
   (90, 'About', 95, 'about', NULL, NULL, 10),
   (91, 'CTF 42Lausanne', 96, 'https://ctf.42lausanne.ch', NULL, NULL, 10),
   (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),

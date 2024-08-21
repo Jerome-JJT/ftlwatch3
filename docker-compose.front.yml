@@ -1,0 +1,58 @@
+version: "3.7"
+
+
+services:
+  back:
+    # build: ./_build/php
+    image: php:8.1.2-apache
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mockback:/var/www/html
+
+    networks:
+      - front
+
+    working_dir: /var/www/html
+
+
+  front:
+    build: ./_build/react
+
+    volumes:
+      - ./site:/app
+
+    networks:
+      - front
+
+    working_dir: /app
+
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./_build/nginx/Dockerfile-front
+
+    restart: "no"
+    environment:
+      BUILD_TYPE: "DEV" 
+
+    stdin_open:  true # docker run -i
+    tty: true        # docker run -t
+
+    ports:
+      - "8181:80"
+
+    depends_on:
+      - front
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./static:/var/www/static
+
+    networks:
+      - front
+
+
+networks:
+  front:
+
