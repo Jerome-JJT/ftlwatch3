@@ -2,7 +2,7 @@
 
 
 def discord_diff(refer, fetched, check):
-    return f'ref: `{refer[check] if (refer != None and refer[check] != None and refer[check] != "") else "None"}`, new: `{fetched[check] if (fetched[check] != None and fetched[check] != "") else "None"}`'
+    return f'ref: `{refer[check] if (refer != None and refer.get(check) != None and refer[check] != "") else "None"}`, new: `{fetched[check] if (fetched.get(check) != None and fetched[check] != "") else "None"}`'
 
 def create_discord_payload(content = {}):
     payload = {

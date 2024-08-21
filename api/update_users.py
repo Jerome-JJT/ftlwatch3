@@ -57,11 +57,12 @@ def user_notification(fetched):
     check_fields = ["login", "first_name", "last_name", "display_name", "avatar_url", "kind", 
                     "is_staff", "blackhole", "begin_at", "end_at", "has_cursus21", "is_active", "is_alumni", "wallet",
                     "grade", "level", "is_bde", "is_tutor"]
-    
+    dates = ["blackhole", "begin_at", "end_at"]
+
     diffs = {}
 
     for check in check_fields:
-        if (check == "blackhole" and "blackhole" in fetched.keys() and fetched[check] != None):
+        if (check in dates and check in fetched.keys() and fetched[check] != None):
             fetched[check] = parser.parse(fetched[check])
             fetched[check] = fetched[check].replace(tzinfo=None)
 
@@ -86,7 +87,7 @@ def user_notification(fetched):
         elif ("has_cursus21" in diffs.keys() and fetched["has_cursus21"] == True): # cursus
             send_to_rabbit('joincursus.server.message.queue', embed)
 
-        elif (any(e in ["login", "is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind"] for e in diffs.keys())): # active
+        elif (any(e in ["login", "is_active", "is_staff", "is_alumni", "is_bde", "is_tutor", "kind", "end_at"] for e in diffs.keys())): # active
             send_to_rabbit('activity.server.message.queue', embed)
 
         elif (any((e in ["first_name", "last_name", "display_name", "avatar_url", "kind", "is_staff", "is_alumni", "wallet", "grade", "is_bde", "is_tutor", "_title",  "_titles"]) for e in diffs.keys()) 
@@ -161,7 +162,7 @@ def timed_user_log(days, correction_point, wallet, level, is_active, date, user_
 def user_min_import(user_id):
     from _utils_mylogger import mylogger, LOGGER_DEBUG, LOGGER_INFO, LOGGER_WARNING, LOGGER_ERROR
     
-    cuser = callapi(f"/v2/cursus_users/?filter[user_id]={user_id}", False)
+    cuser = callapi(f"/v2/cursus/21/cursus_users/?filter[user_id]={user_id}", False)
     if (len(cuser) != 1):
         mylogger(f"FAIL PLANB {user_id}  len(cuser) {len(cuser)}", LOGGER_ERROR)
         return False
@@ -215,6 +216,9 @@ def user_min_import(user_id):
         "is_alumni" = %(is_alumni)s,
         "wallet" = %(wallet)s,
         "correction_point" = %(correction_point)s,
+
+        "begin_at" = %(begin_at)s,
+        "end_at" = %(end_at)s,
 
         "created_at" = %(created_at)s,
         "updated_at" = %(updated_at)s
@@ -444,13 +448,12 @@ def import_users(longway=True):
 
     if (longway):
         # all_users1 = callapi("/v2/campus/47/users?sort=id", True)
-        all_users = callapi("/v2/cursus_users?filter[campus_id]=47", True)
+        all_users = callapi("/v2/cursus_users?filter[campus_id]=47&sort=user_id", True)
 
-        cursus21_ids = {u["user"]["id"]: u['user']['active?'] for i in list(filter(lambda x: x['cursus_id'] == 21, all_users))}
+        cursus21_ids = {u["user"]["id"]: u['user']['active?'] for u in list(filter(lambda x: x['cursus_id'] == 21, all_users))}
 
         all_users = dict({ i['user']['login']: i['user'] for i in all_users })
         all_users = list(all_users.values())
-        # cursus_users = callapi("/v2/cursus/21/cursus_users?filter[campus_id]=47&filter[active]=true", True)
     else:
         all_users = callapi("/v2/campus/47/users?sort=-id", False)
 
