@@ -322,7 +322,7 @@ export function CalculatorPage(): JSX.Element {
       <StyledCalculator>
         <div className="box">
           <h1 style={{ textAlign: 'center' }} className="title">
-            Calculator
+            XP Calculator
             <p style={{ color: 'black', fontSize: 'x-small' }}>Based on 42evaluators.com calculator from rfautier</p>
           </h1>
         </div>

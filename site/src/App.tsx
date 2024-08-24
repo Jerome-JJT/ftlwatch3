@@ -61,6 +61,7 @@ import { OffersPage } from 'BasicPages/OffersPage';
 import { RushesPage } from 'Projects/RushesPage';
 import { InternshipsPage } from 'Projects/InternshipsPage';
 import { CalculatorPage } from './components/Projects/Calculator';
+import { PacePage } from 'Projects/Pace';
 // import Place from './components/Place/Place';
 
 
@@ -181,6 +182,7 @@ export default function App(): JSX.Element {
             <Route path="/admin/updater" element={<UpdaterPage />} />
 
             <Route path="/calculator" element={<CalculatorPage />} />
+            <Route path="/pace" element={<PacePage />} />
 
             {/* <Route path="/test" element={<Place loginer={loginer} />} /> */}
 

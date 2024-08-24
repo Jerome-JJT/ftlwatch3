@@ -87,6 +87,22 @@ if ($page == 'me' && $action == 'get') {
     jsonResponse(array(), 401);
 }
 
+if ($page == 'me' && $action == 'calculator_get') {
+    jsonResponse(array(
+        "beginLevel" => 4.2,
+        "projects" => array(
+            array(
+                "name" => "P1",
+                "xp" => 1000
+            ),
+            array(
+                "name" => "P2",
+                "xp" => 100000
+            )
+        )
+    ), 200);
+}
+
 
 jsonResponse(array(), 510);
 

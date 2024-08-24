@@ -289,7 +289,7 @@ function getCalculatorProjects()
 {
   $query = "SELECT projects.name, projects.difficulty AS xp
     FROM projects
-    WHERE projects.main_cursus = 21
+    WHERE projects.main_cursus = 21 AND projects.difficulty > 0
     ORDER BY projects.name
   ";
 
