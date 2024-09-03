@@ -113,7 +113,8 @@ def team_notification(fetched):
     if (refer):
         refer["_users"] = ", ".join(tmp_refer_team_users)
     fetched["_users"] = ", ".join(tmp_fetched_team_users)
-    check_fields.append("_users")
+    if (len(tmp_refer_team_users) != len(tmp_fetched_team_users)):
+        check_fields.append("_users")
 
     
     diffs = {}
