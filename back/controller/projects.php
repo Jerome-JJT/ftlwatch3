@@ -249,7 +249,7 @@ function get_tinder($debug = false)
     }
 
     if ($debug == true) {
-        jsonResponse(array($userDoneProject, $filters), 200); 
+        jsonResponse(array($userDoneProjects, $filters), 200); 
     }
 
 
