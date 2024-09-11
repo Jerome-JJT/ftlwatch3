@@ -169,7 +169,7 @@ def team_notification(fetched):
                 send_to_rabbit('teams_piscine.server.message.queue', embed)
 
         else:
-            if (project != None and (project["cursus_id"] not in [21, 66] or project["project_type_id"] != 1)):
+            if (project != None and (project["cursus_id"] not in [21] or project["project_type_id"] != 1) and project["cursus_id"] not in [66]):
                 send_to_rabbit('advanced.server.message.queue', embed)
 
             else:
