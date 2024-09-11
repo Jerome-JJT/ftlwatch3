@@ -194,7 +194,7 @@ function get_rush_projects()
     jsonResponse($res, 200);
 }
 
-function get_tinder()
+function get_tinder($debug = false)
 {
     $res = array();
 
@@ -246,6 +246,10 @@ function get_tinder()
     $tmp = array();
     foreach (array_keys($filters) as $filter_key) {
         $tmp[$filter_key] = array();
+    }
+
+    if ($debug == true) {
+        jsonResponse(array($userDoneProject, $filters), 200); 
     }
 
 

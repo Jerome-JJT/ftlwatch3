@@ -19,7 +19,7 @@ switch ($action) {
         break;
 
     case "get_tinder":
-        get_tinder();
+        get_tinder(isset($_GET['debug']));
         break;
 
     case "get_subjects":
