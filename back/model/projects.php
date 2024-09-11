@@ -164,7 +164,7 @@ function getProjectsCount()
 
 function getExamCount()
 {
-  $query = "SELECT pr.user_id, SUM(pr.is_validated) AS validated from  
+  $query = "SELECT pr.user_id, SUM(CASE WHEN pr.is_validated > 0 THEN 1 ELSE 0 END) AS validated from 
     (SELECT users.id AS user_id, users.login, projects.slug,
     SUM(CASE WHEN is_validated THEN 1 ELSE 0 END) AS is_validated,
       COUNT(projects.id) AS tries
