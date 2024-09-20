@@ -7,7 +7,7 @@ function getUsersComputers()
     FROM v_users_computers
     JOIN users ON users.id = v_users_computers.user_id
     WHERE rank < 10
-      AND users.hidden = FALSE
+      AND users.hidden = FALSE AND users.has_cursus21 = TRUE AND users.login NOT LIKE '3b3-%' AND users.end_at IS NULL
   ";
 
   $data = array();
@@ -34,7 +34,7 @@ function getUsersTotals()
     SUM(CASE WHEN locations.host LIKE 'c3%' THEN length ELSE 0 END) AS total_c3
     FROM locations
     JOIN users ON users.id = locations.user_id
-    WHERE locations.length < 100000 AND users.hidden = FALSE
+    WHERE locations.length < 100000 AND users.hidden = FALSE AND users.has_cursus21 = TRUE AND users.login NOT LIKE '3b3-%' AND users.end_at IS NULL
     GROUP BY users.id
     ORDER BY total DESC
   ";
@@ -58,7 +58,7 @@ function getComputersTotals()
     SUM(locations.sun_length) AS total_sun,
     SUM(locations.moon_length) AS total_moon
     FROM locations
-    WHERE locations.length < 100000
+    WHERE locations.length < 100000 AND locations.host LIKE 'c%'
     GROUP BY locations.host
     ORDER BY total DESC
   ";
