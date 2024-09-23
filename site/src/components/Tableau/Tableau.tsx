@@ -136,7 +136,8 @@ export function TableauPage(): JSX.Element {
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  }, [addNotif, searchParams, setSearchParams, usedFilter, usedProjects]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addNotif, usedFilter, usedProjects]);
 
   const subOptions = useMemo(() => (
     <>
