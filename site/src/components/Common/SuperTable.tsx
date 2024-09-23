@@ -72,6 +72,7 @@ export function SuperTable({
 
   const [sortColumn, setSortColumn] = React.useState('id');
   const [sortDirection, setSortDirection] = React.useState('asc');
+  const [sortSetting, setSortSetting] = React.useState(new Map());
 
   const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
 
@@ -88,31 +89,56 @@ export function SuperTable({
     setSearchQuery(event.target.value);
   };
 
-  const handleSort = (column: any): void => {
-    if (sortColumn === column && sortDirection === 'desc') {
-      setSortColumn('');
-    }
-    else if (sortColumn === column) {
-      setSortDirection('desc');
-    }
-    else {
-      setSortColumn(column);
-      setSortDirection('asc');
-    }
-  };
+  const handleSort = useCallback((column: any): void => {
+    setSortSetting((prev) => {
+      const newS = new Map(prev);
+      if (newS.has(column)) {
+        if (newS.get(column) === 'asc') {
+          newS.set(column, 'desc');
+        }
+        else {
+          newS.delete(column);
+        }
+      }
+      else {
+        newS.set(column, 'asc');
+      }
+      return newS;
+    });
+  }, []);
 
-  const customSort = useCallback((a: any, b: any): number => {
-    let aValue = a[`_${sortColumn}`] !== undefined ? a[`_${sortColumn}`] : a[sortColumn];
-    let bValue = b[`_${sortColumn}`] !== undefined ? b[`_${sortColumn}`] : b[sortColumn];
+  const customComp = useCallback((a: any, b: any, aValue: any, bValue: any, comps: [string, string][]): number => {
+
+
+    if (aValue === bValue) {
+      if (comps.length > 0) {
+
+        const thisComp = comps.shift()!;
+
+        const newA = a[`_${thisComp[0]}`] !== undefined ? a[`_${thisComp[0]}`] : a[thisComp[0]];
+        const newB = b[`_${thisComp[0]}`] !== undefined ? b[`_${thisComp[0]}`] : b[thisComp[0]];
+
+        if (thisComp[1] === 'asc') {
+          return customComp(a, b, newA, newB, comps);
+        }
+        else if (thisComp[1] === 'desc') {
+          return customComp(a, b, newB, newA, comps);
+        }
+      }
+      else {
+        return 0;
+      }
+    }
 
     if (typeof aValue !== 'undefined' || typeof bValue !== 'undefined') {
 
-      if (typeof aValue === 'undefined' || aValue === null) {
+      if (typeof aValue === 'undefined') {
         aValue = '';
       }
-      if (typeof bValue === 'undefined' || bValue === null) {
+      if (typeof bValue === 'undefined') {
         bValue = '';
       }
+
 
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return aValue - bValue;
@@ -123,9 +149,6 @@ export function SuperTable({
       else if (bValue !== null && aValue === null) {
         return 1;
       }
-      else if (aValue === null && bValue === null) {
-        return 0;
-      }
       else {
         return aValue.toString().localeCompare(bValue.toString());
       }
@@ -133,7 +156,16 @@ export function SuperTable({
     else {
       return 0;
     }
-  }, [sortColumn]);
+  }, []);
+
+
+  const sortedValues = useMemo(() => values && [...values]?.sort((a, b): number => {
+
+    const comps = Array.from(sortSetting.entries()) as [string, string][];
+
+    return customComp(a, b, undefined, undefined, comps);
+
+  }) || undefined, [values, sortSetting, customComp]);
 
   const generatePageNumbers = (currentPage: number, totalPages: number, maxPages: number): number[] => {
     const halfMaxPages = Math.floor(maxPages / 2);
@@ -148,15 +180,6 @@ export function SuperTable({
     return pageNumbers;
   };
 
-
-  const sortedValues = useMemo(() => values && [...values]?.sort((a, b): number => {
-    if (sortDirection === 'asc') {
-      return customSort(a, b);
-    }
-    else {
-      return customSort(b, a);
-    }
-  }) || undefined, [values, sortDirection, customSort]);
 
   const filteredUsers = useMemo(() => sortedValues?.filter((user) => {
     const userValues = Object.values(user);
@@ -229,8 +252,8 @@ export function SuperTable({
 
                 const args = objUrlEncode({
                   ...Object.fromEntries(searchParams.entries()),
-                  "search": searchQuery,
-                  "searchIncludeAll": doIncludeAll ? true : undefined
+                  'search':           searchQuery,
+                  'searchIncludeAll': doIncludeAll ? true : undefined,
                 });
 
                 const link = `${base}?${args}`;
@@ -239,9 +262,10 @@ export function SuperTable({
 
                 try {
                   await navigator.clipboard.writeText(link);
-                  addNotif("Copied to clipboard", "INFO");
-                } catch (error) {
-                  addNotif("Unable to copy to clipboard", "ERROR");
+                  addNotif('Copied to clipboard', 'INFO');
+                }
+                catch (error) {
+                  addNotif('Unable to copy to clipboard', 'ERROR');
                 }
               }}
               variant='outlined'
@@ -340,8 +364,8 @@ export function SuperTable({
                         <p className={headerPClasses}>
                           {value.label.toString()}
                         </p>
-                        {sortColumn === value.field
-                          ? (sortDirection === 'asc'
+                        {sortSetting.has(value.field)
+                          ? (sortSetting.get(value.field) === 'asc'
                             ? <AiOutlineCaretUp />
                             : <AiOutlineCaretDown />)
                           : <AiOutlineCaretLeft />}

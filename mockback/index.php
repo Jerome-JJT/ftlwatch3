@@ -80,11 +80,70 @@ if ($page == 'me' && $action == 'get') {
                     "route" => "basics/coalitions",
                     "basefilter" => null,
                     "submenu_id" => 4
+                ),
+                array(
+                    "id" => 20,
+                    "name" => "Tableau",
+                    "icon" => null,
+                    "route" => "tableau",
+                    "basefilter" => "?filter=f1&projects=c1",
+                    "submenu_id" => 4
                 )
             )
         ), 200);
     }
     jsonResponse(array(), 401);
+}
+
+if ($page == 'tableau' && $action == 'get') {
+    jsonResponse(array(
+        "poolfilters" => array(
+            array("name" => "test1"),
+            array("name" => "test2", "hidden" => true),
+            array("name" => "test3", "hidden" => false),
+        ),
+        "projects" => array(
+            "infos", "test1", "test2"
+        ),
+        "columns" => array(
+            array("label" => "ID", "field" => "id"),
+            array("label" => "Name", "field" => "name"),
+            array("label" => "Points", "field" => "points"),
+            array("label" => "Level", "field" => "level"),
+        ),
+        "values" => array(
+            array(
+                "id" => 4,
+                "name" => "n1",
+                "points" => 5,
+                "level" => 32,
+            ),
+            array(
+                "id" => 5,
+                "name" => "n2",
+                "points" => 20,
+                "level" => 32,
+            ),
+            array(
+                "id" => 6,
+                "name" => "n2",
+                "points" => 5,
+                "level" => 0,
+            ),
+            array(
+                "id" => 7,
+                "name" => "n1",
+                "points" => 16,
+                "level" => 7,
+            ),
+            array(
+                "id" => 8,
+                "name" => "n5",
+                "points" => 5,
+                "level" => 4,
+            ),
+        )
+    ), 200);
 }
 
 if ($page == 'me' && $action == 'calculator_get') {
