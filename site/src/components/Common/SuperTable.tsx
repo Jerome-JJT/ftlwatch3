@@ -107,7 +107,6 @@ export function SuperTable({
 
   const customComp = useCallback((a: any, b: any, aValue: any, bValue: any, comps: [string, string][]): number => {
 
-
     if (aValue === bValue) {
       if (comps.length > 0) {
 
@@ -130,10 +129,10 @@ export function SuperTable({
 
     if (typeof aValue !== 'undefined' || typeof bValue !== 'undefined') {
 
-      if (typeof aValue === 'undefined') {
+      if (typeof aValue === 'undefined' || aValue === null) {
         aValue = '';
       }
-      if (typeof bValue === 'undefined') {
+      if (typeof bValue === 'undefined' || bValue === null) {
         bValue = '';
       }
 
