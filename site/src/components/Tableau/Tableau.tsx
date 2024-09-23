@@ -60,8 +60,8 @@ export function TableauPage(): JSX.Element {
         if (res.status === 200) {
           const args = objUrlEncode({
             ...Object.fromEntries(searchParams.entries()),
-            "filter": usedFilter,
-            "projects": usedProjects
+            'filter':   usedFilter,
+            'projects': usedProjects,
           });
           window.history.replaceState(null, '', `/tableau${(args && args !== '') ? `?${args}` : ''}`);
           setSearchParams(args);
@@ -136,7 +136,7 @@ export function TableauPage(): JSX.Element {
       .catch((error) => {
         addNotif(AxiosErrorText(error), 'error');
       });
-  }, [addNotif, usedFilter, usedProjects]);
+  }, [addNotif, searchParams, setSearchParams, usedFilter, usedProjects]);
 
   const subOptions = useMemo(() => (
     <>
