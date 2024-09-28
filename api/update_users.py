@@ -475,7 +475,7 @@ def import_users(longway=True):
                                         AVG(correction_point) AS avgpoints, 
                                         AVG(wallet) AS avgwallets
                                         FROM users
-                                        WHERE (end_at IS NOT NULL) AND hidden = FALSE""")[0]
+                                        WHERE end_at IS NULL AND hidden = FALSE AND login NOT LIKE '3b3-%' AND has_cursus21 = True""")[0]
 
         mylogger(f"End users worker, for {infos['nbusers']}, {infos['sumpoints']} points (moy {infos['avgpoints']}), moy wallets {infos['avgwallets']}", LOGGER_ALERT)
     
