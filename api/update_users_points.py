@@ -140,7 +140,7 @@ def import_users_points(update_all=False, start_at=1):
 
     to_check = executeQuerySelect("""SELECT id, login FROM users 
                                 WHERE end_at IS NULL AND 
-                                login NOT LIKE '3b3-%%' AND 
+                                login NOT LIKE '3b3-%%'
                                 ORDER BY id""")
 
     mylogger("Start users points worker", LOGGER_ALERT)
