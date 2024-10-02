@@ -8,6 +8,7 @@ import io
 import time
 import urllib
 from urllib.request import Request, urlopen
+import ssl
 from PyPDF2 import PdfReader
 import hashlib
 from dateutil import parser
@@ -131,7 +132,8 @@ def import_subjects(update_all=False, start_at=1500):
 
         mylogger(f"Try import subject {start_at} {url} / current_limit {current_limit}, 500 limit {counter_500}", LOGGER_INFO)
         try:
-            res = urlopen(url)
+            context = ssl._create_unverified_context()
+            res = urlopen(url, context=context)
 
             if (res.status == 200):
 
