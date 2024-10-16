@@ -50,20 +50,23 @@ export function TinderPage(): JSX.Element {
               <img className='max-h-20 rounded-lg object-contain' src={card.avatar_url} alt="profile-picture" />
             </div>
 
-            <GaugeChart id={`gauge-chart-${card.circle}-${card.user_id}`}
-              className=''
-              style={{ width: '150px' }}
-              marginInPercent={0.01}
-              nrOfLevels={10}
-              colors={['#FF6000', '#00B0B0']}
-              animate={false}
-              percent={card.score / 200}
-              formatTextValue={(value: string) => `${parseInt(value) * 2}%`}
-            />
+            <div className='text-xs md:text-sm text-black dark:text-white'>
+              <GaugeChart id={`gauge-chart-${card.circle}-${card.user_id}`}
+                hideText={true}
+                style={{ width: '140px', marginBottom: '4px' }}
+                marginInPercent={0.01}
+                nrOfLevels={10}
+                colors={['#FF6000', '#00B0B0']}
+                animate={false}
+                percent={card.score / 200}
+                formatTextValue={(value: string) => `${parseInt(value) * 2}%`}
+              />
+              {card.score}%
+            </div>
             <div className='grow'></div>
 
           </div>
-          <div>
+          <div className='text-black dark:text-white'>
             Last projects updated<br/>
             {card.last_projects.map((p: string) => {
               return <React.Fragment key={p}>{p}<br/></React.Fragment>;
