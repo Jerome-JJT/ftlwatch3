@@ -153,6 +153,7 @@ export default function App(): JSX.Element {
 
             <Route path="/projects/teams" element={<TeamsPage />} />
             <Route path="/projects/rushes" element={<RushesPage />} />
+            <Route path="/projects/teammate-finder" element={<TinderPage />} />
             <Route path="/projects/tinder" element={<TinderPage />} />
             <Route path="/projects/subjects" element={<SubjectsPage />} />
             <Route path="/projects/unmatchedsubjects" element={<UnmatchedSubjectsPage />} />
@@ -162,6 +163,7 @@ export default function App(): JSX.Element {
             <Route path="/locations/userstotal" element={<UsersTotalPage />} />
             <Route path="/locations/computerstotal" element={<ComputersTotalPage />} />
             <Route path="/locations/peaks" element={<PeaksDaysPage />} />
+            <Route path="/locations/friends" element={<LoveGraphPage />} />
             <Route path="/locations/love" element={<LoveGraphPage />} />
 
             <Route path="/watch/fall" element={<FallGraphPage />} />
