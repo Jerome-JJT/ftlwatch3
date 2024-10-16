@@ -108,12 +108,12 @@ export function TinderPage(): JSX.Element {
   React.useEffect(() => {
     const args = objUrlEncode({
       ...Object.fromEntries(searchParams.entries()),
-      "project": currentFilter
+      'project': currentFilter,
     });
     window.history.replaceState(null, '', `${(args && args !== '') ? `?${args}` : ''}`);
     setSearchParams(args);
 
-  }, [currentFilter]);
+  }, [currentFilter, searchParams, setSearchParams]);
 
 
   const displayValues = useMemo(() => {
@@ -145,8 +145,11 @@ export function TinderPage(): JSX.Element {
 
         subOptions={subOptions}
 
-        tableTitle='Tinder'
-        tableDesc='To find peers to do group projects'
+        tableTitle='Teammate finder'
+        tableDesc='To find peers to do group projects, 200% means it&apos;s their last project to do,
+        100% means they have acess to the project (but not done anything on the circle),
+        less than 100% means they can have up to one project and/or exam to do to unlock the circle.
+        Keep in mind that they can already have a group not registered on the intranet.'
         options={[10, 25, 50, 100]}
       // reloadFunction={() => { setValues([]); }}
       />
