@@ -61,7 +61,7 @@ export function TinderPage(): JSX.Element {
                 percent={card.score / 200}
                 formatTextValue={(value: string) => `${parseInt(value) * 2}%`}
               />
-              {card.score}%
+              {Math.round(card.score * 100)/100}%
             </div>
             <div className='grow'></div>
 
