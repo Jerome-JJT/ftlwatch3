@@ -218,7 +218,7 @@ function get_tinder($debug = false)
                     "avatar_url" => $project["avatar_url"],
                     "projects" => array($project["project_slug"]), 
                     "score" => 0
-                );;
+                );
             }
         }
     }
@@ -283,6 +283,7 @@ function get_tinder($debug = false)
                     "user_id" => $user["user_id"],
                     "login" => $user["login"],
                     "avatar_url" => $user["avatar_url"],
+                    "last_projects" => array_slice($user["projects"], 0, 3),
                     "score" => $score
                 ));
             }

@@ -146,6 +146,31 @@ if ($page == 'tableau' && $action == 'get') {
     ), 200);
 }
 
+if ($page == 'projects' && $action == 'get_tinder') {
+    jsonResponse(array(
+        "filters" => array(
+            "circle3" => array(
+                "projects" => array("test1"),
+                "prev" => 6,
+                "min" => 7.5,
+                "max" => 9
+            ),
+        ),
+        "values" => array(
+            "circle3" => array(
+                array(
+                    "user_id" => 4242, 
+                    "login" => "test2",
+                    "avatar_url" => "/favicon.ico",
+                    "last_projects" => array("test5", "test6", "test7"),
+                    "score" => 100
+                )
+            )
+        )
+    ), 200);
+}
+
+
 if ($page == 'me' && $action == 'calculator_get') {
     jsonResponse(array(
         "beginLevel" => 4.2,

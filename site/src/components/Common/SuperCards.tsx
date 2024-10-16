@@ -144,9 +144,7 @@ export function SuperCards({
               </p>
             }
             {tableDesc &&
-              <p className="super-description">
-                {tableDesc}
-              </p>
+              tableDesc.split('\n').map((str, i) => <p key={i} className="super-description">{str}</p>)
             }
           </div>
 
@@ -158,8 +156,8 @@ export function SuperCards({
 
                 const args = objUrlEncode({
                   ...Object.fromEntries(searchParams.entries()),
-                  "search": searchQuery,
-                  "searchIncludeAll": doIncludeAll ? true : undefined
+                  'search':           searchQuery,
+                  'searchIncludeAll': doIncludeAll ? true : undefined,
                 });
 
                 const link = `${base}?${args}`;
@@ -168,9 +166,10 @@ export function SuperCards({
 
                 try {
                   await navigator.clipboard.writeText(link);
-                  addNotif("Copied to clipboard", "INFO");
-                } catch (error) {
-                  addNotif("Unable to copy to clipboard", "ERROR");
+                  addNotif('Copied to clipboard', 'INFO');
+                }
+                catch (error) {
+                  addNotif('Unable to copy to clipboard', 'ERROR');
                 }
               }}
               variant='outlined'

@@ -120,6 +120,7 @@ function getTinderProjects()
       AND users.hidden = FALSE
 
     GROUP BY users.id, projects.id
+    ORDER BY MAX(teams.updated_at) DESC
   ";
 
   $data = array();

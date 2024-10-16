@@ -63,6 +63,12 @@ export function TinderPage(): JSX.Element {
             <div className='grow'></div>
 
           </div>
+          <div>
+            Last projects updated<br/>
+            {card.last_projects.map((p: string) => {
+              return <React.Fragment key={p}>{p}<br/></React.Fragment>;
+            })}
+          </div>
         </CardBody>
       </Card>
     );
@@ -146,10 +152,11 @@ export function TinderPage(): JSX.Element {
         subOptions={subOptions}
 
         tableTitle='Teammate finder'
-        tableDesc='To find peers to do group projects, 200% means it&apos;s their last project to do,
-        100% means they have acess to the project (but not done anything on the circle),
-        less than 100% means they can have up to one project and/or exam to do to unlock the circle.
-        Keep in mind that they can already have a group not registered on the intranet.'
+        tableDesc={`To find peers to do group projects\n
+        200% means it's their last project to do\n
+        100% means they have access to the project (but not done anything on the circle)\n
+        Less than 100% means they can have up to one project and/or exam to do to unlock the circle.\n
+        Keep in mind that they can already have a group not registered on the intranet.`}
         options={[10, 25, 50, 100]}
       // reloadFunction={() => { setValues([]); }}
       />

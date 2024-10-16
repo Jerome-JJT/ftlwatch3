@@ -235,9 +235,7 @@ export function SuperTable({
               </p>
             }
             {tableDesc &&
-              <p className="super-description">
-                {tableDesc}
-              </p>
+              tableDesc.split('\n').map((str, i) => <p key={i} className="super-description">{str}</p>)
             }
           </div>
 
