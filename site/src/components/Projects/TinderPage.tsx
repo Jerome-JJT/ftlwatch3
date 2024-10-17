@@ -67,7 +67,7 @@ export function TinderPage(): JSX.Element {
 
           </div>
           <div className='text-black dark:text-white'>
-            Last projects updated<br/>
+            <span className='font-extrabold italic'>Last projects updated</span><br/>
             {card.last_projects.map((p: string) => {
               return <React.Fragment key={p}>{p}<br/></React.Fragment>;
             })}
