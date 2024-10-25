@@ -7,7 +7,15 @@ const StyledPace = styled.div`
   }
 `;
 
-const baseUpgrades = [13, 48, 81, 134, 211, 318, 365];
+const baseUpgrades = [
+  [8, 13, 18, 24, 30, 45],
+  [32, 48, 60, 72, 88, 118],
+  [54, 81, 101, 121, 148, 178],
+  [90, 134, 168, 201, 246, 306],
+  [141, 211, 264, 316, 387, 447],
+  [212, 318, 398, 478, 584, 644],
+  [244, 365, 457, 548, 670, 730],
+];
 const timings = [8, 12, 15, 18, 22, 24];
 
 const addDays = (date: Date, days: number) => {
@@ -80,9 +88,9 @@ export function PacePage(): JSX.Element {
               return (
                 <Fragment key={`l-${c}`}>
                   <div key={`${c}-x`}>Circle {c}</div>
-                  {timings.map((t) => {
-                    const addition = (baseUpgrades[c] / 12.0) * t;
-                    const res = addDays(new Date(beginDate), Math.floor(addition + offset));
+                  {timings.map((t, p) => {
+                    const addition = baseUpgrades[c][p];
+                    const res = addDays(new Date(beginDate), Math.floor(addition + offset - 1));
                     return <div key={`${c}-${t}`}>
                       {res.toISOString().substring(0, 10)}
                     </div>;
