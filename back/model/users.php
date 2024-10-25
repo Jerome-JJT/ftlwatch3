@@ -232,6 +232,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
   poolfilters.name AS poolfilter,
   projects.id AS project_id,
   projects.slug AS project_slug,
+  projects.corder AS project_corder,
   projects.main_cursus,
   MAX(teams.final_mark) AS final_mark,
   COALESCE(cursus21_coalition.color, cursus9_coalition.color) AS _line_color
@@ -267,7 +268,7 @@ function getUserProjects($hidden, $poolfilter, $projects)
     )
 
   GROUP BY users.id, projects.id, cursus21_coalition.color, cursus9_coalition.color, poolfilters.id
-  ORDER BY projects.corder, projects.slug
+  ORDER BY users.login
   ";
 
   $data = array(":poolfilter" => $poolfilter, ":projects" => $projects, ":hidden" => $hidden == true ? "TRUE" : "FALSE");

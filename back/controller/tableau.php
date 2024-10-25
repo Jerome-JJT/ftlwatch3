@@ -189,6 +189,7 @@ function tableau_api($selectedFilter, $selectedProjects) {
                     $cols[$team['project_slug']] = array(
                         "label" => $team['project_slug'],
                         "field" => $team['project_id'],
+                        "corder" => $team['project_corder'],
                     );
                 }
     
@@ -212,7 +213,20 @@ function tableau_api($selectedFilter, $selectedProjects) {
             ]
         );
 
-        $res["columns"] = array_merge($res["columns"], array_values($cols));
+        $cols = array_values($cols);
+        usort($cols, function($a, $b) {
+            if($a['corder'] > $b['corder']) {
+                return 1;
+            }
+            else if($a['corder'] < $b['corder']) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        });
+
+        $res["columns"] = array_merge($res["columns"], $cols);
 
         $res["values"] = array_values($tmp);
     }
