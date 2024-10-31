@@ -37,7 +37,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
 
     return axios
       .post('/?page=admin&action=profile_set', objUrlEncode(
-        saveSettings
+        saveSettings, true
       ),
       { withCredentials: true }
       )
@@ -128,7 +128,7 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
         <MyInput
           type='number'
           label='CSS'
-          value={settings.css_click || ''}
+          value={settings.css_click ?? ''}
           onChange={(e) => setSettings((prev: any) => {return { ...prev, css_click: e.target.value };})}
         />
 
