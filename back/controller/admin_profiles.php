@@ -48,6 +48,7 @@ function profile_set($data)
             isset($data["github_link"]) && 
             isset($data["terms"]) &&
             isset($data["can_change_theme"]) &&
+            isset($data["css_click"]) &&
             isset($data["citation"]) &&
             isset($data["citation_avatar"])
         ) {
@@ -59,6 +60,7 @@ function profile_set($data)
                 $data["github_link"], 
                 $data["terms"],
                 $data["can_change_theme"],
+                $data["css_click"],
                 $data["citation"],
                 $data["citation_avatar"]
             );

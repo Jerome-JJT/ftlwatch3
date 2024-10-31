@@ -115,7 +115,7 @@ function setSettings($userId, $themeId, $themeColor, $terms) {
 
 
 function setSettingsAdmin($userId, $themeId, $themeColor, $githubLink, 
-$terms, $canChangeTheme, $citation, $citationAvatar) {
+$terms, $canChangeTheme, $cssClicks, $citation, $citationAvatar) {
 
   $query = "UPDATE login_user_profiles SET 
   
@@ -124,6 +124,7 @@ $terms, $canChangeTheme, $citation, $citationAvatar) {
   github_link = COALESCE(:github_link, github_link),
   terms = COALESCE(:terms, terms),
   can_change_theme = COALESCE(:can_change_theme, can_change_theme),
+  css_click = COALESCE(:css_click, css_click),
   citation = COALESCE(:citation, citation),
   citation_avatar = COALESCE(:citation_avatar, citation_avatar)
 
@@ -136,6 +137,7 @@ $terms, $canChangeTheme, $citation, $citationAvatar) {
     ":github_link" => $githubLink,
     ":terms" => $terms,
     ":can_change_theme" => $canChangeTheme,
+    ":css_click" => $cssClicks,
     ":citation" => $citation,
     ":citation_avatar" => $citationAvatar,
   );

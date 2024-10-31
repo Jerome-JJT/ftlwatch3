@@ -32,7 +32,6 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
       modify: _modify,
       password: _password,
       ban_date: _ban_date,
-      css_click: _css_click,
       ads: _ads,
       ...saveSettings } = settings;
 
@@ -124,6 +123,13 @@ export function UserProfileModify({ themes, profile }: UserProfileModifyProps): 
           label='Github link'
           value={settings.github_link || ''}
           onChange={(e) => setSettings((prev: any) => {return { ...prev, github_link: e.target.value };})}
+        />
+
+        <MyInput
+          type='number'
+          label='CSS'
+          value={settings.css_click || ''}
+          onChange={(e) => setSettings((prev: any) => {return { ...prev, css_click: e.target.value };})}
         />
 
         <MyInput
