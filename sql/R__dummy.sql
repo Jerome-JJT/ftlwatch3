@@ -53,6 +53,35 @@ SELECT
 );
 
 
+DROP VIEW IF EXISTS v_users_points_stats;
+
+CREATE VIEW v_users_points_stats AS (
+  SELECT ROW_NUMBER() OVER (ORDER BY correction_point DESC), 
+  id, login, correction_point
+  FROM users
+
+  WHERE end_at IS NULL AND 
+  hidden = FALSE AND 
+  login NOT LIKE '3b3-%%' AND 
+  has_cursus21 = TRUE
+  ORDER BY correction_point DESC
+);
+
+
+DROP VIEW IF EXISTS v_points_repartition;
+
+CREATE VIEW v_points_repartition AS (
+  SELECT 
+  vups1.row_number, ROUND(vups1.row_number * 100.0 / (SELECT COUNT(v_users_points_stats.*) FROM v_users_points_stats)) AS row_perc, vups1.login, 
+  vups1.correction_point, SUM(vups2.correction_point) AS cumul, ROUND(SUM(vups2.correction_point) * 100.0 / (SELECT SUM(v_users_points_stats.correction_point) FROM v_users_points_stats)) AS perc_evalp
+  FROM v_users_points_stats vups1
+  JOIN v_users_points_stats vups2
+  ON vups1.correction_point <= vups2.correction_point
+  GROUP BY vups1.row_number, vups1.login, vups1.correction_point
+  ORDER BY vups1.row_number ASC
+);
+
+
 
 -- DROP VIEW IF EXISTS v_users_projects;
 
