@@ -278,6 +278,9 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (92, 'Old 42lwatch (tmp)', 97, 'http://env-4927797.jcloud-ver-jpc.ik-server.com/', NULL, 3, 1),
   (94, '42 evals', 99, 'http://42evals.com/', NULL, NULL, 10),
   (95, 'PONG', 98, 'https://pong.42lwatch.ch/', NULL, NULL, 10),
+  (96, 'TETRIS', 98, 'https://tetris.42lwatch.ch/', NULL, NULL, 10),
+  (97, 'RNCP calc 1', 99, 'https://42tools.slopez.dev/rncp-progress', NULL, NULL, 10),
+  (98, 'RNCP calc 2', 99, 'https://rncp.hacku.org/rncp', NULL, NULL, 10),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
