@@ -40,6 +40,133 @@ function get_pools()
     $tmp = array(
         array(
             "fillPoints" => 0,
+            "overflowPoints" => 0,
+            "totalPoints" => 0,
+            "salesPoints" => 0,
+            "startFill" => '',
+            "endFill" => '',
+            "startSales" => '',
+            "endSales" => '',
+        )
+    );
+    $buffer = array();
+
+
+    $salesReasons = array('Earning after defense', 'Refund during sales');
+
+    $currentPool = -1;
+
+    foreach($transactions as $tr) {
+
+        if ($tr['reason'] == 'Defense plannification' && ($tr['user_id'] == $tr['leader_id'] || $tr['slug'] == null)) {
+            continue;
+        }
+        if ($tr['reason'] == 'Earning after defense' && ($tr['sum'] == $tr['cost'] || $tr['slug'] == null)) {
+            continue;
+        }
+
+        if ($tr['reason'] == 'Provided points to the pool.' || $tr['reason'] == 'Defense plannification' || $tr['reason'] == 'Evaluator cancelled a defense') {
+            array_push($buffer, array(
+                'date' => $tr['created_at'],
+                'points' => $tr['sum']
+            ));
+        }
+
+
+        if (in_array($tr['reason'], $salesReasons)) {
+            $base = new DateTime($tr['created_at']);
+
+            $flag = false;
+            foreach($buffer as $b) {
+                $cmp = new DateTime($b['date']);
+
+                if ($cmp->diff($base)->days >= 2) {
+                    if ($flag == false) {
+                        $currentPool += 1;
+
+                        $tmp[$currentPool] = array(
+                            "fillPoints" => 0,
+                            "overflowPoints" => 0,
+                            "totalPoints" => 0,
+                            "salesPoints" => 0,
+                            "startFill" => $b['date'],
+                            "endFill" => '',
+                            "startSales" => $tr['created_at'],
+                            "endSales" => '',
+                        );
+
+                        $flag = true;
+                    }
+
+                    if ($b['date'] < $tmp[$currentPool]["startFill"]) {
+                        $tmp[$currentPool]["startFill"] = $b['date'];
+                    }
+                    if ($b['date'] > $tmp[$currentPool]["endFill"]) {
+                        $tmp[$currentPool]["endFill"] = $b['date'];
+                    }
+
+                    $tmp[$currentPool]["fillPoints"] += $b['points'];
+                    $tmp[$currentPool]["totalPoints"] += $b['points'];
+                }
+            }
+
+            foreach($buffer as $b) {
+                $cmp = new DateTime($b['date']);
+
+                if ($cmp->diff($base)->days < 2) {
+                    // $tmp[$currentPool]["fillPoints"] += $b['points'];
+                    $tmp[$currentPool]['overflowPoints'] += $b['points'];
+                    $tmp[$currentPool]["totalPoints"] += $b['points'];
+                }
+            }
+            
+            $buffer = array();
+
+            $tmp[$currentPool]['endSales'] = $tr['created_at'];
+            if ($tmp[$currentPool]['startSales'] == ''){
+                $tmp[$currentPool]['startSales'] = $tr['created_at'];
+            }
+        }            
+
+        if ($tr['reason'] == 'Earning after defense') {
+            // $tmp[$currentPool]['salesPoints'] += ($tr['sum'] - $tr['cost']);
+            $tmp[$currentPool]['salesPoints'] += 1;
+        }
+
+        if ($tr['reason'] == 'Refund during sales') {
+            $tmp[$currentPool]['salesPoints'] += $tr['sum'];
+        }
+    }
+
+    array_shift($tmp);
+
+    $res = array();
+
+    $res["columns"] = [
+        ["label" => "Points filled", "field" => "fillPoints"],
+        ["label" => "Points overflowed", "field" => "overflowPoints"],
+        ["label" => "Points saleds", "field" => "salesPoints"],
+
+        ["label" => "Start filling", "field" => "startFill"],
+        ["label" => "End filling", "field" => "endFill"],
+
+        ["label" => "Start sales", "field" => "startSales"],
+        ["label" => "End sales", "field" => "endSales"]
+    ];
+
+    $res["values"] = array_values($tmp);
+
+    jsonResponse($res, 200);
+}
+
+
+function get_pools_old()
+{
+    $transactions = getPools();
+
+    $tmp = array(
+        array(
+            "fillPoints" => 0,
             "salesPoints" => 0,
             "startFill" => '',
             "endFill" => '',
@@ -220,6 +347,13 @@ function get_pools2()
 
 // "2023-11-12 15:52:35 +0100",
 // "2023-11-13 17:43:32 +0100",
+
+
+
+// "2024-10-31 14:31:36 +0100"
+// "2024-11-01 14:03:29 +0100"
+
+// "2024-12-08 10:19:38 +0100"
 
 jsonResponse($res, 200);
 
