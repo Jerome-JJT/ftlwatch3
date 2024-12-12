@@ -138,6 +138,36 @@ function get_pools()
         }
     }
 
+    $flag = false;
+    foreach($buffer as $b) {
+        if ($flag == false) {
+            $currentPool += 1;
+
+            $tmp[$currentPool] = array(
+                "fillPoints" => 0,
+                "overflowPoints" => 0,
+                "totalPoints" => 0,
+                "salesPoints" => 0,
+                "startFill" => $b['date'],
+                "endFill" => '',
+                "startSales" => '',
+                "endSales" => '',
+            );
+
+            $flag = true;
+        }
+
+        if ($b['date'] < $tmp[$currentPool]["startFill"]) {
+            $tmp[$currentPool]["startFill"] = $b['date'];
+        }
+        if ($b['date'] > $tmp[$currentPool]["endFill"]) {
+            $tmp[$currentPool]["endFill"] = $b['date'];
+        }
+
+        $tmp[$currentPool]["fillPoints"] += $b['points'];
+        $tmp[$currentPool]["totalPoints"] += $b['points'];
+    }
+
     array_shift($tmp);
 
     $res = array();
