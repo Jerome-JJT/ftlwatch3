@@ -121,17 +121,21 @@ async def ping(ctx):
     await ctx.defer()
 
     try:
-        send_to_rabbit('errors.server.message.queue', {'content': f'Bot ping request by {str(ctx.author)}'})
+        send_to_rabbit('errors.server.message.queue', {'content': f'Bot ping request by {str(ctx.author)} {str(ctx.author.id)}'})
     except:
         pass
     
-    if (str(ctx.author) in env('BOT_ADMIN_WL').split(",")):
+    if (str(ctx.author.id) in env('BOT_ADMIN_WL').split(",")):
         send_to_rabbit('private.message.queue', {'content': 'Ping'})
 
     await ctx.respond(f"Done")
 
 
 
+@bot.slash_command(name="clean", description="Clean", help='Clean')
+async def clean(ctx, amount: Option(int, 'Amount', required=True)):
+    if (str(ctx.author.id) in env('BOT_ADMIN_WL').split(",")):
+        await ctx.channel.purge(limit=amount)
 
 
 @bot.slash_command(name="api", description="Api endpoint")
@@ -283,7 +287,7 @@ async def comments(ctx, pseudo: Option(str, 'Pseudo', required=True)):
     except:
         pass
 
-    r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2025-03-01T00:00:00.000Z", nultiple=1)
+    r = callapi(f"/v2/users/{pseudo}/scale_teams/as_corrector?range[created_at]=2021-10-01T00:00:00.000Z,2030-03-01T00:00:00.000Z", nultiple=1)
     list = ["comment", "created_at"]
 
     #print(r)
