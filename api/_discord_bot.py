@@ -137,6 +137,8 @@ async def clean(ctx, amount: Option(int, 'Amount', required=True)):
     if (str(ctx.author.id) in env('BOT_ADMIN_WL').split(",")):
         await ctx.channel.purge(limit=amount)
 
+    await ctx.respond(f"Done", ephemeral=True)
+
 
 @bot.slash_command(name="api", description="Api endpoint")
 async def api(ctx,
