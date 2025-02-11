@@ -13,7 +13,7 @@ def logtologstash(logs):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
   except socket.error as msg:
-    mylogger("Failed to create logstash socket", LOGGER_ERROR)
+    # mylogger("Failed to create logstash socket", LOGGER_ERROR)
     return
 
 
@@ -21,7 +21,7 @@ def logtologstash(logs):
     sock.connect((HOST, PORT))
 
   except socket.error as msg:
-    mylogger(f"Failed to connect logstash socket {msg}", LOGGER_ERROR)
+    # mylogger(f"Failed to connect logstash socket {msg}", LOGGER_ERROR)
     return
 
   data = []
