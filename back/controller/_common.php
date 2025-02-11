@@ -168,7 +168,7 @@ function logtologstash($status)
     try {
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         if ($socket === false) {
-            mylogger("Failed to create socket", LOGGER_ERROR());
+            // mylogger("Failed to create socket", LOGGER_ERROR());
         } 
         else {
             $connect_timeval = array(
@@ -191,7 +191,7 @@ function logtologstash($status)
             $result = @socket_sendto($socket, $message, strlen($message), 0, $logstashHost, $logstashPort);
     
             if ($result === false) {
-                mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
+                // mylogger("Failed to send the message to Logstash", LOGGER_ERROR());
             } 
             // else {
             //     echo "Log message sent to Logstash.";
