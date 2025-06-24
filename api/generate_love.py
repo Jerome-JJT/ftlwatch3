@@ -77,7 +77,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             AND dist < %(dist)s
             AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%'
                                        
-            GROUP BY user_id, user_login, user_image, users.end_at, users.grade, users.has_cursus21
+            GROUP BY user_id, user_login, user_image, users.end_at, users.is_alumni, users.grade, users.has_cursus21
         """, {
             "min_date": min_date,
             "max_date": max_date,
@@ -139,7 +139,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             AND dist < %(dist)s
             AND hidden = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (end_at IS NULL)
                                        
-            GROUP BY user_id, user_login, user_image, users.end_at, users.grade, users.has_cursus21
+            GROUP BY user_id, user_login, user_image, users.end_at, users.is_alumni, users.grade, users.has_cursus21
         """, {
             "min_date": min_date,
             "max_date": max_date,
