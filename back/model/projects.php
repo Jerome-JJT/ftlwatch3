@@ -115,7 +115,7 @@ function getTinderProjects()
     JOIN project_types ON project_types.id = projects.project_type_id
 
     WHERE projects.main_cursus = 21
-      AND users.hidden = False AND users.kind <> 'external' AND users.grade <> 'Member' AND users.login NOT LIKE '3b3-%%' 
+      AND users.hidden = False AND users.kind <> 'external' AND users.grade <> 'Transcender' AND users.grade <> 'Alumni' AND users.login NOT LIKE '3b3-%%' 
       AND users.has_cursus21 = True AND (users.end_at IS NULL)
       AND project_types.name = 'common-core'
       AND users.hidden = FALSE

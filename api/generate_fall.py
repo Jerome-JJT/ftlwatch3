@@ -47,7 +47,7 @@ def generate_fall(graph_type="", output_name='', min_date='2000-00-00', max_date
 
     raw_nodes = executeQuerySelect("""
         SELECT users.id AS user_id, users.login AS user_login, users.avatar_url AS user_image,
-                (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.is_alumni = TRUE THEN 'A' ELSE CASE WHEN users.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user_type
             FROM users
             
         WHERE users.hidden = False AND users.kind <> 'external' AND users.login NOT LIKE '3b3-%%' AND users.has_cursus21 = True
@@ -186,7 +186,7 @@ def gen_falls():
         # target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
         # target_date = target_date.strftime("%Y-%m-%d")
 
-        generate_fall(output_name='fall_all', takes=['T', 'S', 'B'], nboccure=4)
+        generate_fall(output_name='fall_all', takes=['A', 'T', 'S', 'B'], nboccure=4)
 
         mylogger("End fall graph generator", LOGGER_ALERT)
 

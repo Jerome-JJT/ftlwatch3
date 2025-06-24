@@ -250,6 +250,7 @@ function tableau_pools()
         'blackholes' => 0,
         'incursus' => 0,
         'transcendead' => 0,
+        'alumnis' => 0,
     );
     
     $users = getUsersPools();
@@ -264,6 +265,7 @@ function tableau_pools()
                 'blackholes' => 0,
                 'incursus' => 0,
                 'transcendead' => 0,
+                'alumnis' => 0,
             );
         }
 
@@ -276,6 +278,7 @@ function tableau_pools()
                 'blackholes' => 0,
                 'incursus' => 0,
                 'transcendead' => 0,
+                'alumnis' => 0,
             );
         }
 
@@ -290,7 +293,12 @@ function tableau_pools()
 
             if ($user['end_at'] == null || strtotime($user['end_at']) >= time()) {
                 
-                if ($user['grade'] == 'Member') {
+                if ($user['grade'] == 'Alumni') {
+                    $pools['all']['alumnis'] += 1;
+                    $pools[$year]['alumnis'] += 1;
+                    $pools[$user['poolfilter']]['alumnis'] += 1;
+                }
+                else if ($user['grade'] == 'Transcender') {
                     $pools['all']['transcendead'] += 1;
                     $pools[$year]['transcendead'] += 1;
                     $pools[$user['poolfilter']]['transcendead'] += 1;
@@ -323,6 +331,9 @@ function tableau_pools()
 
         $pools[$poolid]['_perc_transcendead'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['transcendead'] / $pools[$poolid]['selected']) * 100, 2) : 0;
         $pools[$poolid]['perc_transcendead'] = $pools[$poolid]['_perc_transcendead']." %";
+
+        $pools[$poolid]['_perc_alumni'] = $pools[$poolid]['selected'] > 0 ? round(($pools[$poolid]['alumnis'] / $pools[$poolid]['selected']) * 100, 2) : 0;
+        $pools[$poolid]['perc_alumni'] = $pools[$poolid]['_perc_alumni']." %";
     }        
     
 
@@ -343,6 +354,9 @@ function tableau_pools()
 
         ["label" => "Transcendead", "field" => "transcendead"],
         ["label" => "Perc Transcendead", "field" => "perc_transcendead"],
+
+        ["label" => "Alumi", "field" => "alumnis"],
+        ["label" => "Perc Alumni", "field" => "perc_alumni"],
     ];
 
     $res["values"] = array_values($pools);

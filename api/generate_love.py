@@ -30,8 +30,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             SELECT * FROM (
 
                 SELECT user1_id, u1.login AS user1_login, u2.login AS user2_login, user2_id, 
-                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
-                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
+                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.is_alumni = TRUE THEN 'A' ELSE CASE WHEN u1.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user1_type,
+                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u2.is_alumni = TRUE THEN 'A' ELSE CASE WHEN u2.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user2_type,
                     SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
                 FROM (
                     SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
@@ -63,7 +63,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
         raw_nodes = executeQuerySelect("""
             SELECT user_id, users.login AS user_login, users.avatar_url AS user_image, SUM(length) AS length,
-                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.is_alumni = TRUE THEN 'A' ELSE CASE WHEN users.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user_type
                 FROM (
                 SELECT user1_id AS user_id, date, dist, length, is_piscine FROM vp_loves
                 UNION 
@@ -91,8 +91,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             SELECT * FROM (
 
                 SELECT user1_id, u1.login AS user1_login, u2.login AS user2_login, user2_id,
-                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user1_type,
-                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u2.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user2_type,
+                    (CASE WHEN u1.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u1.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.is_alumni = TRUE THEN 'A' ELSE CASE WHEN u1.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user1_type,
+                    (CASE WHEN u2.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN u2.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN u1.is_alumni = TRUE THEN 'A' ELSE CASE WHEN u2.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user2_type,
                     SUM(length) AS length, ROW_NUMBER() OVER (PARTITION BY user1_id ORDER BY SUM(length) DESC) AS ranked
                 FROM (
                     SELECT user1_id AS user1_id, user2_id AS user2_id, date, dist, length, is_piscine FROM vp_loves
@@ -125,7 +125,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
 
         raw_nodes = executeQuerySelect("""
             SELECT user_id, users.login AS user_login, users.avatar_url AS user_image, SUM(length) AS length,
-                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.grade = 'Member' THEN 'T' ELSE 'S' END END END) AS user_type
+                    (CASE WHEN users.has_cursus21 = FALSE THEN 'N' ELSE CASE WHEN users.end_at IS NOT NULL THEN 'B' ELSE CASE WHEN users.is_alumni = TRUE THEN 'A' ELSE CASE WHEN users.grade = 'Transcender' THEN 'T' ELSE 'S' END END END END) AS user_type
                 FROM (
                 SELECT user1_id AS user_id, date, dist, length, is_piscine FROM vp_loves
                 UNION 
@@ -168,6 +168,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 node_color = '#B22222'
             elif (rnode["user_type"] == "T"):
                 node_color = '#32CD32'
+            elif (rnode["user_type"] == "A"):
+                node_color = '#CDBB32'
             elif (rnode["user_type"] == "N"):
                 node_color = '#800080'
             else:
