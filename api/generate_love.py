@@ -45,8 +45,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 WHERE date between %(min_date)s AND %(max_date)s
                 AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
                 AND dist < %(dist)s
-                AND u1.hidden = False AND u1.is_admin = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%'
-                AND u2.hidden = False AND u2.is_admin = False AND u2.kind <> 'external' AND u2.login NOT LIKE '3b3-%%'
+                AND u1.hidden = False AND u1.is_staff = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%'
+                AND u2.hidden = False AND u2.is_staff = False AND u2.kind <> 'external' AND u2.login NOT LIKE '3b3-%%'
 
                 GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.is_alumni, u2.is_alumni, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
             ) uall
@@ -75,7 +75,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             WHERE date between %(min_date)s AND %(max_date)s
             AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
             AND dist < %(dist)s
-            AND hidden = False AND is_admin = False AND kind <> 'external' AND login NOT LIKE '3b3-%%'
+            AND hidden = False AND is_staff = False AND kind <> 'external' AND login NOT LIKE '3b3-%%'
                                        
             GROUP BY user_id, user_login, user_image, users.end_at, users.is_alumni, users.grade, users.has_cursus21
         """, {
@@ -106,8 +106,8 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 WHERE date between %(min_date)s AND %(max_date)s
                 AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
                 AND dist < %(dist)s
-                AND u1.hidden = False AND u1.is_admin = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.end_at IS NULL)
-                AND u2.hidden = False AND u2.is_admin = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.end_at IS NULL)
+                AND u1.hidden = False AND u1.is_staff = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%' AND u1.has_cursus21 = True AND (u1.end_at IS NULL)
+                AND u2.hidden = False AND u2.is_staff = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.end_at IS NULL)
 
 
                 GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.is_alumni, u2.is_alumni, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
@@ -137,7 +137,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
             WHERE date between %(min_date)s AND %(max_date)s
             AND (%(is_piscine)s IS NULL OR is_piscine = %(is_piscine)s)
             AND dist < %(dist)s
-            AND hidden = False AND is_admin = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (end_at IS NULL)
+            AND hidden = False AND is_staff = False AND kind <> 'external' AND login NOT LIKE '3b3-%%' AND has_cursus21 = True AND (end_at IS NULL)
                                        
             GROUP BY user_id, user_login, user_image, users.end_at, users.is_alumni, users.grade, users.has_cursus21
         """, {
