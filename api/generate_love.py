@@ -48,7 +48,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 AND u1.hidden = False AND u1.kind <> 'external' AND u1.login NOT LIKE '3b3-%%'
                 AND u2.hidden = False AND u2.kind <> 'external' AND u2.login NOT LIKE '3b3-%%'
 
-                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
+                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.is_alumni, u2.is_alumni, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
             ) uall
 
             WHERE ranked <= %(rank)s
@@ -110,7 +110,7 @@ def generate_love(graph_type="", output_name='', min_date='2000-00-00', max_date
                 AND u2.hidden = False AND u1.kind <> 'external' AND u2.login NOT LIKE '3b3-%%' AND u2.has_cursus21 = True AND (u2.end_at IS NULL)
 
 
-                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
+                GROUP BY user1_id, user1_login, user2_id, user2_login, u1.end_at, u2.end_at, u1.is_alumni, u2.is_alumni, u1.grade, u2.grade, u1.has_cursus21, u2.has_cursus21
             ) uall
 
             WHERE ranked <= %(rank)s
@@ -302,15 +302,15 @@ def gen_loves():
         target_date = datetime.datetime(datetime.datetime.now().year - 1, 10, 1)
         target_date = target_date.strftime("%Y-%m-%d")
 
-        generate_love(output_name='love_piscine_blackhole_2d', is_piscine=True, takes=['T', 'S', 'B', 'N'], nbrank=3)
+        generate_love(output_name='love_piscine_blackhole_2d', is_piscine=True, takes=['A', 'T', 'S', 'B', 'N'], nbrank=3)
         generate_love(output_name='love_piscine_2d', is_piscine=True)
-        generate_love(output_name='love_cursus_2d', takes=['T', 'S', 'B'])
+        generate_love(output_name='love_cursus_2d', takes=['A', 'T', 'S', 'B'])
         generate_love(output_name='love_actual_2d')
         generate_love(output_name='love_recent_2d', is_piscine=False, min_date=target_date)
 
-        generate_love(graph_type="3d", output_name='love_piscine_blackhole_3d', is_piscine=True, takes=['T', 'S', 'B', 'N'], nbrank=3)
+        generate_love(graph_type="3d", output_name='love_piscine_blackhole_3d', is_piscine=True, takes=['A', 'T', 'S', 'B', 'N'], nbrank=3)
         generate_love(graph_type="3d", output_name='love_piscine_3d', is_piscine=True)
-        generate_love(graph_type="3d", output_name='love_cursus_3d', takes=['T', 'S', 'B'])
+        generate_love(graph_type="3d", output_name='love_cursus_3d', takes=['A', 'T', 'S', 'B'])
         generate_love(graph_type="3d", output_name='love_actual_3d')
         generate_love(graph_type="3d", output_name='love_recent_3d', is_piscine=False, min_date=target_date)
         
