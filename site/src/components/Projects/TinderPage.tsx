@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Card,
   CardBody,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
-import { commonTitle } from 'Utils/commonTitle';
-import Separator from 'Common/Separator';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
+import { commonTitle } from '../Utils/commonTitle';
+import Separator from '../Common/Separator';
 import classNames from 'classnames';
 import GaugeChart from 'react-gauge-chart';
 import { useSearchParams } from 'react-router-dom';
-import { objUrlEncode } from 'Utils/objUrlEncode';
+import { objUrlEncode } from '../Utils/objUrlEncode';
 
 
 

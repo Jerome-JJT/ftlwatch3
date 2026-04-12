@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Dialog,
   DialogBody,
 } from '@material-tailwind/react';
-import { SuperTable } from 'Common/SuperTable';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { ColumnProps } from 'Utils/columnsProps';
-import { commonTitle } from 'Utils/commonTitle';
+import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { ColumnProps } from '../Utils/columnsProps';
+import { commonTitle } from '../Utils/commonTitle';
 import { AiOutlineClose } from 'react-icons/ai';
 import { UserProfileModify } from './UserProfileModify';
-import { ThemeProps } from 'Utils/themeProps';
+import { ThemeProps } from '../Utils/themeProps';
 
 
 

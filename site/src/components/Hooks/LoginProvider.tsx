@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext, type ReactNode, createContext, useCallback, useState } from 'react';
 import { AxiosErrorText } from './AxiosErrorText';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { useNotification } from '../Notifications/NotificationsProvider';
 
 export interface LoggedUser {
   id: number

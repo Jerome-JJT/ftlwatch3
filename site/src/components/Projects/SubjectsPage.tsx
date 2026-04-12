@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { SuperTable } from 'Common/SuperTable';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { ColumnProps } from 'Utils/columnsProps';
-import { commonTitle } from 'Utils/commonTitle';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { ColumnProps } from '../Utils/columnsProps';
+import { commonTitle } from '../Utils/commonTitle';
 import { Button, Dialog, DialogBody, DialogHeader } from '@material-tailwind/react';
 import { AiOutlineClose } from 'react-icons/ai';
 

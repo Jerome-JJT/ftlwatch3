@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { useNotification } from '../Notifications/NotificationsProvider';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import styled from 'styled-components';

@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Checkbox,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { ThemeProps } from 'Utils/themeProps';
-import MySelect from 'Common/MySelect';
-import MyInput from 'Common/MyInput';
-import { objUrlEncode } from 'Utils/objUrlEncode';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { ThemeProps } from '../Utils/themeProps';
+import MySelect from '../Common/MySelect';
+import MyInput from '../Common/MyInput';
+import { objUrlEncode } from '../Utils/objUrlEncode';
 
 
 

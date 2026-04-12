@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { commonTitle } from 'Utils/commonTitle';
-import { SuperCards } from 'Common/SuperCards';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { commonTitle } from '../Utils/commonTitle';
+import { SuperCards } from '../Common/SuperCards';
 
 
 function hashCode(str: string) {

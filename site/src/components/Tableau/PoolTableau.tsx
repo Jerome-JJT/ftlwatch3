@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { SuperTable } from 'Common/SuperTable';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+// import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
 import styled from 'styled-components';
-import { comparePoolfilters } from 'Utils/comparePoolfilters';
-import { ColumnProps } from 'Utils/columnsProps';
-import { commonTitle } from 'Utils/commonTitle';
+import { comparePoolfilters } from '../Utils/comparePoolfilters';
+import { ColumnProps } from '../Utils/columnsProps';
+import { commonTitle } from '../Utils/commonTitle';
+import { SuperTable } from '../Common/SuperTable';
 
 
 

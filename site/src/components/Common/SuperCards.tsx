@@ -17,8 +17,8 @@ import {
 import MySelect from './MySelect';
 import MyInput from './MyInput';
 import { useSearchParams } from 'react-router-dom';
-import { objUrlEncode } from 'Utils/objUrlEncode';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { objUrlEncode } from '../Utils/objUrlEncode';
+import { useNotification } from '../Notifications/NotificationsProvider';
 
 interface CardsProps {
   values: any[] | undefined;

@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import { Input, Button, Checkbox } from '@material-tailwind/react';
 
-import { SuperTable } from 'Common/SuperTable';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import MySelect from 'Common/MySelect';
-import { ColumnProps } from 'Utils/columnsProps';
-import { commonTitle } from 'Utils/commonTitle';
+import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import MySelect from '../Common/MySelect';
+import { ColumnProps } from '../Utils/columnsProps';
+import { commonTitle } from '../Utils/commonTitle';
 
 
 

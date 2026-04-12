@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { useNotification } from '../Notifications/NotificationsProvider';
 import { Button, Card, Checkbox } from '@material-tailwind/react';
-import MySelect from 'Common/MySelect';
-import MyInput from 'Common/MyInput';
+import MySelect from '../Common/MySelect';
+import MyInput from '../Common/MyInput';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { useLogin } from 'Hooks/LoginProvider';
-import { ThemeProps } from 'Utils/themeProps';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { useLogin } from '../Hooks/LoginProvider';
+import { ThemeProps } from '../Utils/themeProps';
 
 
 

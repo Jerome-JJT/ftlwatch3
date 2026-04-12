@@ -1,6 +1,6 @@
 import AppLogo from '../../assets/logo_transparent_small.png';
 import { Card, CardBody } from '@material-tailwind/react';
-import { commonTitle } from 'Utils/commonTitle';
+import { commonTitle } from '../Utils/commonTitle';
 import React from 'react';
 
 export default function AboutPage(): JSX.Element {

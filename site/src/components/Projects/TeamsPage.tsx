@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Avatar,
   Badge,
@@ -15,15 +15,15 @@ import {
   Tooltip,
   Typography,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
 import { AiFillStar, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
-import { longDate, shortDate } from 'Utils/dateUtils';
-import { commonTitle } from 'Utils/commonTitle';
+import { longDate, shortDate } from '../Utils/dateUtils';
+import { commonTitle } from '../Utils/commonTitle';
 import classNames from 'classnames';
-import Separator from 'Common/Separator';
+import Separator from '../Common/Separator';
 import { useSearchParams } from 'react-router-dom';
-import { objUrlEncode } from 'Utils/objUrlEncode';
+import { objUrlEncode } from '../Utils/objUrlEncode';
 
 
 

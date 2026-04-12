@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Card,
@@ -11,11 +11,11 @@ import {
   DialogBody,
   DialogHeader,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { commonTitle } from 'Utils/commonTitle';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { commonTitle } from '../Utils/commonTitle';
 import { useParams } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
-import ProjectDisplay from 'Common/ProjectDisplay';
+import ProjectDisplay from '../Common/ProjectDisplay';
 
 
 export function SingleProjectPage(): JSX.Element {

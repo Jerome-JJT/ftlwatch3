@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Card,
   CardBody,
@@ -10,12 +10,12 @@ import {
   DialogBody,
   DialogHeader,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
 import { AiFillDollarCircle, AiOutlineClose } from 'react-icons/ai';
 import { FaInfinity } from 'react-icons/fa';
-import Separator from 'Common/Separator';
-import { commonTitle } from 'Utils/commonTitle';
+import Separator from '../Common/Separator';
+import { commonTitle } from '../Utils/commonTitle';
 
 
 export function ProductsPage(): JSX.Element {

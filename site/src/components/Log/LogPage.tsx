@@ -1,9 +1,9 @@
 import React, { type SyntheticEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useLogin } from 'Hooks/LoginProvider';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { commonTitle } from 'Utils/commonTitle';
+import { useLogin } from '../Hooks/LoginProvider';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { commonTitle } from '../Utils/commonTitle';
 
 export function LogPage(): JSX.Element {
   const { getUserData } = useLogin();

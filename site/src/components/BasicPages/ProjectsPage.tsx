@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Card,
@@ -8,14 +8,14 @@ import {
   CardFooter,
   CardHeader,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
 import classNames from 'classnames';
-import Separator from 'Common/Separator';
-import { commonTitle } from 'Utils/commonTitle';
-import ProjectDisplay from 'Common/ProjectDisplay';
+import Separator from '../Common/Separator';
+import { commonTitle } from '../Utils/commonTitle';
+import ProjectDisplay from '../Common/ProjectDisplay';
 import { useSearchParams } from 'react-router-dom';
-import { objUrlEncode } from 'Utils/objUrlEncode';
+import { objUrlEncode } from '../Utils/objUrlEncode';
 
 
 export function ProjectsPage(): JSX.Element {

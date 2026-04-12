@@ -1,5 +1,5 @@
 import React from 'react';
-import { commonTitle } from 'Utils/commonTitle';
+import { commonTitle } from '../Utils/commonTitle';
 
 import { Card } from '@material-tailwind/react';
 

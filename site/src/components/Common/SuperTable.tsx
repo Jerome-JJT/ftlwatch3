@@ -15,13 +15,13 @@ import {
 } from '@material-tailwind/react';
 import MySelect from './MySelect';
 import classNames from 'classnames';
-import { ColumnProps } from 'Utils/columnsProps';
+import { ColumnProps } from '../Utils/columnsProps';
 import MyInput from './MyInput';
-import { createKey } from 'Utils/createKey';
+import { createKey } from '../Utils/createKey';
 import { Spinner } from '@material-tailwind/react';
 import { useSearchParams } from 'react-router-dom';
-import { objUrlEncode } from 'Utils/objUrlEncode';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { objUrlEncode } from '../Utils/objUrlEncode';
+import { useNotification } from '../Notifications/NotificationsProvider';
 
 
 interface SuperTableProps {

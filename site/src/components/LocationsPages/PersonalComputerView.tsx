@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { commonTitle } from 'Utils/commonTitle';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { commonTitle } from '../Utils/commonTitle';
 import { MapPlace } from 'Maps/MapPlace';
 import GothamMap from 'Maps/GothamMap';
 import {

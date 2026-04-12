@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Card,
@@ -12,9 +12,9 @@ import {
   DialogBody,
   DialogHeader,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
-import { commonTitle } from 'Utils/commonTitle';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
+import { commonTitle } from '../Utils/commonTitle';
 import { AiOutlineClose } from 'react-icons/ai';
 
 

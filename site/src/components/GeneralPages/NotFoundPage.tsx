@@ -1,8 +1,8 @@
 import AppLogo from '../../assets/logo_transparent_small.png';
 import { Button, Card, CardBody, CardFooter } from '@material-tailwind/react';
-import { useLogin } from 'Hooks/LoginProvider';
-import { commonTitle } from 'Utils/commonTitle';
-import { createAuthorizeURL } from 'Utils/createAuthorizeURL';
+import { useLogin } from '../Hooks/LoginProvider';
+import { commonTitle } from '../Utils/commonTitle';
+import { createAuthorizeURL } from '../Utils/createAuthorizeURL';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

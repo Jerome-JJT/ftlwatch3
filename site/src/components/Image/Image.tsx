@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Button,
   Card,
@@ -11,15 +11,15 @@ import {
   DialogBody,
   DialogHeader,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
+import { useNotification } from '../Notifications/NotificationsProvider';
 import { useSearchParams } from 'react-router-dom';
-import { SuperCards } from 'Common/SuperCards';
-import Separator from 'Common/Separator';
+import { SuperCards } from '../Common/SuperCards';
+import Separator from '../Common/Separator';
 import classNames from 'classnames';
-import { comparePoolfilters } from 'Utils/comparePoolfilters';
-import { commonTitle } from 'Utils/commonTitle';
+import { comparePoolfilters } from '../Utils/comparePoolfilters';
+import { commonTitle } from '../Utils/commonTitle';
 import { AiOutlineClose } from 'react-icons/ai';
-import { objUrlEncode } from 'Utils/objUrlEncode';
+import { objUrlEncode } from '../Utils/objUrlEncode';
 
 
 class PoolFilterProps {

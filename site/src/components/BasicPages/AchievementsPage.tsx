@@ -1,16 +1,16 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import {
   Card,
   CardBody,
   CardHeader,
   Checkbox,
 } from '@material-tailwind/react';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { SuperCards } from 'Common/SuperCards';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { SuperCards } from '../Common/SuperCards';
 import { AiFillGift } from 'react-icons/ai';
-import { commonTitle } from 'Utils/commonTitle';
+import { commonTitle } from '../Utils/commonTitle';
 
 
 export function AchievementsPage(): JSX.Element {

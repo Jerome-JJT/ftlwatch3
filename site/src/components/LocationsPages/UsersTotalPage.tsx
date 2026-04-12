@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AxiosErrorText } from 'Hooks/AxiosErrorText';
-import { SuperTable } from 'Common/SuperTable';
-import { useNotification } from 'Notifications/NotificationsProvider';
-import { ColumnProps } from 'Utils/columnsProps';
-import { commonTitle } from 'Utils/commonTitle';
+import { AxiosErrorText } from '../Hooks/AxiosErrorText';
+import { SuperTable } from '../Common/SuperTable';
+import { useNotification } from '../Notifications/NotificationsProvider';
+import { ColumnProps } from '../Utils/columnsProps';
+import { commonTitle } from '../Utils/commonTitle';
 import { Button } from '@material-tailwind/react';
 import classNames from 'classnames';
-import Separator from 'Common/Separator';
+import Separator from '../Common/Separator';
 
 
 
