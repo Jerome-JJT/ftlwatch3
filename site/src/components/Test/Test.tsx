@@ -1,7 +1,7 @@
 import { Button } from '@material-tailwind/react';
-import AsgardMap from 'Maps/AsgardMap';
-import GothamMap from 'Maps/GothamMap';
-import SsdMap from 'Maps/SsdMap';
+import AsgardMap from '../Maps/AsgardMap';
+import GothamMap from '../Maps/GothamMap';
+import SsdMap from '../Maps/SsdMap';
 import { useNotification } from '../Notifications/NotificationsProvider';
 
 export default function TestPage(): JSX.Element {

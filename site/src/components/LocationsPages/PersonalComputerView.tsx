@@ -3,8 +3,8 @@ import axios from 'axios';
 import { AxiosErrorText } from '../Hooks/AxiosErrorText';
 import { useNotification } from '../Notifications/NotificationsProvider';
 import { commonTitle } from '../Utils/commonTitle';
-import { MapPlace } from 'Maps/MapPlace';
-import GothamMap from 'Maps/GothamMap';
+import { MapPlace } from '../Maps/MapPlace';
+import GothamMap from '../Maps/GothamMap';
 import {
   Card,
   Tabs,
@@ -13,8 +13,8 @@ import {
   TabPanel,
   Tab,
 } from '@material-tailwind/react';
-import SsdMap from 'Maps/SsdMap';
-import AsgardMap from 'Maps/AsgardMap';
+import SsdMap from '../Maps/SsdMap';
+import AsgardMap from '../Maps/AsgardMap';
 import { useSearchParams } from 'react-router-dom';
 
 
