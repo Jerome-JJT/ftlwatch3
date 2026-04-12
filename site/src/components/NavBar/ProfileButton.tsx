@@ -17,10 +17,10 @@ import {
 } from "react-icons/ai";
 import { CgDarkMode } from "react-icons/cg";
 import classNames from "classnames";
-import { useLogin } from "Hooks/LoginProvider";
+import { useLogin } from "../Hooks/LoginProvider";
 import axios from "axios";
-import { createAuthorizeURL } from "Utils/createAuthorizeURL";
-import { useTheme } from "Theme/ThemeToggle";
+import { createAuthorizeURL } from "../Utils/createAuthorizeURL";
+import { useTheme } from "../Theme/ThemeToggle";
 
 export default function ProfileButton(): JSX.Element {
   const buttonColor = "bg-[#CCCCCC]";
