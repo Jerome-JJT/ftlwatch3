@@ -281,6 +281,7 @@ INSERT INTO "pages" ("id", "name", "corder", "route", "basefilter", "submenu_id"
   (96, 'TETRIS', 98, 'https://tetris.42lwatch.ch/', NULL, NULL, 10),
   (97, 'RNCP calc 1', 99, 'https://42tools.slopez.dev/rncp-progress', NULL, NULL, 10),
   (98, 'RNCP calc 2', 99, 'https://rncp.hacku.org/rncp', NULL, NULL, 10),
+  (99, '42talks', 99, 'https://www.42talks.ch', NULL, NULL, 10),
 
   (100, 'Updater', 5, 'admin/updater', NULL, 3, 1),
   (110, 'Login groups', 10, 'admin/groups', NULL, 3, 9),
