@@ -222,7 +222,7 @@ function tableau_api($selectedFilter, $selectedProjects) {
                 return -1;
             }
             else {
-                return 0;
+                return strcmp($a['label'], $b['label']);
             }
         });
 
