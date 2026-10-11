@@ -158,7 +158,7 @@ def team_notification(fetched):
         embed['fields'] = diffs
 
         mylogger(f"Nofified team {fetched['id']} {fetched['name']}", LOGGER_INFO)
-        if (project != None and ('internship' in project['slug'] or 'part_time' in project['slug'])):
+        if (project != None and ('internship' in project['slug'] or 'part_time' in project['slug'] or 'work-experience' in project['slug'])):
             send_to_rabbit('internships.server.message.queue', embed)
 
         elif (project != None and project['cursus_slug'] in ['piscine-c', 'c-piscine', 'discovery-piscine-web']):
